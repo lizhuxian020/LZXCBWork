@@ -1,0 +1,163 @@
+//
+//  PrefixHeader.pch
+//  SmartCabinet
+//
+//  Created by lym on 2018/1/4.
+//  Copyright © 2018年 lym. All rights reserved.
+//
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+
+#ifdef __OBJC__
+
+/*  手表 */
+#import "CBWtUtils.h"
+#import "HUD.h"
+#import "CBWtConfigDefine.h"
+#import "CBWtColorDefine.h"
+#import "CBWtNotificationKey.h"
+#import "YYModel.h"
+#import "CBWtNetWorkingManager.h"
+#import "Masonry.h"
+#import "UIImageView+WebCache.h"
+#import "NSString+Predicate.h"
+#import "NSString+MD5.h"
+#import "UIColor+BGHexColor.h"
+#import "UIImage+Category.h"
+#import "UIView+BGFrame.h"
+#import "UIFont+Custom.h"
+#import "NSMutableAttributedString+Category.h"
+#import "MBProgressHUD.h"
+#import "CBWtMINUtils.h"
+
+#import "MJExtension.h"
+#import "MJRefresh.h"
+#import "CBWtCommonTools.h"
+#import "CBWtConstStr.h"
+#import "UITextField+YLYXTextLimit.h"
+#import "CBWtNetworkRequestManager.h"
+#import "MBProgressHUD+BDT.h"
+#import "UIButton+CenterImageAndTitle.h"
+#import "NSString+Category.h"
+#import "IQUIView+Hierarchy.h"
+#import "UIButton+EnlargeEdge.h"
+#import "CBWtNoDataView.h"
+#import "HomeModel.h"
+#import <FMDB.h>
+
+
+/*  车联网 */
+#import "Utils.h"
+#import "ConfigDefine.h"
+#import "GloabalEnum.h"
+#import "ColorDefine.h"
+#import "NotificationKey.h"
+#import "NetWorkingManager.h"
+#import "MINUtils.h"
+#import "GGGraphics.h"
+#import "CBBaseNavigationController.h"
+#import "CBBaseNetworkModel.h"
+#import "CBNetworkRequestManager.h"
+#import "CBCommonTools.h"
+#import "UILabel+extension.h"
+#import "IQKeyboardManager.h"
+#import "CBNoDataView.h"
+#import "CBNetworkBadView.h"
+#import "DeviceDetailModel.h"
+
+#import "TQLocationConverter.h"
+#import "ZCChinaLocation.h"
+
+#define K_TabBarColorChangeNotification @"KTabBarColorChangeNotification"  // 选中设备后，tabBar颜色改变
+#define kTabbarItemLongPress @"kTabbarItemLongPress"
+#define kStautsRectHeight [[UIApplication sharedApplication] statusBarFrame].size.height
+
+///* oc 调用 swift*/
+//#import "cobanBnPetSwift-Swift.h"
+//#import <UMCommon/UMCommon.h>     // 公共组件是所有友盟产品的基础组件，必选 //#import <UMAnalytics/MobClick.h>  // 统计组件
+//#import <UMPush/UMessage.h>       // push 组件 //#import <UserNotificatoins/UserNotifications.h> // Push 组件必须的系统库
+//#import <UMCommon/UMConfigure.h> //#import <UMCommonLog/UMCommonLogHeaders.h>
+
+#endif
+
+
+
+//竖屏幕宽高
+#define SCREEN_WIDTH ([UIScreen mainScreen].bounds.size.width)
+#define SCREEN_HEIGHT ([UIScreen mainScreen].bounds.size.height)
+//iPhoneX系列都是刘海屏，状态栏高度都是44，不管是普通状态下还是特殊状态下（通话中或热点被接入）
+//其余机型的状态栏高度在常规状态下是20，特殊状态下（通话中或热点被接入）是40。
+#define KIs_iPhoneXStyle (([[UIApplication sharedApplication] statusBarFrame].size.height >= 44.0f) ? (YES):(NO))
+
+#define PPNavigationBarHeight  ([UIApplication sharedApplication].statusBarFrame.size.height + 44.0)//((KIs_iPhoneXStyle)? 88 : 64.0)
+//tabbar的高度
+#define TabBARHEIGHT  ((KIs_iPhoneXStyle) ? 83 : 49)
+//tabbar的与屏幕底部的padding
+#define TabPaddingBARHEIGHT  ((KIs_iPhoneXStyle) ? 34 : 0)
+//navigationBar的与屏幕顶部的padding
+#define NavPaddingBARHEIGHT  ([UIApplication sharedApplication].statusBarFrame.size.height - 44.0)//((KIs_iPhoneXStyle) ? 24 : 0)
+
+#define fontRate (SCREEN_WIDTH/414.0f)//([UIScreen mainScreen].bounds.size.width == 375.0 ? 1 : [UIScreen mainScreen].bounds.size.width > 375.0? 1 : [UIScreen mainScreen].bounds.size.width/375.0 * 0.9)
+#define frameSizeRate (SCREEN_WIDTH/414.0f)//([UIScreen mainScreen].bounds.size.width == 375.0 ? 1 : (SCREEN_WIDTH/414.0f))//(([UIScreen mainScreen].bounds.size.width)/375.0)
+
+// plus 为基准，大屏机型不变，小屏机型缩小
+#define KFitWidthRate (SCREEN_WIDTH/414.0f)
+#define KFitHeightRate (SCREEN_HEIGHT/736.0f)
+
+//// 6s 为基准，大屏机型不变，小屏机型缩小
+//#define KFitWidthRate ([UIScreen mainScreen].bounds.size.width == 375.0 ? 1 : (SCREEN_WIDTH/414.0f))
+//#define KFitHeightRate ([UIScreen mainScreen].bounds.size.height == 667 ? 1 : (SCREEN_HEIGHT/736.0f))
+
+// 导航栏加状态栏高度
+#define kNavAndStatusHeight [[UIApplication sharedApplication] statusBarFrame].size.height + self.navigationController.navigationBar.frame.size.height
+
+//弱引用
+#define WS(weakSelf)  __weak __typeof(&*self)weakSelf = self;
+#define kWeakSelf(type)  __weak typeof(type) weak##type = type;
+#define kStrongSelf(type)  __strong typeof(type) type = weak##type;
+
+
+//设置圆角
+#define GXJViewBorderRadius(View, Radius, Width, Color)\
+\
+[View.layer setCornerRadius:(Radius)];\
+[View.layer setMasksToBounds:YES];\
+[View.layer setBorderWidth:(Width)];\
+[View.layer setBorderColor:[Color CGColor]]
+
+#define kSysVer ([UIDevice currentDevice].systemVersion.floatValue)  // 系统版本
+#define kSysAbove8 (kSysVer >= 8)
+
+//字符串是否为空
+#define kStringIsEmpty(str) ([str isKindOfClass:[NSNull class]] || str == nil || [str length] < 1 ? YES : NO || [str isEqualToString:@"(null)"])
+
+
+// 多语言
+//#define Localized(key)  [[NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"appLanguage"]] ofType:@"lproj"]] localizedStringForKey:(key) value:nil table:@"Language"]
+
+#define AppLanguage @"applanguage"
+
+#define Localized(key) \
+({\
+NSString *lang = [[NSUserDefaults standardUserDefaults] objectForKey:@"applanguage"];\
+static NSMutableDictionary *bundles = nil;\
+static dispatch_once_t onceToken;\
+dispatch_once(&onceToken, ^{\
+bundles = [NSMutableDictionary new];\
+bundles[@"zh-Hant"] = [NSBundle bundleWithPath:[[NSBundle mainBundle]pathForResource:@"zh-Hant" ofType:@"lproj"]];\
+bundles[@"en"] = [NSBundle bundleWithPath:[[NSBundle mainBundle]pathForResource:@"en" ofType:@"lproj"]];\
+bundles[@"zh-Hans"] = [NSBundle bundleWithPath:[[NSBundle mainBundle]pathForResource:@"zh-Hans" ofType:@"lproj"]];\
+bundles[@"fr"] = [NSBundle bundleWithPath:[[NSBundle mainBundle]pathForResource:@"fr" ofType:@"lproj"]];\
+});\
+NSBundle *bundle = nil;\
+if (lang) {\
+bundle = bundles[lang];\
+} else {\
+bundle = [NSBundle mainBundle];\
+}\
+NSString *value = [bundle localizedStringForKey:key value:nil table:@"Localizable"];\
+(value);\
+})\
+
+#endif /* PrefixHeader_pch */

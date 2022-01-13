@@ -1,0 +1,6 @@
+module Pods_cobanBnPetSwift {
+  umbrella header "Pods-cobanBnPetSwift-umbrella.h"
+
+  export *
+  module * { export * }
+}

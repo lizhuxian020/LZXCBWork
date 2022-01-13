@@ -1,0 +1,10 @@
+/* 
+  InfoPlist.strings
+  cobanBnPetSwift
+
+  Created by coban on 2020/3/10.
+  Copyright © 2020 coban. All rights reserved.
+*/
+CFBundleDisplayName = "巴诺物联网";
+"NSMicrophoneUsageDescription" = "App需要您的同意,才能访问麦克风录音以发送语音";
+"NSPhotoLibraryUsageDescription" = "App需要您的同意,以便于扫描二维码绑定设备";

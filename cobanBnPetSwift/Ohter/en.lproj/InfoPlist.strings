@@ -1,0 +1,10 @@
+/* 
+  InfoPlist.strings
+  cobanBnPetSwift
+
+  Created by coban on 2020/3/10.
+  Copyright © 2020 coban. All rights reserved.
+*/
+CFBundleDisplayName = "BAANOOL IOT";
+"NSMicrophoneUsageDescription" = "App needs your consent to access the microphone recording to send voice";
+"NSPhotoLibraryUsageDescription" = "App requires your consent in order to scan the QR code to bind the device";
