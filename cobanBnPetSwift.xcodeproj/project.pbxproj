@@ -6314,7 +6314,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1.4;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = KSWVM9W6YC;
+				DEVELOPMENT_TEAM = 7YH24V94ZC;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/cobanBnPetSwift/Vendors/UMPush/umcommonlog/umcommonlog_ios_2.0.0",
@@ -6323,7 +6323,7 @@
 					"$(PROJECT_DIR)/cobanBnPetSwift/Vendors/UMPush/common/common_ios_7.1.0/normal",
 				);
 				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = NO;
-				GCC_PREFIX_HEADER = "/Users/huangshengli/Desktop/hsl/coban/科帮projects/cobanPet_swift/cobanBnPetSwift/Ohter/PrefixHeader.pch";
+				GCC_PREFIX_HEADER = "${SRCROOT}/cobanBnPetSwift/Ohter/PrefixHeader.pch";
 				INFOPLIST_FILE = cobanBnPetSwift/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -6337,11 +6337,11 @@
 				);
 				MARKETING_VERSION = 2.1;
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.coban.iot;
+				PRODUCT_BUNDLE_IDENTIFIER = cn.zzstc.banuo;
 				PRODUCT_MODULE_NAME = cobanBnPetSwift;
 				PRODUCT_NAME = "巴诺物联网";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "/Users/huangshengli/Desktop/hsl/coban/科帮projects/cobanPet_swift/cobanBnPetSwift/Ohter/cobanPet-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "${SRCROOT}/cobanBnPetSwift/Ohter/cobanPet-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -6358,7 +6358,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1.4;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = KSWVM9W6YC;
+				DEVELOPMENT_TEAM = 7YH24V94ZC;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/cobanBnPetSwift/Vendors/UMPush/umcommonlog/umcommonlog_ios_2.0.0",
@@ -6367,7 +6367,7 @@
 					"$(PROJECT_DIR)/cobanBnPetSwift/Vendors/UMPush/common/common_ios_7.1.0/normal",
 				);
 				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = NO;
-				GCC_PREFIX_HEADER = "/Users/huangshengli/Desktop/hsl/coban/科帮projects/cobanPet_swift/cobanBnPetSwift/Ohter/PrefixHeader.pch";
+				GCC_PREFIX_HEADER = "${SRCROOT}/cobanBnPetSwift/Ohter/PrefixHeader.pch";
 				INFOPLIST_FILE = cobanBnPetSwift/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -6381,11 +6381,11 @@
 				);
 				MARKETING_VERSION = 2.1;
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.coban.iot;
+				PRODUCT_BUNDLE_IDENTIFIER = cn.zzstc.banuo;
 				PRODUCT_MODULE_NAME = cobanBnPetSwift;
 				PRODUCT_NAME = "巴诺物联网";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "/Users/huangshengli/Desktop/hsl/coban/科帮projects/cobanPet_swift/cobanBnPetSwift/Ohter/cobanPet-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "${SRCROOT}/cobanBnPetSwift/Ohter/cobanPet-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
