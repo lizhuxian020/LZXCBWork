@@ -81,9 +81,7 @@ class CBPetLoginView: CBPetBaseView {
     }
     private func setupView() {
         self.bgmView.snp_makeConstraints { (make) in
-            make.top.equalTo(0)
-            make.left.right.bottom.equalTo(0)
-            make.edges.equalTo(UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
+            make.edges.equalTo(0)
         }
         
         self.inputPhoneView.snp_makeConstraints { (make) in

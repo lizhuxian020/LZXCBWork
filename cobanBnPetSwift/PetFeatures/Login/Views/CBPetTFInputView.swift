@@ -43,8 +43,8 @@ class CBPetTFInputView: CBPetBaseView {
     private func setupView() {
         self.backgroundColor = UIColor.white
         self.titleLb.snp_makeConstraints { (make) in
-            make.left.top.equalTo(0)
-            make.size.equalTo(CGSize(width: SCREEN_WIDTH,height: 20))
+            make.left.top.right.equalTo(0)
+            make.height.equalTo(20)
         }
         self.lineView.snp_makeConstraints { (make) in
             make.left.bottom.right.equalTo(0)

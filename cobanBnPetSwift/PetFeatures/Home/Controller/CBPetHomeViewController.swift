@@ -266,7 +266,9 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         self.centerAvtarView.setupViewModel(viewModel: self.homeViewModel)
         (self.homeViewModel as CBPetHomeViewModel).avtarTitleViewSwitchDeviceBlock = { [weak self] () -> Void in
             CBLog(message: " 点击切换手表 点击切换手表 点击切换手表 ")
-            self?.switchDeviceClick()
+            //lzxTODO:复原
+//            self?.switchDeviceClick()
+            self?.resumeTimer();
         }
         
         self.view.addSubview(self.bindDeviceResultView)
@@ -344,14 +346,18 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
     }
     /* 开始*/
     private func startTimer() {
-        if self.timerRefreshData == nil {
-            self.timerRefreshData = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(getHomeInfoRequest), userInfo: nil, repeats: true)
-            RunLoop.main.add(self.timerRefreshData!, forMode: .common)
-        }
+        //lzxTODO: 删除注释
+//        if self.timerRefreshData == nil {
+//            self.timerRefreshData = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(getHomeInfoRequest), userInfo: nil, repeats: true)
+//            RunLoop.main.add(self.timerRefreshData!, forMode: .common)
+//        }
         self.getHomeInfoRequest()
     }
     /* 继续*/
     private func resumeTimer() {
+        //lzxTODO: 删掉return
+        self.startTimer()
+        return;
         guard self.timerRefreshData != nil else {
             self.startTimer()
             return

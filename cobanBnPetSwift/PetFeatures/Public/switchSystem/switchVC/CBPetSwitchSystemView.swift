@@ -43,7 +43,7 @@ class CBPetSwitchSystemView: CBPetBaseView,UITableViewDelegate, UITableViewDataS
         
         self.addSubview(self.selectTableView)
         self.selectTableView.snp_makeConstraints { (make) in
-            make.left.right.top.bottom.equalTo(self)
+            make.edges.equalTo(0);
         }
         let headView = CBPetChatPetfriendHdView.init(frame: CGRect(x: 0, y: 0, width: SCREEN_WIDTH, height: 28*KFitHeightRate))
         headView.backgroundColor = UIColor.white

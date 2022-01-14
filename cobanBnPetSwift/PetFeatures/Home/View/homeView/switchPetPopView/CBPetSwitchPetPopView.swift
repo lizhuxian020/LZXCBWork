@@ -86,7 +86,7 @@ class CBPetSwitchPetPopView: CBPetBaseView,UIGestureRecognizerDelegate,UICollect
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
         self.collectionView.snp_makeConstraints { (make) in
-            make.left.right.top.bottom.equalTo(self.devicebListView)
+            make.edges.equalTo(0)
         }
     }
     public func showPopView(selectBlock:@escaping(_ petModel:CBPetPsnalCterPetModel) -> Void) {

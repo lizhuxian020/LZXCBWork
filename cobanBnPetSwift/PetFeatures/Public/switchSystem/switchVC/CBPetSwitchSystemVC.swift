@@ -88,8 +88,7 @@ class CBPetSwitchSystemVC: CBPetBaseViewController {
         
         self.view.addSubview(self.switchView)
         self.switchView.snp_makeConstraints { (make) in
-            make.top.left.right.equalTo(0)
-            make.bottom.equalTo(0)
+            make.edges.equalTo(0);
         }
         self.switchView.setupViewModel(viewModel: self.switchViewModel)
         self.switchView.clickBlock = { () -> Void in
