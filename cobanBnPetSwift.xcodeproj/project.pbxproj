@@ -658,6 +658,9 @@
 		43F4FDED248672CD0072B233 /* CBPetFuncChatPetInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F4FDEC248672CD0072B233 /* CBPetFuncChatPetInfoView.swift */; };
 		43F4FDEF248672EB0072B233 /* CBPetFuncChatPetInfoTabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F4FDEE248672EB0072B233 /* CBPetFuncChatPetInfoTabCell.swift */; };
 		6D032D9B1335E2208C8FB6B3 /* libPods-cobanBnPetSwift.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A1F41BDFD0FBDF918826F4E /* libPods-cobanBnPetSwift.a */; };
+		B16C38C52793208D0058EAC4 /* CBPetMultiVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16C38C42793208D0058EAC4 /* CBPetMultiVC.swift */; };
+		B17F1D17279461430040434F /* CBPetMultiVCNaviBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17F1D16279461430040434F /* CBPetMultiVCNaviBar.swift */; };
+		B17F1D1A279463640040434F /* CBPetMultiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17F1D19279463640040434F /* CBPetMultiViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1819,6 +1822,9 @@
 		43F4FDEA2486727B0072B233 /* CBPetFuncChatPetInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetFuncChatPetInfoVC.swift; sourceTree = "<group>"; };
 		43F4FDEC248672CD0072B233 /* CBPetFuncChatPetInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetFuncChatPetInfoView.swift; sourceTree = "<group>"; };
 		43F4FDEE248672EB0072B233 /* CBPetFuncChatPetInfoTabCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetFuncChatPetInfoTabCell.swift; sourceTree = "<group>"; };
+		B16C38C42793208D0058EAC4 /* CBPetMultiVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetMultiVC.swift; sourceTree = "<group>"; };
+		B17F1D16279461430040434F /* CBPetMultiVCNaviBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetMultiVCNaviBar.swift; sourceTree = "<group>"; };
+		B17F1D19279463640040434F /* CBPetMultiViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetMultiViewModel.swift; sourceTree = "<group>"; };
 		B380E0223C51C9E84D9849DF /* Pods-cobanBnPetSwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cobanBnPetSwift.debug.xcconfig"; path = "Target Support Files/Pods-cobanBnPetSwift/Pods-cobanBnPetSwift.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -5043,6 +5049,7 @@
 		439E901C2475A496004ED9AD /* PetFeatures */ = {
 			isa = PBXGroup;
 			children = (
+				B16C38C227931F590058EAC4 /* MultiVC */,
 				17F28DBB2488A311003C4010 /* Message */,
 				439E901D2475A496004ED9AD /* Personal */,
 				439E902D2475A496004ED9AD /* Home */,
@@ -5297,6 +5304,40 @@
 				2A1F41BDFD0FBDF918826F4E /* libPods-cobanBnPetSwift.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B16C38C227931F590058EAC4 /* MultiVC */ = {
+			isa = PBXGroup;
+			children = (
+				B17F1D182794634C0040434F /* Model */,
+				B17F1D15279461270040434F /* View */,
+				B16C38C327931FF50058EAC4 /* Controller */,
+			);
+			path = MultiVC;
+			sourceTree = "<group>";
+		};
+		B16C38C327931FF50058EAC4 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				B16C38C42793208D0058EAC4 /* CBPetMultiVC.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		B17F1D15279461270040434F /* View */ = {
+			isa = PBXGroup;
+			children = (
+				B17F1D16279461430040434F /* CBPetMultiVCNaviBar.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		B17F1D182794634C0040434F /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				B17F1D19279463640040434F /* CBPetMultiViewModel.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		FCDD743A446F819B118ED245 /* Pods */ = {
@@ -5572,6 +5613,7 @@
 				17CDAB6824CEBE5500BB9F8B /* XAxis.m in Sources */,
 				1782BF4824C0427E00544C36 /* CBWtHomeLeftMenuModel.m in Sources */,
 				4389AA512482C16200C4BDC3 /* CBPetFuncAddUserManageVC.swift in Sources */,
+				B16C38C52793208D0058EAC4 /* CBPetMultiVC.swift in Sources */,
 				1782BF2D24C0427E00544C36 /* NSAttributedString+Category.m in Sources */,
 				1782BF3E24C0427E00544C36 /* CBBindWatchNextViewController.m in Sources */,
 				4389AA4F2482B75500C4BDC3 /* CBPetFuncUserManageHeadView.swift in Sources */,
@@ -5586,6 +5628,7 @@
 				17CDAC6E24CEBE5600BB9F8B /* MINBaseViewController.m in Sources */,
 				17CDAB7F24CEBE5500BB9F8B /* GGPie.m in Sources */,
 				1782BF6A24C0427E00544C36 /* CBBindMembCollectionViewCell.m in Sources */,
+				B17F1D17279461430040434F /* CBPetMultiVCNaviBar.swift in Sources */,
 				17FCA6282447FB7F00388A2D /* UIViewController+Extension.swift in Sources */,
 				1782BF8324C0427E00544C36 /* CBPickRelationshipVC.m in Sources */,
 				1782BF8B24C0427E00544C36 /* WatchCallChargeFooterView.m in Sources */,
@@ -5603,6 +5646,7 @@
 				1782BF5124C0427E00544C36 /* CBHomeBindReusltView.m in Sources */,
 				4391E79E248BA46D00CF5BF2 /* CBPetCustomSlideView.swift in Sources */,
 				17F28DC92488C475003C4010 /* CBPetMsgCterModel.swift in Sources */,
+				B17F1D1A279463640040434F /* CBPetMultiViewModel.swift in Sources */,
 				17CDAC4324CEBE5600BB9F8B /* FenceDetailViewController.m in Sources */,
 				17466E4824874070009ABA80 /* CBPetPsnalCterViewModel.swift in Sources */,
 				1782BF9E24C0427E00544C36 /* AddressBookHeaderView.m in Sources */,
