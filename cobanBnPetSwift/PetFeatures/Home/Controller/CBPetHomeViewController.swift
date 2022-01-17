@@ -15,6 +15,8 @@ import UserNotifications
 
 class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
     
+    private var switchPetAlertView : CBPetSwitchPetAlertView = CBPetSwitchPetAlertView.init()
+    
     /* 绑定手表view*/
     private lazy var bindDeviceView:CBPetHomeBindView = {
         let bindV = CBPetHomeBindView.init()
@@ -261,17 +263,17 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         initBarWith(title: "首页".localizedStr, isBack: false)
 //        initBarLeft(imageName: "pet_personal center", action: #selector(jumpToPersonal))
         initBarLeft(imageName: "pet_home_left_deive_list", action: #selector(jumpToMultiVC))
-        initBarRight(imageName: "pet_home_right_setting", action: #selector(jumpToMessageCenter))
+        initBarRight(imageName: "pet_home_right_setting", action: #selector(showSwitchPet))
 
-//        self.centerAvtarView.translatesAutoresizingMaskIntoConstraints = false
-//        self.navigationItem.titleView = self.centerAvtarView
-//        self.centerAvtarView.setupViewModel(viewModel: self.homeViewModel)
-//        (self.homeViewModel as CBPetHomeViewModel).avtarTitleViewSwitchDeviceBlock = { [weak self] () -> Void in
-//            CBLog(message: " 点击切换手表 点击切换手表 点击切换手表 ")
-//            //lzxTODO:复原
-////            self?.switchDeviceClick()
+        self.centerAvtarView.translatesAutoresizingMaskIntoConstraints = false
+        self.navigationItem.titleView = self.centerAvtarView
+        self.centerAvtarView.setupViewModel(viewModel: self.homeViewModel)
+        (self.homeViewModel as CBPetHomeViewModel).avtarTitleViewSwitchDeviceBlock = { [weak self] () -> Void in
+            CBLog(message: " 点击切换手表 点击切换手表 点击切换手表 ")
+            //lzxTODO:复原
+            self?.switchDeviceClick()
 //            self?.resumeTimer();
-//        }
+        }
         
         self.view.addSubview(self.bindDeviceResultView)
         self.bindDeviceResultView.snp_makeConstraints({ (make) in
@@ -318,7 +320,14 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
                 self?.functionClickJump(title: title)
             }
         }
+        
+        self.view.addSubview(self.switchPetAlertView)
     }
+    
+    @objc private func showSwitchPet() {
+        self.switchPetAlertView.showContent()
+    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
 //        self.drawCtrlPanel()
 //        CBPetFenceAlarmPopView.share.showAlert(completeBtnBlock: { [weak self] in
@@ -571,6 +580,12 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
     }
     // MARK: - 跳转多重控制器
     @objc private func jumpToMultiVC() {
+        if self.switchPetAlertView.isHidden {
+            self.switchPetAlertView.showContent()
+        } else {
+            self.switchPetAlertView.dismiss()
+        }
+        return
         let psnalVC = CBPetPersonalCenterVC()
         let userManagementVC = CBPetFuncUserManagementVC.init()
         let msgCterVC = CBPetMsgCterViewController.init()

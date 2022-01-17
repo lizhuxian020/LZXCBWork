@@ -658,6 +658,7 @@
 		43F4FDED248672CD0072B233 /* CBPetFuncChatPetInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F4FDEC248672CD0072B233 /* CBPetFuncChatPetInfoView.swift */; };
 		43F4FDEF248672EB0072B233 /* CBPetFuncChatPetInfoTabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F4FDEE248672EB0072B233 /* CBPetFuncChatPetInfoTabCell.swift */; };
 		6D032D9B1335E2208C8FB6B3 /* libPods-cobanBnPetSwift.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A1F41BDFD0FBDF918826F4E /* libPods-cobanBnPetSwift.a */; };
+		B1212C642795CE8B0044E7CC /* CBPetSwitchPetAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1212C632795CE8B0044E7CC /* CBPetSwitchPetAlertView.swift */; };
 		B16C38C52793208D0058EAC4 /* CBPetMultiVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16C38C42793208D0058EAC4 /* CBPetMultiVC.swift */; };
 		B17F1D17279461430040434F /* CBPetMultiVCNaviBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17F1D16279461430040434F /* CBPetMultiVCNaviBar.swift */; };
 		B17F1D1A279463640040434F /* CBPetMultiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17F1D19279463640040434F /* CBPetMultiViewModel.swift */; };
@@ -1822,6 +1823,7 @@
 		43F4FDEA2486727B0072B233 /* CBPetFuncChatPetInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetFuncChatPetInfoVC.swift; sourceTree = "<group>"; };
 		43F4FDEC248672CD0072B233 /* CBPetFuncChatPetInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetFuncChatPetInfoView.swift; sourceTree = "<group>"; };
 		43F4FDEE248672EB0072B233 /* CBPetFuncChatPetInfoTabCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetFuncChatPetInfoTabCell.swift; sourceTree = "<group>"; };
+		B1212C632795CE8B0044E7CC /* CBPetSwitchPetAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetSwitchPetAlertView.swift; sourceTree = "<group>"; };
 		B16C38C42793208D0058EAC4 /* CBPetMultiVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetMultiVC.swift; sourceTree = "<group>"; };
 		B17F1D16279461430040434F /* CBPetMultiVCNaviBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetMultiVCNaviBar.swift; sourceTree = "<group>"; };
 		B17F1D19279463640040434F /* CBPetMultiViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetMultiViewModel.swift; sourceTree = "<group>"; };
@@ -4785,6 +4787,7 @@
 			children = (
 				435B252A247CAFA9006CC6A1 /* CBPetSwitchPetPopView.swift */,
 				435B252C247CB01C006CC6A1 /* CBPetSwitchPetCollectionVCell.swift */,
+				B1212C632795CE8B0044E7CC /* CBPetSwitchPetAlertView.swift */,
 			);
 			path = switchPetPopView;
 			sourceTree = "<group>";
@@ -5555,6 +5558,7 @@
 				17CDABF824CEBE5600BB9F8B /* PictureClickView.m in Sources */,
 				17CDAB5924CEBE5500BB9F8B /* NumberData.m in Sources */,
 				17CDAB8324CEBE5500BB9F8B /* PieAnimationManager.m in Sources */,
+				B1212C642795CE8B0044E7CC /* CBPetSwitchPetAlertView.swift in Sources */,
 				1782BF7524C0427E00544C36 /* GuardInSchoolViewController.m in Sources */,
 				17CDAB5F24CEBE5500BB9F8B /* BarData.m in Sources */,
 				17CDABBF24CEBE5600BB9F8B /* lstate.c in Sources */,
