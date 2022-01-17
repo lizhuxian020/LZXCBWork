@@ -12,13 +12,31 @@ class CBPetMultiVCNaviBar : CBPetBaseView {
     
 //    var _configData : [String]?
     
+    let normalFont = CBFont(12)
+    let selectedFont = CBFontM(14)
+    
     var configData : [String] = [] {
         didSet {
             self.setContentWithConfig(configData: configData)
         }
     }
     
-    var lastLbl : UILabel?
+    private var _currentSelectedLbl : UILabel?
+    private var currentSelectedLbl : UILabel? {
+        set {
+            guard newValue != nil else {
+                return
+            }
+            if let lbl = _currentSelectedLbl, lbl !== newValue{
+                lbl.font = normalFont
+            }
+            _currentSelectedLbl = newValue
+            _currentSelectedLbl!.font = selectedFont
+        }
+        get {
+            return _currentSelectedLbl
+        }
+    }
     
     lazy private var statusView: UIView? = {
         let view = UIView.init()
@@ -59,6 +77,13 @@ class CBPetMultiVCNaviBar : CBPetBaseView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    public func didScrollTo(_ idx: Int) {
+        guard idx <= (self.titlesContentView?.subviews.count)!-1 else {
+            return
+        }
+        self.currentSelectedLbl = self.titlesContentView?.subviews[idx] as? UILabel
+    }
+    
     private func setupView() {
         self.backgroundColor = UIColor.white
         
@@ -80,7 +105,6 @@ class CBPetMultiVCNaviBar : CBPetBaseView {
             make.width.height.equalTo(30);
         })
         
-//        backBtn?.layoutIfNeeded()
         let titlesContentWidth = SCREEN_WIDTH - (20+30)*2;
         titlesContentView?.snp_makeConstraints({ make in
             make.left.equalTo(backBtn!.snp_right)
@@ -94,9 +118,9 @@ class CBPetMultiVCNaviBar : CBPetBaseView {
         var lastView : UIView?
         for title in configData {
             let view = UILabel.init(text: title)
-            view.font = lastView != nil ? CBFont(12)! : CBFontM(14)
+            view.font = normalFont
             if (lastView == nil) {
-                self.lastLbl = view;
+                self.currentSelectedLbl = view;
             }
             view.textAlignment = .center
             titlesContentView?.addSubview(view)
@@ -118,14 +142,11 @@ class CBPetMultiVCNaviBar : CBPetBaseView {
     
     @objc private func tapTitle(sender:UIGestureRecognizer) {
         let lbl = sender.view as! UILabel;
-        if (self.lastLbl != nil && self.lastLbl !== lbl) {
-            self.lastLbl!.font = CBFont(12)!
-        }
-        self.lastLbl = lbl;
-        lbl.font = CBFontM(14)!
+        let idx = self.titlesContentView?.subviews.index(of: lbl) ?? 0
+        self.currentSelectedLbl = lbl
         if let vm = self.viewModel as? CBPetMultiViewModel,
            let clickBlk = vm.clickNaviTitleBLK {
-            clickBlk(lbl.text ?? "")
+            clickBlk(idx)
         }
     }
     

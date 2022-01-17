@@ -77,8 +77,10 @@ class CBPetBaseViewController: UIViewController,UIGestureRecognizerDelegate {
         self.setupNavigationAttributesMethod()
         
         /* 设置系统侧滑手势*/
-        if (self.navigationController?.responds(to: #selector(getter: self.navigationController?.interactivePopGestureRecognizer)))! {
-            self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        if self.navigationController != nil {        
+            if (self.navigationController?.responds(to: #selector(getter: self.navigationController?.interactivePopGestureRecognizer)))! {
+                self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+            }
         }
         
         AppDelegate.shareInstance.customizedStatusBar?.backgroundColor = UIColor.clear
@@ -131,7 +133,7 @@ class CBPetBaseViewController: UIViewController,UIGestureRecognizerDelegate {
             /* 状态栏 black黑底白字 default白底黑字*/
             self.navigationController?.navigationBar.barStyle = .default
             self.navigationController?.navigationBar.barTintColor = UIColor.white
-            self.navigationController!.navigationBar.tintColor = UIColor.white
+            self.navigationController?.navigationBar.tintColor = UIColor.white
             let dict:NSDictionary = [NSAttributedString.Key.foregroundColor: KPetTextColor,NSAttributedString.Key.font : UIFont.init(name: CBPingFang_SC_Bold, size: 16*KFitHeightRate) as Any]
             self.navigationController?.navigationBar.titleTextAttributes = dict as? [NSAttributedString.Key : AnyObject]
         }

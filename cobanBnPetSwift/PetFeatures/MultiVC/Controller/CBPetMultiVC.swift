@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import UIKit
 
-class CBPetMultiVC : CBPetBaseViewController {
+class CBPetMultiVC : CBPetBaseViewController,UIScrollViewDelegate {
     
     public lazy var multiVM : CBPetMultiViewModel = {
         return CBPetMultiViewModel.init()
@@ -20,7 +21,22 @@ class CBPetMultiVC : CBPetBaseViewController {
         return barView
     }()
     
+    private lazy var scrollView : UIScrollView? = {
+        let scrollView = UIScrollView.init()
+        self.view.addSubview(scrollView)
+        scrollView.isPagingEnabled = true
+        scrollView.delegate = self
+        return scrollView
+    }()
+    
+    private lazy var contentView : UIView? = {
+        let view = UIView.init()
+        scrollView?.addSubview(view)
+        return view
+    }()
+    
     var configData : [String : CBPetBaseViewController]?
+    var titles : [String]?
     
     init(configData : [String : CBPetBaseViewController]) {
         super.init(nibName: nil, bundle: nil)
@@ -55,18 +71,66 @@ class CBPetMultiVC : CBPetBaseViewController {
         barView.snp_makeConstraints { make in
             make.top.left.right.equalTo(0)
         }
-        barView.configData = self.configData!.keys.map({ String in
-            return String
+        
+        self.titles = self.configData!.keys.map({ string in
+            return string
         })
+        barView.configData = self.titles ?? []
+        
+        
+        self.scrollView?.snp_makeConstraints({ make in
+            make.top.equalTo(barView.snp_bottom)
+            make.left.bottom.right.equalTo(0)
+        })
+        self.contentView?.snp_makeConstraints({ make in
+            make.height.edges.equalTo(self.scrollView!)
+        })
+        
+        self.setupContentView()
+    }
+    
+    private func setupContentView() {
+        guard let configData = self.configData, let titles = self.titles else {
+            return
+        }
+        var lastView : UIView?
+        for i in 0..<titles.count {
+            let vc = configData[titles[i]]
+            let view = vc!.view!
+            self.contentView?.addSubview(view)
+            view.snp_makeConstraints { make in
+                make.top.bottom.equalTo(self.contentView!)
+                make.width.equalTo(self.scrollView!)
+                if lastView == nil {
+                    make.left.equalTo(self.contentView!)
+                } else {
+                    make.left.equalTo(lastView!.snp_right)
+                }
+                if i == titles.count-1 {
+                    make.right.equalTo(self.contentView!)
+                }
+            }
+            lastView = view
+        }
     }
     
     private func setupViewModel() {
         self.multiVM.clickBackBtnBLK = {[weak self] () -> Void in
             self?.backBtnClick()
         }
-        self.multiVM.clickNaviTitleBLK = {[weak self] (title) -> Void in
-            CBLog(message: "controller clickTitle : \(self?.configData![title])")
+        self.multiVM.clickNaviTitleBLK = {[weak self] (idx) -> Void in
+            CBLog(message: idx)
+            self?.scrollView?.setContentOffset(CGPoint.init(x: CGFloat(idx)*(self?.scrollView?.frame.width)!, y: 0), animated: true)
             
         }
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let offset = scrollView.contentOffset.x
+        let pageNum : Int = Int(round(offset / scrollView.frame.width))
+        
+        barView.didScrollTo(pageNum)
+//        CGFloat offset = scrollView.contentOffset.x;
+//        NSInteger pageNum = round(offset / CGRectGetWidth(scrollView.frame));
     }
 }

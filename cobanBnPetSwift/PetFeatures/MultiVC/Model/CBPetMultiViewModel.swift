@@ -11,7 +11,8 @@ import Foundation
 class CBPetMultiViewModel: CBPetBaseViewModel {
     
     /* 点击导航栏标题*/
-    var clickNaviTitleBLK : ((_ title: String) -> Void)?
+    var clickNaviTitleBLK : ((_ idx: Int) -> Void)?
     
+    /* 点击导航栏返回*/
     var clickBackBtnBLK : (() -> Void)?
 }
