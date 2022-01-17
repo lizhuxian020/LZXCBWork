@@ -100,7 +100,13 @@ func RGB(r:CGFloat,g:CGFloat,b:CGFloat) -> UIColor {
     return UIColor(red: r / 255.0, green: g / 255.0, blue: b / 255.0, alpha: 1.0)
 }
 
+let CBFont = {(fontSize: CGFloat) -> UIFont? in
+    return UIFont.init(name: CBPingFangSC_Regular, size: fontSize*KFitHeightRate)
+}
 
+let CBFontM = {(fontSize: CGFloat) -> UIFont? in
+    return UIFont.init(name: CBPingFang_SC_Bold, size: fontSize*KFitHeightRate)
+}
 let KCBPetWakeUpLocalPhone = "KCBPetWakeUpLocalPhone"
 
 

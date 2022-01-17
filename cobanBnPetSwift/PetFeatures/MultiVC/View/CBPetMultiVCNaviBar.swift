@@ -18,6 +18,8 @@ class CBPetMultiVCNaviBar : CBPetBaseView {
         }
     }
     
+    var lastLbl : UILabel?
+    
     lazy private var statusView: UIView? = {
         let view = UIView.init()
         self.addSubview(view)
@@ -86,14 +88,16 @@ class CBPetMultiVCNaviBar : CBPetBaseView {
             make.width.equalTo(titlesContentWidth)
         })
         
-        CBLog(message: backBtn)
-        
     }
     
     private func setContentWithConfig(configData: [String]) {
         var lastView : UIView?
         for title in configData {
             let view = UILabel.init(text: title)
+            view.font = lastView != nil ? CBFont(12)! : CBFontM(14)
+            if (lastView == nil) {
+                self.lastLbl = view;
+            }
             view.textAlignment = .center
             titlesContentView?.addSubview(view)
             view.snp_makeConstraints { make in
@@ -114,6 +118,11 @@ class CBPetMultiVCNaviBar : CBPetBaseView {
     
     @objc private func tapTitle(sender:UIGestureRecognizer) {
         let lbl = sender.view as! UILabel;
+        if (self.lastLbl != nil && self.lastLbl !== lbl) {
+            self.lastLbl!.font = CBFont(12)!
+        }
+        self.lastLbl = lbl;
+        lbl.font = CBFontM(14)!
         if let vm = self.viewModel as? CBPetMultiViewModel,
            let clickBlk = vm.clickNaviTitleBLK {
             clickBlk(lbl.text ?? "")
