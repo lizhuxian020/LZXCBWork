@@ -130,7 +130,5 @@ class CBPetMultiVC : CBPetBaseViewController,UIScrollViewDelegate {
         let pageNum : Int = Int(round(offset / scrollView.frame.width))
         
         barView.didScrollTo(pageNum)
-//        CGFloat offset = scrollView.contentOffset.x;
-//        NSInteger pageNum = round(offset / CGRectGetWidth(scrollView.frame));
     }
 }

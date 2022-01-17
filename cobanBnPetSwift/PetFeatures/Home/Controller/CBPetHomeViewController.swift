@@ -576,6 +576,9 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         let msgCterVC = CBPetMsgCterViewController.init()
         let configData = ["我的": psnalVC, "设置": userManagementVC, "消息": msgCterVC];
         let multiVC = CBPetMultiVC.init(configData: configData)
+        multiVC.addChild(psnalVC)
+        multiVC.addChild(userManagementVC)
+        multiVC.addChild(msgCterVC)
         self.navigationController?.pushViewController(multiVC, animated: true)
     }
     // MARK: - 跳转到个人中心
