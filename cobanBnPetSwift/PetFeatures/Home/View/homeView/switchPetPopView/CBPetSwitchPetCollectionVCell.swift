@@ -30,12 +30,12 @@ class CBPetSwitchPetCollectionVCell: UICollectionViewCell {
     }
     private func setupView() {
         
-        self.backgroundColor = UIColor.white
+        self.backgroundColor = UIColor.clear
         
         self.addSubview(self.imgeView)
         self.imgeView.snp_makeConstraints { (make) in
             make.centerX.equalTo(self)
-            make.top.equalTo(20*KFitHeightRate)
+            make.top.equalTo(10*KFitHeightRate)
             make.size.equalTo(CGSize(width: 52*KFitHeightRate, height: 52*KFitHeightRate))
         }
         self.addSubview(self.textLb)

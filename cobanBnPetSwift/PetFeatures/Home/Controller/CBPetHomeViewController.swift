@@ -263,7 +263,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         initBarWith(title: "首页".localizedStr, isBack: false)
 //        initBarLeft(imageName: "pet_personal center", action: #selector(jumpToPersonal))
         initBarLeft(imageName: "pet_home_left_deive_list", action: #selector(jumpToMultiVC))
-        initBarRight(imageName: "pet_home_right_setting", action: #selector(showSwitchPet))
+        initBarRight(imageName: "pet_home_right_setting", action: #selector(jumpToMultiVC))
 
         self.centerAvtarView.translatesAutoresizingMaskIntoConstraints = false
         self.navigationItem.titleView = self.centerAvtarView
@@ -320,8 +320,6 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
                 self?.functionClickJump(title: title)
             }
         }
-        
-        self.view.addSubview(self.switchPetAlertView)
     }
     
     @objc private func showSwitchPet() {
