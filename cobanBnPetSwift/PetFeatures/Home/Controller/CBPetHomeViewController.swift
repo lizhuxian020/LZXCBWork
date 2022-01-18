@@ -262,18 +262,18 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         self.view.backgroundColor = UIColor.white
         initBarWith(title: "首页".localizedStr, isBack: false)
 //        initBarLeft(imageName: "pet_personal center", action: #selector(jumpToPersonal))
-        initBarLeft(imageName: "pet_home_left_deive_list", action: #selector(jumpToMultiVC))
+        initBarLeft(imageName: "pet_home_left_deive_list", action: #selector(showSwitchPet))
         initBarRight(imageName: "pet_home_right_setting", action: #selector(jumpToMultiVC))
 
-        self.centerAvtarView.translatesAutoresizingMaskIntoConstraints = false
-        self.navigationItem.titleView = self.centerAvtarView
-        self.centerAvtarView.setupViewModel(viewModel: self.homeViewModel)
-        (self.homeViewModel as CBPetHomeViewModel).avtarTitleViewSwitchDeviceBlock = { [weak self] () -> Void in
-            CBLog(message: " 点击切换手表 点击切换手表 点击切换手表 ")
-            //lzxTODO:复原
-            self?.switchDeviceClick()
-//            self?.resumeTimer();
-        }
+//        self.centerAvtarView.translatesAutoresizingMaskIntoConstraints = false
+//        self.navigationItem.titleView = self.centerAvtarView
+//        self.centerAvtarView.setupViewModel(viewModel: self.homeViewModel)
+//        (self.homeViewModel as CBPetHomeViewModel).avtarTitleViewSwitchDeviceBlock = { [weak self] () -> Void in
+//            CBLog(message: " 点击切换手表 点击切换手表 点击切换手表 ")
+//            //lzxTODO:复原
+//            self?.switchDeviceClick()
+////            self?.resumeTimer();
+//        }
         
         self.view.addSubview(self.bindDeviceResultView)
         self.bindDeviceResultView.snp_makeConstraints({ (make) in
@@ -454,7 +454,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
             /// 接受状态,有绑定的宠物
             self.updateData()
             self.initBarWith(title: "首页".localizedStr, isBack: false)
-            self.rightBtn.removeTarget(self, action: #selector(switchDeviceClick), for: .touchUpInside)
+//            self.rightBtn.removeTarget(self, action: #selector(switchDeviceClick), for: .touchUpInside)
 //            if let value = self.homeViewModel.homeInfoModel?.msgUnReadCount {
 //                if value == "1" {
 //                    initBarRight(imageName: "pet_messageCenter_red",action: #selector(jumpToMessageCenter))
@@ -578,12 +578,6 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
     }
     // MARK: - 跳转多重控制器
     @objc private func jumpToMultiVC() {
-        if self.switchPetAlertView.isHidden {
-            self.switchPetAlertView.showContent()
-        } else {
-            self.switchPetAlertView.dismiss()
-        }
-        return
         let psnalVC = CBPetPersonalCenterVC()
         let userManagementVC = CBPetFuncUserManagementVC.init()
         let msgCterVC = CBPetMsgCterViewController.init()

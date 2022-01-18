@@ -51,7 +51,7 @@ class CBPetTopSwitchBtnView: CBPetBaseView {
                 return
             }
         })
-        self.frame = CGRect(x: SCREEN_WIDTH-20*KFitWidthRate-ctrlPanelWidth, y: NavigationBarHeigt+12.5*KFitHeightRate+40*KFitHeightRate+15*KFitHeightRate+50*KFitHeightRate, width: ctrlPanelWidth, height: ctrlPanelWidth)
+        self.frame = CGRect(x: SCREEN_WIDTH-20*KFitWidthRate-ctrlPanelWidth, y: NavigationBarHeigt+12.5*KFitHeightRate, width: ctrlPanelWidth, height: ctrlPanelWidth)
         UIApplication.shared.keyWindow?.addSubview(self)
         self.switchBlock = resultBlock
         
