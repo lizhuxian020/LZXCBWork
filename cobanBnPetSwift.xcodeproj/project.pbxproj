@@ -663,6 +663,7 @@
 		B16C38C52793208D0058EAC4 /* CBPetMultiVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16C38C42793208D0058EAC4 /* CBPetMultiVC.swift */; };
 		B17F1D17279461430040434F /* CBPetMultiVCNaviBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17F1D16279461430040434F /* CBPetMultiVCNaviBar.swift */; };
 		B17F1D1A279463640040434F /* CBPetMultiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17F1D19279463640040434F /* CBPetMultiViewModel.swift */; };
+		B1E7040B2798727100060475 /* CBPetToolAssistanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1E7040A2798727100060475 /* CBPetToolAssistanceView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1829,6 +1830,7 @@
 		B16C38C42793208D0058EAC4 /* CBPetMultiVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetMultiVC.swift; sourceTree = "<group>"; };
 		B17F1D16279461430040434F /* CBPetMultiVCNaviBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetMultiVCNaviBar.swift; sourceTree = "<group>"; };
 		B17F1D19279463640040434F /* CBPetMultiViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetMultiViewModel.swift; sourceTree = "<group>"; };
+		B1E7040A2798727100060475 /* CBPetToolAssistanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetToolAssistanceView.swift; sourceTree = "<group>"; };
 		B380E0223C51C9E84D9849DF /* Pods-cobanBnPetSwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cobanBnPetSwift.debug.xcconfig"; path = "Target Support Files/Pods-cobanBnPetSwift/Pods-cobanBnPetSwift.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -4810,6 +4812,7 @@
 				43F3D859275A517F007F605E /* CBPetWakeUpPopView.h */,
 				43F3D85A275A517F007F605E /* CBPetWakeUpPopView.m */,
 				29C459A327980E6100F4C2B4 /* CBPetToolPopView.swift */,
+				B1E7040A2798727100060475 /* CBPetToolAssistanceView.swift */,
 			);
 			path = functionPopView;
 			sourceTree = "<group>";
@@ -5930,6 +5933,7 @@
 				17CDAB5224CEBE5500BB9F8B /* BarChart.m in Sources */,
 				17CDAC3324CEBE5600BB9F8B /* CollosionAlarmViewController.m in Sources */,
 				17CDABF124CEBE5600BB9F8B /* CBChartView.m in Sources */,
+				B1E7040B2798727100060475 /* CBPetToolAssistanceView.swift in Sources */,
 				17A1AF0324A895A800F17911 /* CBPetChatFMDBManager.swift in Sources */,
 				17CDAB9624CEBE5500BB9F8B /* NSObject+FireBlock.m in Sources */,
 				17CDABA224CEBE5500BB9F8B /* KLineChart.m in Sources */,

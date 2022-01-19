@@ -10,7 +10,37 @@ import UIKit
 
 class UIView_Extension: NSObject {
 }
+
+var tapIdentity = 15
+var tapGesId = 16
 extension UIView {
+    
+    public var tapBlk: (()->Void)? {
+        set {
+            if self.tapGes == nil {
+                let tap = UITapGestureRecognizer.init(target: self, action: #selector(tapAction))
+                self.addGestureRecognizer(tap)
+                self.tapGes = tap
+            }
+            objc_setAssociatedObject(self, &tapIdentity, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_COPY_NONATOMIC)
+        }
+        get {
+            return objc_getAssociatedObject(self, &tapIdentity) as? ()->Void
+        }
+    }
+    
+    private var tapGes : UITapGestureRecognizer? {
+        set {
+            objc_setAssociatedObject(self, &tapGesId, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+        get {
+            return objc_getAssociatedObject(self, &tapGesId) as? UITapGestureRecognizer
+        }
+    }
+    
+    @objc private func tapAction() {
+        self.tapBlk?()
+    }
     
     convenience init(backgroundColor:UIColor,
                      cornerRadius:CGFloat,

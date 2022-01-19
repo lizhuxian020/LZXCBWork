@@ -55,6 +55,10 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         let popV = CBPetToolPopView.init()
         return popV
     }()
+    private lazy var toolAssistanceView:CBPetToolAssistanceView = {
+        let popV = CBPetToolAssistanceView.init()
+        return popV
+    }()
     private lazy var shoutPopView:CBPetFunctionShoutView = {
         let popV = CBPetFunctionShoutView.init(frame: CGRect(x: 0, y: 0, width: SCREEN_WIDTH, height: SCREEN_HEIGHT))
         return popV
@@ -323,7 +327,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
             if isShow && title == "" {
                 self?.toolPopView.snp_remakeConstraints({ make in
                     make.left.right.equalTo(0)
-                    make.top.equalTo(self!.view.snp_bottom).offset(-G_ToolPopView_TopHeight-TabPaddingBARHEIGHT)
+                    make.top.equalTo(self!.view.snp_bottom).offset(-G_ToolPopView_TopHeight)
                 })
                 UIView.animate(withDuration: 0.25, animations: {
                     self!.view.layoutIfNeeded()
@@ -655,6 +659,9 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
     // MARK: - 功能菜单点击跳转
     private func functionClickJump (title:String) {
         switch title {
+        case "互动".localizedStr:
+            self.toolAssistanceView.show()
+            break
         case "喊话".localizedStr:
             if CBPetUtils.checkMicrophonePermission(resultBlock: { [weak self] (isAllow) in
                 if isAllow == true {
