@@ -561,6 +561,7 @@
 		17F28DE92488E272003C4010 /* CBPetMsgCterOperateTabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F28DE82488E272003C4010 /* CBPetMsgCterOperateTabCell.swift */; };
 		17F28DEB2488EFD7003C4010 /* CBPetMsgCterShowMoreTabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F28DEA2488EFD7003C4010 /* CBPetMsgCterShowMoreTabCell.swift */; };
 		17FCA6282447FB7F00388A2D /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FCA6272447FB7F00388A2D /* UIViewController+Extension.swift */; };
+		29C459A427980E6100F4C2B4 /* CBPetToolPopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29C459A327980E6100F4C2B4 /* CBPetToolPopView.swift */; };
 		433FF40A2485336400158301 /* CBPetFuncCvstionFootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433FF4092485336400158301 /* CBPetFuncCvstionFootView.swift */; };
 		4343C29B249D1FDA009BF7CC /* CBPetPsnalCterEditPetInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4343C29A249D1FDA009BF7CC /* CBPetPsnalCterEditPetInfoVC.swift */; };
 		4343C29D249D20C6009BF7CC /* CBPetPsnalCterEditUserInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4343C29C249D20C6009BF7CC /* CBPetPsnalCterEditUserInfoVC.swift */; };
@@ -1717,6 +1718,7 @@
 		17F28DE82488E272003C4010 /* CBPetMsgCterOperateTabCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetMsgCterOperateTabCell.swift; sourceTree = "<group>"; };
 		17F28DEA2488EFD7003C4010 /* CBPetMsgCterShowMoreTabCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetMsgCterShowMoreTabCell.swift; sourceTree = "<group>"; };
 		17FCA6272447FB7F00388A2D /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
+		29C459A327980E6100F4C2B4 /* CBPetToolPopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetToolPopView.swift; sourceTree = "<group>"; };
 		2A1F41BDFD0FBDF918826F4E /* libPods-cobanBnPetSwift.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-cobanBnPetSwift.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		433FF4092485336400158301 /* CBPetFuncCvstionFootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetFuncCvstionFootView.swift; sourceTree = "<group>"; };
 		4343C29A249D1FDA009BF7CC /* CBPetPsnalCterEditPetInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetPsnalCterEditPetInfoVC.swift; sourceTree = "<group>"; };
@@ -4807,6 +4809,7 @@
 				435B2536247D661D006CC6A1 /* CBPetFunctionCollectionCell.swift */,
 				43F3D859275A517F007F605E /* CBPetWakeUpPopView.h */,
 				43F3D85A275A517F007F605E /* CBPetWakeUpPopView.m */,
+				29C459A327980E6100F4C2B4 /* CBPetToolPopView.swift */,
 			);
 			path = functionPopView;
 			sourceTree = "<group>";
@@ -5952,6 +5955,7 @@
 				17E4478F242A0D40007F8837 /* CBPetBaseModel.swift in Sources */,
 				1782BF1B24C0427D00544C36 /* NSString+LBExtension.m in Sources */,
 				4360DB382480A2C700D2A03C /* UITextField+Extension.swift in Sources */,
+				29C459A427980E6100F4C2B4 /* CBPetToolPopView.swift in Sources */,
 				17CDABC824CEBE5600BB9F8B /* lundump.c in Sources */,
 				1784CBE7248F2D06004B0D78 /* CBPetPopSheetView.swift in Sources */,
 				435B2531247D08A5006CC6A1 /* CBPetBaseButton.swift in Sources */,

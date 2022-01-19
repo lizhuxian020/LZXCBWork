@@ -51,6 +51,10 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         popV.isHidden = true
         return popV
     }()
+    private lazy var toolPopView:CBPetToolPopView = {
+        let popV = CBPetToolPopView.init()
+        return popV
+    }()
     private lazy var shoutPopView:CBPetFunctionShoutView = {
         let popV = CBPetFunctionShoutView.init(frame: CGRect(x: 0, y: 0, width: SCREEN_WIDTH, height: SCREEN_HEIGHT))
         return popV
@@ -303,18 +307,33 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
             }
         }
         
-        self.view.addSubview(self.functionPopView)
-        self.view.bringSubviewToFront(self.functionPopView)
-        self.functionPopView.setupViewModel(viewModel: self.homeViewModel)
+        self.view.addSubview(self.toolPopView)
+        self.toolPopView.snp_makeConstraints { make in
+            make.left.right.bottom.equalTo(0)
+        }
+        
+//        self.view.addSubview(self.functionPopView)
+//        self.view.bringSubviewToFront(self.functionPopView)
+        self.toolPopView.setupViewModel(viewModel: self.homeViewModel)
         (self.homeViewModel as CBPetHomeViewModel).functionViewBlock = { [weak self] (isShow:Bool,title:String) -> Void in
             CBLog(message: "功能view。。。。")
+            if self == nil {
+                return
+            }
             if isShow && title == "" {
-                UIView.animate(withDuration: 0.5, animations: {
-                    self?.functionPopView.frame = CGRect.init(x: 0, y: SCREEN_HEIGHT - 50*KFitHeightRate, width: SCREEN_WIDTH, height: SCREEN_HEIGHT)
+                self?.toolPopView.snp_remakeConstraints({ make in
+                    make.left.right.equalTo(0)
+                    make.top.equalTo(self!.view.snp_bottom).offset(-G_ToolPopView_TopHeight-TabPaddingBARHEIGHT)
+                })
+                UIView.animate(withDuration: 0.25, animations: {
+                    self!.view.layoutIfNeeded()
                 })
             } else if isShow == false && title == "" {
-                UIView.animate(withDuration: 0.5, animations: {
-                    self?.functionPopView.frame = CGRect.init(x: 0, y: SCREEN_HEIGHT - 200*KFitHeightRate - CGFloat(TabPaddingBARHEIGHT), width: SCREEN_WIDTH, height: SCREEN_HEIGHT)
+                self?.toolPopView.snp_remakeConstraints({ make in
+                    make.left.right.bottom.equalTo(0)
+                })
+                UIView.animate(withDuration: 0.25, animations: {
+                    self!.view.layoutIfNeeded()
                 })
             } else {
                 self?.functionClickJump(title: title)
@@ -404,6 +423,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
                     self?.pickerViewByStatus(successModel: objc as! CBBaseNetworkModel)
                     self?.locatePopView.updateSingleLocateData(model:self?.homeViewModel.homeInfoModel ?? CBPetHomeInfoModel.init())
                     self?.functionPopView.updateFunctionDataSource()
+                    self?.toolPopView.updateContent()
                 }
                 break
             case .paramters:
