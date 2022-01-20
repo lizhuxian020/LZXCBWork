@@ -110,7 +110,8 @@ class CBPetToolPopView : CBPetBaseView {
         bottomFitView.snp_makeConstraints { make in
             make.top.equalTo(iconViewContainer.snp_bottom)
             make.left.right.bottom.equalTo(0)
-            make.height.equalTo(TabPaddingBARHEIGHT)
+//            make.height.equalTo(TabPaddingBARHEIGHT)
+            make.height.equalTo(0)
         }
     }
     
