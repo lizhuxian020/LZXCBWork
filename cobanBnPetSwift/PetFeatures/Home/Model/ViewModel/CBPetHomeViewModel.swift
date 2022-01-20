@@ -118,7 +118,7 @@ class CBPetHomeViewModel: CBPetBaseViewModel {
 }
 extension CBPetHomeViewModel {
     //MARK: - 获取首页信息request
-    func getHomeInfoRequest() {
+    func getHomeInfoRequest(_ finishBLK: (()->Void)? = nil) {
         var paramters:Dictionary<String,Any> = Dictionary()
         if let value = CBPetLoginModelTool.getUser()?.uid {
             paramters = ["uid":value.valueStr]
@@ -137,6 +137,9 @@ extension CBPetHomeViewModel {
             ///首页设备信息本地存储
             if let value = self?.homeInfoModel {
                 CBPetHomeInfoTool.saveHomeInfo(homeInfoModel: value)
+            }
+            if let blk = finishBLK {
+                blk()
             }
             guard self?.updateDataBlock == nil else {
                 self?.updateDataBlock!(.homeInfo, successModel)
@@ -179,14 +182,12 @@ extension CBPetHomeViewModel {
         CBPetNetworkingManager.share.switchDeviceRequest(paramters: paramters,successBlock: { [weak self] (successModel) in
             MBProgressHUD.hide(for: CBPetUtils.getWindow(), animated: true)
             ///返回错误信息
-            guard successModel.status == "0" else {
+            if successModel.status != "0" {
                 MBProgressHUD.showMessage(Msg: successModel.resmsg ?? "请求超时".localizedStr, Deleay: 2.0)
-                self?.getHomeInfoRequest()
-                self?.getDeviceParamtersRequest()
-                return;
             }
-            self?.getHomeInfoRequest()
-            self?.getDeviceParamtersRequest()
+            self?.getHomeInfoRequest({[weak self] in
+                self?.getDeviceParamtersRequest()
+            })
         }, failureBlock: { (failureModel) in
             MBProgressHUD.hide(for: CBPetUtils.getWindow(), animated: true)
         })
@@ -204,7 +205,8 @@ extension CBPetHomeViewModel {
             guard self?.updateDataBlock == nil else {
                 self?.updateDataBlock!(.paramters, self?.paramtersObject as Any)
                 /* 更新各项参数后 刷新首页数据*/
-                self?.getHomeInfoRequest()
+                //lzxPS: 感觉没必要更新首页
+//                self?.getHomeInfoRequest()
                 return
             }
             ///返回错误信息

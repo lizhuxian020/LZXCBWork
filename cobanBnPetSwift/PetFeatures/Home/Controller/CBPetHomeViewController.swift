@@ -17,13 +17,13 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
     
     private var switchPetAlertView : CBPetSwitchPetAlertView = CBPetSwitchPetAlertView.init()
     
-    /* 绑定手表view*/
+    /* 绑定手表view，没有设备的时候展现*/
     private lazy var bindDeviceView:CBPetHomeBindView = {
         let bindV = CBPetHomeBindView.init()
         bindV.isHidden = true
         return bindV
     }()
-    /* 绑定手表申请已提交view*/
+    /* 绑定手表申请已提交view, 没有设备的时候展现*/
     private lazy var bindDeviceResultView:CBPetHomeBdDeviceResultV = {
         let bind = CBPetHomeBdDeviceResultV.init()
         bind.isHidden = true
@@ -46,15 +46,18 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         let markView = CBPetFenceMarkView.init(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
         return markView
     }()
+    /* 工具栏（废弃）*/
     private lazy var functionPopView:CBPetFunctionPopView = {
         let popV = CBPetFunctionPopView.init(frame: CGRect(x: 0, y: SCREEN_HEIGHT - 200*KFitHeightRate - CGFloat(TabPaddingBARHEIGHT), width: SCREEN_WIDTH, height: SCREEN_HEIGHT))
         popV.isHidden = true
         return popV
     }()
+    /* 工具栏*/
     private lazy var toolPopView:CBPetToolPopView = {
         let popV = CBPetToolPopView.init()
         return popV
     }()
+    /* 互动的工具栏*/
     private lazy var toolAssistanceView:CBPetToolAssistanceView = {
         let popV = CBPetToolAssistanceView.init()
         return popV
@@ -75,6 +78,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         let popV = CBPetFuncPubnishmentView.init(frame: CGRect(x: 0, y: 0, width: SCREEN_WIDTH, height: SCREEN_HEIGHT))
         return popV
     }()
+    /* 定位信息popView，点击定位会弹出来*/
     private lazy var locatePopView:CBPetFuncLocatePopView = {
         let popV = CBPetFuncLocatePopView.init(frame: CGRect(x: 0, y: CGFloat(NavigationBarHeigt), width: SCREEN_WIDTH, height: 112*KFitHeightRate))
         return popV
@@ -411,11 +415,12 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
     @objc private func getHomeInfoRequest() {
         self.isAllowShowPanel = true
         /* 获取首页数据*/
-        self.homeViewModel.getHomeInfoRequest()
+        self.homeViewModel.getHomeInfoRequest({[weak self] ()->Void in
+            /* 获取各项参数*/
+            self.homeViewModel.getDeviceParamtersRequest()
+        })
         /* 获取用户信息*/
-        self.homeViewModel.getUserInfoRequest()
-        /* 获取各项参数*/
-        self.homeViewModel.getDeviceParamtersRequest()
+        self!.homeViewModel.getUserInfoRequest()
         /* 设置别名*/
         if let value = CBPetLoginModelTool.getUser() {
             self.addUMAlias(model:value)
@@ -437,7 +442,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
                 if objc is CBBaseNetworkModel {
                     self?.pickerViewByStatus(successModel: objc as! CBBaseNetworkModel)
                     self?.locatePopView.updateSingleLocateData(model:self?.homeViewModel.homeInfoModel ?? CBPetHomeInfoModel.init())
-                    self?.functionPopView.updateFunctionDataSource()
+//                    self?.functionPopView.updateFunctionDataSource()
                     self?.toolPopView.updateContent()
                     self?.toolAssistanceView.updateContent()
                 }
@@ -517,7 +522,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
                             self?.ctrlPanelPopView.setupViewModel(viewModel: self!.homeViewModel)
                             self!.addCtrlPanelPopViewClickMethod()
                             CBPetCtrlPanelView.share.bringToFront()
-                            self?.homeViewModel.getDeviceParamtersRequest()
+//                            self?.homeViewModel.getDeviceParamtersRequest()
                         } else {
                             self?.ctrlPanelPopView.dissmiss()
                         }

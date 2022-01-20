@@ -123,8 +123,11 @@ struct CBPetUserInfoModelTool {
         let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last!
         return (path as NSString).appendingPathComponent("CBPetPsnalInfo.plist")
     }
+    
+    private static var _userInfo : CBPetUserInfoModel?
     //MARK: - 存档
     static func saveUserInfo(userInfoModel:CBPetUserInfoModel) {
+        _userInfo = userInfoModel
         let encodeer = JSONEncoder()
         if let data = try? encodeer.encode(userInfoModel) {
             //UserDefaults.standard.set(data, forKey: path)
@@ -137,15 +140,20 @@ struct CBPetUserInfoModelTool {
             }
         }
     }
+    
     //MARK: - 获取用户信息
     static func getUserInfo() -> CBPetUserInfoModel {
+        if let info = _userInfo {
+            return info
+        }
         let homeInfoData = NSKeyedUnarchiver.unarchiveObject(withFile: psnalInfoPath)
         let decoder = JSONDecoder()
         if let data = homeInfoData as? Data {
             let homeInfoModel = try? decoder.decode(CBPetUserInfoModel.self, from: data)
-            return homeInfoModel!
+            _userInfo = homeInfoModel
         }
-        return CBPetUserInfoModel()
+        _userInfo = CBPetUserInfoModel()
+        return _userInfo!
     }
     //MARK: - 删档
     static func removeUserInfo() {
