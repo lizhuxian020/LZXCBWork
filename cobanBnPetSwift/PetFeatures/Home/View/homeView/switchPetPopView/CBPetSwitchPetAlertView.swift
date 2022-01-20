@@ -12,12 +12,14 @@ import HandyJSON
 import UIKit
 
 
-class CBPetSwitchPetAlertView : CBPetBaseView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+class CBPetSwitchPetAlertView : CBPetBaseView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate {
     
     let itemW = SCREEN_WIDTH/5
     let itemH = 100*KFitHeightRate
     let contentH : CGFloat = 300.0
     
+    /// 点击完成按钮的回调
+    public var selectBlock:((_ petModel:CBPetPsnalCterPetModel) -> Void)?
     private var bgView : UIView = UIView.init()
     private var contentView : UIView = UIView.init()
     private var activityView : UIActivityIndicatorView = {
@@ -77,10 +79,16 @@ class CBPetSwitchPetAlertView : CBPetBaseView, UICollectionViewDataSource, UICol
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        let point = gestureRecognizer.location(in: self)
+        return !self.contentView.frame.contains(point)
+    }
+    
     private func setupUI() {
         self.frame = CGRect.init(x: 0, y: 0, width: SCREEN_WIDTH, height: SCREEN_HEIGHT)
         self.backgroundColor = .clear
         let tapGes = UITapGestureRecognizer.init(target: self, action: #selector(dismiss))
+        tapGes.delegate = self
         self.addGestureRecognizer(tapGes)
         
         self.addSubview(bgView)
@@ -176,5 +184,14 @@ class CBPetSwitchPetAlertView : CBPetBaseView, UICollectionViewDataSource, UICol
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize.init(width: itemW, height: itemH)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        self.dismiss()
+        let model = self.dataSource[indexPath.row]
+        guard let blk = self.selectBlock else {
+            return
+        }
+        blk(model)
     }
 }

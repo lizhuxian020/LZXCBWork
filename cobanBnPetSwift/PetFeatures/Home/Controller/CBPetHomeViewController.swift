@@ -347,6 +347,16 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
     }
     
     @objc private func showSwitchPet() {
+        self.switchPetAlertView.selectBlock = { [weak self] (petModel:CBPetPsnalCterPetModel) in
+            if petModel.title == "添加".localizedStr {
+                /* 添加宠物*/
+                self!.toBindDeviceClick()
+            } else {
+                self?.cleanMap()
+                /* 选中某个宠物设备并切换*/
+                self?.homeViewModel.switchDeviceRequest(imeiStr: petModel.pet.device.imei ?? "")
+            }
+        }
         self.switchPetAlertView.showContent()
     }
     
