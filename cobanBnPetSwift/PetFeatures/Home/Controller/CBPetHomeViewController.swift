@@ -417,10 +417,10 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         /* 获取首页数据*/
         self.homeViewModel.getHomeInfoRequest({[weak self] ()->Void in
             /* 获取各项参数*/
-            self.homeViewModel.getDeviceParamtersRequest()
+            self!.homeViewModel.getDeviceParamtersRequest()
         })
         /* 获取用户信息*/
-        self!.homeViewModel.getUserInfoRequest()
+        self.homeViewModel.getUserInfoRequest()
         /* 设置别名*/
         if let value = CBPetLoginModelTool.getUser() {
             self.addUMAlias(model:value)
