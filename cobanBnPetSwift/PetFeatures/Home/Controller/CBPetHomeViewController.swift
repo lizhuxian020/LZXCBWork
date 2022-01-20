@@ -319,6 +319,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
 //        self.view.addSubview(self.functionPopView)
 //        self.view.bringSubviewToFront(self.functionPopView)
         self.toolPopView.setupViewModel(viewModel: self.homeViewModel)
+        self.toolAssistanceView.setupViewModel(viewModel: self.homeViewModel)
         (self.homeViewModel as CBPetHomeViewModel).functionViewBlock = { [weak self] (isShow:Bool,title:String) -> Void in
             CBLog(message: "功能view。。。。")
             if self == nil {
@@ -428,6 +429,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
                     self?.locatePopView.updateSingleLocateData(model:self?.homeViewModel.homeInfoModel ?? CBPetHomeInfoModel.init())
                     self?.functionPopView.updateFunctionDataSource()
                     self?.toolPopView.updateContent()
+                    self?.toolAssistanceView.updateContent()
                 }
                 break
             case .paramters:
@@ -660,7 +662,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
     private func functionClickJump (title:String) {
         switch title {
         case "互动".localizedStr:
-            self.toolAssistanceView.show()
+            self.toolAssistanceView.show(frame: self.toolPopView.getInteractionIconFrame())
             break
         case "喊话".localizedStr:
             if CBPetUtils.checkMicrophonePermission(resultBlock: { [weak self] (isAllow) in
@@ -747,6 +749,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
             self.homeViewModel.singleLocateCommandRequest()
             break
         case "微聊".localizedStr:
+            self.toolAssistanceView.hide()
             let chatVC = CBPetFunctionChatVC.init()
             self.navigationController?.pushViewController(chatVC, animated: true)
             break

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 let G_ToolPopView_TopHeight = KIs_iPhoneXStyle ? TabPaddingBARHEIGHT : 20*KFitHeightRate
 
@@ -36,6 +37,16 @@ class CBPetToolPopView : CBPetBaseView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    public func getInteractionIconFrame() -> CGRect {
+        guard let view = self.iconViewContainer.subviews.first,
+              let window = UIApplication.shared.keyWindow else {
+                  return CGRect.init()
+        }
+        let rect = window.convert(view.frame, from: self.iconViewContainer)
+        CBLog(message: rect)
+        return rect
+    }
+    
     public func updateContent() {
         var iconDataSource : [Dictionary<String,String>] = [
             ["img":"pet_func_interaction", "txt":"互动".localizedStr],
@@ -47,11 +58,10 @@ class CBPetToolPopView : CBPetBaseView {
             iconDataSource.insert(["img":"pet_function_wakeup", "txt":"唤醒".localizedStr], at: 2)
         }
         
-        //self.iconContainer.removeAllView
         self.iconViewContainer.subviews.forEach { view in
             view.removeFromSuperview()
         }
-        //self.iconCOntainer.addIconViewWithData
+        
         var lastView : UIView?
         for data in iconDataSource {
             let view = self.createIconView(data)
@@ -67,18 +77,9 @@ class CBPetToolPopView : CBPetBaseView {
             }
             lastView = view
         }
-        
-//        if let value = CBPetHomeInfoTool.getHomeInfo().devUser.isAdmin {
-//            if value.valueStr == "1" {
-//                /* 管理员*/
-//            } else {
-//                /* 0或无为非管理员 */
-//            }
-//        }
     }
     
     private func setupUI() {
-        self.layer.cornerRadius = G_ToolPopView_TopHeight
         self.backgroundColor = .white
         
         self.addSubview(topTapView)
@@ -104,7 +105,6 @@ class CBPetToolPopView : CBPetBaseView {
             make.top.equalTo(self.topTapView.snp_bottom)
             make.left.right.equalTo(0)
         }
-        iconViewContainer.backgroundColor = .red
         
         self.addSubview(bottomFitView)
         bottomFitView.snp_makeConstraints { make in
@@ -137,8 +137,6 @@ class CBPetToolPopView : CBPetBaseView {
             make.bottom.equalTo(-10*KFitHeightRate)
         }
         
-//        let tap = UITapGestureRecognizer.init(target: self, action: #selector(clickIcon(sender:)))
-//        view.addGestureRecognizer(tap)
         view.tapBlk = { [weak self] ()->Void in
             CBLog(message: data)
             guard self != nil,
@@ -149,11 +147,6 @@ class CBPetToolPopView : CBPetBaseView {
         }
         return view
     }
-    
-//    @objc private func clickIcon(sender: UITapGestureRecognizer) {
-//        let view = sender.view
-//        
-//    }
     
     @objc private func clickTopTap() {
         if let vm = self.viewModel as? CBPetHomeViewModel,
@@ -166,5 +159,16 @@ class CBPetToolPopView : CBPetBaseView {
     
     override func setupViewModel(viewModel: Any) {
         self.viewModel = viewModel
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let maskPath = UIBezierPath.init(roundedRect: self.bounds, byRoundingCorners: UIRectCorner(rawValue: UIRectCorner.topRight.rawValue | UIRectCorner.topLeft.rawValue), cornerRadii: CGSize(width: 18*KFitHeightRate, height: 18*KFitHeightRate))
+        let maskLayer = CAShapeLayer.init()
+        /* 设置大小*/
+        maskLayer.frame = self.bounds
+        /* 设置图形样子*/
+        maskLayer.path = maskPath.cgPath
+        self.layer.mask = maskLayer
     }
 }

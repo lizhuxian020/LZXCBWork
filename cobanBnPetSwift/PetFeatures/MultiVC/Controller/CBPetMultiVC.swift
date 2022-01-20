@@ -65,7 +65,7 @@ class CBPetMultiVC : CBPetBaseViewController,UIScrollViewDelegate {
     
     private func setupView() {
         self.setupViewModel()
-        view.backgroundColor = .red
+        view.backgroundColor = .white
         
         barView.setupViewModel(viewModel: self.multiVM)
         barView.snp_makeConstraints { make in
@@ -87,6 +87,8 @@ class CBPetMultiVC : CBPetBaseViewController,UIScrollViewDelegate {
         })
         
         self.setupContentView()
+        
+        self.scrollView?.panGestureRecognizer.require(toFail: (self.navigationController?.interactivePopGestureRecognizer)!)
     }
     
     private func setupContentView() {
