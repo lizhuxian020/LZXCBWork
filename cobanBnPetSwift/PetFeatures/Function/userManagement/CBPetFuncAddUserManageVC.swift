@@ -14,8 +14,8 @@ class CBPetFuncAddUserManageVC: CBPetBaseViewController {
 
     private lazy var inputPhoneView:CBPetTFInputView = {
         let inputView = CBPetTFInputView.init()
-        inputView.setInputView(title: "".localizedStr, placeholdStr: "请输入手机号码".localizedStr)
-        inputView.textTF.keyboardType = .numberPad
+        inputView.setInputView(title: "".localizedStr, placeholdStr: "请输入手机号码/邮箱".localizedStr)
+//        inputView.textTF.keyboardType = .numberPad
         self.view.addSubview(inputView)
         return inputView
     }()
@@ -45,21 +45,21 @@ class CBPetFuncAddUserManageVC: CBPetBaseViewController {
         self.rightBtn.titleLabel?.font = UIFont(name: CBPingFangSC_Regular, size: 14*KFitHeightRate)
         
         self.view.addSubview(self.inputPhoneView)
-        self.view.addSubview(self.areaCodeBTF)
+//        self.view.addSubview(self.areaCodeBTF)
         self.inputPhoneView.snp_makeConstraints { (make) in
             make.left.equalTo(20*KFitWidthRate)
             make.right.equalTo((-20*KFitWidthRate))
             make.height.equalTo(53*KFitHeightRate)
             make.top.equalTo(self.view.snp_top).offset(0*KFitHeightRate)
         }
-        self.areaCodeBTF.snp_makeConstraints { (make) in
-            make.right.equalTo(self.inputPhoneView.snp_right).offset(0)
-            make.centerY.equalTo(self.inputPhoneView.textTF.snp_centerY)
-        }
+//        self.areaCodeBTF.snp_makeConstraints { (make) in
+//            make.right.equalTo(self.inputPhoneView.snp_right).offset(0)
+//            make.centerY.equalTo(self.inputPhoneView.textTF.snp_centerY)
+//        }
     }
     @objc private func commfirmClick() {
         guard self.inputPhoneView.textTF.text?.isEmpty == false else {
-            MBProgressHUD.showMessage(Msg: "请输入手机号码".localizedStr, Deleay: 1.5)
+            MBProgressHUD.showMessage(Msg: "请输入手机号码/邮箱".localizedStr, Deleay: 1.5)
             return
         }
         self.findUserInfoByPhoeRequet()

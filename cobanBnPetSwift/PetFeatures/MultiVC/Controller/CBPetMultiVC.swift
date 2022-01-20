@@ -35,12 +35,13 @@ class CBPetMultiVC : CBPetBaseViewController,UIScrollViewDelegate {
         return view
     }()
     
-    var configData : [String : CBPetBaseViewController]?
-    var titles : [String]?
+    var configData : [String : CBPetBaseViewController] = [:]
+    var titles : [String] = []
     
-    init(configData : [String : CBPetBaseViewController]) {
+    init(configData : [String : CBPetBaseViewController], titles : [String]) {
         super.init(nibName: nil, bundle: nil)
         self.configData = configData
+        self.titles = titles
     }
     
     required init?(coder: NSCoder) {
@@ -72,10 +73,7 @@ class CBPetMultiVC : CBPetBaseViewController,UIScrollViewDelegate {
             make.top.left.right.equalTo(0)
         }
         
-        self.titles = self.configData!.keys.map({ string in
-            return string
-        })
-        barView.configData = self.titles ?? []
+        barView.configData = self.titles
         
         
         self.scrollView?.snp_makeConstraints({ make in
@@ -92,9 +90,8 @@ class CBPetMultiVC : CBPetBaseViewController,UIScrollViewDelegate {
     }
     
     private func setupContentView() {
-        guard let configData = self.configData, let titles = self.titles else {
-            return
-        }
+        let configData = self.configData
+        let titles = self.titles
         var lastView : UIView?
         for i in 0..<titles.count {
             let vc = configData[titles[i]]

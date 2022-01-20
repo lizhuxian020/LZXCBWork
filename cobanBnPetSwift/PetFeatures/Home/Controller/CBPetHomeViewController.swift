@@ -607,8 +607,8 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         let psnalVC = CBPetPersonalCenterVC()
         let userManagementVC = CBPetFuncUserManagementVC.init()
         let msgCterVC = CBPetMsgCterViewController.init()
-        let configData = ["我的": psnalVC, "设置": userManagementVC, "消息": msgCterVC];
-        let multiVC = CBPetMultiVC.init(configData: configData)
+        let configData = ["我的".localizedStr: psnalVC, "设置".localizedStr: userManagementVC, "消息".localizedStr: msgCterVC];
+        let multiVC = CBPetMultiVC.init(configData: configData, titles: ["我的".localizedStr, "设置".localizedStr, "消息".localizedStr])
         multiVC.addChild(psnalVC)
         multiVC.addChild(userManagementVC)
         multiVC.addChild(msgCterVC)
