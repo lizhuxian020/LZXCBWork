@@ -23,7 +23,7 @@ class CBAvatarAnnotionView: BMKAnnotationView {
         imgV.isUserInteractionEnabled = true;
         imgV.layer.masksToBounds = true;
         imgV.layer.cornerRadius = (img.size.width - 12)/2;
-        imgV.contentMode = .scaleAspectFit;
+        imgV.contentMode = .scaleAspectFill;
         return imgV
     }()
     private var statusBtn:UIButton = {
@@ -55,9 +55,8 @@ class CBAvatarAnnotionView: BMKAnnotationView {
     override init!(annotation: BMKAnnotation!, reuseIdentifier: String!) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         
-        self.addSubview(self.statusBtn)
+//        self.addSubview(self.statusBtn)
         let img = UIImage.init(named: "pet_mapAvatar_default")!
-        self.bounds = CGRect.init(x: 0, y: 0, width: img.size.width, height: img.size.height)
         self.addSubview(self.defaultImageView)
         self.defaultImageView.addSubview(self.avtarImgView)
         self.avtarImgView.snp_makeConstraints { (make) in
@@ -73,8 +72,8 @@ class CBAvatarAnnotionView: BMKAnnotationView {
         self.avtarImgView.image = iconImage
     }
     func updateAvatarByImageUrl(imageUrl:String) {
-        self.defaultImageView.image = UIImage(named: "pet_mapAvatar_default")! 
-        self.avtarImgView.sd_setImage(with: URL.init(string: imageUrl), placeholderImage: UIImage(named: ""), options: [])
+//        self.defaultImageView.image = UIImage(named: "pet_mapAvatar_default")!
+        self.avtarImgView.sd_setImage(with: URL.init(string: imageUrl), placeholderImage: UIImage.init(), options: [])
     }
     func updateHomeInfoModel(homeModel:CBPetHomeInfoModel) {
         switch homeModel.pet.device.online {

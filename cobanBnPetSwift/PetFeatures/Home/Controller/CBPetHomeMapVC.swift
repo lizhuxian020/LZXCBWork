@@ -100,8 +100,12 @@ class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSear
     func mapView(_ mapView: BMKMapView!, viewFor annotation: BMKAnnotation!) -> BMKAnnotationView! {
         if annotation is CBPetNormalAnnotation {
             let annotationView = CBAvatarAnnotionView.annotationViewCopyMapView(mapView: mapView, annotation: annotation)
-            annotationView.image = UIImage() /* 置空默认图片*/
-            annotationView.updateIconImage(iconImage: self.avtarImg ?? UIImage.init(named: "pet_mapAvatar_default")!)
+            annotationView.image = UIImage.init(named: "pet_mapAvatar_default")!
+//            annotationView.updateIconImage(iconImage: self.avtarImg ?? UIImage.init(named: "pet_mapAvatar_default")!)
+            
+            let model = annotation as! CBPetNormalAnnotation;
+            let imgUrl = model.avatarImgUrl ?? ""
+            annotationView.updateAvatarByImageUrl(imageUrl: imgUrl)
             annotationView.updateHomeInfoModel(homeModel: self.homeViewModel.homeInfoModel ?? CBPetHomeInfoModel())
             let imageDefault = UIImage.init(named: "pet_mapAvatar_default")!
             annotationView.centerOffset = CGPoint(x: 0, y: -(imageDefault.size.height)/2)
@@ -118,9 +122,11 @@ class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSear
         return nil
     }
     func mapView(_ mapView: BMKMapView!, didSelect view: BMKAnnotationView!) {
+        CBLog(message: "--lzx didSelect : \(view.description)")
     }
     func mapView(_ mapView: BMKMapView!, click view: BMKAnnotationView!) {
         // 点击标注事件
+        CBLog(message: "--lzx didClick : \(view.description)")
 //        print("百度地图点击了标注")
 //        let locationVC = CBLocationViewController.init()
 //        self.navigationController?.pushViewController(locationVC, animated: true)

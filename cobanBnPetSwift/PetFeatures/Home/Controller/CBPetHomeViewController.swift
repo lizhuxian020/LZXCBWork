@@ -418,6 +418,8 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         self.homeViewModel.getHomeInfoRequest({[weak self] ()->Void in
             /* 获取各项参数*/
             self!.homeViewModel.getDeviceParamtersRequest()
+            /* 获取设备列表*/
+            self!.homeViewModel.getDeviceList()
         })
         /* 获取用户信息*/
         self.homeViewModel.getUserInfoRequest()
@@ -450,6 +452,19 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
             case .paramters:
                 /* 设备各项参数刷新*/
                 self?.ctrlPanelPopView.updateParamters(model: self?.homeViewModel.paramtersObject ?? CBPetHomeParamtersModel())
+                break
+            case .deviceList:
+                guard let deviceList = self?.homeViewModel.deviceList else {
+                    return
+                }
+                let otherDevice = deviceList.map { model -> CBPetPsnalCterPetModel in
+                    let currentChoosePet = self?.homeViewModel.homeInfoModel?.pet
+                    if currentChoosePet?.device.imei != model.imei {
+                        return model
+                    }
+                    return CBPetPsnalCterPetModel.init()
+                }
+                self?.addOtherMarker(deviceList: otherDevice)
                 break
             case .lsiten:
                 let str = objc as! String
@@ -610,7 +625,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
             self.addMapFenceMarker()
             self.addMapCircle()
         }
-        self.addMapMarker()
+//        self.addMapMarker()
     }
     private func cleanMap() {
         self.baiduMapView.removeOverlays(self.baiduMapView.overlays)
@@ -919,11 +934,26 @@ extension CBPetHomeViewController {
         }
         return modelArr
     }
+    private func addOtherMarker(deviceList: [CBPetPsnalCterPetModel]) {
+        for model in deviceList {
+            guard model.imei != nil else {
+                continue
+            }
+            let normalAnnotation = CBPetNormalAnnotation.init()
+            normalAnnotation.avatarImgUrl = model.pet.photo
+            normalAnnotation.coordinate = CLLocationCoordinate2DMake(Double(model.pet.device.location.lat ?? "0")!, Double(model.pet.device.location.lng ?? "0")!)
+            normalAnnotation.title = nil
+            self.baiduMapView.addAnnotation(normalAnnotation)
+            
+        }
+        self.addMapMarker()
+    }
     private func addMapMarker() {
         guard AppDelegate.shareInstance.IsShowGoogleMap == true else {
             let normalAnnotation = CBPetNormalAnnotation.init()
             normalAnnotation.coordinate = CLLocationCoordinate2DMake(Double(self.homeViewModel.homeInfoModel?.pet.device.location.lat ?? "0")!, Double(self.homeViewModel.homeInfoModel?.pet.device.location.lng ?? "0")!)
             normalAnnotation.title = nil
+            normalAnnotation.avatarImgUrl = self.homeViewModel.homeInfoModel?.pet.photo
             self.baiduMapView.addAnnotation(normalAnnotation)
             self.baiduMapView.setCenter(CLLocationCoordinate2DMake(Double(self.homeViewModel.homeInfoModel?.pet.device.location.lat ?? "0")!, Double(self.homeViewModel.homeInfoModel?.pet.device.location.lng ?? "0")!) , animated: true)
             return

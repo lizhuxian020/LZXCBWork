@@ -56,6 +56,8 @@ enum CBPetHomeUpdDataType:String {
     case homeInfo = "homeInfo"
     /* 参数设置*/
     case paramters  = "paramters"
+    /* 设备列表*/
+    case deviceList = "deviceList"
     /* 听听*/
     case lsiten = "lsiten"
     /* 设置惩罚*/
@@ -74,6 +76,8 @@ class CBPetHomeViewModel: CBPetBaseViewModel {
     public var homeInfoModel:CBPetHomeInfoModel?
     /* 参数model*/
     public var paramtersObject:CBPetHomeParamtersModel?
+    /* 设备列表*/
+    public var deviceList : [CBPetPsnalCterPetModel]?
     /* 是否能发起惩罚*/
 //    lazy var isPunish:Bool = {
 //        let sss:Bool = true
@@ -187,6 +191,7 @@ extension CBPetHomeViewModel {
             }
             self?.getHomeInfoRequest({[weak self] in
                 self?.getDeviceParamtersRequest()
+                self?.getDeviceList()
             })
         }, failureBlock: { (failureModel) in
             MBProgressHUD.hide(for: CBPetUtils.getWindow(), animated: true)
@@ -216,6 +221,28 @@ extension CBPetHomeViewModel {
             }
         }, failureBlock: { (failureModel) in
         })
+    }
+    //MARK: - 获取设备列表以显示到地图上
+    func getDeviceList() {
+        guard let uid = CBPetLoginModelTool.getUser()?.uid else {
+            return
+        }
+        CBPetNetworkingManager.share.getAllDeviceRequest(paramters: ["uid":uid]) { [weak self] successModel in
+            /* 返回错误信息*/
+            guard successModel.status == "0" else {
+                MBProgressHUD.showMessage(Msg: successModel.resmsg ?? "请求超时".localizedStr, Deleay: 2.0)
+                return;
+            }
+            let ddJson = JSON.init(successModel.data as Any)
+            let petListModelObject = JSONDeserializer<CBPetPsnalCterPetAllModel>.deserializeFrom(dict: ddJson.dictionaryObject)
+            if let value = petListModelObject?.allPet {
+                self?.deviceList = value
+                self?.updateDataBlock!(.deviceList, value)
+            }
+        } failureBlock: { failModel in
+            
+        }
+
     }
     //MARK: - 喊话上传语音文件到七牛云request
     func shoutUploadVoiceToQiniuRequest(msgFile:String) {

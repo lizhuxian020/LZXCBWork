@@ -10,4 +10,5 @@ import UIKit
 
 class CBPetNormalAnnotation: BMKPointAnnotation {
     var nearPetsModel:CBPetFuncNearPetModel?
+    var avatarImgUrl:String?
 }

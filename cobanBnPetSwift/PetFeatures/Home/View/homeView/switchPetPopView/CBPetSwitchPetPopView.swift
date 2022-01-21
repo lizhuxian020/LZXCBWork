@@ -10,6 +10,7 @@ import UIKit
 import SwiftyJSON
 import HandyJSON
 
+/// 老的首页宠物选择view(废弃)
 class CBPetSwitchPetPopView: CBPetBaseView,UIGestureRecognizerDelegate,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
 
     /// 点击完成按钮的回调
