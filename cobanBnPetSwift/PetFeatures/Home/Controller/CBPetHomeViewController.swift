@@ -494,7 +494,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         if successModel.status == "0" {
             /// 接受状态,有绑定的宠物
             self.updateData()
-            self.initBarWith(title: "首页".localizedStr, isBack: false)
+            self.initBarWith(title: self.homeViewModel.homeInfoModel?.pet.name ?? "首页".localizedStr, isBack: false)
 //            self.rightBtn.removeTarget(self, action: #selector(switchDeviceClick), for: .touchUpInside)
 //            if let value = self.homeViewModel.homeInfoModel?.msgUnReadCount {
 //                if value == "1" {
