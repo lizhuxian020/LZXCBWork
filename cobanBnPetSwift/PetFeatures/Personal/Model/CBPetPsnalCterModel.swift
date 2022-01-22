@@ -76,9 +76,13 @@ struct CBPetPsnalCterPetPetDevice:HandyJSON,Codable {
     var create_time:String?
     var imei:String?
     var location:CBPetPsnalCterPetPetDeviceLocation = CBPetPsnalCterPetPetDeviceLocation.init()
+    var online:String?
+    var simCardType:String?
 }
 struct CBPetPsnalCterPetPetDeviceLocation:HandyJSON,Codable {
     var add_time:String?
+    var postTime:String?
+    var baterry:String?
     var id:String?
     var imei:String?
     var lat:String?

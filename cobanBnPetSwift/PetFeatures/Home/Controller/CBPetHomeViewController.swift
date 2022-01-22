@@ -940,7 +940,7 @@ extension CBPetHomeViewController {
                 continue
             }
             let normalAnnotation = CBPetNormalAnnotation.init()
-            normalAnnotation.avatarImgUrl = model.pet.photo
+            normalAnnotation.petModel = model
             normalAnnotation.coordinate = CLLocationCoordinate2DMake(Double(model.pet.device.location.lat ?? "0")!, Double(model.pet.device.location.lng ?? "0")!)
             normalAnnotation.title = nil
             self.baiduMapView.addAnnotation(normalAnnotation)
@@ -953,7 +953,7 @@ extension CBPetHomeViewController {
             let normalAnnotation = CBPetNormalAnnotation.init()
             normalAnnotation.coordinate = CLLocationCoordinate2DMake(Double(self.homeViewModel.homeInfoModel?.pet.device.location.lat ?? "0")!, Double(self.homeViewModel.homeInfoModel?.pet.device.location.lng ?? "0")!)
             normalAnnotation.title = nil
-            normalAnnotation.avatarImgUrl = self.homeViewModel.homeInfoModel?.pet.photo
+            normalAnnotation.homeInfoModel = self.homeViewModel.homeInfoModel
             self.baiduMapView.addAnnotation(normalAnnotation)
             self.baiduMapView.setCenter(CLLocationCoordinate2DMake(Double(self.homeViewModel.homeInfoModel?.pet.device.location.lat ?? "0")!, Double(self.homeViewModel.homeInfoModel?.pet.device.location.lng ?? "0")!) , animated: true)
             return

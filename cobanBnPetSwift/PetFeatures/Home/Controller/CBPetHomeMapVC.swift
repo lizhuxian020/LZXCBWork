@@ -104,17 +104,16 @@ class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSear
 //            annotationView.updateIconImage(iconImage: self.avtarImg ?? UIImage.init(named: "pet_mapAvatar_default")!)
             
             let model = annotation as! CBPetNormalAnnotation;
-            let imgUrl = model.avatarImgUrl ?? ""
+            let imgUrl = model.avatarImgUrl() ?? ""
             annotationView.updateAvatarByImageUrl(imageUrl: imgUrl)
             annotationView.updateHomeInfoModel(homeModel: self.homeViewModel.homeInfoModel ?? CBPetHomeInfoModel())
             let imageDefault = UIImage.init(named: "pet_mapAvatar_default")!
             annotationView.centerOffset = CGPoint(x: 0, y: -(imageDefault.size.height)/2)
             
-            let v = UIView.init()
-            v.backgroundColor = .red
-            v.frame = CGRect.init(x: 0, y: 0, width: 100, height: 100)
-            let p = BMKActionPaopaoView.init(customView: v)
-            p?.frame = v.bounds
+            let paoView = CBPetAvatarPaoView.init()
+            paoView.annotationModel = model
+            paoView.layoutIfNeeded()
+            let p = BMKActionPaopaoView.init(customView: paoView)
             annotationView.paopaoView = p
             return annotationView
         } else if annotation is CBPetFenceAnnotation {

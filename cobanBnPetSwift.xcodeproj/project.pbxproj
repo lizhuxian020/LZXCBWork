@@ -664,6 +664,7 @@
 		B17F1D17279461430040434F /* CBPetMultiVCNaviBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17F1D16279461430040434F /* CBPetMultiVCNaviBar.swift */; };
 		B17F1D1A279463640040434F /* CBPetMultiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17F1D19279463640040434F /* CBPetMultiViewModel.swift */; };
 		B1E7040B2798727100060475 /* CBPetToolAssistanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1E7040A2798727100060475 /* CBPetToolAssistanceView.swift */; };
+		B1EF2F2B279C554D0050BF05 /* CBPetAvatarPaoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1EF2F2A279C554D0050BF05 /* CBPetAvatarPaoView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1831,6 +1832,7 @@
 		B17F1D16279461430040434F /* CBPetMultiVCNaviBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetMultiVCNaviBar.swift; sourceTree = "<group>"; };
 		B17F1D19279463640040434F /* CBPetMultiViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetMultiViewModel.swift; sourceTree = "<group>"; };
 		B1E7040A2798727100060475 /* CBPetToolAssistanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetToolAssistanceView.swift; sourceTree = "<group>"; };
+		B1EF2F2A279C554D0050BF05 /* CBPetAvatarPaoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetAvatarPaoView.swift; sourceTree = "<group>"; };
 		B380E0223C51C9E84D9849DF /* Pods-cobanBnPetSwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cobanBnPetSwift.debug.xcconfig"; path = "Target Support Files/Pods-cobanBnPetSwift/Pods-cobanBnPetSwift.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -3054,6 +3056,7 @@
 				17973B1F24B5C11A00464698 /* CBAvatarAnnotionView.swift */,
 				17AA1D5A24D2AEAB0061445D /* CBPetAvatarMarkView.swift */,
 				17E2B6F024FCAD5C007D914D /* CBPetFenceMarkView.swift */,
+				B1EF2F2A279C554D0050BF05 /* CBPetAvatarPaoView.swift */,
 			);
 			path = annotationView;
 			sourceTree = "<group>";
@@ -6081,6 +6084,7 @@
 				435B2537247D661D006CC6A1 /* CBPetFunctionCollectionCell.swift in Sources */,
 				1782BF2424C0427E00544C36 /* UIButton+ImageAndTitle.m in Sources */,
 				435B2540247D8035006CC6A1 /* CBPetFunctionShoutView.swift in Sources */,
+				B1EF2F2B279C554D0050BF05 /* CBPetAvatarPaoView.swift in Sources */,
 				1782BFA724C0427E00544C36 /* CBWtBaseViewController.m in Sources */,
 				17CDAB5124CEBE5500BB9F8B /* ProgressChart.m in Sources */,
 				17657F5F248E198C0033E3D4 /* CBPetPopView.swift in Sources */,
