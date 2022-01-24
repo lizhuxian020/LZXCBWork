@@ -665,6 +665,7 @@
 		B17F1D1A279463640040434F /* CBPetMultiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17F1D19279463640040434F /* CBPetMultiViewModel.swift */; };
 		B1E7040B2798727100060475 /* CBPetToolAssistanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1E7040A2798727100060475 /* CBPetToolAssistanceView.swift */; };
 		B1EF2F2B279C554D0050BF05 /* CBPetAvatarPaoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1EF2F2A279C554D0050BF05 /* CBPetAvatarPaoView.swift */; };
+		B1EF2F2D279EFB000050BF05 /* CBPetFuncUserManageOtherConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1EF2F2C279EFB000050BF05 /* CBPetFuncUserManageOtherConfigView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1833,6 +1834,7 @@
 		B17F1D19279463640040434F /* CBPetMultiViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetMultiViewModel.swift; sourceTree = "<group>"; };
 		B1E7040A2798727100060475 /* CBPetToolAssistanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetToolAssistanceView.swift; sourceTree = "<group>"; };
 		B1EF2F2A279C554D0050BF05 /* CBPetAvatarPaoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetAvatarPaoView.swift; sourceTree = "<group>"; };
+		B1EF2F2C279EFB000050BF05 /* CBPetFuncUserManageOtherConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetFuncUserManageOtherConfigView.swift; sourceTree = "<group>"; };
 		B380E0223C51C9E84D9849DF /* Pods-cobanBnPetSwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cobanBnPetSwift.debug.xcconfig"; path = "Target Support Files/Pods-cobanBnPetSwift/Pods-cobanBnPetSwift.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -5026,6 +5028,7 @@
 				4389AA4A2482B6B100C4BDC3 /* CBPetFuncUserManageView.swift */,
 				4389AA4E2482B75500C4BDC3 /* CBPetFuncUserManageHeadView.swift */,
 				4389AA4C2482B72400C4BDC3 /* CBPetFuncUserManagerCell.swift */,
+				B1EF2F2C279EFB000050BF05 /* CBPetFuncUserManageOtherConfigView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -6043,6 +6046,7 @@
 				17CDAB9A24CEBE5500BB9F8B /* DLineScaler.m in Sources */,
 				17CDAC5D24CEBE5600BB9F8B /* NetWorkConfigView.m in Sources */,
 				1782BF1C24C0427D00544C36 /* UIButton+CountDown.m in Sources */,
+				B1EF2F2D279EFB000050BF05 /* CBPetFuncUserManageOtherConfigView.swift in Sources */,
 				1782BF9324C0427E00544C36 /* MINInputView.m in Sources */,
 				43C87C10248A9C75008C84A7 /* CBPetCtrlPanelPopView.swift in Sources */,
 				17CDABCB24CEBE5600BB9F8B /* ldump.c in Sources */,

@@ -20,6 +20,10 @@ class CBPetFuncUserManageView: CBPetBaseView, UITableViewDelegate, UITableViewDa
         headV.backgroundColor = UIColor.white
         return headV
     }()
+    private lazy var configView : CBPetFuncUserManageOtherConfigView = {
+        let v = CBPetFuncUserManageOtherConfigView.init()
+        return v
+    }()
     private lazy var userManageTableView:UITableView = {
         let tableV:UITableView = UITableView(frame: CGRect.zero, style: .plain)
         tableV.delegate = self
@@ -71,10 +75,17 @@ class CBPetFuncUserManageView: CBPetBaseView, UITableViewDelegate, UITableViewDa
         let tapGesture = UITapGestureRecognizer.init(target: self, action: #selector(fingerTap))
         self.headView.addGestureRecognizer(tapGesture)
         
+        self.addSubview(self.configView)
+        configView.snp_makeConstraints { make in
+            make.left.equalTo(20*KFitWidthRate)
+            make.right.equalTo(-20*KFitWidthRate)
+            make.top.equalTo(self.headView.snp_bottom).offset(10*KFitHeightRate)
+        }
+        
         self.addSubview(self.userManageTableView)
         self.userManageTableView.snp_makeConstraints { (make) in
             make.left.right.equalTo(self)
-            make.top.equalTo(self.headView.snp_bottom).offset(10*KFitHeightRate)
+            make.top.equalTo(self.configView.snp_bottom).offset(10*KFitHeightRate)
             make.bottom.equalTo(-70*KFitHeightRate - TabPaddingBARHEIGHT)
         }
         
