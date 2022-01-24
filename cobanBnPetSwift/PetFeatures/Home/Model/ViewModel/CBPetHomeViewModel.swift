@@ -190,7 +190,7 @@ extension CBPetHomeViewModel {
                 MBProgressHUD.showMessage(Msg: successModel.resmsg ?? "请求超时".localizedStr, Deleay: 2.0)
             }
             self?.getHomeInfoRequest({[weak self] in
-                self?.getDeviceParamtersRequest()
+//                self?.getDeviceParamtersRequest()
                 self?.getDeviceList()
             })
         }, failureBlock: { (failureModel) in

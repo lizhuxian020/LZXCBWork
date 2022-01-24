@@ -133,7 +133,8 @@ class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSear
     func mapView(_ mapView: BMKMapView!, click view: BMKAnnotationView!) {
         // 点击标注事件
         CBLog(message: "--lzx didClick : \(view.description)")
-        mapView.selectAnnotation(view.annotation, animated: true)
+//        mapView.selectAnnotation(view.annotation, animated: true)
+//        self.didClickAnnotaionView(view: view)
 //        print("百度地图点击了标注")
 //        let locationVC = CBLocationViewController.init()
 //        self.navigationController?.pushViewController(locationVC, animated: true)
@@ -147,6 +148,10 @@ class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSear
             return circleView
         }
         return nil
+    }
+    
+    func didClickAnnotaionView(view: BMKAnnotationView!) {
+        
     }
     // MARK: - Google 地图
 //    func mapView(_ mapView: GMSMapView, markerInfoWindow marker: GMSMarker) -> UIView? {

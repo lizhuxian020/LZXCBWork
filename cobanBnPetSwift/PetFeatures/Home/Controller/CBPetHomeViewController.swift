@@ -12,6 +12,7 @@
 import UIKit
 import SwiftyJSON
 import UserNotifications
+import AVFAudio
 
 class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
     
@@ -356,7 +357,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
                 /* 添加宠物*/
                 self!.toBindDeviceClick()
             } else {
-                self?.cleanMap()
+//                self?.cleanMap()
                 /* 选中某个宠物设备并切换*/
                 self?.homeViewModel.switchDeviceRequest(imeiStr: petModel.pet.device.imei ?? "")
             }
@@ -364,14 +365,17 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         self.switchPetAlertView.showContent()
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        self.drawCtrlPanel()
-//        CBPetFenceAlarmPopView.share.showAlert(completeBtnBlock: { [weak self] in
-//            //
-//        }) {
-//            //
-//        }
+    override func didClickAnnotaionView(view: BMKAnnotationView!) {
+        guard let annotation : CBPetNormalAnnotation = view.annotation as? CBPetNormalAnnotation else {
+            return
+        }
+        self.homeViewModel.switchDeviceRequest(imeiStr: annotation.petModel?.pet.device.imei ?? "")
     }
+    
+    private func switchPet(petModel : CBPetPsnalCterPetModel!) {
+        
+    }
+    
     private func drawCtrlPanel() {
         // [1,9)的随机数
         // arc4random_uniform(UInt32(9) + 1) {
@@ -443,7 +447,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
                 /* 首页数据源刷新*/
                 if objc is CBBaseNetworkModel {
                     self?.pickerViewByStatus(successModel: objc as! CBBaseNetworkModel)
-                    self?.locatePopView.updateSingleLocateData(model:self?.homeViewModel.homeInfoModel ?? CBPetHomeInfoModel.init())
+//                    self?.locatePopView.updateSingleLocateData(model:self?.homeViewModel.homeInfoModel ?? CBPetHomeInfoModel.init())
 //                    self?.functionPopView.updateFunctionDataSource()
                     self?.toolPopView.updateContent()
                     self?.toolAssistanceView.updateContent()
@@ -457,14 +461,21 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
                 guard let deviceList = self?.homeViewModel.deviceList else {
                     return
                 }
-                let otherDevice = deviceList.map { model -> CBPetPsnalCterPetModel in
+                var currentPet : CBPetPsnalCterPetModel?
+                var newList = deviceList.map { model -> CBPetPsnalCterPetModel in
                     let currentChoosePet = self?.homeViewModel.homeInfoModel?.pet
                     if currentChoosePet?.device.imei != model.imei {
                         return model
+                    } else {
+                        currentPet = model
                     }
                     return CBPetPsnalCterPetModel.init()
                 }
-                self?.addOtherMarker(deviceList: otherDevice)
+                if currentPet != nil {
+                    newList.append(currentPet!)
+                }
+//                self?.addOtherMarker(deviceList: otherDevice)
+                self?.addAllMarker(deviceList: newList)
                 break
             case .lsiten:
                 let str = objc as! String
@@ -508,8 +519,8 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
     private func pickerViewByStatus (successModel:CBBaseNetworkModel) {
         if successModel.status == "0" {
             /// 接受状态,有绑定的宠物
-            self.updateData()
-            self.initBarWith(title: self.homeViewModel.homeInfoModel?.pet.name ?? "首页".localizedStr, isBack: false)
+//            self.updateData()
+//            self.initBarWith(title: self.homeViewModel.homeInfoModel?.pet.name ?? "首页".localizedStr, isBack: false)
 //            self.rightBtn.removeTarget(self, action: #selector(switchDeviceClick), for: .touchUpInside)
 //            if let value = self.homeViewModel.homeInfoModel?.msgUnReadCount {
 //                if value == "1" {
@@ -947,6 +958,29 @@ extension CBPetHomeViewController {
             
         }
         self.addMapMarker()
+    }
+    private func addAllMarker(deviceList: [CBPetPsnalCterPetModel]) {
+        self.cleanMap()
+        
+        for i in 0..<deviceList.count {
+            let model = deviceList[i]
+            guard model.imei != nil else {
+                continue
+            }
+            let normalAnnotation = CBPetNormalAnnotation.init()
+            normalAnnotation.petModel = model
+            normalAnnotation.coordinate = normalAnnotation.getCoordinate2D()
+            normalAnnotation.title = nil
+            self.baiduMapView.addAnnotation(normalAnnotation)
+            
+            if i == deviceList.count-1 {
+//                self.baiduMapView.selectAnnotation(normalAnnotation, animated: true)
+                self.baiduMapView.setCenter(normalAnnotation.getCoordinate2D() , animated: true)
+                self.initBarWith(title: model.pet.name ?? "首页".localizedStr, isBack: false)
+            }
+        }
+        
+//        self.addMapMarker()
     }
     private func addMapMarker() {
         guard AppDelegate.shareInstance.IsShowGoogleMap == true else {
