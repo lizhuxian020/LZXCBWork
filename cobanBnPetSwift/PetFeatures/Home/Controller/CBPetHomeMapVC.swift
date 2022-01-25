@@ -110,11 +110,11 @@ class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSear
             let imageDefault = UIImage.init(named: "pet_mapAvatar_default")!
             annotationView.centerOffset = CGPoint(x: 0, y: -(imageDefault.size.height)/2)
             
-            let paoView = CBPetAvatarPaoView.init()
-            paoView.annotationModel = model
-            paoView.layoutIfNeeded()
-            let p = BMKActionPaopaoView.init(customView: paoView)
-            annotationView.paopaoView = p
+//            let paoView = CBPetAvatarPaoView.init()
+//            paoView.annotationModel = model
+//            paoView.layoutIfNeeded()
+//            let p = BMKActionPaopaoView.init(customView: paoView)
+//            annotationView.paopaoView = p
             return annotationView
         } else if annotation is CBPetFenceAnnotation {
             let annotationViewID = "CBPetFenceAnnotation"
@@ -134,7 +134,7 @@ class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSear
         // 点击标注事件
         CBLog(message: "--lzx didClick : \(view.description)")
 //        mapView.selectAnnotation(view.annotation, animated: true)
-//        self.didClickAnnotaionView(view: view)
+        self.didClickAnnotaionView(view: view)
 //        print("百度地图点击了标注")
 //        let locationVC = CBLocationViewController.init()
 //        self.navigationController?.pushViewController(locationVC, animated: true)

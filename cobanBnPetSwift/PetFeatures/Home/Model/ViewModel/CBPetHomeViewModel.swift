@@ -198,7 +198,7 @@ extension CBPetHomeViewModel {
         })
     }
     //MARK: - 根据设备编号获取设备设置的参数request
-    func getDeviceParamtersRequest() {
+    func getDeviceParamtersRequest(_ finishBLK: (()->Void)? = nil) {
         var paramters:Dictionary<String,Any> = Dictionary()
         if let value = CBPetHomeInfoTool.getHomeInfo().pet.device.imei {
             paramters["imei"] = value.valueStr
@@ -209,6 +209,9 @@ extension CBPetHomeViewModel {
             CBPetHomeParamtersModel.saveHomeParamters(homeInfoModel: self?.paramtersObject ?? CBPetHomeParamtersModel())
             guard self?.updateDataBlock == nil else {
                 self?.updateDataBlock!(.paramters, self?.paramtersObject as Any)
+                if let blk = finishBLK {
+                    blk()
+                }
                 /* 更新各项参数后 刷新首页数据*/
                 //lzxPS: 感觉没必要更新首页
 //                self?.getHomeInfoRequest()
@@ -529,19 +532,14 @@ extension CBPetHomeViewModel {
         CBPetNetworkingManager.share.commandRequest(paramters: paramters , successBlock: { [weak self] (successModel) in
              MBProgressHUD.hide(for: CBPetUtils.getWindow(), animated: true)
              //返回错误信息
-             guard successModel.status == "0" else {
+             if successModel.status != "0" {
                 if successModel.rescode == "0024" {
                     MBProgressHUD.showMessage(Msg: "设备已离线".localizedStr, Deleay: 1.5)
                 }  else if successModel.rescode == "0029" {
                     MBProgressHUD.showMessage(Msg: "下发指令超时".localizedStr, Deleay: 1.5)
                 }
-                guard self?.updateDataBlock == nil else {
-                    self?.updateDataBlock!(.setFence,"电子围栏开启".localizedStr)
-                    return
-                }
-                 return;
              }
-            guard self?.updateDataBlock == nil else {
+            if self?.updateDataBlock != nil {
                 self?.updateDataBlock!(.setFence,"电子围栏开启".localizedStr)
                 return
             }

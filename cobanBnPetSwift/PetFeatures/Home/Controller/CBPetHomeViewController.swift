@@ -325,6 +325,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
 //        self.view.bringSubviewToFront(self.functionPopView)
         self.toolPopView.setupViewModel(viewModel: self.homeViewModel)
         self.toolAssistanceView.setupViewModel(viewModel: self.homeViewModel)
+        self.addCtrlPanelPopViewClickMethod()
         (self.homeViewModel as CBPetHomeViewModel).functionViewBlock = { [weak self] (isShow:Bool,title:String) -> Void in
             CBLog(message: "功能view。。。。")
             if self == nil {
@@ -421,9 +422,10 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         /* 获取首页数据*/
         self.homeViewModel.getHomeInfoRequest({[weak self] ()->Void in
             /* 获取各项参数*/
-            self!.homeViewModel.getDeviceParamtersRequest()
-            /* 获取设备列表*/
-            self!.homeViewModel.getDeviceList()
+            self!.homeViewModel.getDeviceParamtersRequest({[weak self] in
+                /* 获取设备列表*/
+                self!.homeViewModel.getDeviceList()
+            })
         })
         /* 获取用户信息*/
         self.homeViewModel.getUserInfoRequest()
@@ -502,7 +504,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
                 let str = objc as! String
                 if str == "电子围栏开启".localizedStr {
                     /* 获取各项参数*/
-                    self?.homeViewModel.getDeviceParamtersRequest()
+//                    self?.homeViewModel.getDeviceParamtersRequest()
                 }
                 break
             case .callPosition:
@@ -854,7 +856,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
             let fenceVC = CBPetSetFenceViewController.init()
             fenceVC.homeViewModel = self.homeViewModel
             self.navigationController?.pushViewController(fenceVC, animated: true)
-            CBPetCtrlPanelView.share.dismissCtrlViewClick()
+//            CBPetCtrlPanelView.share.dismissCtrlViewClick()
             break
         case "设置回家语音".localizedStr:
             let setRcdVC = CBPetSelectRecordingVC.init()
@@ -974,9 +976,20 @@ extension CBPetHomeViewController {
             self.baiduMapView.addAnnotation(normalAnnotation)
             
             if i == deviceList.count-1 {
-//                self.baiduMapView.selectAnnotation(normalAnnotation, animated: true)
+                
+                
                 self.baiduMapView.setCenter(normalAnnotation.getCoordinate2D() , animated: true)
                 self.initBarWith(title: model.pet.name ?? "首页".localizedStr, isBack: false)
+                
+                let view: CBAvatarAnnotionView = self.baiduMapView.view(for: normalAnnotation) as! CBAvatarAnnotionView
+                let paoView = CBPetAvatarPaoView.init()
+                paoView.annotationModel = normalAnnotation
+                paoView.fenceModel = self.homeViewModel.paramtersObject ?? CBPetHomeParamtersModel.init()
+                paoView.layoutIfNeeded()
+                paoView.setupViewModel(viewModel: self.homeViewModel)
+                let p = BMKActionPaopaoView.init(customView: paoView)
+                view.paopaoView = p
+                self.baiduMapView.selectAnnotation(normalAnnotation, animated: true)
             }
         }
         

@@ -16,6 +16,11 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
             self.didGetAnnotation()
         }
     }
+    var fenceModel : CBPetHomeParamtersModel? {
+        didSet {
+            self.didSetFenceModel()
+        }
+    }
     
     private var bgImgView : UIImageView = {
         let v = UIImageView.init()
@@ -55,11 +60,13 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
     private var fencyLbl : UILabel = {
         let v = UILabel.init()
         v.text = "电子围栏"
+        v.isUserInteractionEnabled = true
         return v
     }()
     
     private var fencySwitch : UISwitch = {
         let v = UISwitch.init()
+        v.addTarget(self, action: #selector(didSwitch(sender:)), for: .valueChanged)
         return v
     }()
     
@@ -161,13 +168,14 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
         
         fencyContainer.addSubview(fencyLbl)
         fencyLbl.snp_makeConstraints { make in
-            make.centerY.equalTo(fencyContainer)
+            make.top.bottom.equalTo(fencyContainer)
             make.left.equalTo(fencyContainer)
         }
         fencyContainer.addSubview(fencySwitch)
         fencySwitch.snp_makeConstraints { make in
             make.centerY.equalTo(fencyLbl)
             make.right.equalTo(fencyContainer)
+            make.left.equalTo(fencyLbl.snp_right)
         }
         
         let batteryContainer = UIView.init()
@@ -206,6 +214,16 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
         
         statusLbl.text = "NB已连接"
         batteryLbl.text = "100%"
+        
+        fencyLbl.tapBlk = {[weak self] in
+            if self?.viewModel is CBPetHomeViewModel {
+                let homeViewModel = self?.viewModel as! CBPetHomeViewModel
+                guard homeViewModel.ctrlPanelClickBlock == nil else {
+                    homeViewModel.ctrlPanelClickBlock!("电子围栏开启".localizedStr as Any,false,false)
+                    return
+                }
+            }
+        }
     }
     
     private func didGetAnnotation() {
@@ -216,7 +234,15 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
         self.timeLbl.text = annotationModel!.getTimeStr(formatStr: "yyyy-MM-dd HH:mm:ss")
         self._setupBattery()
         self._setupStatus()
+//        self.fencySwitch.isOn = annotationModel!.homeInfoModel?.fence
         
+    }
+    
+    private func didSetFenceModel() {
+        guard fenceModel != nil else {
+            return
+        }
+        self.fencySwitch.isOn = fenceModel!.fenceSwitch == "1"
     }
     
     private func _setupBattery() {
@@ -296,6 +322,16 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
             self.locateLbl.text = ""
             CBLog(message: "未找地理位置")
             break
+        }
+    }
+    
+    @objc func didSwitch(sender: UISwitch) {
+        if self.viewModel is CBPetHomeViewModel {
+            let homeViewModel = self.viewModel as! CBPetHomeViewModel
+            guard homeViewModel.ctrlPanelClickBlock == nil else {
+                homeViewModel.ctrlPanelClickBlock!("电子围栏开启".localizedStr as Any,true,sender.isOn)
+                return
+            }
         }
     }
 }
