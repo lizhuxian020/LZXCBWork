@@ -10,6 +10,8 @@ import UIKit
 
 class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSearchDelegate,GMSMapViewDelegate {
     
+    public var showPaoView : Bool = false
+    
     public lazy var homeViewModel:CBPetHomeViewModel = {
         let viewMd = CBPetHomeViewModel.init()
         return viewMd
@@ -130,9 +132,14 @@ class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSear
     func mapView(_ mapView: BMKMapView!, didSelect view: BMKAnnotationView!) {
         CBLog(message: "--lzx didSelect : \(view.description)")
     }
+    func mapView(_ mapView: BMKMapView!, didDeselect view: BMKAnnotationView!) {
+        CBLog(message: "--lzx didDeSelect : \(view.description)")
+        self.showPaoView = false;
+    }
     func mapView(_ mapView: BMKMapView!, click view: BMKAnnotationView!) {
         // 点击标注事件
         CBLog(message: "--lzx didClick : \(view.description)")
+        self.showPaoView = true
 //        mapView.selectAnnotation(view.annotation, animated: true)
         self.didClickAnnotaionView(view: view)
 //        print("百度地图点击了标注")

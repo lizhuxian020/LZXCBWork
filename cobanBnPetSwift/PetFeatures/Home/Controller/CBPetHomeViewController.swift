@@ -982,15 +982,17 @@ extension CBPetHomeViewController {
                 self.baiduMapView.setCenter(normalAnnotation.getCoordinate2D() , animated: true)
                 self.initBarWith(title: model.pet.name ?? "首页".localizedStr, isBack: false)
                 
-                let view: CBAvatarAnnotionView = self.baiduMapView.view(for: normalAnnotation) as! CBAvatarAnnotionView
-                let paoView = CBPetAvatarPaoView.init()
-                paoView.annotationModel = normalAnnotation
-                paoView.fenceModel = self.homeViewModel.paramtersObject ?? CBPetHomeParamtersModel.init()
-                paoView.layoutIfNeeded()
-                paoView.setupViewModel(viewModel: self.homeViewModel)
-                let p = BMKActionPaopaoView.init(customView: paoView)
-                view.paopaoView = p
-                self.baiduMapView.selectAnnotation(normalAnnotation, animated: true)
+                if self.showPaoView {
+                    let view: CBAvatarAnnotionView = self.baiduMapView.view(for: normalAnnotation) as! CBAvatarAnnotionView
+                    let paoView = CBPetAvatarPaoView.init()
+                    paoView.annotationModel = normalAnnotation
+                    paoView.fenceModel = self.homeViewModel.paramtersObject ?? CBPetHomeParamtersModel.init()
+                    paoView.layoutIfNeeded()
+                    paoView.setupViewModel(viewModel: self.homeViewModel)
+                    let p = BMKActionPaopaoView.init(customView: paoView)
+                    view.paopaoView = p
+                    self.baiduMapView.selectAnnotation(normalAnnotation, animated: true)
+                }
             }
         }
         

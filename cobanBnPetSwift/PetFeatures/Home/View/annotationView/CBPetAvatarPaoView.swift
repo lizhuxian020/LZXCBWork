@@ -40,8 +40,8 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
     }()
     
     private var locateLbl : UILabel = {
-        let v = UILabel.init()
-        v.font = UIFont(name: CBPingFangSC_Regular, size: 10*KFitHeightRate)!
+        let v = UILabel(text: "", textColor: KPet666666Color, font: UIFont(name: CBPingFangSC_Regular, size: 12*KFitHeightRate)!)
+        v.numberOfLines = 0
         return v
     }()
     
@@ -52,14 +52,12 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
     }()
     
     private var timeLbl : UILabel = {
-        let v = UILabel.init()
-        v.font = UIFont(name: CBPingFangSC_Regular, size: 10*KFitHeightRate)!
+        let v = UILabel(text: "", textColor: KPet666666Color, font: UIFont(name: CBPingFangSC_Regular, size: 12*KFitHeightRate)!)
         return v
     }()
     
     private var fencyLbl : UILabel = {
-        let v = UILabel.init()
-        v.text = "电子围栏"
+        let v = UILabel(text: "电子围栏".localizedStr, textColor: KPet333333Color, font: UIFont(name: CBPingFangSC_Regular, size: 14*KFitHeightRate)!, textAlignment: .left)
         v.isUserInteractionEnabled = true
         return v
     }()
@@ -115,7 +113,7 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
         self.snp_makeConstraints { make in
             make.width.equalTo(258)
         }
-        self.backgroundColor = .green
+        self.backgroundColor = .clear
         
         self.addSubview(bgImgView)
         bgImgView.snp_makeConstraints { make in
@@ -124,10 +122,10 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
         
         self.addSubview(contentView)
         contentView.snp_makeConstraints { make in
-            make.top.equalTo(10)
-            make.left.equalTo(10)
-            make.right.equalTo(-10)
-            make.bottom.equalTo(-15)
+            make.top.equalTo(10*KFitHeightRate)
+            make.left.equalTo(20*KFitWidthRate)
+            make.right.equalTo(-20*KFitWidthRate)
+            make.bottom.equalTo(-15*KFitHeightRate)
         }
         
         contentView.addSubview(locateImgView)
@@ -144,6 +142,15 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
             make.width.height.equalTo(20)
         }
         
+        let s = UIView.init()
+        s.backgroundColor = kLineColor
+        contentView.addSubview(s)
+        s.snp_makeConstraints { make in
+            make.height.equalTo(1)
+            make.bottom.equalTo(self.locateLbl)
+            make.left.right.equalTo(0)
+        }
+        
         contentView.addSubview(timeLbl)
         contentView.addSubview(timeImgView)
         timeLbl.snp_makeConstraints { make in
@@ -156,6 +163,15 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
             make.left.equalTo(self.contentView)
             make.right.equalTo(self.timeLbl.snp_left).offset(-10)
             make.width.height.equalTo(20)
+        }
+        
+        let s1 = UIView.init()
+        s1.backgroundColor = kLineColor
+        contentView.addSubview(s1)
+        s1.snp_makeConstraints { make in
+            make.height.equalTo(1)
+            make.bottom.equalTo(self.timeLbl)
+            make.left.right.equalTo(0)
         }
         
         let fencyContainer = UIView.init()
@@ -176,6 +192,15 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
             make.centerY.equalTo(fencyLbl)
             make.right.equalTo(fencyContainer)
             make.left.equalTo(fencyLbl.snp_right)
+        }
+        
+        let s2 = UIView.init()
+        s2.backgroundColor = kLineColor
+        contentView.addSubview(s2)
+        s2.snp_makeConstraints { make in
+            make.height.equalTo(1)
+            make.bottom.equalTo(fencyContainer)
+            make.left.right.equalTo(0)
         }
         
         let batteryContainer = UIView.init()
