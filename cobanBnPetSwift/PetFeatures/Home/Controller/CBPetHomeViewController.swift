@@ -504,7 +504,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
                 let str = objc as! String
                 if str == "电子围栏开启".localizedStr {
                     /* 获取各项参数*/
-//                    self?.homeViewModel.getDeviceParamtersRequest()
+//                    self?.homeViewModel.getDeviceParamtersRequest()   
                 }
                 break
             case .callPosition:

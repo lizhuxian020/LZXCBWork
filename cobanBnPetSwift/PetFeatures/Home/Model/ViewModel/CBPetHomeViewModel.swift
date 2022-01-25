@@ -119,6 +119,9 @@ class CBPetHomeViewModel: CBPetBaseViewModel {
     
     /* 设置虚拟电子围栏操作block，（开关，修改围栏）*/
     var petHomeSetFenceBlock:((_ type:String,_ objc:Any) -> Void)?
+    
+    /* paoView的围栏开关*/
+    var paoViewFenceSwitch : UISwitch?
 }
 extension CBPetHomeViewModel {
     //MARK: - 获取首页信息request
@@ -190,8 +193,9 @@ extension CBPetHomeViewModel {
                 MBProgressHUD.showMessage(Msg: successModel.resmsg ?? "请求超时".localizedStr, Deleay: 2.0)
             }
             self?.getHomeInfoRequest({[weak self] in
-//                self?.getDeviceParamtersRequest()
-                self?.getDeviceList()
+                self?.getDeviceParamtersRequest({[weak self] in
+                    self?.getDeviceList()
+                })
             })
         }, failureBlock: { (failureModel) in
             MBProgressHUD.hide(for: CBPetUtils.getWindow(), animated: true)
@@ -538,6 +542,9 @@ extension CBPetHomeViewModel {
                 }  else if successModel.rescode == "0029" {
                     MBProgressHUD.showMessage(Msg: "下发指令超时".localizedStr, Deleay: 1.5)
                 }
+                 if let s = self?.paoViewFenceSwitch {
+                     s.setOn(false, animated: true)
+                 }
              }
             if self?.updateDataBlock != nil {
                 self?.updateDataBlock!(.setFence,"电子围栏开启".localizedStr)

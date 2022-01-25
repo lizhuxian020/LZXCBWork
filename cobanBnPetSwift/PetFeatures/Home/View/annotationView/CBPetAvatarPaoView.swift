@@ -329,6 +329,7 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
         if self.viewModel is CBPetHomeViewModel {
             let homeViewModel = self.viewModel as! CBPetHomeViewModel
             guard homeViewModel.ctrlPanelClickBlock == nil else {
+                homeViewModel.paoViewFenceSwitch = sender
                 homeViewModel.ctrlPanelClickBlock!("电子围栏开启".localizedStr as Any,true,sender.isOn)
                 return
             }
