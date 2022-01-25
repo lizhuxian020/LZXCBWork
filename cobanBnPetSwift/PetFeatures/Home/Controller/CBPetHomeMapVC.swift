@@ -11,6 +11,8 @@ import UIKit
 class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSearchDelegate,GMSMapViewDelegate {
     
     public var showPaoView : Bool = false
+    public var isClickAnnoatation : Bool = false
+    public var isCleanMap : Bool = false
     
     public lazy var homeViewModel:CBPetHomeViewModel = {
         let viewMd = CBPetHomeViewModel.init()
@@ -103,20 +105,14 @@ class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSear
         if annotation is CBPetNormalAnnotation {
             let annotationView = CBAvatarAnnotionView.annotationViewCopyMapView(mapView: mapView, annotation: annotation)
             annotationView.image = UIImage.init(named: "pet_mapAvatar_default")!
-//            annotationView.updateIconImage(iconImage: self.avtarImg ?? UIImage.init(named: "pet_mapAvatar_default")!)
             
             let model = annotation as! CBPetNormalAnnotation;
             let imgUrl = model.avatarImgUrl() ?? ""
             annotationView.updateAvatarByImageUrl(imageUrl: imgUrl)
-            annotationView.updateHomeInfoModel(homeModel: self.homeViewModel.homeInfoModel ?? CBPetHomeInfoModel())
+            annotationView.updatePetModel(petModel: model.petModel!)
             let imageDefault = UIImage.init(named: "pet_mapAvatar_default")!
             annotationView.centerOffset = CGPoint(x: 0, y: -(imageDefault.size.height)/2)
             
-//            let paoView = CBPetAvatarPaoView.init()
-//            paoView.annotationModel = model
-//            paoView.layoutIfNeeded()
-//            let p = BMKActionPaopaoView.init(customView: paoView)
-//            annotationView.paopaoView = p
             return annotationView
         } else if annotation is CBPetFenceAnnotation {
             let annotationViewID = "CBPetFenceAnnotation"
@@ -134,11 +130,20 @@ class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSear
     }
     func mapView(_ mapView: BMKMapView!, didDeselect view: BMKAnnotationView!) {
         CBLog(message: "--lzx didDeSelect : \(view.description)")
+        view.paopaoView = nil
+        if self.isCleanMap {
+            return
+        }
+        if self.isClickAnnoatation {
+            self.isClickAnnoatation = false
+            return
+        }
         self.showPaoView = false;
     }
     func mapView(_ mapView: BMKMapView!, click view: BMKAnnotationView!) {
         // 点击标注事件
         CBLog(message: "--lzx didClick : \(view.description)")
+        self.isClickAnnoatation = true
         self.showPaoView = true
 //        mapView.selectAnnotation(view.annotation, animated: true)
         self.didClickAnnotaionView(view: view)

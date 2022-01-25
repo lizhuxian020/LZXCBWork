@@ -419,6 +419,15 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
     //MARK: - 获取首页数据request
     @objc private func getHomeInfoRequest() {
         self.isAllowShowPanel = true
+        self.refreshDeviceList()
+        /* 获取用户信息*/
+        self.homeViewModel.getUserInfoRequest()
+        /* 设置别名*/
+        if let value = CBPetLoginModelTool.getUser() {
+            self.addUMAlias(model:value)
+        }
+    }
+    private func refreshDeviceList() {
         /* 获取首页数据*/
         self.homeViewModel.getHomeInfoRequest({[weak self] ()->Void in
             /* 获取各项参数*/
@@ -427,12 +436,6 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
                 self!.homeViewModel.getDeviceList()
             })
         })
-        /* 获取用户信息*/
-        self.homeViewModel.getUserInfoRequest()
-        /* 设置别名*/
-        if let value = CBPetLoginModelTool.getUser() {
-            self.addUMAlias(model:value)
-        }
     }
     // MARK: - 数据源刷新
     private func updateDataSource() {
@@ -504,7 +507,8 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
                 let str = objc as! String
                 if str == "电子围栏开启".localizedStr {
                     /* 获取各项参数*/
-//                    self?.homeViewModel.getDeviceParamtersRequest()
+//                    self?.homeViewModel.getHomeInfoRequest()
+                    self?.refreshDeviceList()
                 }
                 break
             case .callPosition:
@@ -641,9 +645,11 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
 //        self.addMapMarker()
     }
     private func cleanMap() {
+        self.isCleanMap = true
         self.baiduMapView.removeOverlays(self.baiduMapView.overlays)
         self.baiduMapView.removeAnnotations(self.baiduMapView.annotations)
         self.googleMapView.clear()
+        self.isCleanMap = false
     }
     // MARK: - 跳转多重控制器
     @objc private func jumpToMultiVC() {
@@ -996,14 +1002,20 @@ extension CBPetHomeViewController {
             }
         }
         
-//        self.addMapMarker()
+        self.addFenceMark()
+    }
+    private func addFenceMark() {
+        if self.homeViewModel.paramtersObject?.fenceSwitch == "1" {
+            self.addMapFenceMarker()
+            self.addMapCircle()
+        }
     }
     private func addMapMarker() {
         guard AppDelegate.shareInstance.IsShowGoogleMap == true else {
             let normalAnnotation = CBPetNormalAnnotation.init()
             normalAnnotation.coordinate = CLLocationCoordinate2DMake(Double(self.homeViewModel.homeInfoModel?.pet.device.location.lat ?? "0")!, Double(self.homeViewModel.homeInfoModel?.pet.device.location.lng ?? "0")!)
             normalAnnotation.title = nil
-            normalAnnotation.homeInfoModel = self.homeViewModel.homeInfoModel
+//            normalAnnotation.homeInfoModel = self.homeViewModel.homeInfoModel
             self.baiduMapView.addAnnotation(normalAnnotation)
             self.baiduMapView.setCenter(CLLocationCoordinate2DMake(Double(self.homeViewModel.homeInfoModel?.pet.device.location.lat ?? "0")!, Double(self.homeViewModel.homeInfoModel?.pet.device.location.lng ?? "0")!) , animated: true)
             return
@@ -1046,7 +1058,8 @@ extension CBPetHomeViewController {
             guard AppDelegate.shareInstance.IsShowGoogleMap == true else {
                 let circle = BMKCircle.init(center: coord, radius: radius)
                 self.baiduMapView.add(circle)
-                self.addBaiduMapFitCircleFence(model: coordinateModel, radius: Double(coordinateModel.radius ?? 0))
+                //lzxPS: 不需要缩放
+//                self.addBaiduMapFitCircleFence(model: coordinateModel, radius: Double(coordinateModel.radius ?? 0))
                 return
             }
            

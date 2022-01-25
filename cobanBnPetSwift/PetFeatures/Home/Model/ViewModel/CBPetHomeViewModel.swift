@@ -153,9 +153,11 @@ extension CBPetHomeViewModel {
                 return
             }
         }, failureBlock: { [weak self] (failureModel) in
-            guard self?.updateDataBlock == nil else {
+            if self?.updateDataBlock != nil {
                 self?.updateDataBlock!(.homeInfo, failureModel)
-                return
+            }
+            if let blk = finishBLK {
+                blk()
             }
         })
     }
@@ -187,14 +189,15 @@ extension CBPetHomeViewModel {
         
         MBProgressHUD.showAdded(to: CBPetUtils.getWindow(), animated: true)
         CBPetNetworkingManager.share.switchDeviceRequest(paramters: paramters,successBlock: { [weak self] (successModel) in
-            MBProgressHUD.hide(for: CBPetUtils.getWindow(), animated: true)
             ///返回错误信息
             if successModel.status != "0" {
                 MBProgressHUD.showMessage(Msg: successModel.resmsg ?? "请求超时".localizedStr, Deleay: 2.0)
             }
             self?.getHomeInfoRequest({[weak self] in
                 self?.getDeviceParamtersRequest({[weak self] in
-                    self?.getDeviceList()
+                    self?.getDeviceList({
+                        MBProgressHUD.hide(for: CBPetUtils.getWindow(), animated: true)
+                    })
                 })
             })
         }, failureBlock: { (failureModel) in
@@ -227,10 +230,13 @@ extension CBPetHomeViewModel {
                 return;
             }
         }, failureBlock: { (failureModel) in
+            if let blk = finishBLK {
+                blk()
+            }
         })
     }
     //MARK: - 获取设备列表以显示到地图上
-    func getDeviceList() {
+    func getDeviceList(_ finishBlk : (()->Void)? = nil) {
         guard let uid = CBPetLoginModelTool.getUser()?.uid else {
             return
         }
@@ -246,8 +252,13 @@ extension CBPetHomeViewModel {
                 self?.deviceList = value
                 self?.updateDataBlock!(.deviceList, value)
             }
+            if finishBlk != nil {
+                finishBlk!()
+            }
         } failureBlock: { failModel in
-            
+            if finishBlk != nil {
+                finishBlk!()
+            }
         }
 
     }

@@ -90,6 +90,21 @@ class CBAvatarAnnotionView: BMKAnnotationView {
             break
         }
     }
+    func updatePetModel(petModel:CBPetPsnalCterPetModel) {
+        switch petModel.pet.device.online {
+        case "0":
+            self.defaultImageView.image = UIImage(named: "pet_mapAvatar_default_offlineV2")!
+            break
+        case "1":
+            self.defaultImageView.image = UIImage(named: "pet_mapAvatar_defaultV2")!
+            break
+        case "2":
+            self.defaultImageView.image = UIImage(named: "pet_mapAvatar_default_alarmV2")!
+            break
+        default:
+            break
+        }
+    }
     func updateNearPetsInfo(model:CBPetFuncNearPetModel) {
         self.avtarImgView.sd_setImage(with: URL.init(string: model.photo ?? ""), placeholderImage: UIImage(named: ""), options: [])
         self.defaultImageView.image = UIImage(named: "pet_mapAvatar_default")!
