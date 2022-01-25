@@ -11,7 +11,9 @@ import SwiftyJSON
 import HandyJSON
 
 class CBPetFuncUserManagementVC: CBPetBaseViewController {
-
+    
+    public var homeViewModel : CBPetHomeViewModel?
+    
     private lazy var userManageViewModel:CBPetUserManageViewModel = {
         let vv = CBPetUserManageViewModel.init()
         return vv
@@ -28,7 +30,13 @@ class CBPetFuncUserManagementVC: CBPetBaseViewController {
         self.noNetworkView.reloadBlock = { [weak self] () -> Void in
             CBLog(message: "重新加载")
             self!.getPetManagerListRequest()
+            self?.getDeviceParamtersRequest()
         }
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        getPetManagerListRequest()
+        self.getDeviceParamtersRequest()
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,7 +46,7 @@ class CBPetFuncUserManagementVC: CBPetBaseViewController {
         /* view的 y 从 导航栏以下算起*/
         self.edgesForExtendedLayout = UIRectEdge.bottom
         self.setupView()
-        getPetManagerListRequest()
+        
     }
     private func setupView() {
         self.view.backgroundColor = UIColor.white
@@ -50,11 +58,14 @@ class CBPetFuncUserManagementVC: CBPetBaseViewController {
         }
         
         self.manageView.setupViewModel(viewModel: self.userManageViewModel)
+        self.setupVM()
         self.userManageViewModel.MJHeaderRefreshReloadDataBlock = { [weak self] (tag:Int) in
             self?.getPetManagerListRequest()
+            self?.getDeviceParamtersRequest()
         }
         self.userManageViewModel.MJFooterRefreshReloadDataBlock = { [weak self] (tag:Int) in
             self?.getPetManagerListRequest()
+            self?.getDeviceParamtersRequest()
         }
         /*  解绑 */
         self.userManageViewModel.userManageDeleteUserManageBlock = { [weak self] (model:CBPetUserManageModel) in
@@ -69,6 +80,27 @@ class CBPetFuncUserManagementVC: CBPetBaseViewController {
             petInfoVC.psnalCterViewModel.petInfoModel = petInfoModel
             
             self?.navigationController?.pushViewController(petInfoVC, animated: true)
+        }
+    }
+    private func setupVM() {
+        self.userManageViewModel.didClickTimezone = {[weak self] in
+            let selectTimeZVC = CBPetSelectTimeZViewController.init()
+            selectTimeZVC.homeViewModel = (self?.homeViewModel)!
+            self?.navigationController?.pushViewController(selectTimeZVC, animated: true)
+        }
+        self.userManageViewModel.didClickLossSwitch = {[weak self] (isOn : Bool)->Void in
+            self?.homeViewModel?.setCallPosiActionStatusCommandRequest(status: isOn ? "1" : "0", {[weak self] in
+                self?.getDeviceParamtersRequest()
+            })
+        }
+        self.userManageViewModel.didClickTimeReportSwitch = {[weak self] (isOn : Bool)->Void in
+            self?.homeViewModel?.setTimeReportStatusCommandRequest(status: isOn ? "1" : "0") {[weak self] in
+                self?.getDeviceParamtersRequest()
+            }
+        }
+        self.userManageViewModel.didClickTimeReport = {[weak self] in
+            let timeReportVC = CBPetSetTimeReportViewController.init()
+            self?.navigationController?.pushViewController(timeReportVC, animated: true)
         }
     }
     @objc private func addUserManageClick() {
@@ -98,6 +130,28 @@ class CBPetFuncUserManagementVC: CBPetBaseViewController {
         }) { [weak self] (failureModel) in
             self?.manageView.endRefresh()
         }
+    }
+    
+    //MARK: - 根据设备编号获取设备设置的参数request
+    private func getDeviceParamtersRequest() {
+        var paramters:Dictionary<String,Any> = Dictionary()
+        if let value = CBPetHomeInfoTool.getHomeInfo().pet.device.imei {
+            paramters["imei"] = value.valueStr
+        }
+        CBPetNetworkingManager.share.getParamtersByIMEIRequest(paramters: paramters,successBlock: { [weak self] (successModel) in
+            let ddJson = JSON.init(successModel.data as Any)
+            let paramtersModel = CBPetHomeParamtersModel.deserialize(from: ddJson.dictionaryObject)
+            ///返回错误信息
+            guard successModel.status == "0" else {
+                MBProgressHUD.showMessage(Msg: successModel.resmsg ?? "请求超时".localizedStr, Deleay: 2.0)
+                return;
+            }
+            if let blk = self?.userManageViewModel.userMangerUpdateParamModelBlock,
+                paramtersModel != nil {
+               blk(paramtersModel!)
+            }
+        }, failureBlock: { (failureModel) in
+        })
     }
     //MARK: - 解绑
     private func unBindDeviceRqeust(model:CBPetUserManageModel) {

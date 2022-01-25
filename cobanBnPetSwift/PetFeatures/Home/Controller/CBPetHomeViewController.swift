@@ -504,14 +504,14 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
                 let str = objc as! String
                 if str == "电子围栏开启".localizedStr {
                     /* 获取各项参数*/
-//                    self?.homeViewModel.getDeviceParamtersRequest()   
+//                    self?.homeViewModel.getDeviceParamtersRequest()
                 }
                 break
             case .callPosition:
                 let str = objc as! String
                 if str == "挂失开启".localizedStr {
                     /* 获取各项参数*/
-                    self?.homeViewModel.getDeviceParamtersRequest()
+//                    self?.homeViewModel.getDeviceParamtersRequest()
                 }
                 break
             }
@@ -655,6 +655,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         multiVC.addChild(psnalVC)
         multiVC.addChild(userManagementVC)
         multiVC.addChild(msgCterVC)
+        userManagementVC.homeViewModel = self.homeViewModel
         self.navigationController?.pushViewController(multiVC, animated: true)
     }
     // MARK: - 跳转到个人中心

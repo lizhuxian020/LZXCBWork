@@ -559,7 +559,7 @@ extension CBPetHomeViewModel {
          }
     }
     //MARK: - 挂失开启指令request
-    func setCallPosiActionStatusCommandRequest(status:String) {
+    func setCallPosiActionStatusCommandRequest(status:String, _ finishBlk : (()->Void)? = nil) {
         var paramters:Dictionary<String,Any> = Dictionary()
         if let value = CBPetHomeInfoTool.getHomeInfo().pet.device.imei {
             paramters["imei"] = value.valueStr
@@ -579,21 +579,19 @@ extension CBPetHomeViewModel {
         CBPetNetworkingManager.share.commandRequest(paramters: paramters , successBlock: { [weak self] (successModel) in
              MBProgressHUD.hide(for: CBPetUtils.getWindow(), animated: true)
              //返回错误信息
-             guard successModel.status == "0" else {
+             if successModel.status != "0" {
                 if successModel.rescode == "0024" {
                     MBProgressHUD.showMessage(Msg: "设备已离线".localizedStr, Deleay: 1.5)
                 }  else if successModel.rescode == "0029" {
                     MBProgressHUD.showMessage(Msg: "下发指令超时".localizedStr, Deleay: 1.5)
                 }
-                guard self?.updateDataBlock == nil else {
-                    self?.updateDataBlock!(.callPosition,"挂失开启".localizedStr)
-                    return
-                }
-                 return;
              }
-            guard self?.updateDataBlock == nil else {
-                self?.updateDataBlock!(.callPosition,"挂失开启".localizedStr)
+            if self?.updateDataBlock == nil  {
                 return
+            }
+            self?.updateDataBlock!(.callPosition,"挂失开启".localizedStr)
+            if finishBlk != nil {
+                finishBlk!()
             }
          }) { [weak self] (failureModel) in
              MBProgressHUD.hide(for: CBPetUtils.getWindow(), animated: true)
@@ -604,7 +602,7 @@ extension CBPetHomeViewModel {
          }
     }
     //MARK: - 定时报告开关指令request
-    func setTimeReportStatusCommandRequest(status:String) {
+    func setTimeReportStatusCommandRequest(status:String, _ finishBlk : (()->Void)? = nil) {
         var paramters:Dictionary<String,Any> = Dictionary()
         if let value = CBPetHomeInfoTool.getHomeInfo().pet.device.imei {
             paramters["imei"] = value.valueStr
@@ -624,21 +622,19 @@ extension CBPetHomeViewModel {
         CBPetNetworkingManager.share.commandRequest(paramters: paramters , successBlock: { [weak self] (successModel) in
              MBProgressHUD.hide(for: CBPetUtils.getWindow(), animated: true)
              //返回错误信息
-             guard successModel.status == "0" else {
+             if successModel.status != "0" {
                 if successModel.rescode == "0024" {
                     MBProgressHUD.showMessage(Msg: "设备已离线".localizedStr, Deleay: 1.5)
                 }  else if successModel.rescode == "0029" {
                     MBProgressHUD.showMessage(Msg: "下发指令超时".localizedStr, Deleay: 1.5)
                 }
-                guard self?.updateDataBlock == nil else {
-                    self?.updateDataBlock!(.callPosition,"挂失开启".localizedStr)
-                    return
-                }
-                 return;
              }
-            guard self?.updateDataBlock == nil else {
-                self?.updateDataBlock!(.callPosition,"挂失开启".localizedStr)
+            if self?.updateDataBlock == nil {
                 return
+            }
+            self?.updateDataBlock!(.callPosition,"挂失开启".localizedStr)
+            if finishBlk != nil {
+                finishBlk!()
             }
          }) { [weak self] (failureModel) in
              MBProgressHUD.hide(for: CBPetUtils.getWindow(), animated: true)

@@ -7,14 +7,25 @@
 //
 
 import Foundation
+import UIKit
 
 class CBPetFuncUserManageOtherConfigView : CBPetBaseView {
+    
+    var configModel : CBPetHomeParamtersModel? {
+        didSet {
+            self.didSetConfigModel()
+        }
+    }
     
     private var lossTitleLbl : UILabel = {
         let v = UILabel(text: "挂失".localizedStr, textColor: KPetTextColor, font: UIFont(name: CBPingFangSC_Regular, size: 14*KFitHeightRate)!,textAlignment: .left)
         return v;
     }()
-    private var lossSwitch : UISwitch = UISwitch.init()
+    private var lossSwitch : UISwitch = {
+        let v = UISwitch.init()
+        v.addTarget(self, action: #selector(clickLossSwitch(sender:)), for: .valueChanged)
+        return  v
+    }()
     private var lossSubTitleLbl : UILabel = {
         let v = UILabel(text: "挂失后，只要设备开机就自动发送位置给APP，请耐心等候。".localizedStr, textColor: KPet666666Color, font: UIFont(name: CBPingFangSC_Regular, size: 10*KFitHeightRate)!,textAlignment: .left)
         v.numberOfLines = 0
@@ -25,7 +36,11 @@ class CBPetFuncUserManageOtherConfigView : CBPetBaseView {
         let v = UILabel(text: "设置时区".localizedStr, textColor: KPetTextColor, font: UIFont(name: CBPingFangSC_Regular, size: 14*KFitHeightRate)!,textAlignment: .left)
         return v;
     }()
-    private var timezoneValueLbl : UILabel = UILabel.init()
+    private var timezoneValueLbl : UILabel = {
+        let v = UILabel(text: "", textColor: KPet666666Color, font: UIFont(name: CBPingFangSC_Regular, size: 12*KFitHeightRate)!,textAlignment: .left)
+        v.numberOfLines = 0
+        return v;
+    }()
     private var timezoneArrowView : UIImageView = {
        let v = UIImageView.init()
         v.image = UIImage.init(named: "pet_psnal_rightArrow")
@@ -36,7 +51,11 @@ class CBPetFuncUserManageOtherConfigView : CBPetBaseView {
         let v = UILabel(text: "定时报告".localizedStr, textColor: KPetTextColor, font: UIFont(name: CBPingFangSC_Regular, size: 14*KFitHeightRate)!,textAlignment: .left)
         return v;
     }()
-    private var timeReportSwitch : UISwitch = UISwitch.init()
+    private var timeReportSwitch : UISwitch = {
+        let v = UISwitch.init()
+        v.addTarget(self, action: #selector(clickTimeReportSwitch(sender:)), for: .valueChanged)
+        return  v
+    }()
     private var timeReportSubTitleLbl : UILabel = {
         let v = UILabel(text: "定时报告,设备将会每天指定时间上报位置,最多可设置三个时间。注意:开启后设备将超低功耗运行无法通讯,只有到达指定时间才唤醒并工作三分钟".localizedStr, textColor: KPet666666Color, font: UIFont(name: CBPingFangSC_Regular, size: 10*KFitHeightRate)!,textAlignment: .left)
         v.numberOfLines = 0
@@ -110,7 +129,7 @@ class CBPetFuncUserManageOtherConfigView : CBPetBaseView {
         }
         timezoneContainer.addSubview(timezoneValueLbl)
         timezoneValueLbl.snp_makeConstraints { make in
-            make.centerY.equalTo(0)
+            make.centerY.equalTo(timezoneContainer)
             make.right.equalTo(timezoneArrowView.snp_left).offset(-5*KFitWidthRate)
         }
         let s1 = UIView.init()
@@ -139,18 +158,55 @@ class CBPetFuncUserManageOtherConfigView : CBPetBaseView {
             make.centerY.equalTo(timeReportContainer)
             make.right.equalTo(0)
         }
-        timeReportContainer.addSubview(timeReportSubTitleLbl)
-        timeReportSubTitleLbl.snp_makeConstraints { make in
-            make.left.equalTo(0)
-            make.bottom.equalTo(-10*KFitHeightRate)
-            make.top.equalTo(self.timeReportTitleLbl.snp_bottom).offset(5*KFitHeightRate)
-            make.right.equalTo(self.timeReportArrowView.snp_left).offset(-5*KFitHeightRate)
-        }
-        
         timeReportContainer.addSubview(timeReportSwitch)
         timeReportSwitch.snp_makeConstraints { make in
             make.top.equalTo(10*KFitHeightRate)
             make.right.equalTo(timeReportArrowView.snp_left).offset(-5*KFitWidthRate)
+        }
+        
+        timeReportContainer.addSubview(timeReportSubTitleLbl)
+        timeReportSubTitleLbl.snp_makeConstraints { make in
+            make.left.equalTo(0)
+            make.bottom.equalTo(-10*KFitHeightRate)
+            make.top.equalTo(self.timeReportSwitch.snp_bottom).offset(5*KFitHeightRate)
+            make.right.equalTo(self.timeReportArrowView.snp_left).offset(-5*KFitHeightRate)
+        }
+        
+        timezoneContainer.tapBlk = {[weak self] in
+            if let viewModel = self?.viewModel as? CBPetUserManageViewModel,
+               let blk = viewModel.didClickTimezone{
+                blk()
+            }
+        }
+        
+        timeReportContainer.tapBlk = {[weak self] in
+            if let viewModel = self?.viewModel as? CBPetUserManageViewModel,
+               let blk = viewModel.didClickTimeReport{
+                blk()
+            }
+        }
+    }
+    
+    private func didSetConfigModel() {
+        guard self.configModel != nil else {
+            return
+        }
+        self.lossSwitch.isOn = self.configModel?.callPosiAction == "1"
+        self.timezoneValueLbl.text = self.configModel?.timeZone
+        self.timeReportSwitch.isOn = self.configModel?.timingSwitch == "1"
+    }
+    
+    @objc private func clickLossSwitch(sender : UISwitch) {
+        if let viewModel = self.viewModel as? CBPetUserManageViewModel,
+           let blk = viewModel.didClickLossSwitch{
+            blk(sender.isOn)
+        }
+    }
+    
+    @objc private func clickTimeReportSwitch(sender : UISwitch) {
+        if let viewModel = self.viewModel as? CBPetUserManageViewModel,
+           let blk = viewModel.didClickTimeReportSwitch{
+            blk(sender.isOn)
         }
     }
 }

@@ -34,7 +34,7 @@ class CBPetMsgCterViewController: CBPetBaseViewController {
         
         setupView()
         //self.msgCenterView.beginRefresh()
-        getMessageListInfoReuqest()
+//        getMessageListInfoReuqest()
         
         /* 推送通知*/
         NotificationCenter.default.addObserver(self, selector: #selector(noticeNofitication), name: NSNotification.Name.init(K_CBPetNoticeNotification), object: nil)

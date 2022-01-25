@@ -53,6 +53,7 @@ class CBPetFuncUserManageView: CBPetBaseView, UITableViewDelegate, UITableViewDa
     }
     override func setupViewModel(viewModel: Any) {
         self.viewModel = viewModel
+        self.configView.setupViewModel(viewModel: self.viewModel)
         self.userManageTableView.reloadData()
         if self.viewModel is CBPetUserManageViewModel {
             let vvModel = self.viewModel as! CBPetUserManageViewModel
@@ -60,6 +61,9 @@ class CBPetFuncUserManageView: CBPetBaseView, UITableViewDelegate, UITableViewDa
                 ///刷新数据
                 self?.arrayDataSource = dataSource
                 self?.userManageTableView.reloadData()
+            }
+            vvModel.userMangerUpdateParamModelBlock = {[weak self] (paramModel : CBPetHomeParamtersModel) -> Void in
+                self?.configView.configModel = paramModel
             }
         }
     }
