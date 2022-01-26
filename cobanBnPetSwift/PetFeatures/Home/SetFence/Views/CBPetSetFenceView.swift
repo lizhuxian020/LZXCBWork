@@ -28,11 +28,11 @@ class CBPetSetFenceView: CBPetBaseView, CBPetCutmoSlideViewDelegate {
         let inputV = CBPetSetFenceInputView.init()
         return inputV
     }()
-    private lazy var sliderView:CBPetCustomSlideView = {
-        let slideV = CBPetCustomSlideView.init()
-        slideV.slideDeleate = self
-        return slideV
-    }()
+//    private lazy var sliderView:CBPetCustomSlideView = {
+//        let slideV = CBPetCustomSlideView.init()
+//        slideV.slideDeleate = self
+//        return slideV
+//    }()
     private var homeInfoModel:CBPetHomeInfoModel?
     
     override init(frame: CGRect) {
@@ -60,9 +60,9 @@ class CBPetSetFenceView: CBPetBaseView, CBPetCutmoSlideViewDelegate {
             if let value = self.homeInfoModel?.fence.data?.components(separatedBy: ",") {
                 if value.count >= 3 {
                     self.inputRadiusView.inputTF.text = value[2]
-                    DispatchQueue.main.asyncAfter(deadline: .now()+0.1, execute:{
-                        self.sliderView.setSliderValue(value: Float(value[2] as String)! < 100 ? 100 : Float(value[2] as String)!)
-                    })
+//                    DispatchQueue.main.asyncAfter(deadline: .now()+0.1, execute:{
+//                        self.sliderView.setSliderValue(value: Float(value[2] as String)! < 100 ? 100 : Float(value[2] as String)!)
+//                    })
                 }
             }
         }
@@ -102,14 +102,14 @@ class CBPetSetFenceView: CBPetBaseView, CBPetCutmoSlideViewDelegate {
             make.height.equalTo(15*KFitHeightRate)
         }
         
-        self.addSubview(self.sliderView)
-        self.sliderView.snp_makeConstraints { (make) in
-            make.top.equalTo(self.inputRadiusView.snp_bottom).offset(10*KFitHeightRate)
-            make.left.equalTo(self.snp_left).offset(20*KFitWidthRate)
-            make.right.equalTo(self.snp_right).offset(-20*KFitWidthRate)
-            make.height.equalTo(35*KFitHeightRate)
-        }
-        self.sliderView.setSlideDataSource(dataSourse: ["100","200","300","400","500","600","700","800","900","1000"], hideTargetIndex: [2,4,6,8])
+//        self.addSubview(self.sliderView)
+//        self.sliderView.snp_makeConstraints { (make) in
+//            make.top.equalTo(self.inputRadiusView.snp_bottom).offset(10*KFitHeightRate)
+//            make.left.equalTo(self.snp_left).offset(20*KFitWidthRate)
+//            make.right.equalTo(self.snp_right).offset(-20*KFitWidthRate)
+//            make.height.equalTo(35*KFitHeightRate)
+//        }
+//        self.sliderView.setSlideDataSource(dataSourse: ["100","200","300","400","500","600","700","800","900","1000"], hideTargetIndex: [2,4,6,8])
     }
     //MARK: - 滑动代理
     func returnSlideValue(slideValue: String) {

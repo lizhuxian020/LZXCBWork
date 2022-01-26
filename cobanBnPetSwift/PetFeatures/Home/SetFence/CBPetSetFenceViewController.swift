@@ -7,11 +7,12 @@
 //
 
 import UIKit
+import CoreLocation
 
 class CBPetSetFenceViewController: CBPetSetFenceMapVC {
 
     private lazy var setFenceView:CBPetSetFenceView = {
-        let vv = CBPetSetFenceView.init(frame: CGRect(x: 0, y: 0, width: SCREEN_WIDTH, height: 160*KFitHeightRate))
+        let vv = CBPetSetFenceView.init(frame: CGRect(x: 0, y: 0, width: SCREEN_WIDTH, height: 120*KFitHeightRate))
         return vv
     }()
     
@@ -75,6 +76,13 @@ class CBPetSetFenceViewController: CBPetSetFenceMapVC {
             } else if type == "setFenceReload" {
                 MBProgressHUD.showMessage(Msg: "设置成功".localizedStr, Deleay: 1.5)
                 self?.navigationController?.popViewController(animated: true)
+            } else if type == "DragValue" {
+                if objc is CLLocationDistance {
+                    let distance : Int = Int(objc as! CLLocationDistance)
+                    self?.circleRadius = Float(objc as! CLLocationDistance)
+                    self?.setFenceView.inputRadiusView.inputTF.text = "\(distance)"
+                    self?.baiduCircleFenceView?.radius = objc as! CLLocationDistance
+                }
             }
         }
         self.selectCoordBlock = { [weak self] () -> Void in
@@ -128,6 +136,14 @@ class CBPetSetFenceViewController: CBPetSetFenceMapVC {
     }
     */
     
+    override func didEndDragAnnotation(coordinate: CLLocationCoordinate2D, radius: Double) {
+        let circlePoint = BMKMapPointForCoordinate(coordinate)
+        let pointRadius = radius/0.61
+        let fitRect = BMKMapRectMake(circlePoint.x - pointRadius, circlePoint.y - pointRadius, pointRadius*2, pointRadius*2)
+        self.baiduMapView.setVisibleMapRect(fitRect, animated: true)
+        self.baiduMapView.setCenter(coordinate, animated: true)
+    }
+    
 }
 extension CBPetSetFenceViewController {
     private func getModelArr(dataString:String) -> [CBPetCoordinateObject] {
@@ -166,6 +182,16 @@ extension CBPetSetFenceViewController {
         self.avatarMarkView.updateIconImage(iconImage: self.avtarImg ?? UIImage.init(named: "pet_mapAvatar_default")!)
         self.googleMapView.camera = GMSCameraPosition.camera(withLatitude: lat, longitude: lng, zoom: 15)
     }
+    private func addFenceMark(_ coordinate : CLLocationCoordinate2D) {
+        guard AppDelegate.shareInstance.IsShowGoogleMap == true else {
+            let normalAnnotation = CBPetNormalAnnotation.init()
+            normalAnnotation.isFenceCircleMark = true
+            normalAnnotation.coordinate = coordinate
+            normalAnnotation.title = nil
+            self.baiduMapView.addAnnotation(normalAnnotation)
+            return
+        }
+    }
     private func addMapFenceMarker() {
         if self.polygonCoordinate.count > 0 {
             let coordinateModel = self.polygonCoordinate[0]
@@ -193,6 +219,10 @@ extension CBPetSetFenceViewController {
                 self.baiduMapView.add(self.baiduCircleFenceView)
                 self.addBaiduMapFitCircleFence(model: coordinateModel, radius: radius)
                 
+                let mapRect = self.baiduCircleFenceView!.boundingMapRect
+                
+                let fencePoint : CLLocationCoordinate2D = BMKCoordinateForMapPoint(BMKMapPointMake(BMKMapRectGetMaxX(mapRect), mapRect.origin.y+mapRect.size.height/2.0))
+                self.addFenceMark(fencePoint)
                 let reverseGeoCodeOpetion = BMKReverseGeoCodeSearchOption.init()
                 reverseGeoCodeOpetion.location = coord
                 self.searcher.delegate = self

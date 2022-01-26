@@ -114,4 +114,15 @@ extension UIView {
         /* 阴影半径 */
         self.layer.shadowRadius = shadowRadius
     }
+    
+    func snapShotImage() -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.isOpaque, 0)
+        guard let context = UIGraphicsGetCurrentContext() else {
+            return UIImage.init()
+        }
+        self.layer.render(in: context)
+        let img = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return img ?? UIImage.init()
+    }
 }

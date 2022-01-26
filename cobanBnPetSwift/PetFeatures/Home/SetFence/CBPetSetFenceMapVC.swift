@@ -97,9 +97,53 @@ class CBPetSetFenceMapVC: CBPetBaseViewController,BMKMapViewDelegate,BMKGeoCodeS
         self.googleView.addSubview(self.googleMapView)
         self.googleMapView.delegate = self
     }
+    
+    func didEndDragAnnotation(coordinate:CLLocationCoordinate2D, radius:Double) {
+        
+    }
+    
+    func mapView(_ mapView: BMKMapView!, annotationView view: BMKAnnotationView!, didChangeDragState newState: UInt, fromOldState oldState: UInt) {
+        let coordinateModel = self.polygonCoordinate[0]
+        let coord = CLLocationCoordinate2DMake(Double(coordinateModel.coordinate?.latitude ?? 0), Double(coordinateModel.coordinate?.longitude ?? 0))
+        switch newState {
+        case 1:
+            CBLog(message: "--lzx: 开始拖拽")
+            break
+        case 2:
+            let loca = view.center
+            let coo = self.baiduMapView.convert(loca, toCoordinateFrom: self.baiduMapView)
+            let distance : CLLocationDistance = BMKMetersBetweenMapPoints(BMKMapPointForCoordinate(coo), BMKMapPointForCoordinate(coord))
+            if self.homeViewModel.petHomeSetFenceBlock != nil {
+                self.homeViewModel.petHomeSetFenceBlock!("DragValue",distance)
+            }
+            CBLog(message: "--lzx: 拖拽中: \(loca) + distance: \(distance)")
+            break
+        case 4:
+            let loca = view.center
+            let coo = self.baiduMapView.convert(loca, toCoordinateFrom: self.baiduMapView)
+            let distance : CLLocationDistance = BMKMetersBetweenMapPoints(BMKMapPointForCoordinate(coo), BMKMapPointForCoordinate(coord))
+            self.didEndDragAnnotation(coordinate: coordinateModel.coordinate!, radius: distance)
+            CBLog(message: "--lzx: 拖拽结束")
+            break
+        default:
+            break
+        }
+    }
+    
     // MARK: - BMKMapViewDelegate
     func mapView(_ mapView: BMKMapView!, viewFor annotation: BMKAnnotation!) -> BMKAnnotationView! {
         if annotation is CBPetNormalAnnotation {
+            let cbAnnotation = annotation as! CBPetNormalAnnotation
+            if (cbAnnotation.isFenceCircleMark) {
+                var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "fenceAV")
+                if annotationView == nil {
+                    annotationView = BMKAnnotationView.init(annotation: cbAnnotation, reuseIdentifier: "fenceAV")
+                }
+                annotationView!.image = UIImage.init(named: "pet_fence_annotation")!
+                
+                annotationView?.isDraggable = true
+                return annotationView
+            }
             let annotationView = CBAvatarAnnotionView.annotationViewCopyMapView(mapView: mapView, annotation: annotation)
             annotationView.updateIconImage(iconImage: self.avtarImg ?? UIImage.init(named: "pet_mapAvatar_default")!)
             annotationView.updateHomeInfoModel(homeModel: self.homeViewModel.homeInfoModel ?? CBPetHomeInfoModel())

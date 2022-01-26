@@ -9,6 +9,7 @@
 import UIKit
 
 class CBPetNormalAnnotation: BMKPointAnnotation {
+    var isFenceCircleMark : Bool = false
     var nearPetsModel:CBPetFuncNearPetModel?
 
     var petModel : CBPetPsnalCterPetModel?
