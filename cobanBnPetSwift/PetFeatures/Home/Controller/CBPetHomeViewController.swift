@@ -545,30 +545,30 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
             self.bindDeviceResultView.isHidden = true
             self.bindDeviceView.isHidden = true
             
-            if self.isAllowShowPanel == true {
-                let progressFloat = CGFloat(0.3)//CBPetUtils.randomBetween(firstNum: 0.0, secondNum: 1.0)
-                if UIViewController.getCurrentVC() is CBPetHomeViewController {
-                    CBPetCtrlPanelView.share.showCtrlPanel(topColor: UIColor.init().colorWithHexString(hexString: "#F8563B"), bottomColor: UIColor.init().colorWithHexString(hexString: "#F8563B", alpha: 0.1),progressfloat:progressFloat) { [weak self] (isShow:Bool) in
-                        if isShow {
-                            self?.ctrlPanelPopView.popView()
-                            self?.ctrlPanelPopView.setupViewModel(viewModel: self!.homeViewModel)
-                            self!.addCtrlPanelPopViewClickMethod()
-                            CBPetCtrlPanelView.share.bringToFront()
-//                            self?.homeViewModel.getDeviceParamtersRequest()
-                        } else {
-                            self?.ctrlPanelPopView.dissmiss()
-                        }
-                    }
-                    /* 回调圆的比例 值为0-1 */
-                    if let value = self.homeViewModel.homeInfoModel?.pet.device.location.baterry {
-                        let valueNum = Float(value.valueStr) ?? 0
-                        if CBPetCtrlPanelView.share.drawProgressBlocks != nil {
-                            CBPetCtrlPanelView.share.drawProgressBlocks!(CGFloat(valueNum/100))
-                        }
-                    }
-                }
-            }
-            self.isAllowShowPanel = false
+//            if self.isAllowShowPanel == true {
+//                let progressFloat = CGFloat(0.3)//CBPetUtils.randomBetween(firstNum: 0.0, secondNum: 1.0)
+//                if UIViewController.getCurrentVC() is CBPetHomeViewController {
+//                    CBPetCtrlPanelView.share.showCtrlPanel(topColor: UIColor.init().colorWithHexString(hexString: "#F8563B"), bottomColor: UIColor.init().colorWithHexString(hexString: "#F8563B", alpha: 0.1),progressfloat:progressFloat) { [weak self] (isShow:Bool) in
+//                        if isShow {
+//                            self?.ctrlPanelPopView.popView()
+//                            self?.ctrlPanelPopView.setupViewModel(viewModel: self!.homeViewModel)
+//                            self!.addCtrlPanelPopViewClickMethod()
+//                            CBPetCtrlPanelView.share.bringToFront()
+////                            self?.homeViewModel.getDeviceParamtersRequest()
+//                        } else {
+//                            self?.ctrlPanelPopView.dissmiss()
+//                        }
+//                    }
+//                    /* 回调圆的比例 值为0-1 */
+//                    if let value = self.homeViewModel.homeInfoModel?.pet.device.location.baterry {
+//                        let valueNum = Float(value.valueStr) ?? 0
+//                        if CBPetCtrlPanelView.share.drawProgressBlocks != nil {
+//                            CBPetCtrlPanelView.share.drawProgressBlocks!(CGFloat(valueNum/100))
+//                        }
+//                    }
+//                }
+//            }
+//            self.isAllowShowPanel = false
             
         } else {
             self.locatePopView.isHidden = true
@@ -895,7 +895,6 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
                 let fenceVC = CBPetSetFenceViewController.init()
                 fenceVC.homeViewModel = self.homeViewModel
                 self.navigationController?.pushViewController(fenceVC, animated: true)
-                CBPetCtrlPanelView.share.dismissCtrlViewClick()
             } else {
                 /* 有围栏，设置围栏开关*/
                 self.homeViewModel.setFenceStatusCommandRequest(status: status == true ? "1" : "0")
