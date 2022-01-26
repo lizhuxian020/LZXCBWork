@@ -660,6 +660,7 @@
 		43F4FDEF248672EB0072B233 /* CBPetFuncChatPetInfoTabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F4FDEE248672EB0072B233 /* CBPetFuncChatPetInfoTabCell.swift */; };
 		6D032D9B1335E2208C8FB6B3 /* libPods-cobanBnPetSwift.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A1F41BDFD0FBDF918826F4E /* libPods-cobanBnPetSwift.a */; };
 		B1212C642795CE8B0044E7CC /* CBPetSwitchPetAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1212C632795CE8B0044E7CC /* CBPetSwitchPetAlertView.swift */; };
+		B15F916F27A19F53000953B6 /* CBPetGMSMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15F916E27A19F53000953B6 /* CBPetGMSMarker.swift */; };
 		B16C38C52793208D0058EAC4 /* CBPetMultiVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16C38C42793208D0058EAC4 /* CBPetMultiVC.swift */; };
 		B17F1D17279461430040434F /* CBPetMultiVCNaviBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17F1D16279461430040434F /* CBPetMultiVCNaviBar.swift */; };
 		B17F1D1A279463640040434F /* CBPetMultiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17F1D19279463640040434F /* CBPetMultiViewModel.swift */; };
@@ -1829,6 +1830,7 @@
 		43F4FDEC248672CD0072B233 /* CBPetFuncChatPetInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetFuncChatPetInfoView.swift; sourceTree = "<group>"; };
 		43F4FDEE248672EB0072B233 /* CBPetFuncChatPetInfoTabCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetFuncChatPetInfoTabCell.swift; sourceTree = "<group>"; };
 		B1212C632795CE8B0044E7CC /* CBPetSwitchPetAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetSwitchPetAlertView.swift; sourceTree = "<group>"; };
+		B15F916E27A19F53000953B6 /* CBPetGMSMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetGMSMarker.swift; sourceTree = "<group>"; };
 		B16C38C42793208D0058EAC4 /* CBPetMultiVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetMultiVC.swift; sourceTree = "<group>"; };
 		B17F1D16279461430040434F /* CBPetMultiVCNaviBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetMultiVCNaviBar.swift; sourceTree = "<group>"; };
 		B17F1D19279463640040434F /* CBPetMultiViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetMultiViewModel.swift; sourceTree = "<group>"; };
@@ -5158,6 +5160,7 @@
 				439E90362475A496004ED9AD /* CBPetHomeInfoModel.swift */,
 				439E90352475A496004ED9AD /* CBPetNormalAnnotation.swift */,
 				4347ED4624ACC0B300DED6BD /* CBPetFenceAnnotation.swift */,
+				B15F916E27A19F53000953B6 /* CBPetGMSMarker.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -5996,6 +5999,7 @@
 				1782BF2E24C0427E00544C36 /* NSMutableAttributedString+Category.m in Sources */,
 				1782BF3324C0427E00544C36 /* AppSettingViewController.m in Sources */,
 				1782BF6124C0427E00544C36 /* CBTalkFootView.m in Sources */,
+				B15F916F27A19F53000953B6 /* CBPetGMSMarker.swift in Sources */,
 				439E905F2475A497004ED9AD /* CBPetNormalAnnotation.swift in Sources */,
 				4380C285247C38090012D7B7 /* CBPetHomeAvatarView.swift in Sources */,
 				17CDABFF24CEBE5600BB9F8B /* AlarmTypeViewController.m in Sources */,

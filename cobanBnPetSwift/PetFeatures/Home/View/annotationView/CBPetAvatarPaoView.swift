@@ -10,10 +10,10 @@ import Foundation
 import UIKit
 
 class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
-    
-    var annotationModel : CBPetNormalAnnotation? {
+
+    var petModel : CBPetPsnalCterPetModel? {
         didSet {
-            self.didGetAnnotation()
+            self.didSetPetModel()
         }
     }
     var fenceModel : CBPetHomeParamtersModel? {
@@ -94,6 +94,8 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
         return search
     }()
     
+    private var geocoder : GMSGeocoder = GMSGeocoder.init()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -133,13 +135,13 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
         
         locateLbl.snp_makeConstraints { make in
             make.top.right.equalTo(self.contentView)
-            make.height.equalTo(50)
+            make.height.greaterThanOrEqualTo(50*KFitHeightRate)
         }
         locateImgView.snp_makeConstraints { make in
             make.centerY.equalTo(locateLbl)
             make.left.equalTo(self.contentView)
-            make.right.equalTo(self.locateLbl.snp_left).offset(-10)
-            make.width.height.equalTo(20)
+            make.right.equalTo(self.locateLbl.snp_left).offset(-10*KFitWidthRate)
+            make.width.height.equalTo(20*KFitWidthRate)
         }
         
         let s = UIView.init()
@@ -156,13 +158,13 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
         timeLbl.snp_makeConstraints { make in
             make.top.equalTo(self.locateLbl.snp_bottom)
             make.right.equalTo(self.contentView)
-            make.height.equalTo(50)
+            make.height.equalTo(50*KFitHeightRate)
         }
         timeImgView.snp_makeConstraints { make in
             make.centerY.equalTo(self.timeLbl)
             make.left.equalTo(self.contentView)
-            make.right.equalTo(self.timeLbl.snp_left).offset(-10)
-            make.width.height.equalTo(20)
+            make.right.equalTo(self.timeLbl.snp_left).offset(-10*KFitWidthRate)
+            make.width.height.equalTo(20*KFitHeightRate)
         }
         
         let s1 = UIView.init()
@@ -177,7 +179,7 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
         let fencyContainer = UIView.init()
         contentView.addSubview(fencyContainer)
         fencyContainer.snp_makeConstraints { make in
-            make.height.equalTo(50)
+            make.height.equalTo(50*KFitHeightRate)
             make.left.right.equalTo(self.contentView)
             make.top.equalTo(self.timeLbl.snp_bottom)
         }
@@ -206,7 +208,7 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
         let batteryContainer = UIView.init()
         contentView.addSubview(batteryContainer)
         batteryContainer.snp_makeConstraints { make in
-            make.height.equalTo(50)
+            make.height.equalTo(50*KFitHeightRate)
             make.left.right.bottom.equalTo(self.contentView)
             make.top.equalTo(fencyContainer.snp_bottom)
         }
@@ -251,16 +253,14 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
         }
     }
     
-    private func didGetAnnotation() {
-        guard annotationModel != nil else {
+    private func didSetPetModel() {
+        guard self.petModel != nil else {
             return
         }
         self.startSearher()
-        self.timeLbl.text = annotationModel!.getTimeStr(formatStr: "yyyy-MM-dd HH:mm:ss")
+        self.timeLbl.text = petModel!.getTimeStr(formatStr: "yyyy-MM-dd HH:mm:ss")
         self._setupBattery()
         self._setupStatus()
-//        self.fencySwitch.isOn = annotationModel!.homeInfoModel?.fence
-        
     }
     
     private func didSetFenceModel() {
@@ -271,11 +271,11 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
     }
     
     private func _setupBattery() {
-        let battery = annotationModel!.getBattery()
+        let battery = petModel?.pet.device.location.baterry ?? ""
         if battery.isEmpty == false {
             self.batteryImgView.isHidden = false
-            self.batteryLbl.text = annotationModel!.getBattery() + "%"
-            let percentNum = Float(annotationModel!.getBattery()) ?? 0
+            self.batteryLbl.text = battery + "%"
+            let percentNum = Float(battery) ?? 0
             if percentNum <= 10 {
                 self.batteryView.backgroundColor = UIColor.init().colorWithHexString(hexString: "#F8563B")
             } else if percentNum <= 20 && percentNum > 10 {
@@ -297,7 +297,7 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
     }
     
     private func _setupStatus() {
-        let online = annotationModel!.getOnline()
+        let online = petModel?.pet.device.online ?? ""
         var statusTxt : String?
         switch online {
         case "0":
@@ -313,10 +313,10 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
     }
     
     func getSimCardTypeStr() -> String {
-        guard annotationModel != nil else {
+        guard petModel != nil else {
             return ""
         }
-        let simCardType = annotationModel!.getSimCardType()
+        let simCardType = petModel?.pet.device.simCardType ?? ""
         if simCardType == "0" {
             return "NB"
         } else if simCardType == "1" {
@@ -327,8 +327,12 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
     }
     
     private func startSearher() {
+        if AppDelegate.shareInstance.IsShowGoogleMap {
+            self.locateLbl.text = petModel?.app_addressStr
+            return
+        }
         let reverseGeoCodeOpetion = BMKReverseGeoCodeSearchOption.init()
-        reverseGeoCodeOpetion.location = annotationModel!.getCoordinate2D()
+        reverseGeoCodeOpetion.location = petModel!.getCoordinate2D()
         let flag = self.searcher.reverseGeoCode(reverseGeoCodeOpetion)
         if flag == true {
             CBLog(message: "反geo检索发送成功")
@@ -344,7 +348,7 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
             self.locateLbl.text = result.address
             break
         default:
-            self.locateLbl.text = ""
+            self.locateLbl.text = "未知".localizedStr
             CBLog(message: "未找地理位置")
             break
         }

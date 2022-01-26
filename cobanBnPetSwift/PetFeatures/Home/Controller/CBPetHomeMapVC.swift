@@ -166,14 +166,31 @@ class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSear
         
     }
     // MARK: - Google 地图
-//    func mapView(_ mapView: GMSMapView, markerInfoWindow marker: GMSMarker) -> UIView? {
-//        /*在标记即将被选中时调用，并提供一个可选的自定义信息窗口来 如果此方法返回UIView，则用于该标记。*/
-//        return nil
-//    }
-//    //点击大头针时调用
-//    func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
-//        return true
-//    }
+    func mapView(_ mapView: GMSMapView, markerInfoWindow marker: GMSMarker) -> UIView? {
+        /*在标记即将被选中时调用，并提供一个可选的自定义信息窗口来 如果此方法返回UIView，则用于该标记。*/
+        guard let cbMark = marker as? CBPetGMSMarker,
+              cbMark.zIndex == 100 else {
+            return nil
+        }
+        let paoView = CBPetAvatarPaoView.init()
+        paoView.petModel = cbMark.petModel
+        paoView.fenceModel = self.homeViewModel.paramtersObject ?? CBPetHomeParamtersModel.init()
+        paoView.layoutIfNeeded()
+        paoView.setupViewModel(viewModel: self.homeViewModel)
+        return paoView
+    }
+    func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
+        CBLog(message: "---lzx: GMS didTapInfoWindows")
+    }
+    //点击大头针时调用
+    func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
+        self.didClickGMSMarker(marker: marker)
+        return true
+    }
+    
+    func didClickGMSMarker(marker: GMSMarker) {
+        CBLog(message: "--lzx: didClickMArk")
+    }
     /*
     // MARK: - Navigation
 

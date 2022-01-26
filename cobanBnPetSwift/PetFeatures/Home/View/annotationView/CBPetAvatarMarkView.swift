@@ -23,7 +23,7 @@ class CBPetAvatarMarkView: CBPetBaseView {
         imgV.isUserInteractionEnabled = true;
         imgV.layer.masksToBounds = true;
         imgV.layer.cornerRadius = (img.size.width - 12)/2;
-        imgV.contentMode = .scaleAspectFit;
+        imgV.contentMode = .scaleAspectFill;
         return imgV
     }()
     override init(frame: CGRect) {
@@ -47,6 +47,23 @@ class CBPetAvatarMarkView: CBPetBaseView {
             make.top.equalTo(self.defaultImageView.snp_top).offset(6)
             make.size.equalTo(CGSize.init(width: img.size.width-12, height: img.size.width-12))
         }
+    }
+    func updateIconImage(petModel : CBPetPsnalCterPetModel) {
+        self.avtarImgView.sd_setImage(with: URL.init(string: petModel.pet.photo ?? ""), placeholderImage: UIImage(named: "pet_mapAvatar_default"))
+        switch petModel.pet.device.online {
+        case "0":
+            self.defaultImageView.image = UIImage(named: "pet_mapAvatar_default_offlineV2")!
+            break
+        case "1":
+            self.defaultImageView.image = UIImage(named: "pet_mapAvatar_defaultV2")!
+            break
+        case "2":
+            self.defaultImageView.image = UIImage(named: "pet_mapAvatar_default_alarmV2")!
+            break
+        default:
+            break
+        }
+
     }
     func updateIconImage(iconImage:UIImage) {
         self.avtarImgView.image = iconImage

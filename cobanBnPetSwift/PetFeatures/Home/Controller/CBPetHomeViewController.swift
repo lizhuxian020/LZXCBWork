@@ -373,6 +373,13 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         self.homeViewModel.switchDeviceRequest(imeiStr: annotation.petModel?.pet.device.imei ?? "")
     }
     
+    override func didClickGMSMarker(marker: GMSMarker) {
+        guard let cbMarker = marker as? CBPetGMSMarker else {
+            return
+        }
+        self.homeViewModel.switchDeviceRequest(imeiStr: cbMarker.petModel?.pet.device.imei ?? "")
+    }
+    
     private func switchPet(petModel : CBPetPsnalCterPetModel!) {
         
     }
@@ -452,7 +459,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
                 /* 首页数据源刷新*/
                 if objc is CBBaseNetworkModel {
                     self?.pickerViewByStatus(successModel: objc as! CBBaseNetworkModel)
-//                    self?.locatePopView.updateSingleLocateData(model:self?.homeViewModel.homeInfoModel ?? CBPetHomeInfoModel.init())
+                    self?.locatePopView.updateSingleLocateData(model:self?.homeViewModel.homeInfoModel ?? CBPetHomeInfoModel.init())
 //                    self?.functionPopView.updateFunctionDataSource()
                     self?.toolPopView.updateContent()
                     self?.toolAssistanceView.updateContent()
@@ -968,8 +975,42 @@ extension CBPetHomeViewController {
         self.addMapMarker()
     }
     private func addAllMarker(deviceList: [CBPetPsnalCterPetModel]) {
+        
+        self.initBarWith(title: deviceList.last?.pet.name ?? "首页".localizedStr, isBack: false)
+        
         self.cleanMap()
         
+        if AppDelegate.shareInstance.IsShowGoogleMap {
+            self.addAllMark_GMS(deviceList: deviceList)
+            return
+        }
+        self.addAllMark_BMK(deviceList: deviceList)
+    }
+    private func addAllMark_GMS(deviceList: [CBPetPsnalCterPetModel]) {
+        for i in 0..<deviceList.count {
+            let model = deviceList[i]
+            guard model.imei != nil else {
+                continue
+            }
+            let marker = CBPetGMSMarker.init()
+            marker.petModel = model
+            marker.position = CLLocationCoordinate2DMake(Double(model.pet.device.location.lat ?? "0")!, Double(model.pet.device.location.lng ?? "0")!)
+            let avatarMarkView = CBPetAvatarMarkView.init(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+            avatarMarkView.updateIconImage(petModel: model)
+            marker.iconView = avatarMarkView
+            marker.generateAddressStr {[weak self] in
+                marker.map = self?.googleMapView
+                if i == deviceList.count-1 {
+                    self?.googleMapView.selectedMarker = marker
+                }
+            }
+            if i == deviceList.count-1 {
+                self.googleMapView.camera = GMSCameraPosition.camera(withLatitude: Double(model.pet.device.location.lat ?? "0")!, longitude: Double(model.pet.device.location.lng ?? "0")!, zoom: self.googleMapView.camera.zoom)
+                marker.zIndex = 100
+            }
+        }
+    }
+    private func addAllMark_BMK(deviceList: [CBPetPsnalCterPetModel]) {
         for i in 0..<deviceList.count {
             let model = deviceList[i]
             guard model.imei != nil else {
@@ -985,12 +1026,11 @@ extension CBPetHomeViewController {
                 
                 
                 self.baiduMapView.setCenter(normalAnnotation.getCoordinate2D() , animated: true)
-                self.initBarWith(title: model.pet.name ?? "首页".localizedStr, isBack: false)
                 
                 if self.showPaoView {
                     let view: CBAvatarAnnotionView = self.baiduMapView.view(for: normalAnnotation) as! CBAvatarAnnotionView
                     let paoView = CBPetAvatarPaoView.init()
-                    paoView.annotationModel = normalAnnotation
+                    paoView.petModel = model
                     paoView.fenceModel = self.homeViewModel.paramtersObject ?? CBPetHomeParamtersModel.init()
                     paoView.layoutIfNeeded()
                     paoView.setupViewModel(viewModel: self.homeViewModel)

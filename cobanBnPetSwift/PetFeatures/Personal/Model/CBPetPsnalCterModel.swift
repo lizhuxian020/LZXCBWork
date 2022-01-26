@@ -53,6 +53,26 @@ struct CBPetPsnalCterPetModel:HandyJSON,Codable {
     var isOn:String?
     var cout:Int = 0
     var index:Int = 0
+    
+    /* 自己加的*/
+    var app_addressStr:String?
+    
+    func getCoordinate2D() -> CLLocationCoordinate2D {
+        return CLLocationCoordinate2DMake(Double(self.pet.device.location.lat ?? "0")!, Double(self.pet.device.location.lng ?? "0")!)
+    }
+    
+    func getTimeStr(formatStr: String) -> String {
+        var value : String?
+        value = self.pet.device.location.postTime
+        if value != nil {
+            if let valueTimeZone = CBPetHomeParamtersModel.getHomeParamters().timeZone {
+                return CBPetUtils.convertTimestampToDateStr(timestamp: value!.valueStr, formateStr: "yyyy-MM-dd HH:mm:ss",timeZone: Int(valueTimeZone) ?? 0)
+            } else {
+                return CBPetUtils.convertTimestampToDateStr(timestamp: value!.valueStr, formateStr: "yyyy-MM-dd HH:mm:ss")
+            }
+        }
+        return ""
+    }
 }
 struct CBPetPsnalCterPetPet:HandyJSON,Codable {
     var add_time:String?
