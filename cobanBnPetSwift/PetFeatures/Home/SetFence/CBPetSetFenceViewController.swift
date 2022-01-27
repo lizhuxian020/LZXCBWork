@@ -54,14 +54,10 @@ class CBPetSetFenceViewController: CBPetSetFenceMapVC {
         thuImage = thuImage.imageConvertRoundCorner(radius: thuImage.size.height, borderWidth: 1.5, borderColor: UIColor.white)
         self.avtarImg = thuImage
         
-        self.cleanBaiduMap()
-        
         self.polygonCoordinate = self.getModelArr(dataString: self.homeViewModel.homeInfoModel?.fence.data ?? "")
         DispatchQueue.main.asyncAfter(deadline: .now()+0.1, execute:{
             ///延时操作才能加载出来，相当于网络请求
-            self.addMapMarker(lat: Double(self.homeViewModel.homeInfoModel?.pet.device.location.lat ?? "0")!, lng: Double(self.homeViewModel.homeInfoModel?.pet.device.location.lng ?? "0")!)
-            self.addMapFenceMarker()
-            self.addMapCircle()
+            self.markTheMap()
         })
         
         self.homeViewModel.petHomeSetFenceBlock = { [weak self] (type:String,objc:Any) -> Void in
@@ -81,7 +77,11 @@ class CBPetSetFenceViewController: CBPetSetFenceMapVC {
                     let distance : Int = Int(objc as! CLLocationDistance)
                     self?.circleRadius = Float(objc as! CLLocationDistance)
                     self?.setFenceView.inputRadiusView.inputTF.text = "\(distance)"
-                    self?.baiduCircleFenceView?.radius = objc as! CLLocationDistance
+                    guard AppDelegate.shareInstance.IsShowGoogleMap == true else {
+                        self?.baiduCircleFenceView?.radius = objc as! CLLocationDistance
+                        return
+                    }
+                    self?.googleCircle?.radius = objc as! CLLocationDistance
                 }
             }
         }
@@ -89,12 +89,29 @@ class CBPetSetFenceViewController: CBPetSetFenceMapVC {
             /* 点中地图上某个点*/
             self?.polygonCoordinate[0].radius = self?.circleRadius
             
-            self?.cleanBaiduMap()
-            
-            self?.addMapMarker(lat: Double(self?.homeViewModel.homeInfoModel?.pet.device.location.lat ?? "0")!, lng: Double(self?.homeViewModel.homeInfoModel?.pet.device.location.lng ?? "0")!)
-            self?.addMapFenceMarker()
-            self?.addMapCircle()
+            self?.markTheMap()
         }
+    }
+    private func markTheMap() {
+        self.cleanBaiduMap()
+        self.addMapMarker(lat: Double(self.homeViewModel.homeInfoModel?.pet.device.location.lat ?? "0")!, lng: Double(self.homeViewModel.homeInfoModel?.pet.device.location.lng ?? "0")!)
+        self.addMapFenceMarker()
+        self.addMapCircle()
+        
+        let coordinateModel = self.polygonCoordinate[0]
+        let radius = CLLocationDistance(coordinateModel.radius ?? 100)
+        self.zoomTo(coord: coordinateModel.coordinate ?? CLLocationCoordinate2DMake(Double(0), Double(0)), radius: radius)
+    }
+    private func zoomTo(coord: CLLocationCoordinate2D, radius: CLLocationDistance) {
+        guard AppDelegate.shareInstance.IsShowGoogleMap == true else {
+            self.addBaiduMapFitCircleFence(coordinate: coord, radius: radius)
+            return
+        }
+        let d = radius * 2
+        let northeast = GMSGeometryOffset(coord, d, 45)
+        let southwest = GMSGeometryOffset(coord, d, 180+45)
+        self.googleMapView.animate(with: GMSCameraUpdate.fit(GMSCoordinateBounds.init(coordinate: northeast, coordinate: southwest)))
+//        self.googleMapView.camera = GMSCameraPosition.camera(withLatitude: coord.latitude, longitude: coord.longitude, zoom: self.googleMapView.camera.zoom)
     }
     private func cleanBaiduMap() {
         self.baiduMapView.removeOverlays(self.baiduMapView.overlays)
@@ -137,11 +154,15 @@ class CBPetSetFenceViewController: CBPetSetFenceMapVC {
     */
     
     override func didEndDragAnnotation(coordinate: CLLocationCoordinate2D, radius: Double) {
-        let circlePoint = BMKMapPointForCoordinate(coordinate)
-        let pointRadius = radius/0.61
-        let fitRect = BMKMapRectMake(circlePoint.x - pointRadius, circlePoint.y - pointRadius, pointRadius*2, pointRadius*2)
-        self.baiduMapView.setVisibleMapRect(fitRect, animated: true)
-        self.baiduMapView.setCenter(coordinate, animated: true)
+        guard AppDelegate.shareInstance.IsShowGoogleMap == true else {
+            let circlePoint = BMKMapPointForCoordinate(coordinate)
+            let pointRadius = radius/0.61
+            let fitRect = BMKMapRectMake(circlePoint.x - pointRadius, circlePoint.y - pointRadius, pointRadius*2, pointRadius*2)
+            self.baiduMapView.setVisibleMapRect(fitRect, animated: true)
+            self.baiduMapView.setCenter(coordinate, animated: true)
+            return
+        }
+        self.zoomTo(coord: coordinate, radius: radius)
     }
     
 }
@@ -172,7 +193,7 @@ extension CBPetSetFenceViewController {
             normalAnnotation.coordinate = CLLocationCoordinate2DMake(lat, lng)
             normalAnnotation.title = nil
             self.baiduMapView.addAnnotation(normalAnnotation)
-            self.baiduMapView.setCenter(CLLocationCoordinate2DMake(lat, lng) , animated: true)
+//            self.baiduMapView.setCenter(CLLocationCoordinate2DMake(lat, lng) , animated: true)
             return
         }
         let marker = GMSMarker.init()
@@ -180,8 +201,9 @@ extension CBPetSetFenceViewController {
         marker.iconView = self.avatarMarkView
         marker.map = self.googleMapView
         self.avatarMarkView.updateIconImage(iconImage: self.avtarImg ?? UIImage.init(named: "pet_mapAvatar_default")!)
-        self.googleMapView.camera = GMSCameraPosition.camera(withLatitude: lat, longitude: lng, zoom: 15)
+//        self.googleMapView.camera = GMSCameraPosition.camera(withLatitude: lat, longitude: lng, zoom: self.googleMapView.camera.zoom)
     }
+    /* 拖拽点*/
     private func addFenceMark(_ coordinate : CLLocationCoordinate2D) {
         guard AppDelegate.shareInstance.IsShowGoogleMap == true else {
             let normalAnnotation = CBPetNormalAnnotation.init()
@@ -191,7 +213,14 @@ extension CBPetSetFenceViewController {
             self.baiduMapView.addAnnotation(normalAnnotation)
             return
         }
+        let marker = GMSMarker.init()
+        marker.position = coordinate
+        marker.icon = UIImage.init(named: "pet_fence_annotation")
+        marker.isDraggable = true
+        marker.map = self.googleMapView
+        
     }
+    /* 加红点*/
     private func addMapFenceMarker() {
         if self.polygonCoordinate.count > 0 {
             let coordinateModel = self.polygonCoordinate[0]
@@ -217,7 +246,7 @@ extension CBPetSetFenceViewController {
             guard AppDelegate.shareInstance.IsShowGoogleMap == true else {
                 self.baiduCircleFenceView = BMKCircle.init(center: coord, radius: radius)
                 self.baiduMapView.add(self.baiduCircleFenceView)
-                self.addBaiduMapFitCircleFence(model: coordinateModel, radius: radius)
+//                self.addBaiduMapFitCircleFence(model: coordinateModel, radius: radius)
                 
                 let mapRect = self.baiduCircleFenceView!.boundingMapRect
                 
@@ -244,11 +273,14 @@ extension CBPetSetFenceViewController {
                 self.googleCircle?.map = self.googleMapView
             }
     
-            var bounds = GMSCoordinateBounds.init()
-            bounds = bounds.includingCoordinate(coord)
-            self.googleMapView.animate(with: GMSCameraUpdate.fit(bounds, withPadding: 30))//30.0
-            let zoomLevel = GMSCameraPosition.zoom(at: coord, forMeters: radius, perPoints: 50)//50.0
-            self.googleMapView.animate(toZoom: zoomLevel)
+//            var bounds = GMSCoordinateBounds.init()
+//            bounds = bounds.includingCoordinate(coord)
+//            self.googleMapView.animate(with: GMSCameraUpdate.fit(bounds, withPadding: 30))//30.0
+//            let zoomLevel = GMSCameraPosition.zoom(at: coord, forMeters: radius, perPoints: 50)//50.0
+//            self.googleMapView.animate(toZoom: zoomLevel)
+            
+            let targetCoord = GMSGeometryOffset(coord, radius, 90)
+            self.addFenceMark(targetCoord)
             
 //            /* 显示地理位置*/
 //            guard AppDelegate.shareInstance.IsShowGoogleMap == true else {
@@ -276,12 +308,12 @@ extension CBPetSetFenceViewController {
             }
         }
     }
-    private func addBaiduMapFitCircleFence(model:CBPetCoordinateObject,radius:Double) {
+    private func addBaiduMapFitCircleFence(coordinate:CLLocationCoordinate2D,radius:CLLocationDistance) {
         // 一个点的长度是0.870096
-        let circlePoint = BMKMapPointForCoordinate(model.coordinate ?? CLLocationCoordinate2DMake(Double(0), Double(0)))
+        let circlePoint = BMKMapPointForCoordinate(coordinate)
         let pointRadius = radius/0.6
         let fitRect = BMKMapRectMake(circlePoint.x - pointRadius, circlePoint.y - pointRadius, pointRadius*2, pointRadius*2)
         self.baiduMapView.setVisibleMapRect(fitRect, animated: true)
-        self.baiduMapView.setCenter(model.coordinate ?? CLLocationCoordinate2DMake(Double(0), Double(0)), animated: true)
+        self.baiduMapView.setCenter(coordinate, animated: true)
     }
 }

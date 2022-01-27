@@ -207,7 +207,27 @@ class CBPetSetFenceMapVC: CBPetBaseViewController,BMKMapViewDelegate,BMKGeoCodeS
             return
         }
     }
-    
+    func mapView(_ mapView: GMSMapView, didBeginDragging marker: GMSMarker) {
+        CBLog(message: "--lzx: didBeginDragging")
+    }
+    func mapView(_ mapView: GMSMapView, didDrag marker: GMSMarker) {
+        CBLog(message: "--lzx: didDrag: \(marker.position)")
+        let coordinateModel = self.polygonCoordinate[0]
+        let coord = CLLocationCoordinate2DMake(Double(coordinateModel.coordinate?.latitude ?? 0), Double(coordinateModel.coordinate?.longitude ?? 0))
+        let movedCoo = marker.position
+        let distance = GMSGeometryDistance(coord, movedCoo)
+        if self.homeViewModel.petHomeSetFenceBlock != nil {
+            self.homeViewModel.petHomeSetFenceBlock!("DragValue",distance)
+        }
+    }
+    func mapView(_ mapView: GMSMapView, didEndDragging marker: GMSMarker) {
+        let coordinateModel = self.polygonCoordinate[0]
+        let movedCoo = marker.position
+        
+        let distance = GMSGeometryDistance(coordinateModel.coordinate!, movedCoo)
+        self.didEndDragAnnotation(coordinate: coordinateModel.coordinate!, radius: distance)
+        CBLog(message: "--lzx: didEndDragging")
+    }
     /*
     // MARK: - Navigation
 

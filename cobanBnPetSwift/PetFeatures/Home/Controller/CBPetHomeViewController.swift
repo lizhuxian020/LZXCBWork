@@ -380,6 +380,12 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         self.homeViewModel.switchDeviceRequest(imeiStr: cbMarker.petModel?.pet.device.imei ?? "")
     }
     
+    override func didClickGMSInfoWindow() {
+        let fenceVC = CBPetSetFenceViewController.init()
+        fenceVC.homeViewModel = self.homeViewModel
+        self.navigationController?.pushViewController(fenceVC, animated: true)
+    }
+    
     private func switchPet(petModel : CBPetPsnalCterPetModel!) {
         
     }

@@ -181,6 +181,7 @@ class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSear
     }
     func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
         CBLog(message: "---lzx: GMS didTapInfoWindows")
+        self.didClickGMSInfoWindow()
     }
     //点击大头针时调用
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
@@ -190,6 +191,10 @@ class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSear
     
     func didClickGMSMarker(marker: GMSMarker) {
         CBLog(message: "--lzx: didClickMArk")
+    }
+    
+    func didClickGMSInfoWindow() {
+        
     }
     /*
     // MARK: - Navigation

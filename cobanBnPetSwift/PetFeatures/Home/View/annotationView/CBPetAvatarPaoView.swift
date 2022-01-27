@@ -208,20 +208,23 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
         let batteryContainer = UIView.init()
         contentView.addSubview(batteryContainer)
         batteryContainer.snp_makeConstraints { make in
-            make.height.equalTo(50*KFitHeightRate)
+//            make.height.equalTo(50*KFitHeightRate)
             make.left.right.bottom.equalTo(self.contentView)
             make.top.equalTo(fencyContainer.snp_bottom)
         }
         
         batteryContainer.addSubview(statusLbl)
         statusLbl.snp_makeConstraints { make in
-            make.centerY.equalTo(batteryContainer)
+//            make.centerY.equalTo(batteryContainer)
             make.left.equalTo(batteryContainer)
+            make.top.equalTo(batteryContainer).offset(10*KFitHeightRate)
         }
         batteryContainer.addSubview(batteryLbl)
         batteryLbl.snp_makeConstraints { make in
             make.right.equalTo(batteryContainer)
-            make.centerY.equalTo(statusLbl)
+            make.top.equalTo(self.statusLbl.snp_bottom).offset(5*KFitHeightRate)
+            make.bottom.equalTo(batteryContainer).offset(-10*KFitHeightRate)
+//            make.centerY.equalTo(statusLbl)
         }
         let powerImage = UIImage(named: "pet_home_power")!
         batteryImgView.image = powerImage
