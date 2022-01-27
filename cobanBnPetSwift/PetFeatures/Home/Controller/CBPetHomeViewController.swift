@@ -988,9 +988,33 @@ extension CBPetHomeViewController {
         
         if AppDelegate.shareInstance.IsShowGoogleMap {
             self.addAllMark_GMS(deviceList: deviceList)
+        } else {
+            self.addAllMark_BMK(deviceList: deviceList)
+        }
+        self.addFenceMark()
+        
+        var center : CLLocationCoordinate2D?
+        var radius : CLLocationDistance?
+        if !self.polygonCoordinate.isEmpty {
+            let coordinateModel = self.polygonCoordinate[0]
+            center = coordinateModel.coordinate ?? CLLocationCoordinate2DMake(Double(0), Double(0))
+            radius = CLLocationDistance(coordinateModel.radius ?? 100)
+        } else {
+            center = CLLocationCoordinate2DMake(Double(self.homeViewModel.homeInfoModel?.pet.device.location.lat ?? "0")!, Double(self.homeViewModel.homeInfoModel?.pet.device.location.lng ?? "0")!)
+            radius = 100
+        }
+        self.zoomTo(coord: center!, radius: radius!)
+    }
+    private func zoomTo(coord: CLLocationCoordinate2D, radius: CLLocationDistance) {
+        guard AppDelegate.shareInstance.IsShowGoogleMap == true else {
+            self.addBaiduMapFitCircleFence(coordinate: coord, radius: radius)
             return
         }
-        self.addAllMark_BMK(deviceList: deviceList)
+        let d = radius * 2
+        let northeast = GMSGeometryOffset(coord, d, 45)
+        let southwest = GMSGeometryOffset(coord, d, 180+45)
+        self.googleMapView.animate(with: GMSCameraUpdate.fit(GMSCoordinateBounds.init(coordinate: northeast, coordinate: southwest)))
+//        self.googleMapView.camera = GMSCameraPosition.camera(withLatitude: coord.latitude, longitude: coord.longitude, zoom: self.googleMapView.camera.zoom)
     }
     private func addAllMark_GMS(deviceList: [CBPetPsnalCterPetModel]) {
         for i in 0..<deviceList.count {
@@ -1011,7 +1035,7 @@ extension CBPetHomeViewController {
                 }
             }
             if i == deviceList.count-1 {
-                self.googleMapView.camera = GMSCameraPosition.camera(withLatitude: Double(model.pet.device.location.lat ?? "0")!, longitude: Double(model.pet.device.location.lng ?? "0")!, zoom: self.googleMapView.camera.zoom)
+//                self.googleMapView.camera = GMSCameraPosition.camera(withLatitude: Double(model.pet.device.location.lat ?? "0")!, longitude: Double(model.pet.device.location.lng ?? "0")!, zoom: self.googleMapView.camera.zoom)
                 marker.zIndex = 100
             }
         }
@@ -1047,7 +1071,7 @@ extension CBPetHomeViewController {
             }
         }
         
-        self.addFenceMark()
+        
     }
     private func addFenceMark() {
         if self.homeViewModel.paramtersObject?.fenceSwitch == "1" {
@@ -1117,16 +1141,16 @@ extension CBPetHomeViewController {
                 circle.map = self.googleMapView
             }
         
-            var bounds = GMSCoordinateBounds.init()
-            bounds = bounds.includingCoordinate(coord)
-            self.googleMapView.animate(with: GMSCameraUpdate.fit(bounds, withPadding: 30))//30.0
-            let zoomLevel = GMSCameraPosition.zoom(at: coord, forMeters: radius, perPoints: 50)//50.0
-            self.googleMapView.animate(toZoom: zoomLevel)
+//            var bounds = GMSCoordinateBounds.init()
+//            bounds = bounds.includingCoordinate(coord)
+//            self.googleMapView.animate(with: GMSCameraUpdate.fit(bounds, withPadding: 30))//30.0
+//            let zoomLevel = GMSCameraPosition.zoom(at: coord, forMeters: radius, perPoints: 50)//50.0
+//            self.googleMapView.animate(toZoom: zoomLevel)
         }
     }
-    private func addBaiduMapFitCircleFence(model:CBPetCoordinateObject,radius:Double) {
+    private func addBaiduMapFitCircleFence(coordinate:CLLocationCoordinate2D,radius:Double) {
         // 一个点的长度是0.870096
-        let circlePoint = BMKMapPointForCoordinate(model.coordinate ?? CLLocationCoordinate2DMake(Double(0), Double(0)))
+        let circlePoint = BMKMapPointForCoordinate(coordinate)
         let pointRadius = radius/0.6
         let fitRect = BMKMapRectMake(circlePoint.x - pointRadius, circlePoint.y - pointRadius, pointRadius*2, pointRadius*2)
         self.baiduMapView.setVisibleMapRect(fitRect, animated: true)

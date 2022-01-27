@@ -358,13 +358,29 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
     }
     
     @objc func didSwitch(sender: UISwitch) {
-        if self.viewModel is CBPetHomeViewModel {
-            let homeViewModel = self.viewModel as! CBPetHomeViewModel
-            guard homeViewModel.ctrlPanelClickBlock == nil else {
-                homeViewModel.paoViewFenceSwitch = sender
-                homeViewModel.ctrlPanelClickBlock!("电子围栏开启".localizedStr as Any,true,sender.isOn)
-                return
+        
+        let action = {[weak self] in
+            if self?.viewModel is CBPetHomeViewModel {
+                let homeViewModel = self?.viewModel as! CBPetHomeViewModel
+                guard homeViewModel.ctrlPanelClickBlock == nil else {
+                    homeViewModel.paoViewFenceSwitch = sender
+                    homeViewModel.ctrlPanelClickBlock!("电子围栏开启".localizedStr as Any,true,sender.isOn)
+                    return
+                }
             }
         }
+        
+        if sender.isOn {
+            let alertC = UIAlertController.init(title: "", message: "电子围栏，当宠物出围栏时app能收到报警并提示主人。注意：开启此功能后会打开设备的GPS，耗电量会增加。".localizedStr, preferredStyle: .alert)
+            alertC.addAction(UIAlertAction.init(title: "取消", style: .cancel, handler: { alertAction in
+                sender.setOn(false, animated: true)
+            }))
+            alertC.addAction(UIAlertAction.init(title: "确定", style: .default, handler: { alertAction in
+                action()
+            }))
+            UIViewController.getCurrentVC()?.present(alertC, animated: true, completion: nil)
+            return
+        }
+        action()
     }
 }
