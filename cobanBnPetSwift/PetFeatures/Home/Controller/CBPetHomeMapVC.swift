@@ -161,6 +161,10 @@ class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSear
         }
         return nil
     }
+    func mapView(_ mapView: BMKMapView!, onClickedMapBlank coordinate: CLLocationCoordinate2D) {
+        CBLog(message: "--lzx: onClickedMapBlank")
+        self.didClickBlankAreaOfMap()
+    }
     
     func didClickAnnotaionView(view: BMKAnnotationView!) {
         
@@ -238,6 +242,11 @@ class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSear
     
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
         gmsPaoView.removeFromSuperview()
+        self.didClickBlankAreaOfMap()
+    }
+    
+    func didClickBlankAreaOfMap() {
+        
     }
     /*
     // MARK: - Navigation

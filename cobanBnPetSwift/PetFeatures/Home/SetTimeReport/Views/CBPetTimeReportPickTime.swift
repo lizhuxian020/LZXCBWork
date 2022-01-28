@@ -161,7 +161,7 @@ class CBPetTimeReportPickTime: CBPetBaseView,UIPickerViewDelegate,UIPickerViewDa
         }
         
         for index in 0..<60 {
-            if index <= 12 {
+            if index <= 23 {
                 self.arrayDataHour.append(String.init(format: "%02d", index))
             }
             self.arrayDataMinute.append(String.init(format: "%02d", index))

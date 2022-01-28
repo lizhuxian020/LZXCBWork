@@ -18,7 +18,7 @@ import CoreLocation
 class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
     
     private var switchPetAlertView : CBPetSwitchPetAlertView = CBPetSwitchPetAlertView.init()
-    
+    private var clickLocateTime : TimeInterval?
     /* 绑定手表view，没有设备的时候展现*/
     private lazy var bindDeviceView:CBPetHomeBindView = {
         let bindV = CBPetHomeBindView.init()
@@ -385,6 +385,10 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         let fenceVC = CBPetSetFenceViewController.init()
         fenceVC.homeViewModel = self.homeViewModel
         self.navigationController?.pushViewController(fenceVC, animated: true)
+    }
+    
+    override func didClickBlankAreaOfMap() {
+        self.locatePopView.dissmiss()
     }
     
     private func switchPet(petModel : CBPetPsnalCterPetModel!) {
@@ -800,6 +804,9 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
             }
             break
         case "定位".localizedStr:
+            if self.isOverTime(min: 3) == false {
+                return
+            }
             self.locatePopView.popView()
             self.homeViewModel.singleLocateCommandRequest()
             break
@@ -821,6 +828,21 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         default:
             break
         }
+    }
+    private func isOverTime(min: Int) -> Bool {
+        guard let time = clickLocateTime else {
+            clickLocateTime = NSDate.init().timeIntervalSince1970
+            return true
+        }
+        let currentTime = NSDate.init().timeIntervalSince1970
+        let duration = currentTime - time
+        let result = duration >= Double(min * 60)
+        if result {
+            clickLocateTime = currentTime
+        } else {
+            MBProgressHUD.showMessage(Msg: "三分钟后再试".localizedStr, Deleay: 1.5)
+        }
+        return result
     }
     //MARK: - 前往录音
     private func toSetReordingClick() {
