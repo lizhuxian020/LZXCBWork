@@ -258,6 +258,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
         /// 激活，进入前台
+//        self.createLocalNotification(userInfo: [
+//            "body": [
+//                "title": "body_title",
+//                "body": "body_body",
+//                "watchAlarmType": "watchAlarmType",
+//                "productType": "2",
+//                "phone": "123123213",
+//                "pushType": "2",
+//                "imei": "864364050000061",
+//                "applicaName": "applicaName",
+//                "applicaMessId":"applicaMessId",
+//            ]
+//        ])
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -393,6 +406,8 @@ extension AppDelegate {
         var alertBody = ""
         let ddJsonBodyInfo = JSON.init(userInfo["body"] as Any)
         let noticeModelObjc = CBPetNoticeModel.deserialize(from: CBPetUtils.getDictionaryFromJSONString(jsonString: ddJsonBodyInfo.stringValue))
+//        let dicc : Dictionary = userInfo["body"] as! Dictionary<String, Any>
+//        let noticeModelObjc = CBPetNoticeModel.deserialize(from: dicc)
         CBLog(message: "推送过来的内容:\(userInfo)")
         CBLog(message: userInfo)
         /* 手表*/
