@@ -209,7 +209,7 @@ class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSear
         gmsPaoView.setupViewModel(viewModel: self.homeViewModel)
         
         let point = mapView.projection.point(for: location)
-        self.googleMapView.addSubview(gmsPaoView)
+        self.googleView.addSubview(gmsPaoView)
         let markImg = UIImage.init(named: "pet_fence_annotation")!
         gmsPaoView.snp_makeConstraints({ make in
             make.centerX.equalTo(point.x)

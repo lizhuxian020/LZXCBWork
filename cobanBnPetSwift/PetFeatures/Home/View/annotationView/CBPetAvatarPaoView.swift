@@ -374,10 +374,10 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
         
         if sender.isOn {
             let alertC = UIAlertController.init(title: "", message: "电子围栏，当宠物出围栏时app能收到报警并提示主人。注意：开启此功能后会打开设备的GPS，耗电量会增加。".localizedStr, preferredStyle: .alert)
-            alertC.addAction(UIAlertAction.init(title: "取消", style: .cancel, handler: { alertAction in
+            alertC.addAction(UIAlertAction.init(title: "取消".localizedStr, style: .cancel, handler: { alertAction in
                 sender.setOn(false, animated: true)
             }))
-            alertC.addAction(UIAlertAction.init(title: "确定", style: .default, handler: { alertAction in
+            alertC.addAction(UIAlertAction.init(title: "确定".localizedStr, style: .default, handler: { alertAction in
                 action()
             }))
             UIViewController.getCurrentVC()?.present(alertC, animated: true, completion: nil)
@@ -388,6 +388,7 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
     
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         let pointInFence = _fenceContainer?.convert(point, from: self)
-        return _fenceContainer?.bounds.contains(pointInFence!) ?? false
+        let result = _fenceContainer?.bounds.contains(pointInFence!)
+        return result!
     }
 }
