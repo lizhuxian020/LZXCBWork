@@ -180,7 +180,7 @@ extension CBPetHomeViewModel {
         }
     }
     //MARK: - 切换设备请求request
-    func switchDeviceRequest(imeiStr:String) {
+    func switchDeviceRequest(imeiStr:String, _ finishBlk : (()->Void)? = nil) {
         var paramters:Dictionary<String,Any> = ["uid":"","imei":""]
         if let value = CBPetLoginModelTool.getUser()?.uid {
             paramters.updateValue(value.valueStr, forKey: "uid")
@@ -197,6 +197,7 @@ extension CBPetHomeViewModel {
                 self?.getDeviceParamtersRequest({[weak self] in
                     self?.getDeviceList({
                         MBProgressHUD.hide(for: CBPetUtils.getWindow(), animated: true)
+                        finishBlk?()
                     })
                 })
             })
@@ -554,7 +555,7 @@ extension CBPetHomeViewModel {
                     MBProgressHUD.showMessage(Msg: "下发指令超时".localizedStr, Deleay: 1.5)
                 }
                  if let s = self?.paoViewFenceSwitch {
-                     s.setOn(false, animated: true)
+                     s.setOn(self?.paramtersObject?.fenceSwitch == "1", animated: true)
                  }
              }
             if self?.updateDataBlock != nil {

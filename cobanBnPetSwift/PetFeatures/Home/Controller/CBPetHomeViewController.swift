@@ -13,6 +13,7 @@ import UIKit
 import SwiftyJSON
 import UserNotifications
 import AVFAudio
+import CoreLocation
 
 class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
     
@@ -373,11 +374,11 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         self.homeViewModel.switchDeviceRequest(imeiStr: annotation.petModel?.pet.device.imei ?? "")
     }
     
-    override func didClickGMSMarker(marker: GMSMarker) {
+    override func didClickGMSMarker(marker: GMSMarker, _ finishBlk : @escaping ()->Void) {
         guard let cbMarker = marker as? CBPetGMSMarker else {
             return
         }
-        self.homeViewModel.switchDeviceRequest(imeiStr: cbMarker.petModel?.pet.device.imei ?? "")
+        self.homeViewModel.switchDeviceRequest(imeiStr: cbMarker.petModel?.pet.device.imei ?? "", finishBlk)
     }
     
     override func didClickGMSInfoWindow() {
@@ -492,7 +493,6 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
                 if currentPet != nil {
                     newList.append(currentPet!)
                 }
-//                self?.addOtherMarker(deviceList: otherDevice)
                 self?.addAllMarker(deviceList: newList)
                 break
             case .lsiten:
@@ -638,25 +638,17 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         self.baiduView.isHidden = AppDelegate.shareInstance.IsShowGoogleMap
         self.googleView.isHidden = !AppDelegate.shareInstance.IsShowGoogleMap
     }
-    // MARK: - 更新头像和地图数据
-    private func updateData() { 
-        let data = NSData.init(contentsOf: NSURL.init(string: (self.homeViewModel.homeInfoModel?.pet.photo ?? ""))! as URL)
-        let originalImage = UIImage.init(data: (data as Data? ?? Data.init()))
-        var thuImage = UIImage.imageByScalingAndCroppingForSourceImage(sourceImage: originalImage ?? UIImage.init(), targetSize: CGSize(width: 92, height: 92))
-        thuImage = thuImage.imageConvertRoundCorner(radius: thuImage.size.height, borderWidth: 1.5, borderColor: UIColor.white)
-        self.avtarImg = thuImage
-        if self.homeViewModel.avatarTitleViewUpdateUIBlock != nil {
-            self.homeViewModel.avatarTitleViewUpdateUIBlock!(false,self.homeViewModel.homeInfoModel?.pet.name ?? "未知".localizedStr, self.avtarImg ?? UIImage())
-        }
-
-        cleanMap()
-        /* 围栏开启的时候，显示*/
-        if self.homeViewModel.paramtersObject?.fenceSwitch == "1" {
-            self.addMapFenceMarker()
-            self.addMapCircle()
-        }
-//        self.addMapMarker()
-    }
+//    // MARK: - 更新头像和地图数据
+//    private func updateData() {
+//        let data = NSData.init(contentsOf: NSURL.init(string: (self.homeViewModel.homeInfoModel?.pet.photo ?? ""))! as URL)
+//        let originalImage = UIImage.init(data: (data as Data? ?? Data.init()))
+//        var thuImage = UIImage.imageByScalingAndCroppingForSourceImage(sourceImage: originalImage ?? UIImage.init(), targetSize: CGSize(width: 92, height: 92))
+//        thuImage = thuImage.imageConvertRoundCorner(radius: thuImage.size.height, borderWidth: 1.5, borderColor: UIColor.white)
+//        self.avtarImg = thuImage
+//        if self.homeViewModel.avatarTitleViewUpdateUIBlock != nil {
+//            self.homeViewModel.avatarTitleViewUpdateUIBlock!(false,self.homeViewModel.homeInfoModel?.pet.name ?? "未知".localizedStr, self.avtarImg ?? UIImage())
+//        }
+//    }
     private func cleanMap() {
         self.isCleanMap = true
         self.baiduMapView.removeOverlays(self.baiduMapView.overlays)
@@ -966,20 +958,6 @@ extension CBPetHomeViewController {
         }
         return modelArr
     }
-    private func addOtherMarker(deviceList: [CBPetPsnalCterPetModel]) {
-        for model in deviceList {
-            guard model.imei != nil else {
-                continue
-            }
-            let normalAnnotation = CBPetNormalAnnotation.init()
-            normalAnnotation.petModel = model
-            normalAnnotation.coordinate = CLLocationCoordinate2DMake(Double(model.pet.device.location.lat ?? "0")!, Double(model.pet.device.location.lng ?? "0")!)
-            normalAnnotation.title = nil
-            self.baiduMapView.addAnnotation(normalAnnotation)
-            
-        }
-        self.addMapMarker()
-    }
     private func addAllMarker(deviceList: [CBPetPsnalCterPetModel]) {
         
         self.initBarWith(title: deviceList.last?.pet.name ?? "首页".localizedStr, isBack: false)
@@ -992,18 +970,6 @@ extension CBPetHomeViewController {
             self.addAllMark_BMK(deviceList: deviceList)
         }
         self.addFenceMark()
-        
-        var center : CLLocationCoordinate2D?
-        var radius : CLLocationDistance?
-        if !self.polygonCoordinate.isEmpty {
-            let coordinateModel = self.polygonCoordinate[0]
-            center = coordinateModel.coordinate ?? CLLocationCoordinate2DMake(Double(0), Double(0))
-            radius = CLLocationDistance(coordinateModel.radius ?? 100)
-        } else {
-            center = CLLocationCoordinate2DMake(Double(self.homeViewModel.homeInfoModel?.pet.device.location.lat ?? "0")!, Double(self.homeViewModel.homeInfoModel?.pet.device.location.lng ?? "0")!)
-            radius = 100
-        }
-        self.zoomTo(coord: center!, radius: radius!)
     }
     private func zoomTo(coord: CLLocationCoordinate2D, radius: CLLocationDistance) {
         guard AppDelegate.shareInstance.IsShowGoogleMap == true else {
@@ -1015,6 +981,13 @@ extension CBPetHomeViewController {
         let southwest = GMSGeometryOffset(coord, d, 180+45)
         self.googleMapView.animate(with: GMSCameraUpdate.fit(GMSCoordinateBounds.init(coordinate: northeast, coordinate: southwest)))
 //        self.googleMapView.camera = GMSCameraPosition.camera(withLatitude: coord.latitude, longitude: coord.longitude, zoom: self.googleMapView.camera.zoom)
+    }
+    private func moveTo(coord: CLLocationCoordinate2D) {
+        guard AppDelegate.shareInstance.IsShowGoogleMap == true else {
+            self.baiduMapView.setCenter(coord, animated: true)
+            return
+        }
+        self.googleMapView.animate(toLocation: coord)
     }
     private func addAllMark_GMS(deviceList: [CBPetPsnalCterPetModel]) {
         for i in 0..<deviceList.count {
@@ -1037,6 +1010,7 @@ extension CBPetHomeViewController {
             if i == deviceList.count-1 {
 //                self.googleMapView.camera = GMSCameraPosition.camera(withLatitude: Double(model.pet.device.location.lat ?? "0")!, longitude: Double(model.pet.device.location.lng ?? "0")!, zoom: self.googleMapView.camera.zoom)
                 marker.zIndex = 100
+                tappedMarker = marker
             }
         }
     }
@@ -1077,25 +1051,21 @@ extension CBPetHomeViewController {
         if self.homeViewModel.paramtersObject?.fenceSwitch == "1" {
             self.addMapFenceMarker()
             self.addMapCircle()
+            
+            var center : CLLocationCoordinate2D?
+            var radius : CLLocationDistance?
+            if self.polygonCoordinate.count > 0 {
+                let coordinateModel = self.polygonCoordinate[0]
+                center = coordinateModel.coordinate ?? CLLocationCoordinate2DMake(Double(0), Double(0))
+                radius = CLLocationDistance(coordinateModel.radius ?? 100)
+                self.zoomTo(coord: center!, radius: radius!)
+            }
+        } else {
+            self.moveTo(coord: CLLocationCoordinate2DMake(Double(self.homeViewModel.homeInfoModel?.pet.device.location.lat ?? "0")!, Double(self.homeViewModel.homeInfoModel?.pet.device.location.lng ?? "0")!))
         }
-    }
-    private func addMapMarker() {
-        guard AppDelegate.shareInstance.IsShowGoogleMap == true else {
-            let normalAnnotation = CBPetNormalAnnotation.init()
-            normalAnnotation.coordinate = CLLocationCoordinate2DMake(Double(self.homeViewModel.homeInfoModel?.pet.device.location.lat ?? "0")!, Double(self.homeViewModel.homeInfoModel?.pet.device.location.lng ?? "0")!)
-            normalAnnotation.title = nil
-//            normalAnnotation.homeInfoModel = self.homeViewModel.homeInfoModel
-            self.baiduMapView.addAnnotation(normalAnnotation)
-            self.baiduMapView.setCenter(CLLocationCoordinate2DMake(Double(self.homeViewModel.homeInfoModel?.pet.device.location.lat ?? "0")!, Double(self.homeViewModel.homeInfoModel?.pet.device.location.lng ?? "0")!) , animated: true)
-            return
+        if gmsPaoView.superview != nil {
+            self.gmsMapDidChangePosition()
         }
-        let marker = GMSMarker.init()
-        marker.position = CLLocationCoordinate2DMake(Double(self.homeViewModel.homeInfoModel?.pet.device.location.lat ?? "0")!, Double(self.homeViewModel.homeInfoModel?.pet.device.location.lng ?? "0")!)
-        marker.iconView = self.avatarMarkView
-        marker.map = self.googleMapView
-        self.avatarMarkView.updateIconImage(iconImage: self.avtarImg ?? UIImage.init(named: "pet_mapAvatar_default")!)
-        self.avatarMarkView.updateHomeInfoModel(homeModel: self.homeViewModel.homeInfoModel ?? CBPetHomeInfoModel())
-        self.googleMapView.camera = GMSCameraPosition.camera(withLatitude: Double(self.homeViewModel.homeInfoModel?.pet.device.location.lat ?? "0")!, longitude: Double(self.homeViewModel.homeInfoModel?.pet.device.location.lng ?? "0")!, zoom: 15)
     }
     private func addMapFenceMarker() {
         self.polygonCoordinate = self.getModelArr(dataString: self.homeViewModel.homeInfoModel?.fence.data ?? "")

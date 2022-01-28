@@ -22,6 +22,7 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
         }
     }
     
+    private var _fenceContainer : UIView?
     private var bgImgView : UIImageView = {
         let v = UIImageView.init()
         var img = UIImage.init(named: "pet_paoView_bg") ?? UIImage.init()
@@ -56,13 +57,13 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
         return v
     }()
     
-    private var fencyLbl : UILabel = {
+    private var fenceLbl : UILabel = {
         let v = UILabel(text: "电子围栏".localizedStr, textColor: KPet333333Color, font: UIFont(name: CBPingFangSC_Regular, size: 14*KFitHeightRate)!, textAlignment: .left)
         v.isUserInteractionEnabled = true
         return v
     }()
     
-    private var fencySwitch : UISwitch = {
+    private var fenceSwitch : UISwitch = {
         let v = UISwitch.init()
         v.addTarget(self, action: #selector(didSwitch(sender:)), for: .valueChanged)
         return v
@@ -176,24 +177,25 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
             make.left.right.equalTo(0)
         }
         
-        let fencyContainer = UIView.init()
-        contentView.addSubview(fencyContainer)
-        fencyContainer.snp_makeConstraints { make in
+        let fenceContainer = UIView.init()
+        _fenceContainer = fenceContainer
+        contentView.addSubview(fenceContainer)
+        fenceContainer.snp_makeConstraints { make in
             make.height.equalTo(50*KFitHeightRate)
             make.left.right.equalTo(self.contentView)
             make.top.equalTo(self.timeLbl.snp_bottom)
         }
         
-        fencyContainer.addSubview(fencyLbl)
-        fencyLbl.snp_makeConstraints { make in
-            make.top.bottom.equalTo(fencyContainer)
-            make.left.equalTo(fencyContainer)
+        fenceContainer.addSubview(fenceLbl)
+        fenceLbl.snp_makeConstraints { make in
+            make.top.bottom.equalTo(fenceContainer)
+            make.left.equalTo(fenceContainer)
         }
-        fencyContainer.addSubview(fencySwitch)
-        fencySwitch.snp_makeConstraints { make in
-            make.centerY.equalTo(fencyLbl)
-            make.right.equalTo(fencyContainer)
-            make.left.equalTo(fencyLbl.snp_right)
+        fenceContainer.addSubview(fenceSwitch)
+        fenceSwitch.snp_makeConstraints { make in
+            make.centerY.equalTo(fenceLbl)
+            make.right.equalTo(fenceContainer)
+            make.left.equalTo(fenceLbl.snp_right)
         }
         
         let s2 = UIView.init()
@@ -201,7 +203,7 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
         contentView.addSubview(s2)
         s2.snp_makeConstraints { make in
             make.height.equalTo(1)
-            make.bottom.equalTo(fencyContainer)
+            make.bottom.equalTo(fenceContainer)
             make.left.right.equalTo(0)
         }
         
@@ -210,7 +212,7 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
         batteryContainer.snp_makeConstraints { make in
 //            make.height.equalTo(50*KFitHeightRate)
             make.left.right.bottom.equalTo(self.contentView)
-            make.top.equalTo(fencyContainer.snp_bottom)
+            make.top.equalTo(fenceContainer.snp_bottom)
         }
         
         batteryContainer.addSubview(statusLbl)
@@ -245,7 +247,7 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
         statusLbl.text = "NB已连接"
         batteryLbl.text = "100%"
         
-        fencyLbl.tapBlk = {[weak self] in
+        fenceLbl.tapBlk = {[weak self] in
             if self?.viewModel is CBPetHomeViewModel {
                 let homeViewModel = self?.viewModel as! CBPetHomeViewModel
                 guard homeViewModel.ctrlPanelClickBlock == nil else {
@@ -270,7 +272,7 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
         guard fenceModel != nil else {
             return
         }
-        self.fencySwitch.isOn = fenceModel!.fenceSwitch == "1"
+        self.fenceSwitch.isOn = fenceModel!.fenceSwitch == "1"
     }
     
     private func _setupBattery() {
@@ -382,5 +384,10 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
             return
         }
         action()
+    }
+    
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        let pointInFence = _fenceContainer?.convert(point, from: self)
+        return _fenceContainer?.bounds.contains(pointInFence!) ?? false
     }
 }

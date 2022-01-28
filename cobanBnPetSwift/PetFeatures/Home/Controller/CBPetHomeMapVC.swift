@@ -168,33 +168,76 @@ class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSear
     // MARK: - Google 地图
     func mapView(_ mapView: GMSMapView, markerInfoWindow marker: GMSMarker) -> UIView? {
         /*在标记即将被选中时调用，并提供一个可选的自定义信息窗口来 如果此方法返回UIView，则用于该标记。*/
-        guard let cbMark = marker as? CBPetGMSMarker,
-              cbMark.zIndex == 100 else {
-            return nil
-        }
-        let paoView = CBPetAvatarPaoView.init()
-        paoView.petModel = cbMark.petModel
-        paoView.fenceModel = self.homeViewModel.paramtersObject ?? CBPetHomeParamtersModel.init()
-        paoView.layoutIfNeeded()
-        paoView.setupViewModel(viewModel: self.homeViewModel)
-        return paoView
+        return UIView.init()
     }
     func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
         CBLog(message: "---lzx: GMS didTapInfoWindows")
         self.didClickGMSInfoWindow()
     }
+    
+    var gmsPaoView : CBPetAvatarPaoView = CBPetAvatarPaoView.init()
+    var tappedMarker : CBPetGMSMarker?
     //点击大头针时调用
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
-        self.didClickGMSMarker(marker: marker)
-        return true
+        self.didClickGMSMarker(marker: marker) {[weak self] in
+            guard let cbMarker = marker as? CBPetGMSMarker else {
+                return
+            }
+            self?.generatePaoView(mapView: mapView, cbMarker: cbMarker)
+        }
+        
+        return false
     }
     
-    func didClickGMSMarker(marker: GMSMarker) {
+    func didClickGMSMarker(marker: GMSMarker, _ finishBlk : @escaping ()->Void) {
         CBLog(message: "--lzx: didClickMArk")
     }
     
     func didClickGMSInfoWindow() {
         
+    }
+    
+    private func generatePaoView(mapView: GMSMapView, cbMarker: CBPetGMSMarker) {
+        let location = cbMarker.petModel!.getCoordinate2D()
+        tappedMarker = cbMarker
+        
+        gmsPaoView.removeFromSuperview()
+//        gmsPaoView = CBPetAvatarPaoView.init()
+        gmsPaoView.petModel = cbMarker.petModel
+        gmsPaoView.fenceModel = self.homeViewModel.paramtersObject ?? CBPetHomeParamtersModel.init()
+//        gmsPaoView.layoutIfNeeded()
+        gmsPaoView.setupViewModel(viewModel: self.homeViewModel)
+        
+        let point = mapView.projection.point(for: location)
+        self.googleMapView.addSubview(gmsPaoView)
+        let markImg = UIImage.init(named: "pet_fence_annotation")!
+        gmsPaoView.snp_makeConstraints({ make in
+            make.centerX.equalTo(point.x)
+            make.bottom.equalTo(self.view.snp_top).offset(point.y-markImg.size.height)
+        })
+    }
+    
+    func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
+        self.gmsMapDidChangePosition()
+    }
+    
+    func gmsMapDidChangePosition() {
+        if tappedMarker != nil && gmsPaoView.superview != nil {
+            let location = tappedMarker?.petModel?.getCoordinate2D()
+            let point = self.googleMapView.projection.point(for: location!)
+            let markImg = UIImage.init(named: "pet_fence_annotation")!
+            gmsPaoView.petModel = tappedMarker!.petModel
+            gmsPaoView.fenceModel = self.homeViewModel.paramtersObject ?? CBPetHomeParamtersModel.init()
+            gmsPaoView.setupViewModel(viewModel: self.homeViewModel)
+            gmsPaoView.snp_remakeConstraints({ make in
+                make.centerX.equalTo(point.x)
+                make.bottom.equalTo(self.view.snp_top).offset(point.y-markImg.size.height)
+            })
+        }
+    }
+    
+    func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
+        gmsPaoView.removeFromSuperview()
     }
     /*
     // MARK: - Navigation
