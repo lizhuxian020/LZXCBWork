@@ -9,6 +9,8 @@
 import UIKit
 
 class CBPetForgetPwdViewController: CBPetBaseViewController {
+    
+    private let isGoogle = AppDelegate.shareInstance.IsShowGoogleMap
 
     public lazy var forgetPwdViewModel:CBPetLoginViewModel = {
         let viewMd = CBPetLoginViewModel.init()
@@ -16,11 +18,25 @@ class CBPetForgetPwdViewController: CBPetBaseViewController {
     }()
     private lazy var inputPhoneView:CBPetTFInputView = {
         let inputView = CBPetTFInputView.init()
-        inputView.setInputView(title: "号码".localizedStr, placeholdStr: "请输入手机号码/邮箱".localizedStr)
+        if isGoogle {
+            inputView.setInputView(title: "邮箱".localizedStr, placeholdStr: "请输入邮箱".localizedStr)
+        } else {
+            inputView.setInputView(title: "手机号码".localizedStr, placeholdStr: "请输入手机号码".localizedStr)
+        }
         inputView.textTF.addChangeTextTarget()
         inputView.textTF.maxTextNumber = 50
         self.view.addSubview(inputView)
         return inputView
+    }()
+    private lazy var areaCodeBTF:UITextField = {
+        let tf = UITextField(text: "+86", textColor: KPetAppColor, font: UIFont.init(name: CBPingFangSC_Regular, size: 14*KFitHeightRate)!, placeholder: "请输入国家码".localizedStr)
+        tf.keyboardType = .numberPad
+        tf.textAlignment = .right
+        tf.addChangeTextTarget()
+        tf.maxTextNumber = 9
+        self.view.addSubview(tf)
+        tf.isHidden = isGoogle
+        return tf
     }()
 
     private lazy var inputVerificationCodeView:CBPetTFInputView = {
@@ -110,6 +126,10 @@ class CBPetForgetPwdViewController: CBPetBaseViewController {
             make.height.equalTo(50*KFitHeightRate)
             make.top.equalTo(self.view.snp_top).offset(CGFloat(20*KFitHeightRate) + NavigationBarHeigt)
         }
+        self.areaCodeBTF.snp_makeConstraints { (make) in
+            make.right.equalTo(self.inputPhoneView.snp_right).offset(0)
+            make.centerY.equalTo(self.inputPhoneView.textTF.snp_centerY)
+        }
         
         self.inputVerificationCodeView.snp_makeConstraints { (make) in
             make.left.equalTo(20*KFitWidthRate)
@@ -174,13 +194,25 @@ class CBPetForgetPwdViewController: CBPetBaseViewController {
     }
     //MARK: - 忘记密码获取验证码
     @objc private func getVerificationCodeClick(sender:UIButton) {
-        guard self.inputPhoneView.textTF.text!.isEmpty == false else {
-            MBProgressHUD.showMessage(Msg: "请输入手机号/邮箱".localizedStr, Deleay: 1.5)
-            return
+        if isGoogle {
+            if self.inputPhoneView.textTF.text?.isValidateEmail() == false {
+                MBProgressHUD.showMessage(Msg: "请输入邮箱".localizedStr, Deleay: 1.5)
+                return
+            }
+        } else {
+            if self.inputPhoneView.textTF.text?.isValidatePhoneNumber() == false {
+                MBProgressHUD.showMessage(Msg: "请输入手机号码".localizedStr, Deleay: 1.5)
+                return
+            }
         }
+//        guard self.inputPhoneView.textTF.text!.isEmpty == false else {
+//            MBProgressHUD.showMessage(Msg: "请输入手机号/邮箱".localizedStr, Deleay: 1.5)
+//            return
+//        }
         //self.startCountDownMethod(sender: self.getVerificationBtn)
         //return
-        if self.inputPhoneView.textTF.text?.isValidateEmail() == true {
+//        if self.inputPhoneView.textTF.text?.isValidateEmail() == true {
+        if isGoogle {
             CBPetNetworkingManager.share.getEmailCode(Email: self.inputPhoneView.textTF.text!, Type: "2") { [weak self] (successModel) in
                 if let value = self?.view {
                     MBProgressHUD.hide(for: value, animated: true)
@@ -199,7 +231,11 @@ class CBPetForgetPwdViewController: CBPetBaseViewController {
             }
         } else {
             MBProgressHUD.showAdded(to: self.view, animated: true)
-            CBPetNetworkingManager.share.getVerificationCode(Phone: self.inputPhoneView.textTF.text!, Type: "2",areaCode: "", successBlock: { [weak self] (successModel) in
+            var areaCode = self.areaCodeBTF.text!;
+            if areaCode.hasPrefix("+") {
+                areaCode = areaCode.subString(from: 1)
+            }
+            CBPetNetworkingManager.share.getVerificationCode(Phone: self.inputPhoneView.textTF.text!, Type: "2",areaCode: areaCode, successBlock: { [weak self] (successModel) in
                 if let value = self?.view {
                     MBProgressHUD.hide(for: value, animated: true)
                 }

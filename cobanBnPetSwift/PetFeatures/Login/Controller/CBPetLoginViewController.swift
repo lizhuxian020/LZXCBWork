@@ -50,7 +50,11 @@ class CBPetLoginViewController: CBPetBaseViewController {
             
             mainViewModel.getVerificationCodeBlock = { [weak self] (sender:CBPetBaseButton,phone:String,areaCode:String) -> Void in
                 //self?.startCountDownMethod(sender: sender)
-                self?.getRegisterCodeRequest(sender: sender,email: phone,areaCode: areaCode)
+                var newCode = areaCode
+                if newCode.hasPrefix("+") {
+                    newCode = newCode.subString(from: 1)
+                }
+                self?.getRegisterCodeRequest(sender: sender,email: phone,areaCode: newCode)
                 self?.tempBtn = sender
             }
             self.counDownBlock = { [weak mainViewModel] (coutDown:Int,isFinished:Bool) -> Void in
@@ -135,7 +139,26 @@ class CBPetLoginViewController: CBPetBaseViewController {
     //MARK: - 获取注册邮箱验证码
     private func getRegisterCodeRequest(sender:CBPetBaseButton,email:String,areaCode:String) {
         MBProgressHUD.showAdded(to: self.view, animated: true)
-        CBPetNetworkingManager.share.getEmailCode(Email: email, Type: "1") { [weak self] (successModel) in
+        if AppDelegate.shareInstance.IsShowGoogleMap {
+            CBPetNetworkingManager.share.getEmailCode(Email: email, Type: "1") { [weak self] (successModel) in
+                if let value = self?.view {
+                    MBProgressHUD.hide(for: value, animated: true)
+                }
+                /* 返回错误信息*/
+                guard successModel.status == "0" else {
+                    MBProgressHUD.showMessage(Msg: successModel.resmsg ?? "请求超时".localizedStr, Deleay: 2.0)
+                    return;
+                }
+                MBProgressHUD.showMessage(Msg: "发送成功", Deleay: 1.5)
+                self!.startCountDownMethod(sender: sender)
+            } failureBlock: { [weak self] (failureModel) in
+                if let value = self?.view {
+                    MBProgressHUD.hide(for: value, animated: true)
+                }
+            }
+            return
+        }
+        CBPetNetworkingManager.share.getVerificationCode(Phone: email, Type: "1", areaCode: areaCode) { [weak self] (successModel) in
             if let value = self?.view {
                 MBProgressHUD.hide(for: value, animated: true)
             }
@@ -146,11 +169,12 @@ class CBPetLoginViewController: CBPetBaseViewController {
             }
             MBProgressHUD.showMessage(Msg: "发送成功", Deleay: 1.5)
             self!.startCountDownMethod(sender: sender)
-        } failureBlock: { [weak self] (failureModel) in
+        } failureBlock: {  [weak self] (failureModel) in
             if let value = self?.view {
                 MBProgressHUD.hide(for: value, animated: true)
             }
         }
+
     }
     //MARK: - 注册
     private func registerRequest(email:String,code:String,pwd:String) {

@@ -9,6 +9,8 @@
 import UIKit
 
 class CBPetRegisterView: CBPetBaseView {
+    
+    private let isGoogle = AppDelegate.shareInstance.IsShowGoogleMap
 
     private lazy var bgmView:UIScrollView = {
         let bgmView = UIScrollView.init()
@@ -18,22 +20,27 @@ class CBPetRegisterView: CBPetBaseView {
     }()
     public lazy var inputPhoneView:CBPetTFInputView = {
         let inputView = CBPetTFInputView.init()
-        inputView.setInputView(title: "账号".localizedStr, placeholdStr: "请输入邮箱".localizedStr)
+        if isGoogle {
+            inputView.setInputView(title: "邮箱".localizedStr, placeholdStr: "请输入邮箱".localizedStr)
+        } else {
+            inputView.setInputView(title: "手机号码".localizedStr, placeholdStr: "请输入手机号码".localizedStr)
+        }
         //inputView.textTF.keyboardType = .numberPad
         inputView.textTF.addChangeTextTarget()
         inputView.textTF.maxTextNumber = 50
         self.bgmView.addSubview(inputView)
         return inputView
     }()
-//    private lazy var areaCodeBTF:UITextField = {
-//        let tf = UITextField(text: "", textColor: KPetAppColor, font: UIFont.init(name: CBPingFangSC_Regular, size: 14*KFitHeightRate)!, placeholder: "请输入国家码".localizedStr)
-//        tf.keyboardType = .numberPad
-//        tf.textAlignment = .right
-//        tf.addChangeTextTarget()
-//        tf.maxTextNumber = 9
-//        self.bgmView.addSubview(tf)
-//        return tf
-//    }()
+    private lazy var areaCodeBTF:UITextField = {
+        let tf = UITextField(text: "+86", textColor: KPetAppColor, font: UIFont.init(name: CBPingFangSC_Regular, size: 14*KFitHeightRate)!, placeholder: "请输入国家码".localizedStr)
+        tf.keyboardType = .numberPad
+        tf.textAlignment = .right
+        tf.addChangeTextTarget()
+        tf.maxTextNumber = 9
+        self.bgmView.addSubview(tf)
+        tf.isHidden = isGoogle
+        return tf
+    }()
 //    private lazy var inputImageView:CBPetTFInputView = {
 //        let inputView = CBPetTFInputView.init()
 //        inputView.setInputView(title: "图形验证码".localizedStr, placeholdStr: "请输入结果".localizedStr)
@@ -143,10 +150,10 @@ class CBPetRegisterView: CBPetBaseView {
             make.height.equalTo(50*KFitHeightRate)
             make.top.equalTo(self.bgmView.snp_top).offset(60*KFitHeightRate)
         }
-//        self.areaCodeBTF.snp_makeConstraints { (make) in
-//            make.right.equalTo(self.inputPhoneView.snp_right).offset(0)
-//            make.centerY.equalTo(self.inputPhoneView.textTF.snp_centerY)
-//        }
+        self.areaCodeBTF.snp_makeConstraints { (make) in
+            make.right.equalTo(self.inputPhoneView.snp_right).offset(0)
+            make.centerY.equalTo(self.inputPhoneView.textTF.snp_centerY)
+        }
 //        self.inputImageView.snp_makeConstraints { (make) in
 //            make.left.equalTo(40*KFitWidthRate)
 //            make.width.equalTo(SCREEN_WIDTH-80*KFitWidthRate)
@@ -233,14 +240,21 @@ class CBPetRegisterView: CBPetBaseView {
     }
     //MARK: - 获取验证码
     @objc private func getVerificationCodeClick() {
-        if self.inputPhoneView.textTF.text?.isValidateEmail() == false {
-            MBProgressHUD.showMessage(Msg: "请输入邮箱".localizedStr, Deleay: 1.5)
-            return
+        if isGoogle {
+            if self.inputPhoneView.textTF.text?.isValidateEmail() == false {
+                MBProgressHUD.showMessage(Msg: "请输入邮箱".localizedStr, Deleay: 1.5)
+                return
+            }
+        } else {
+            if self.inputPhoneView.textTF.text?.isValidatePhoneNumber() == false {
+                MBProgressHUD.showMessage(Msg: "请输入手机号码".localizedStr, Deleay: 1.5)
+                return
+            }
         }
         if self.viewModel is CBPetLoginViewModel {
             let vvModel = self.viewModel as! CBPetLoginViewModel
             guard vvModel.getVerificationCodeBlock == nil else {
-                vvModel.getVerificationCodeBlock!(self.getVerificationBtn,self.inputPhoneView.textTF.text!, "")//self.areaCodeBTF.text!
+                vvModel.getVerificationCodeBlock!(self.getVerificationBtn,self.inputPhoneView.textTF.text!, (isGoogle ? "" : self.areaCodeBTF.text!) )//self.areaCodeBTF.text!
                 vvModel.getVerificationCodeUpdateViewBlock = { [weak self] (coutDown:Int,isFinished:Bool) -> Void in
                     if isFinished == true {
                         self!.getVerificationBtn.setTitle("获取验证码".localizedStr, for: .normal)

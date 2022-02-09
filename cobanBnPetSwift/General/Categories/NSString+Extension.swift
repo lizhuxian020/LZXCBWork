@@ -141,6 +141,11 @@ extension String {
         let identityCardPredicate = NSPredicate.init(format: "SELF MATCHES %@", regex)
         return identityCardPredicate.evaluate(with: self)
     }
+    func isValidatePhoneNumber() -> Bool {
+        let regex = "^((1[0-9])|(1[0-9])|(1[0-9]))\\d{9}$"
+        let identityCardPredicate = NSPredicate.init(format: "SELF MATCHES %@", regex)
+        return identityCardPredicate.evaluate(with: self)
+    }
 }
 extension Float {
     /// 小数点后如果只是0，显示整数，如果不是，显示原来的值

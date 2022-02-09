@@ -9,6 +9,9 @@
 import UIKit
 
 class CBPetLoginView: CBPetBaseView {
+    
+    private let isGoogle = AppDelegate.shareInstance.IsShowGoogleMap
+    
     private lazy var bgmView:UIView = {
         let bgmView = UIView.init()
         bgmView.backgroundColor = UIColor.white
@@ -17,17 +20,22 @@ class CBPetLoginView: CBPetBaseView {
     }()
     public lazy var inputPhoneView:CBPetTFInputView = {
         let inputView = CBPetTFInputView.init()
-        inputView.setInputView(title: "账号".localizedStr, placeholdStr: "请输入账号".localizedStr)
+        if isGoogle {
+            inputView.setInputView(title: "邮箱".localizedStr, placeholdStr: "请输入邮箱".localizedStr)
+        } else {
+            inputView.setInputView(title: "手机号码".localizedStr, placeholdStr: "请输入手机号码".localizedStr)
+        }
         inputView.textTF.addChangeTextTarget()
         inputView.textTF.maxTextNumber = 50
         self.bgmView.addSubview(inputView)
         return inputView
     }()
     private lazy var areaCodeBTF:UITextField = {
-        let tf = UITextField(text: "", textColor: KPetAppColor, font: UIFont.init(name: CBPingFangSC_Regular, size: 14*KFitHeightRate)!, placeholder: "请输入国家码".localizedStr)
+        let tf = UITextField(text: "+86", textColor: KPetAppColor, font: UIFont.init(name: CBPingFangSC_Regular, size: 14*KFitHeightRate)!, placeholder: "请输入国家码".localizedStr)
         tf.textAlignment = .right
         tf.keyboardType = .numberPad
         self.bgmView.addSubview(tf)
+        tf.isHidden = isGoogle
         return tf
     }()
     private lazy var inputPwdView:CBPetTFInputView = {
@@ -89,6 +97,10 @@ class CBPetLoginView: CBPetBaseView {
             make.right.equalTo((-40*KFitWidthRate))
             make.height.equalTo(50*KFitHeightRate)
             make.top.equalTo(self.bgmView.snp_top).offset(60*KFitHeightRate)
+        }
+        self.areaCodeBTF.snp_makeConstraints { (make) in
+            make.right.equalTo(self.inputPhoneView.snp_right).offset(0)
+            make.centerY.equalTo(self.inputPhoneView.textTF.snp_centerY)
         }
         if CBPetLoginModelTool.getUser()?.email?.isValidateEmail() == true {
             self.inputPhoneView.textTF.text = CBPetLoginModelTool.getUser()?.email
