@@ -689,25 +689,27 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         self.navigationController?.pushViewController(msgCterVC, animated: true)
     }
     private func setSliderData(simCardType:String,listenTime:String) {
-        if simCardType == "0" {
-            if Int(listenTime) ?? 0 > 15 {
-                self.listenPopView.sliderView.setSlideDataSource(dataSourse: ["5","10","15","20","25","30"],hideTargetIndex: [])
-            } else {
-                self.listenPopView.sliderView.setSlideDataSource(dataSourse: ["5","7","9","11","13","15"],hideTargetIndex: [])
-            }
-        } else if simCardType == "1" {
-            if Int(listenTime) ?? 0 > 15 {
-                self.listenPopView.sliderView.setSlideDataSource(dataSourse: ["5","10","15","20","25","30"],hideTargetIndex: [])
-            } else {
-                self.listenPopView.sliderView.setSlideDataSource(dataSourse: ["5","7","9","11","13","15"],hideTargetIndex: [])
-            }
-        } else {
-            if Int(listenTime) ?? 0 > 15 {
-                self.listenPopView.sliderView.setSlideDataSource(dataSourse: ["5","10","15","20","25","30"],hideTargetIndex: [])
-            } else {
-                self.listenPopView.sliderView.setSlideDataSource(dataSourse: ["5","7","9","11","13","15"],hideTargetIndex: [])
-            }
-        }
+        self.listenPopView.sliderView.setSlideDataSource(dataSourse: ["5","10","15","20","25","30"],hideTargetIndex: [])
+//        全部统一改成30秒
+//        if simCardType == "0" {
+//            if Int(listenTime) ?? 0 > 15 {
+//                self.listenPopView.sliderView.setSlideDataSource(dataSourse: ["5","10","15","20","25","30"],hideTargetIndex: [])
+//            } else {
+//                self.listenPopView.sliderView.setSlideDataSource(dataSourse: ["5","7","9","11","13","15"],hideTargetIndex: [])
+//            }
+//        } else if simCardType == "1" {
+//            if Int(listenTime) ?? 0 > 15 {
+//                self.listenPopView.sliderView.setSlideDataSource(dataSourse: ["5","10","15","20","25","30"],hideTargetIndex: [])
+//            } else {
+//                self.listenPopView.sliderView.setSlideDataSource(dataSourse: ["5","7","9","11","13","15"],hideTargetIndex: [])
+//            }
+//        } else {
+//            if Int(listenTime) ?? 0 > 15 {
+//                self.listenPopView.sliderView.setSlideDataSource(dataSourse: ["5","10","15","20","25","30"],hideTargetIndex: [])
+//            } else {
+//                self.listenPopView.sliderView.setSlideDataSource(dataSourse: ["5","7","9","11","13","15"],hideTargetIndex: [])
+//            }
+//        }
     }
     // MARK: - 功能菜单点击跳转
     private func functionClickJump (title:String) {
