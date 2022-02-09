@@ -6380,7 +6380,7 @@
 				CODE_SIGN_ENTITLEMENTS = cobanBnPetSwift/cobanBnPetSwift.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.4;
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = KSWVM9W6YC;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6403,7 +6403,7 @@
 					"\"$(SRCROOT)/cobanBnPetSwift/Vendors/VoiceConvert/AmrConverter/lib\"",
 					"\"$(SRCROOT)/cobanBnPetSwift/Vendors/VoiceConvert/LameUitls\"",
 				);
-				MARKETING_VERSION = 2.1;
+				MARKETING_VERSION = 2.2;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.coban.iot;
 				PRODUCT_MODULE_NAME = cobanBnPetSwift;
@@ -6424,7 +6424,7 @@
 				CODE_SIGN_ENTITLEMENTS = cobanBnPetSwift/cobanBnPetSwift.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.4;
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = KSWVM9W6YC;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6447,7 +6447,7 @@
 					"\"$(SRCROOT)/cobanBnPetSwift/Vendors/VoiceConvert/AmrConverter/lib\"",
 					"\"$(SRCROOT)/cobanBnPetSwift/Vendors/VoiceConvert/LameUitls\"",
 				);
-				MARKETING_VERSION = 2.1;
+				MARKETING_VERSION = 2.2;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.coban.iot;
 				PRODUCT_MODULE_NAME = cobanBnPetSwift;
