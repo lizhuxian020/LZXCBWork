@@ -305,8 +305,12 @@ extension CBPetHomeViewModel {
              guard successModel.status == "0" else {
                 if successModel.rescode == "0024" {
                     MBProgressHUD.showMessage(Msg: "设备已离线".localizedStr, Deleay: 1.5)
-                }  else if successModel.rescode == "0029" {
+                } else if successModel.rescode == "0029" {
                     MBProgressHUD.showMessage(Msg: "下发指令超时".localizedStr, Deleay: 1.5)
+                } else if successModel.rescode == "702" {
+                    MBProgressHUD.showMessage(Msg: "设备正在听听中，请稍后再试".localizedStr, Deleay: 1.5)
+                } else if successModel.rescode == "701" {
+                    MBProgressHUD.showMessage(Msg: "设备正在喊话中，请稍后再试".localizedStr, Deleay: 1.5)
                 }
                  return;
              }
@@ -340,6 +344,10 @@ extension CBPetHomeViewModel {
                     MBProgressHUD.showMessage(Msg: "设备已离线".localizedStr, Deleay: 1.5)
                 }  else if successModel.rescode == "0029" {
                     MBProgressHUD.showMessage(Msg: "下发指令超时".localizedStr, Deleay: 1.5)
+                } else if successModel.rescode == "702" {
+                    MBProgressHUD.showMessage(Msg: "设备正在听听中，请稍后再试".localizedStr, Deleay: 1.5)
+                } else if successModel.rescode == "701" {
+                    MBProgressHUD.showMessage(Msg: "设备正在喊话中，请稍后再试".localizedStr, Deleay: 1.5)
                 }
                 guard self?.updateDataBlock == nil else {
                     self?.updateDataBlock!(.lsiten, "听听回调".localizedStr)
@@ -463,6 +471,10 @@ extension CBPetHomeViewModel {
                     MBProgressHUD.showMessage(Msg: "设备已离线".localizedStr, Deleay: 1.5)
                 }  else if successModel.rescode == "0029" {
                     MBProgressHUD.showMessage(Msg: "下发指令超时".localizedStr, Deleay: 1.5)
+                } else if successModel.rescode == "702" {
+                    MBProgressHUD.showMessage(Msg: "设备正在听听中，请稍后再试".localizedStr, Deleay: 1.5)
+                } else if successModel.rescode == "701" {
+                    MBProgressHUD.showMessage(Msg: "设备正在喊话中，请稍后再试".localizedStr, Deleay: 1.5)
                 }
                  return;
              }
