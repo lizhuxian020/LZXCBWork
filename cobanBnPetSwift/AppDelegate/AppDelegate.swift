@@ -29,6 +29,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
     /* 角标*/
     var badgeNumber:NSInteger = 0
     
+    class public func isShowGoogle() -> Bool {
+        let userLanguage:[String] = UserDefaults.standard.object(forKey: "AppleLanguages") as! [String]
+        var IsShowGoogleMap = false
+        if userLanguage.first?.hasPrefix("en") == true {
+            IsShowGoogleMap = true
+        }
+        return IsShowGoogleMap
+    }
+    
     /* 在oc中这样写单例才能被调用 */
 //    @objc open func shareInstanceFunc() -> AppDelegate {
 //        return AppDelegate.shareInstance

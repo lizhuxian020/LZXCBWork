@@ -139,7 +139,7 @@ class CBPetLoginViewController: CBPetBaseViewController {
     //MARK: - 获取注册邮箱验证码
     private func getRegisterCodeRequest(sender:CBPetBaseButton,email:String,areaCode:String) {
         MBProgressHUD.showAdded(to: self.view, animated: true)
-        if AppDelegate.shareInstance.IsShowGoogleMap {
+        if AppDelegate.isShowGoogle() {
             CBPetNetworkingManager.share.getEmailCode(Email: email, Type: "1") { [weak self] (successModel) in
                 if let value = self?.view {
                     MBProgressHUD.hide(for: value, animated: true)

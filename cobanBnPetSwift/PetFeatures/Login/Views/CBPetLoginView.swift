@@ -10,7 +10,9 @@ import UIKit
 
 class CBPetLoginView: CBPetBaseView {
     
-    private let isGoogle = AppDelegate.shareInstance.IsShowGoogleMap
+    private func isGoogle() -> Bool {
+        return AppDelegate.isShowGoogle()
+    }
     
     private lazy var bgmView:UIView = {
         let bgmView = UIView.init()
@@ -20,7 +22,7 @@ class CBPetLoginView: CBPetBaseView {
     }()
     public lazy var inputPhoneView:CBPetTFInputView = {
         let inputView = CBPetTFInputView.init()
-        if isGoogle {
+        if isGoogle() {
             inputView.setInputView(title: "邮箱".localizedStr, placeholdStr: "请输入邮箱".localizedStr)
         } else {
             inputView.setInputView(title: "手机号码".localizedStr, placeholdStr: "请输入手机号码".localizedStr)
@@ -35,7 +37,7 @@ class CBPetLoginView: CBPetBaseView {
         tf.textAlignment = .right
         tf.keyboardType = .numberPad
         self.bgmView.addSubview(tf)
-        tf.isHidden = isGoogle
+        tf.isHidden = isGoogle()
         return tf
     }()
     private lazy var inputPwdView:CBPetTFInputView = {

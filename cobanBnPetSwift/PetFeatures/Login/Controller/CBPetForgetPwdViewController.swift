@@ -10,7 +10,9 @@ import UIKit
 
 class CBPetForgetPwdViewController: CBPetBaseViewController {
     
-    private let isGoogle = AppDelegate.shareInstance.IsShowGoogleMap
+    private func isGoogle() -> Bool {
+        return AppDelegate.isShowGoogle()
+    }
 
     public lazy var forgetPwdViewModel:CBPetLoginViewModel = {
         let viewMd = CBPetLoginViewModel.init()
@@ -18,7 +20,7 @@ class CBPetForgetPwdViewController: CBPetBaseViewController {
     }()
     private lazy var inputPhoneView:CBPetTFInputView = {
         let inputView = CBPetTFInputView.init()
-        if isGoogle {
+        if isGoogle() {
             inputView.setInputView(title: "邮箱".localizedStr, placeholdStr: "请输入邮箱".localizedStr)
         } else {
             inputView.setInputView(title: "手机号码".localizedStr, placeholdStr: "请输入手机号码".localizedStr)
@@ -35,7 +37,7 @@ class CBPetForgetPwdViewController: CBPetBaseViewController {
         tf.addChangeTextTarget()
         tf.maxTextNumber = 9
         self.view.addSubview(tf)
-        tf.isHidden = isGoogle
+        tf.isHidden = isGoogle()
         return tf
     }()
 
@@ -194,7 +196,7 @@ class CBPetForgetPwdViewController: CBPetBaseViewController {
     }
     //MARK: - 忘记密码获取验证码
     @objc private func getVerificationCodeClick(sender:UIButton) {
-        if isGoogle {
+        if isGoogle() {
             if self.inputPhoneView.textTF.text?.isValidateEmail() == false {
                 MBProgressHUD.showMessage(Msg: "请输入邮箱".localizedStr, Deleay: 1.5)
                 return
@@ -212,7 +214,7 @@ class CBPetForgetPwdViewController: CBPetBaseViewController {
         //self.startCountDownMethod(sender: self.getVerificationBtn)
         //return
 //        if self.inputPhoneView.textTF.text?.isValidateEmail() == true {
-        if isGoogle {
+        if isGoogle() {
             CBPetNetworkingManager.share.getEmailCode(Email: self.inputPhoneView.textTF.text!, Type: "2") { [weak self] (successModel) in
                 if let value = self?.view {
                     MBProgressHUD.hide(for: value, animated: true)

@@ -10,7 +10,9 @@ import UIKit
 
 class CBPetRegisterView: CBPetBaseView {
     
-    private let isGoogle = AppDelegate.shareInstance.IsShowGoogleMap
+    private func isGoogle() -> Bool {
+        return AppDelegate.isShowGoogle()
+    }
 
     private lazy var bgmView:UIScrollView = {
         let bgmView = UIScrollView.init()
@@ -20,7 +22,7 @@ class CBPetRegisterView: CBPetBaseView {
     }()
     public lazy var inputPhoneView:CBPetTFInputView = {
         let inputView = CBPetTFInputView.init()
-        if isGoogle {
+        if isGoogle() {
             inputView.setInputView(title: "邮箱".localizedStr, placeholdStr: "请输入邮箱".localizedStr)
         } else {
             inputView.setInputView(title: "手机号码".localizedStr, placeholdStr: "请输入手机号码".localizedStr)
@@ -38,7 +40,7 @@ class CBPetRegisterView: CBPetBaseView {
         tf.addChangeTextTarget()
         tf.maxTextNumber = 9
         self.bgmView.addSubview(tf)
-        tf.isHidden = isGoogle
+        tf.isHidden = isGoogle()
         return tf
     }()
 //    private lazy var inputImageView:CBPetTFInputView = {
@@ -240,7 +242,7 @@ class CBPetRegisterView: CBPetBaseView {
     }
     //MARK: - 获取验证码
     @objc private func getVerificationCodeClick() {
-        if isGoogle {
+        if isGoogle() {
             if self.inputPhoneView.textTF.text?.isValidateEmail() == false {
                 MBProgressHUD.showMessage(Msg: "请输入邮箱".localizedStr, Deleay: 1.5)
                 return
@@ -254,7 +256,7 @@ class CBPetRegisterView: CBPetBaseView {
         if self.viewModel is CBPetLoginViewModel {
             let vvModel = self.viewModel as! CBPetLoginViewModel
             guard vvModel.getVerificationCodeBlock == nil else {
-                vvModel.getVerificationCodeBlock!(self.getVerificationBtn,self.inputPhoneView.textTF.text!, (isGoogle ? "" : self.areaCodeBTF.text!) )//self.areaCodeBTF.text!
+                vvModel.getVerificationCodeBlock!(self.getVerificationBtn,self.inputPhoneView.textTF.text!, (isGoogle() ? "" : self.areaCodeBTF.text!) )//self.areaCodeBTF.text!
                 vvModel.getVerificationCodeUpdateViewBlock = { [weak self] (coutDown:Int,isFinished:Bool) -> Void in
                     if isFinished == true {
                         self!.getVerificationBtn.setTitle("获取验证码".localizedStr, for: .normal)
