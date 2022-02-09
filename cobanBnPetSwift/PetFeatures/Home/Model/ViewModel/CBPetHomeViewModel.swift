@@ -220,9 +220,6 @@ extension CBPetHomeViewModel {
                 if let blk = finishBLK {
                     blk()
                 }
-                /* 更新各项参数后 刷新首页数据*/
-                //lzxPS: 感觉没必要更新首页
-//                self?.getHomeInfoRequest()
                 return
             }
             ///返回错误信息

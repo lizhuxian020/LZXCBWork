@@ -92,7 +92,12 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
     }()
     
     /* 定时器20s刷新数据*/
-    private var timerRefreshData:Timer?
+    private lazy var timerRefreshData:Timer = {
+        let timer = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(getHomeInfoRequest), userInfo: nil, repeats: true)
+        RunLoop.main.add(timer, forMode: .common)
+        return timer
+    }()
+    
     /* 控制面板popView*/
     private lazy var ctrlPanelPopView:CBPetCtrlPanelPopView = {
         let popV = CBPetCtrlPanelPopView.init(frame: CGRect(x: 0, y: 0, width: SCREEN_WIDTH, height: SCREEN_HEIGHT))
@@ -123,9 +128,8 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
     }
     deinit {
         // vc 销毁
-        //print("首页CBPetHomeViewController---被释放了")
-        self.timerRefreshData?.invalidate()
-        self.timerRefreshData = nil
+        print("首页CBPetHomeViewController---被释放了")
+        self.timerRefreshData.invalidate()
         NotificationCenter.default.removeObserver(self)
     }
     override func noNetworkNotification(notifi: Notification) {
@@ -146,10 +150,17 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         setupView()
         /* 推送通知*/
         NotificationCenter.default.addObserver(self, selector: #selector(noticeNofitication), name: NSNotification.Name.init(K_CBPetNoticeNotification), object: nil)
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationWillBackground), name: NSNotification.Name.init(UIApplication.didEnterBackgroundNotification.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationBecomeActive), name: NSNotification.Name.init(UIApplication.didBecomeActiveNotification.rawValue), object: nil)
         /* 获取七牛token*/
         self.homeViewModel.getQNFileTokenRequestMethod()
         updateDataSource()
+    }
+    @objc private func applicationWillBackground() {
+        self.paseTimer()
+    }
+    @objc private func applicationBecomeActive() {
+        self.resumeTimer()
     }
     @objc private func noticeNofitication(notification: Notification) {
         let userInfo:Dictionary<String,Any> = notification.object as! Dictionary<String, Any>
@@ -284,7 +295,6 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
 //        self.centerAvtarView.setupViewModel(viewModel: self.homeViewModel)
 //        (self.homeViewModel as CBPetHomeViewModel).avtarTitleViewSwitchDeviceBlock = { [weak self] () -> Void in
 //            CBLog(message: " 点击切换手表 点击切换手表 点击切换手表 ")
-//            //lzxTODO:复原
 //            self?.switchDeviceClick()
 ////            self?.resumeTimer();
 //        }
@@ -409,30 +419,12 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
     //MARK: - 定时器暂停、开始、继续
     /* 暂停*/
     private func paseTimer() {
-        guard self.timerRefreshData == nil else {
-            self.timerRefreshData?.fireDate = NSDate.distantFuture
-            return
-        }
+        self.timerRefreshData.fireDate = NSDate.distantFuture
     }
-    /* 开始*/
-    private func startTimer() {
-        //lzxTODO: 删除注释
-//        if self.timerRefreshData == nil {
-//            self.timerRefreshData = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(getHomeInfoRequest), userInfo: nil, repeats: true)
-//            RunLoop.main.add(self.timerRefreshData!, forMode: .common)
-//        }
-        self.getHomeInfoRequest()
-    }
+    
     /* 继续*/
     private func resumeTimer() {
-        //lzxTODO: 删掉return
-        self.startTimer()
-        return;
-        guard self.timerRefreshData != nil else {
-            self.startTimer()
-            return
-        }
-        self.timerRefreshData?.fireDate = NSDate.init() as Date
+        self.timerRefreshData.fireDate = NSDate.init() as Date
     }
     //MARK: - 获取首页数据request
     @objc private func getHomeInfoRequest() {
@@ -1119,8 +1111,6 @@ extension CBPetHomeViewController {
             guard AppDelegate.shareInstance.IsShowGoogleMap == true else {
                 let circle = BMKCircle.init(center: coord, radius: radius)
                 self.baiduMapView.add(circle)
-                //lzxPS: 不需要缩放
-//                self.addBaiduMapFitCircleFence(model: coordinateModel, radius: Double(coordinateModel.radius ?? 0))
                 return
             }
            
