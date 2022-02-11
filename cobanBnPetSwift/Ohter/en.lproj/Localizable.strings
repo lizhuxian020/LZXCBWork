@@ -1293,3 +1293,4 @@
 "定位中…" = "Positioning…";
 "添加唤醒时间" = "Add wake time";
 "唤醒时间" = "Wake time";
+"%ld分%ld秒后再试" = "Try again in %ldminutes %ldseconds";

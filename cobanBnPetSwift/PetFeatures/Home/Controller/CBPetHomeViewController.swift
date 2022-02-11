@@ -778,7 +778,12 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
             break
         case "惩罚".localizedStr:
             if self.homeViewModel.isPunish == false {
-                MBProgressHUD.showMessage(Msg: "三分钟后再试".localizedStr, Deleay: 1.5)
+                let curTime = NSDate.init().timeIntervalSince1970
+                let during = 180 - (curTime - self.homeViewModel.punishTime)
+                let min = NSInteger(during) / 60
+                let sec = NSInteger(during) % 60
+                let msg = NSString.init(format: "%ld分%ld秒后再试".localizedStr as NSString, min, sec)
+                MBProgressHUD.showMessage(Msg: msg as String, Deleay: 1.5)
                 break
             }
             self.punishmentPopView.popView()
