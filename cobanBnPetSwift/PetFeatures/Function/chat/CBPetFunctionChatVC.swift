@@ -260,7 +260,7 @@ class CBPetFunctionChatVC: CBPetBaseViewController {
         newM.device.location.lat = newM.lat_y
         newM.photo = myPetData?.pet.photo
         newM.device.imei = myPetData?.imei
-        
+        newM.id = "myPetModel"//用来给地图标识，点击了这个不要弹框
         realMyPetData = newM
     }
     

@@ -145,6 +145,8 @@ class CBPetChatNearbyPetsView: CBPetBaseView,BMKMapViewDelegate,BMKGeoCodeSearch
             }
             let imageDefault = UIImage.init(named: "pet_mapAvatar_default")
             annotationView.centerOffset = CGPoint(x: 0, y: -(imageDefault?.size.height)!/2)
+            //为了给view宽高撑开，否则点击不了
+            annotationView.image = UIImage.init(named: "pet_mapAvatar_default")
             return annotationView
         }
         return nil
@@ -155,6 +157,9 @@ class CBPetChatNearbyPetsView: CBPetBaseView,BMKMapViewDelegate,BMKGeoCodeSearch
         if view.annotation is CBPetNormalAnnotation {
             let annotationM = view.annotation as! CBPetNormalAnnotation
             if let value = annotationM.nearPetsModel {
+                guard value.id != "myPetModel" else {
+                    return
+                }
                 CBPetNearPetPopView.share.updateNearPetsData(model: value)
                 CBPetNearPetPopView.share.showAlert(completeBtnBlock: {
                     /* 确定*/
