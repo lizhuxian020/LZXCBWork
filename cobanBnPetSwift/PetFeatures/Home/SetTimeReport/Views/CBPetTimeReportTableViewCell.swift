@@ -61,7 +61,7 @@ class CBPetTimeReportTableViewCell: CBPetBaseTableViewCell {
     var timeReportModel:CBPetTimingReportModel = CBPetTimingReportModel() {
         didSet {
             
-            nameLb.text = "唤醒时间" + "\(timeReportModel.index)"
+            nameLb.text = "唤醒时间".localizedStr + "\(timeReportModel.index)"
             timeLb.text = String.init(format: "%02d", timeReportModel.timingHour) + ":" + String.init(format: "%02d", timeReportModel.timingMinute) 
         }
     }

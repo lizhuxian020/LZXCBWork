@@ -67,7 +67,7 @@ class CBPetToolPopView : CBPetBaseView {
             let view = self.createIconView(data)
             self.iconViewContainer.addSubview(view)
             view.snp_makeConstraints { make in
-                make.width.equalTo(self.iconViewContainer.snp_width).dividedBy(4)
+                make.width.equalTo(self.iconViewContainer.snp_width).dividedBy(iconDataSource.count)
                 make.top.bottom.equalTo(0)
                 if lastView == nil {
                     make.left.equalTo(0)

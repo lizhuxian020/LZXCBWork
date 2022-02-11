@@ -834,7 +834,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         if result {
             clickLocateTime = currentTime
         } else {
-            MBProgressHUD.showMessage(Msg: "三分钟后再试".localizedStr, Deleay: 1.5)
+            MBProgressHUD.showMessage(Msg: "定位中…".localizedStr, Deleay: 1.5)
         }
         return result
     }
