@@ -11,6 +11,14 @@ import SwiftyJSON
 import HandyJSON
 
 class CBPetFunctionChatVC: CBPetBaseViewController {
+    
+    var myPetData: CBPetPsnalCterPetModel? {
+        didSet {
+            self.didSetMyPetData()
+        }
+    }
+    
+    var realMyPetData: CBPetFuncNearPetModel?
 
     private lazy var funcViewModel:CBPetFuncChatViewModel = {
         let vv = CBPetFuncChatViewModel.init()
@@ -96,6 +104,7 @@ class CBPetFunctionChatVC: CBPetBaseViewController {
             make.top.left.right.equalTo(0)
             make.bottom.equalTo(0)
         }
+        self.funcViewModel.myPetData = self.realMyPetData
         self.petsMainView.setupViewModel(viewModel: self.funcViewModel)
         self.funcViewModel.MJHeaderRefreshReloadDataBlock = { [weak self] (tag:Int) in
             if tag == 2020 {
@@ -241,6 +250,18 @@ class CBPetFunctionChatVC: CBPetBaseViewController {
         let cvstionVC = CBPetFuncConversationVC.init()
         cvstionVC.petFriendMsgModel = model
         self.navigationController?.pushViewController(cvstionVC, animated: true)
+    }
+    
+    private func didSetMyPetData() {
+        var newM = CBPetFuncNearPetModel.init()
+        newM.lat_y = myPetData?.pet.device.location.lat
+        newM.lng_x = myPetData?.pet.device.location.lng
+        newM.device.location.lng = newM.lng_x
+        newM.device.location.lat = newM.lat_y
+        newM.photo = myPetData?.pet.photo
+        newM.device.imei = myPetData?.imei
+        
+        realMyPetData = newM
     }
     
     /*

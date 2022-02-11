@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreLocation
 
 class CBPetChatNearbyPetsView: CBPetBaseView,BMKMapViewDelegate,BMKGeoCodeSearchDelegate,GMSMapViewDelegate {
     
@@ -76,17 +77,22 @@ class CBPetChatNearbyPetsView: CBPetBaseView,BMKMapViewDelegate,BMKGeoCodeSearch
                     for (_,model) in vvModel.nearPetsDataSource!.enumerated()  {
                         self?.addMapMarker(model: model)
                     }
-                } else {
-                    let locationModel = CBPetHomeInfoTool.getHomeInfo().pet.device.location
-                    guard AppDelegate.shareInstance.IsShowGoogleMap == true else {
-                        self?.baiduMapView.setCenter(CLLocationCoordinate2DMake(Double(locationModel.lat ?? "0")!, Double(locationModel.lng ?? "0")!) , animated: true)
-                        return
-                    }
-                    self?.googleMapView.camera = GMSCameraPosition.camera(withLatitude: Double(locationModel.lat ?? "0")!, longitude: Double(locationModel.lng ?? "0")!, zoom: 15)
+                }
+                if let mypet = vvModel.myPetData {
+                    self?.addMapMarker(model: mypet)
+                    let locate = CLLocationCoordinate2DMake(Double(mypet.device.location.lat ?? "0")!, Double(mypet.device.location.lng ?? "0")!)
+                    self?.locateTo(locate)
                 }
                 self?.baiduView.isHidden = AppDelegate.shareInstance.IsShowGoogleMap
                 self?.googleView.isHidden = !AppDelegate.shareInstance.IsShowGoogleMap
             }
+        }
+    }
+    private func locateTo(_ locate: CLLocationCoordinate2D) {
+        if AppDelegate.shareInstance.IsShowGoogleMap != true {
+            self.baiduMapView.setCenter(locate , animated: true)
+        } else {
+            self.googleMapView.camera = GMSCameraPosition.camera(withLatitude: locate.latitude, longitude: locate.longitude, zoom: 15)
         }
     }
     deinit {
@@ -211,7 +217,7 @@ extension CBPetChatNearbyPetsView {
             normalAnnotation.nearPetsModel = model
             self.baiduMapView.addAnnotation(normalAnnotation)
             
-            self.baiduMapView.setCenter(CLLocationCoordinate2DMake(Double(locationModel.lat ?? "0")!, Double(locationModel.lng ?? "0")!) , animated: true)
+//            self.baiduMapView.setCenter(CLLocationCoordinate2DMake(Double(locationModel.lat ?? "0")!, Double(locationModel.lng ?? "0")!) , animated: true)
             return
         }
         

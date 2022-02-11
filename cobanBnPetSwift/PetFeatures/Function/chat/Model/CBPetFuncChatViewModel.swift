@@ -46,6 +46,7 @@ class CBPetFuncChatViewModel: CBPetBaseViewModel {
     /* 点击跳转*/
     var clickPushFuncChatBlock:((_ type:CBPetFuncChatClickType,_ objc:Any) -> Void)?
     
+    var myPetData: CBPetFuncNearPetModel?
     /* 附近宠友数据*/
     var nearPetsDataSource:[CBPetFuncNearPetModel]?
     /* 宠友申请列表数据*/

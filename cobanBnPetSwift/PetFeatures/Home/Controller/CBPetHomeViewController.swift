@@ -17,6 +17,8 @@ import CoreLocation
 
 class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
     
+    var currentPet: CBPetPsnalCterPetModel?
+    
     private var switchPetAlertView : CBPetSwitchPetAlertView = CBPetSwitchPetAlertView.init()
     private var clickLocateTime : TimeInterval?
     /* 绑定手表view，没有设备的时候展现*/
@@ -476,19 +478,20 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
                 guard let deviceList = self?.homeViewModel.deviceList else {
                     return
                 }
-                var currentPet : CBPetPsnalCterPetModel?
+                var temp_currentPet : CBPetPsnalCterPetModel?
                 var newList = deviceList.map { model -> CBPetPsnalCterPetModel in
                     let currentChoosePet = self?.homeViewModel.homeInfoModel?.pet
                     if currentChoosePet?.device.imei != model.imei {
                         return model
                     } else {
-                        currentPet = model
+                        temp_currentPet = model
                     }
                     return CBPetPsnalCterPetModel.init()
                 }
-                if currentPet != nil {
-                    newList.append(currentPet!)
+                if temp_currentPet != nil {
+                    newList.append(temp_currentPet!)
                 }
+                self?.currentPet = temp_currentPet
                 self?.addAllMarker(deviceList: newList)
                 break
             case .lsiten:
@@ -807,6 +810,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         case "微聊".localizedStr:
             self.toolAssistanceView.hide()
             let chatVC = CBPetFunctionChatVC.init()
+            chatVC.myPetData = currentPet
             self.navigationController?.pushViewController(chatVC, animated: true)
             break
         case "用户管理".localizedStr:
