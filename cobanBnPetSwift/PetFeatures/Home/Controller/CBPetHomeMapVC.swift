@@ -172,6 +172,10 @@ class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSear
     // MARK: - Google 地图
     func mapView(_ mapView: GMSMapView, markerInfoWindow marker: GMSMarker) -> UIView? {
         /*在标记即将被选中时调用，并提供一个可选的自定义信息窗口来 如果此方法返回UIView，则用于该标记。*/
+        if let cbMarker = marker as? CBPetGMSMarker, gmsPaoView.superview != nil {
+            tappedMarker = cbMarker
+            gmsPaoView.petModel = cbMarker.petModel
+        }
         return UIView.init()
     }
     func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
@@ -206,6 +210,8 @@ class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSear
         tappedMarker = cbMarker
         
         gmsPaoView.removeFromSuperview()
+        
+        
 //        gmsPaoView = CBPetAvatarPaoView.init()
         gmsPaoView.petModel = cbMarker.petModel
         gmsPaoView.fenceModel = self.homeViewModel.paramtersObject ?? CBPetHomeParamtersModel.init()
@@ -218,6 +224,7 @@ class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSear
         gmsPaoView.snp_makeConstraints({ make in
             make.centerX.equalTo(point.x)
             make.bottom.equalTo(self.view.snp_top).offset(point.y-markImg.size.height)
+            make.width.equalTo(258)
         })
     }
     
@@ -236,6 +243,7 @@ class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSear
             gmsPaoView.snp_remakeConstraints({ make in
                 make.centerX.equalTo(point.x)
                 make.bottom.equalTo(self.view.snp_top).offset(point.y-markImg.size.height)
+                make.width.equalTo(258)
             })
         }
     }
