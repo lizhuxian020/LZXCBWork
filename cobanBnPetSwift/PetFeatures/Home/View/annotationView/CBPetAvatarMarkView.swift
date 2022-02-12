@@ -26,6 +26,12 @@ class CBPetAvatarMarkView: CBPetBaseView {
         imgV.contentMode = .scaleAspectFill;
         return imgV
     }()
+    private var nameLbl : UILabel = {
+        let lbl = UILabel.init(text: "", textColor: KPet666666Color, font: UIFont(name: CBPingFang_SC_Bold, size: 14*KFitHeightRate)!, textAlignment: NSTextAlignment.center)
+        lbl.backgroundColor = .white
+//        lbl.isHidden = true
+        return lbl
+    }()
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -39,17 +45,31 @@ class CBPetAvatarMarkView: CBPetBaseView {
     private func setupView() {
         self.backgroundColor = UIColor.init().colorWithHexString(hexString: "#222222", alpha: 0.00)
         let img = UIImage.init(named: "pet_mapAvatar_default")!
-        self.bounds = CGRect.init(x: 0, y: 0, width: img.size.width, height: img.size.height)
+        self.bounds = CGRect.init(x: 0, y: 0, width: img.size.width, height: img.size.height+20)
         self.addSubview(self.defaultImageView)
+        self.defaultImageView.snp_makeConstraints { make in
+            make.bottom.equalTo(0)
+            make.centerX.equalTo(self.snp_centerX)
+            make.size.equalTo(CGSize.init(width: img.size.width-12, height: img.size.width-12))
+        }
         self.defaultImageView.addSubview(self.avtarImgView)
         self.avtarImgView.snp_makeConstraints { (make) in
             make.centerX.equalTo(self.defaultImageView.snp_centerX)
             make.top.equalTo(self.defaultImageView.snp_top).offset(6)
-            make.size.equalTo(CGSize.init(width: img.size.width-12, height: img.size.width-12))
+            make.size.equalTo(CGSize.init(width: img.size.width, height: img.size.width))
         }
+        self.addSubview(self.nameLbl)
+        self.nameLbl.snp_makeConstraints { (make) in
+            make.centerX.equalTo(self.defaultImageView.snp_centerX)
+            make.bottom.equalTo(self.avtarImgView.snp_top).offset(-5)
+        }
+        self.clipsToBounds = false
+        self.layer.masksToBounds = false
+        
     }
     func updateIconImage(petModel : CBPetPsnalCterPetModel) {
         self.avtarImgView.sd_setImage(with: URL.init(string: petModel.pet.photo ?? ""), placeholderImage: UIImage(named: "pet_mapAvatar_default"))
+        self.nameLbl.text = petModel.pet.name
         switch petModel.pet.device.online {
         case "0":
             self.defaultImageView.image = UIImage(named: "pet_mapAvatar_default_offlineV2")!
@@ -93,5 +113,13 @@ class CBPetAvatarMarkView: CBPetBaseView {
                 self.defaultImageView.image = UIImage(named: "pet_mapAvatar_nearby")!
             }
         }
+    }
+    
+    public func hideNameLbl() {
+        self.nameLbl.isHidden = true
+    }
+    
+    public func showNameLbl() {
+        self.nameLbl.isHidden = false
     }
 }

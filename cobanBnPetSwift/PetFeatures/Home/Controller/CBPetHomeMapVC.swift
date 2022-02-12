@@ -12,7 +12,7 @@ class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSear
     
     public var showPaoView : Bool = false
     public var isClickAnnotation : Bool = false
-    public var isClear : Bool = false
+    public var isClear : Bool = false //因为clear会调deselect，打乱showPao的判断
     public var currentShowPaoView : UIView?
     
     public lazy var homeViewModel:CBPetHomeViewModel = {
@@ -236,13 +236,31 @@ class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSear
     
     var gmsPaoView : CBPetAvatarPaoView = CBPetAvatarPaoView.init()
     var tappedMarker : CBPetGMSMarker?
+    var markers : [CBPetGMSMarker] = []
     //点击大头针时调用
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
-        self.didClickGMSMarker(marker: marker) {[weak self] in
-            guard let cbMarker = marker as? CBPetGMSMarker else {
-                return
+        guard let cbMarker = marker as? CBPetGMSMarker else {
+            return false
+        }
+        
+        if cbMarker.petModel?.imei == self.homeViewModel.homeInfoModel?.pet.device.imei {
+            let markerView = cbMarker.iconView as! CBPetAvatarMarkView
+            if gmsPaoView.superview != nil {
+                gmsPaoView.removeFromSuperview()
+                markerView.showNameLbl()
+            } else {
+                markerView.hideNameLbl()
+                self.generatePaoView(mapView: mapView, cbMarker: cbMarker)
             }
-            self?.generatePaoView(mapView: mapView, cbMarker: cbMarker)
+        } else {
+//            gmsPaoView.removeFromSuperview()
+            self.didClickGMSMarker(marker: marker) {[weak self] in
+                
+                //PS:切换了设备之后，这里marker已不是原来的marker，但这个block最后才执行，在这之前，可以在addMark_GMS里，把生成猴的marker赋值给mapView.selectedMarker，进而到这里拿到正确marker
+                if self?.gmsPaoView.superview != nil {
+                    self?.generatePaoView(mapView: mapView, cbMarker: cbMarker)
+                }
+            }
         }
         
         return false
@@ -274,7 +292,7 @@ class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSear
         let markImg = UIImage.init(named: "pet_fence_annotation")!
         gmsPaoView.snp_makeConstraints({ make in
             make.centerX.equalTo(point.x)
-            make.bottom.equalTo(self.view.snp_top).offset(point.y-markImg.size.height)
+            make.bottom.equalTo(self.view.snp_top).offset(point.y-markImg.size.height*2)
             make.width.equalTo(258)
         })
     }
@@ -293,19 +311,34 @@ class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSear
             gmsPaoView.setupViewModel(viewModel: self.homeViewModel)
             gmsPaoView.snp_remakeConstraints({ make in
                 make.centerX.equalTo(point.x)
-                make.bottom.equalTo(self.view.snp_top).offset(point.y-markImg.size.height)
+                make.bottom.equalTo(self.view.snp_top).offset(point.y-markImg.size.height*2)
                 make.width.equalTo(258)
             })
         }
     }
     
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
+        
         gmsPaoView.removeFromSuperview()
+        if let marker = self.getGMSMarker(imei: self.homeViewModel.homeInfoModel?.pet.device.imei) {
+            if let iconView = marker.iconView as? CBPetAvatarMarkView {
+                iconView.showNameLbl()
+            }
+        }
         self.didClickBlankAreaOfMap()
     }
     
     func didClickBlankAreaOfMap() {
         
+    }
+    
+    func getGMSMarker(imei: String?) -> CBPetGMSMarker? {
+        for marker in self.markers {
+            if marker.petModel?.imei == imei {
+                return marker
+            }
+        }
+        return nil
     }
     /*
     // MARK: - Navigation
