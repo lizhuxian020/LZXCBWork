@@ -43,6 +43,13 @@ class CBAvatarAnnotionView: BMKAnnotationView {
         return btn
     }()
     var avtarClickBlock:(() -> Void)?
+    
+    private var nameLbl : UILabel = {
+        let lbl = UILabel.init(text: "", textColor: KPet666666Color, font: UIFont(name: CBPingFang_SC_Bold, size: 14*KFitHeightRate)!, textAlignment: NSTextAlignment.center)
+        lbl.backgroundColor = .white
+        lbl.isHidden = true
+        return lbl
+    }()
 
     class func annotationViewCopyMapView(mapView:BMKMapView,annotation:BMKAnnotation) -> CBAvatarAnnotionView {
         let annotationViewID = "NormalAnnationView"
@@ -63,6 +70,11 @@ class CBAvatarAnnotionView: BMKAnnotationView {
             make.centerX.equalTo(self.defaultImageView.snp_centerX)
             make.top.equalTo(self.defaultImageView.snp_top).offset(6)
             make.size.equalTo(CGSize.init(width: img.size.width-12, height: img.size.width-12))
+        }
+        self.addSubview(self.nameLbl)
+        self.nameLbl.snp_makeConstraints { (make) in
+            make.centerX.equalTo(self.defaultImageView.snp_centerX)
+            make.bottom.equalTo(self.avtarImgView.snp_top).offset(-5)
         }
     }
     required init?(coder: NSCoder) {
@@ -91,6 +103,7 @@ class CBAvatarAnnotionView: BMKAnnotationView {
         }
     }
     func updatePetModel(petModel:CBPetPsnalCterPetModel) {
+        self.nameLbl.text = petModel.pet.name
         switch petModel.pet.device.online {
         case "0":
             self.defaultImageView.image = UIImage(named: "pet_mapAvatar_default_offlineV2")!
@@ -148,5 +161,13 @@ class CBAvatarAnnotionView: BMKAnnotationView {
             self.avtarClickBlock!()
             return
         }
+    }
+    
+    public func hideNameLbl() {
+        self.nameLbl.isHidden = true
+    }
+    
+    public func showNameLbl() {
+        self.nameLbl.isHidden = false
     }
 }

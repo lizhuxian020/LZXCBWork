@@ -95,7 +95,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
     
     /* 定时器20s刷新数据*/
     private lazy var timerRefreshData:Timer = {
-        let timer = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(getHomeInfoRequest), userInfo: nil, repeats: true)
+        let timer = Timer.scheduledTimer(timeInterval: 2000, target: self, selector: #selector(getHomeInfoRequest), userInfo: nil, repeats: true)
         RunLoop.main.add(timer, forMode: .common)
         return timer
     }()
@@ -475,6 +475,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
                 self?.ctrlPanelPopView.updateParamters(model: self?.homeViewModel.paramtersObject ?? CBPetHomeParamtersModel())
                 break
             case .deviceList:
+                self?.isClickAnnotation = false
                 guard let deviceList = self?.homeViewModel.deviceList else {
                     return
                 }
@@ -649,11 +650,9 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
 //        }
 //    }
     private func cleanMap() {
-        self.isCleanMap = true
         self.baiduMapView.removeOverlays(self.baiduMapView.overlays)
         self.baiduMapView.removeAnnotations(self.baiduMapView.annotations)
         self.googleMapView.clear()
-        self.isCleanMap = false
     }
     // MARK: - 跳转多重控制器
     @objc private func jumpToMultiVC() {
@@ -1058,14 +1057,9 @@ extension CBPetHomeViewController {
                 
                 if self.showPaoView {
                     let view: CBAvatarAnnotionView = self.baiduMapView.view(for: normalAnnotation) as! CBAvatarAnnotionView
-                    let paoView = CBPetAvatarPaoView.init()
-                    paoView.petModel = model
-                    paoView.fenceModel = self.homeViewModel.paramtersObject ?? CBPetHomeParamtersModel.init()
-                    paoView.layoutIfNeeded()
-                    paoView.setupViewModel(viewModel: self.homeViewModel)
-                    let p = BMKActionPaopaoView.init(customView: paoView)
-                    view.paopaoView = p
-                    self.baiduMapView.selectAnnotation(normalAnnotation, animated: true)
+                    self.createPaoView(model: normalAnnotation, annotationView: view)
+                    self.baiduMapView.selectAnnotation(normalAnnotation, animated: false)
+                    self.currentShowPaoView = view.paopaoView
                 }
             }
         }

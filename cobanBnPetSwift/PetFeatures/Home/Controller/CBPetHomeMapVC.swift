@@ -11,8 +11,8 @@ import UIKit
 class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSearchDelegate,GMSMapViewDelegate {
     
     public var showPaoView : Bool = false
-    public var isClickAnnoatation : Bool = false
-    public var isCleanMap : Bool = false
+    public var isClickAnnotation : Bool = false
+    public var currentShowPaoView : UIView?
     
     public lazy var homeViewModel:CBPetHomeViewModel = {
         let viewMd = CBPetHomeViewModel.init()
@@ -104,6 +104,7 @@ class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSear
     func mapView(_ mapView: BMKMapView!, viewFor annotation: BMKAnnotation!) -> BMKAnnotationView! {
         if annotation is CBPetNormalAnnotation {
             let annotationView = CBAvatarAnnotionView.annotationViewCopyMapView(mapView: mapView, annotation: annotation)
+            //PS: 这里是为了给annotationView撑开，否则点击不了
             annotationView.image = UIImage.init(named: "pet_mapAvatar_default")!
             
             let model = annotation as! CBPetNormalAnnotation;
@@ -112,6 +113,12 @@ class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSear
             annotationView.updatePetModel(petModel: model.petModel!)
             let imageDefault = UIImage.init(named: "pet_mapAvatar_default")!
             annotationView.centerOffset = CGPoint(x: 0, y: -(imageDefault.size.height)/2)
+            annotationView.hideNameLbl()
+            
+            
+            if (model.petModel?.imei == self.homeViewModel.homeInfoModel?.pet.device.imei) && self.showPaoView != true {
+                annotationView.showNameLbl()
+            }
             
             return annotationView
         } else if annotation is CBPetFenceAnnotation {
@@ -127,29 +134,68 @@ class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSear
     }
     func mapView(_ mapView: BMKMapView!, didSelect view: BMKAnnotationView!) {
         CBLog(message: "--lzx didSelect : \(view.description)")
+        guard let v = view as? CBAvatarAnnotionView else {
+            return
+        }
     }
     func mapView(_ mapView: BMKMapView!, didDeselect view: BMKAnnotationView!) {
         CBLog(message: "--lzx didDeSelect : \(view.description)")
-        view.paopaoView = nil
-        if self.isCleanMap {
+        guard let v = view as? CBAvatarAnnotionView else {
             return
         }
-        if self.isClickAnnoatation {
-            self.isClickAnnoatation = false
-            return
+        if self.currentShowPaoView != nil {
+            v.showNameLbl()
+            self.currentShowPaoView?.removeFromSuperview()
+            self.removePaoView(annotationView: v)
+            self.currentShowPaoView = nil
         }
-        self.showPaoView = false;
+//        //如果是切换设备，则不管showPao
+//        if self.isClickAnnotation == false {
+//            self.showPaoView = false
+//        }
     }
     func mapView(_ mapView: BMKMapView!, click view: BMKAnnotationView!) {
         // 点击标注事件
         CBLog(message: "--lzx didClick : \(view.description)")
-        self.isClickAnnoatation = true
-        self.showPaoView = true
-//        mapView.selectAnnotation(view.annotation, animated: true)
-        self.didClickAnnotaionView(view: view)
+        
+        guard let anno = view.annotation as? CBPetNormalAnnotation, let v = view as? CBAvatarAnnotionView else {
+            return
+        }
+        
+        if anno.petModel?.imei == self.homeViewModel.homeInfoModel?.devUser.imei {
+            if self.currentShowPaoView == nil {
+                v.hideNameLbl()
+                self.createPaoView(model: anno, annotationView: v)
+                mapView.selectAnnotation(view.annotation, animated: false)
+                self.currentShowPaoView = v.paopaoView
+            } else {
+                mapView.deselectAnnotation(view.annotation, animated: false)
+            }
+        } else {
+//            self.isClickAnnotation = true
+//            self.showPaoView = self.currentShowPaoView != nil
+            self.didClickAnnotaionView(view: view)
+        }
+        
+        
+       
 //        print("百度地图点击了标注")
 //        let locationVC = CBLocationViewController.init()
 //        self.navigationController?.pushViewController(locationVC, animated: true)
+    }
+    public func createPaoView(model: CBPetNormalAnnotation, annotationView: BMKAnnotationView) {
+        let paoView = CBPetAvatarPaoView.init()
+        paoView.petModel = model.petModel
+        paoView.fenceModel = self.homeViewModel.paramtersObject ?? CBPetHomeParamtersModel.init()
+        paoView.layoutIfNeeded()
+        paoView.setupViewModel(viewModel: self.homeViewModel)
+        let p = BMKActionPaopaoView.init(customView: paoView)
+        annotationView.paopaoView = p
+        self.showPaoView = true
+    }
+    private func removePaoView(annotationView: BMKAnnotationView) {
+        annotationView.paopaoView = nil
+        self.showPaoView = false
     }
     func mapView(_ mapView: BMKMapView!, viewFor overlay: BMKOverlay!) -> BMKOverlayView! {
         if overlay is BMKCircle {
