@@ -12,6 +12,7 @@ class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSear
     
     public var showPaoView : Bool = false
     public var isClickAnnotation : Bool = false
+    public var isClear : Bool = false
     public var currentShowPaoView : UIView?
     
     public lazy var homeViewModel:CBPetHomeViewModel = {
@@ -172,8 +173,8 @@ class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSear
                 mapView.deselectAnnotation(view.annotation, animated: false)
             }
         } else {
-//            self.isClickAnnotation = true
-//            self.showPaoView = self.currentShowPaoView != nil
+            self.isClickAnnotation = true
+            self.showPaoView = self.currentShowPaoView != nil
             self.didClickAnnotaionView(view: view)
         }
         
@@ -191,11 +192,15 @@ class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSear
         paoView.setupViewModel(viewModel: self.homeViewModel)
         let p = BMKActionPaopaoView.init(customView: paoView)
         annotationView.paopaoView = p
-        self.showPaoView = true
+        if self.isClickAnnotation == false && self.isClear == false {
+            self.showPaoView = true
+        }
     }
     private func removePaoView(annotationView: BMKAnnotationView) {
         annotationView.paopaoView = nil
-        self.showPaoView = false
+        if self.isClickAnnotation == false && self.isClear == false {
+            self.showPaoView = false
+        }
     }
     func mapView(_ mapView: BMKMapView!, viewFor overlay: BMKOverlay!) -> BMKOverlayView! {
         if overlay is BMKCircle {
