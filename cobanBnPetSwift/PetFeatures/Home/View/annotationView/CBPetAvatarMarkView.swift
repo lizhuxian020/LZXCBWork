@@ -50,26 +50,24 @@ class CBPetAvatarMarkView: CBPetBaseView {
         self.defaultImageView.snp_makeConstraints { make in
             make.bottom.equalTo(0)
             make.centerX.equalTo(self.snp_centerX)
-            make.size.equalTo(CGSize.init(width: img.size.width-12, height: img.size.width-12))
         }
         self.defaultImageView.addSubview(self.avtarImgView)
         self.avtarImgView.snp_makeConstraints { (make) in
             make.centerX.equalTo(self.defaultImageView.snp_centerX)
             make.top.equalTo(self.defaultImageView.snp_top).offset(6)
-            make.size.equalTo(CGSize.init(width: img.size.width, height: img.size.width))
+            make.size.equalTo(CGSize.init(width: img.size.width-12, height: img.size.width-12))
         }
+        
         self.addSubview(self.nameLbl)
         self.nameLbl.snp_makeConstraints { (make) in
-            make.centerX.equalTo(self.defaultImageView.snp_centerX)
+            make.centerX.equalTo(self.snp_centerX)
             make.bottom.equalTo(self.avtarImgView.snp_top).offset(-5)
         }
-        self.clipsToBounds = false
-        self.layer.masksToBounds = false
-        
     }
     func updateIconImage(petModel : CBPetPsnalCterPetModel) {
         self.avtarImgView.sd_setImage(with: URL.init(string: petModel.pet.photo ?? ""), placeholderImage: UIImage(named: "pet_mapAvatar_default"))
         self.nameLbl.text = petModel.pet.name
+        
         switch petModel.pet.device.online {
         case "0":
             self.defaultImageView.image = UIImage(named: "pet_mapAvatar_default_offlineV2")!
