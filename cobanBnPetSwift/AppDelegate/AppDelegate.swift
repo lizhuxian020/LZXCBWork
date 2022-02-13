@@ -131,7 +131,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
             self.badgeNumber = 0
         }
         UMConfigure.setLogEnabled(true)
-        UMConfigure.initWithAppkey("5f03c649570df3394b000063", channel: "")
+        UMConfigure.initWithAppkey("62087e09e0f9bb492b0360e1", channel: "")
         // push组件基本功能配置 openDebugMode
         let entity = UMessageRegisterEntity.init()
         //type是对推送的几个参数的选择，可以选择一个或者多个。默认是三个全部打开，即：声音，弹窗，角标
