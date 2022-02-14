@@ -38,10 +38,6 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         avtatarView.isUserInteractionEnabled = true
         return avtatarView
     }()
-    private lazy var switchPetPopView:CBPetSwitchPetPopView = {
-        let popV = CBPetSwitchPetPopView.init(frame: CGRect(x: 0, y: 0, width: SCREEN_WIDTH, height: SCREEN_HEIGHT))
-        return popV
-    }()
     private lazy var avatarMarkView:CBPetAvatarMarkView = {
         let markView = CBPetAvatarMarkView.init(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
         return markView
@@ -278,18 +274,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
     private func setupView() {
         self.view.backgroundColor = UIColor.white
         initBarWith(title: "首页".localizedStr, isBack: false)
-//        initBarLeft(imageName: "pet_personal center", action: #selector(jumpToPersonal))
         initBarLeft(imageName: "pet_home_left_deive_list", action: #selector(showSwitchPet))
-        initBarRight(imageName: "pet_home_right_setting", action: #selector(jumpToMultiVC))
-
-//        self.centerAvtarView.translatesAutoresizingMaskIntoConstraints = false
-//        self.navigationItem.titleView = self.centerAvtarView
-//        self.centerAvtarView.setupViewModel(viewModel: self.homeViewModel)
-//        (self.homeViewModel as CBPetHomeViewModel).avtarTitleViewSwitchDeviceBlock = { [weak self] () -> Void in
-//            CBLog(message: " 点击切换手表 点击切换手表 点击切换手表 ")
-//            self?.switchDeviceClick()
-////            self?.resumeTimer();
-//        }
         
         self.view.addSubview(self.bindDeviceResultView)
         self.bindDeviceResultView.snp_makeConstraints({ (make) in
@@ -522,13 +507,18 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
             
             self.bindDeviceResultView.isHidden = true
             self.bindDeviceView.isHidden = true
+            self.toolPopView.isHidden = false
+            
+            self.rightBtn.isHidden = false
+            self.rightBtn.removeTarget(self, action: nil, for: .touchUpInside)
+            initBarRight(imageName: "pet_home_right_setting", action: #selector(jumpToMultiVC))
         } else {
+            self.toolPopView.isHidden = true
             switch successModel.rescode {
             case "0031":
                 ///待处理,绑定请求已发送
                 self.initBarWith(title: "首页".localizedStr, isBack: false)
-                self.rightBtn.removeTarget(self, action: #selector(jumpToMessageCenter), for: .touchUpInside)
-                initBarRight(imageName: "pet_home_switchDevice",action: #selector(switchDeviceClick))
+                self.rightBtn.isHidden = true
                 self.view.backgroundColor = .white
                 self.functionPopView.isHidden = true
                 if self.homeViewModel.avatarTitleViewUpdateUIBlock != nil {
@@ -542,7 +532,8 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
             case "0032":
                 ///未发绑定请求
                 self.initBarWith(title: "首页".localizedStr, isBack: false)
-                self.rightBtn.removeTarget(self, action: #selector(switchDeviceClick), for: .touchUpInside)
+                self.rightBtn.isHidden = false
+                self.rightBtn.removeTarget(self, action: nil, for: .touchUpInside)
                 initBarRight(imageName: "pet_messageCenter",action: #selector(jumpToMessageCenter))
                 self.view.backgroundColor = .white
                 self.functionPopView.isHidden = true
@@ -557,8 +548,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
             case "0033":
                 ///拒绝绑定请求,UI和待处理,绑定请求已发送 相同    ///和未发绑定请求 相同
                 self.initBarWith(title: "首页".localizedStr, isBack: false)
-                self.rightBtn.removeTarget(self, action: #selector(jumpToMessageCenter), for: .touchUpInside)
-                initBarRight(imageName: "pet_home_switchDevice",action: #selector(switchDeviceClick))
+                self.rightBtn.isHidden = true
                 self.view.backgroundColor = .white
                 self.functionPopView.isHidden = true
                 if self.homeViewModel.avatarTitleViewUpdateUIBlock != nil {
@@ -612,19 +602,19 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         let psnalVC = CBPetPersonalCenterVC()
         self.navigationController?.pushViewController(psnalVC, animated: true)
     }
-    // MARK: - 切换设备click
-    @objc private func switchDeviceClick() {
-        CBPetSwitchPetPopView.share.showPopView { [weak self] (petModel:CBPetPsnalCterPetModel) in
-            if petModel.title == "添加".localizedStr {
-                /* 添加宠物*/
-                self!.toBindDeviceClick()
-            } else {
-                self?.cleanMap()
-                /* 选中某个宠物设备并切换*/
-                self?.homeViewModel.switchDeviceRequest(imeiStr: petModel.pet.device.imei ?? "")
-            }
-        }
-    }
+//    // MARK: - 切换设备click
+//    @objc private func switchDeviceClick() {
+//        CBPetSwitchPetPopView.share.showPopView { [weak self] (petModel:CBPetPsnalCterPetModel) in
+//            if petModel.title == "添加".localizedStr {
+//                /* 添加宠物*/
+//                self!.toBindDeviceClick()
+//            } else {
+//                self?.cleanMap()
+//                /* 选中某个宠物设备并切换*/
+//                self?.homeViewModel.switchDeviceRequest(imeiStr: petModel.pet.device.imei ?? "")
+//            }
+//        }
+//    }
     // MARK: - 消息中心click
     @objc private func jumpToMessageCenter() {
         let msgCterVC = CBPetMsgCterViewController.init()
