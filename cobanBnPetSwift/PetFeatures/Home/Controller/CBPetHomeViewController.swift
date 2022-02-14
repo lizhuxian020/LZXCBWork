@@ -95,7 +95,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
     
     /* 定时器20s刷新数据*/
     private lazy var timerRefreshData:Timer = {
-        let timer = Timer.scheduledTimer(timeInterval: 20000, target: self, selector: #selector(getHomeInfoRequest), userInfo: nil, repeats: true)
+        let timer = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(getHomeInfoRequest), userInfo: nil, repeats: true)
         RunLoop.main.add(timer, forMode: .common)
         return timer
     }()
