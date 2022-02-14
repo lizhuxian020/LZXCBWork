@@ -6382,7 +6382,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 7YH24V94ZC;
+				DEVELOPMENT_TEAM = KSWVM9W6YC;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/cobanBnPetSwift/Vendors/UMPush/umcommonlog/umcommonlog_ios_2.0.0",
@@ -6405,7 +6405,7 @@
 				);
 				MARKETING_VERSION = 2.2;
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = cn.zzstc.lzxPush;
+				PRODUCT_BUNDLE_IDENTIFIER = com.coban.iot;
 				PRODUCT_MODULE_NAME = cobanBnPetSwift;
 				PRODUCT_NAME = "巴诺物联网";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -6449,7 +6449,7 @@
 				);
 				MARKETING_VERSION = 2.2;
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = cn.zzstc.lzxtest;
+				PRODUCT_BUNDLE_IDENTIFIER = com.coban.iot;
 				PRODUCT_MODULE_NAME = cobanBnPetSwift;
 				PRODUCT_NAME = "巴诺物联网";
 				PROVISIONING_PROFILE_SPECIFIER = "";
