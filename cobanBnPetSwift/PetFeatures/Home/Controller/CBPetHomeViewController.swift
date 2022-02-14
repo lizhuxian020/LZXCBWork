@@ -401,10 +401,6 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         self.refreshDeviceList()
         /* 获取用户信息*/
         self.homeViewModel.getUserInfoRequest()
-        /* 设置别名*/
-        if let value = CBPetLoginModelTool.getUser() {
-            self.addUMAlias(model:value)
-        }
     }
     private func refreshDeviceList() {
         /* 获取首页数据*/

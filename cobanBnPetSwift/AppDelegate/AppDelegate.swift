@@ -291,6 +291,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
             IsShowGoogleMap = true
             return
         }
+        /* 设置别名*/
+        if let model = CBPetLoginModelTool.getUser(),let value = model.uid {
+            UMessage.addAlias(value, type: "bnclw_user_id") { (response, error) in
+                CBLog(message: "设置别名成功")
+            }
+        }
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
