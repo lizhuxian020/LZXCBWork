@@ -988,7 +988,9 @@ extension CBPetHomeViewController {
                 self.baiduMapView.setCenter(normalAnnotation.getCoordinate2D() , animated: true)
                 
                 if self.showPaoView {
-                    let view: CBAvatarAnnotionView = self.baiduMapView.view(for: normalAnnotation) as! CBAvatarAnnotionView
+                    guard let view: CBAvatarAnnotionView = self.baiduMapView.view(for: normalAnnotation) as? CBAvatarAnnotionView else {
+                        return
+                    }
                     self.createPaoView(model: normalAnnotation, annotationView: view)
                     self.baiduMapView.selectAnnotation(normalAnnotation, animated: false)
                     self.currentShowPaoView = view.paopaoView
