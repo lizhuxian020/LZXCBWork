@@ -84,12 +84,8 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         return popV
     }()
     
-    /* 定时器20s刷新数据*/
-    private lazy var timerRefreshData:Timer = {
-        let timer = Timer.scheduledTimer(timeInterval: 20, target: self, selector: #selector(getHomeInfoRequest), userInfo: nil, repeats: true)
-        RunLoop.main.add(timer, forMode: .common)
-        return timer
-    }()
+    /* 定时器刷新数据*/
+    private var timerRefreshData:Timer?
     
     /* 控制面板popView*/
     private lazy var ctrlPanelPopView:CBPetCtrlPanelPopView = {
@@ -117,7 +113,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
     deinit {
         // vc 销毁
         print("首页CBPetHomeViewController---被释放了")
-        self.timerRefreshData.invalidate()
+        self.timerRefreshData?.invalidate()
         NotificationCenter.default.removeObserver(self)
     }
     override func noNetworkNotification(notifi: Notification) {
@@ -136,6 +132,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         
         initBarWith(title: "", isBack: false)
         setupView()
+        self.startTimer(60)
         /* 推送通知*/
         NotificationCenter.default.addObserver(self, selector: #selector(noticeNofitication), name: NSNotification.Name.init(K_CBPetNoticeNotification), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(applicationWillBackground), name: NSNotification.Name.init(UIApplication.didEnterBackgroundNotification.rawValue), object: nil)
@@ -386,14 +383,22 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         
     }
     //MARK: - 定时器暂停、开始、继续
+    /* 开始*/
+    private func startTimer(_ sec: Int) {
+        self.timerRefreshData?.invalidate()
+        self.timerRefreshData = nil
+        let timer = Timer.scheduledTimer(timeInterval: TimeInterval(sec), target: self, selector: #selector(getHomeInfoRequest), userInfo: nil, repeats: true)
+        RunLoop.main.add(timer, forMode: .common)
+        self.timerRefreshData = timer
+    }
     /* 暂停*/
     private func paseTimer() {
-        self.timerRefreshData.fireDate = NSDate.distantFuture
+        self.timerRefreshData?.fireDate = NSDate.distantFuture
     }
     
     /* 继续*/
     private func resumeTimer() {
-        self.timerRefreshData.fireDate = NSDate.init() as Date
+        self.timerRefreshData?.fireDate = NSDate.init() as Date
     }
     //MARK: - 获取首页数据request
     @objc private func getHomeInfoRequest() {
@@ -477,6 +482,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
                     self?.clickLocateTime = NSDate.init().timeIntervalSince1970
                     /* 获取首页信息*/
                     self?.homeViewModel.getHomeInfoRequest()
+                    self?.startTimer(20)
                 } else {
                     
                 }
