@@ -123,6 +123,9 @@ class CBPetHomeViewModel: CBPetBaseViewModel {
     
     /* paoView的围栏开关*/
     var paoViewFenceSwitch : UISwitch?
+    
+    /* 成功切换设备block*/
+    var switchPetSuccessBlock: (() -> Void)?
 }
 extension CBPetHomeViewModel {
     //MARK: - 获取首页信息request
@@ -193,6 +196,9 @@ extension CBPetHomeViewModel {
             ///返回错误信息
             if successModel.status != "0" {
                 MBProgressHUD.showMessage(Msg: successModel.resmsg ?? "请求超时".localizedStr, Deleay: 2.0)
+            }
+            if let blk = self?.switchPetSuccessBlock {
+                blk()
             }
             self?.getHomeInfoRequest({[weak self] in
                 self?.getDeviceParamtersRequest({[weak self] in
@@ -480,7 +486,7 @@ extension CBPetHomeViewModel {
                  return;
              }
 //            if (electric_pet == 1) { // 发起惩罚，三分钟后再试
-            self.isPunish = false
+            self.isPunish = true
             self.punishTime = NSDate.init().timeIntervalSince1970
             /* 三分钟后再试*/
             Timer.scheduledTimer(timeInterval: 180, target: self, selector: #selector(self.timerPunish), userInfo: nil, repeats: false)
@@ -490,7 +496,7 @@ extension CBPetHomeViewModel {
          }
     }
     @objc private func timerPunish() {
-        self.isPunish = true
+        self.isPunish = false
         //CBLog(message: "惩罚 定时器 惩罚 定时器惩罚 定时器惩罚 定时器惩罚 定时器惩罚 定时器惩罚 定时器")
     }
     //MARK: - 单次定位指令request

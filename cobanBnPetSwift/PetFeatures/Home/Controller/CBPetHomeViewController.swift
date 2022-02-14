@@ -338,6 +338,11 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
                 self?.functionClickJump(title: title)
             }
         }
+        
+        self.homeViewModel.switchPetSuccessBlock = {[weak self] in
+            self?.homeViewModel.isPunish = false
+            self?.clickLocateTime = nil
+        }
     }
     
     @objc private func showSwitchPet() {
@@ -706,7 +711,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
             }
             break
         case "惩罚".localizedStr:
-            if self.homeViewModel.isPunish == false {
+            if self.homeViewModel.isPunish == true {
                 let curTime = NSDate.init().timeIntervalSince1970
                 let during = 180 - (curTime - self.homeViewModel.punishTime)
                 let min = NSInteger(during) / 60
