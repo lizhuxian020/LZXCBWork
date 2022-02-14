@@ -11,6 +11,8 @@ import SwiftyJSON
 import HandyJSON
 
 class CBPetMsgCterViewController: CBPetBaseViewController {
+    
+    public var homeViewModel : CBPetHomeViewModel?
 
     private lazy var msgCterViewModel:CBPetMsgCterViewModel = {
         let viewModel = CBPetMsgCterViewModel()
@@ -59,6 +61,9 @@ class CBPetMsgCterViewController: CBPetBaseViewController {
             make.top.left.right.equalTo(0)
             make.bottom.equalTo(0)
         }
+        self.homeViewModel?.getCurrentPetLocateString({[weak self] locateString in
+            self?.msgCenterView.locateString = locateString
+        })
         self.msgCenterView.setupViewModel(viewModel: self.msgCterViewModel)
         self.msgCterViewModel.pushBlock = { [weak self] (objc:Any) in
             self?.msgDetailAction(objc: objc)

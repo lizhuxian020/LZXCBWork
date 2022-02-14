@@ -602,6 +602,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         multiVC.addChild(userManagementVC)
         multiVC.addChild(msgCterVC)
         userManagementVC.homeViewModel = self.homeViewModel
+        msgCterVC.homeViewModel = self.homeViewModel
         self.navigationController?.pushViewController(multiVC, animated: true)
     }
     // MARK: - 跳转到个人中心

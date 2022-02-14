@@ -57,6 +57,7 @@ class CBPetFuncUserManagementVC: CBPetBaseViewController {
             make.bottom.equalTo(0)
         }
         
+        self.userManageViewModel.isAdmin = self.homeViewModel?.homeInfoModel?.devUser.isAdmin == "1"
         self.manageView.setupViewModel(viewModel: self.userManageViewModel)
         self.setupVM()
         self.userManageViewModel.MJHeaderRefreshReloadDataBlock = { [weak self] (tag:Int) in

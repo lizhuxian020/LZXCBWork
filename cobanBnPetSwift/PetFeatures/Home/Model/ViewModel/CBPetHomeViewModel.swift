@@ -69,7 +69,7 @@ enum CBPetHomeUpdDataType:String {
     /* 挂失*/
     case callPosition = "callPosition"
 }
-class CBPetHomeViewModel: CBPetBaseViewModel {
+class CBPetHomeViewModel: CBPetBaseViewModel, BMKGeoCodeSearchDelegate{
     
     //MARK: - 数据模型
     /* 首页信息model*/
@@ -126,6 +126,14 @@ class CBPetHomeViewModel: CBPetBaseViewModel {
     
     /* 成功切换设备block*/
     var switchPetSuccessBlock: (() -> Void)?
+    
+    /* 首页选中的宠物当前地理位置*/
+    public var currentPetLocateString: String?
+    private var searcher:BMKGeoCodeSearch = {
+        let search = BMKGeoCodeSearch.init()
+        return search
+    }()
+    private var getLocateStringBlock: ((_ locateString: String) -> Void)?
 }
 extension CBPetHomeViewModel {
     //MARK: - 获取首页信息request
@@ -145,6 +153,8 @@ extension CBPetHomeViewModel {
             }
             let json = JSON.init(successModel.data as Any)
             self?.homeInfoModel = CBPetHomeInfoModel.deserialize(from: json.dictionaryObject) ?? CBPetHomeInfoModel.init()
+            self?.currentPetLocateString = nil
+            self?.getCurrentPetLocateString(nil)
             ///首页设备信息本地存储
             if let value = self?.homeInfoModel {
                 CBPetHomeInfoTool.saveHomeInfo(homeInfoModel: value)
@@ -903,4 +913,45 @@ extension CBPetHomeViewModel {
             self?.getHomeInfoRequest()
         }
     }
+    
+    func getCurrentPetLocateString(_ blk: ((_ locateString: String) -> Void)?) {
+        if self.currentPetLocateString != nil {
+            blk?(self.currentPetLocateString!)
+            return
+        }
+        if blk != nil {
+            self.getLocateStringBlock = blk
+        }
+        let locate = CLLocationCoordinate2D.init(latitude: Double(self.homeInfoModel?.pet.device.location.lat ?? "0")!, longitude: Double(self.homeInfoModel?.pet.device.location.lng ?? "0")!)
+        if AppDelegate.shareInstance.IsShowGoogleMap {
+            
+        } else {
+            self.searcher.delegate = self
+            let reverseGeoCodeOpetion = BMKReverseGeoCodeSearchOption.init()
+            reverseGeoCodeOpetion.location = locate
+            let flag = self.searcher.reverseGeoCode(reverseGeoCodeOpetion)
+            if flag == true {
+                CBLog(message: "反geo检索发送成功")
+            } else {
+                CBLog(message: "反geo检索发送失败")
+            }
+        }
+    }
+    
+    // MARK: - BMKGeoCodeSearchDelegate
+    func onGetReverseGeoCodeResult(_ searcher: BMKGeoCodeSearch!, result: BMKReverseGeoCodeSearchResult!, errorCode error: BMKSearchErrorCode) {
+        switch error { ///69 - 52 = 17
+        case BMK_SEARCH_NO_ERROR:
+            self.currentPetLocateString = result.address
+            break
+        default:
+            self.currentPetLocateString = "未知".localizedStr
+            CBLog(message: "未找地理位置")
+            break
+        }
+        if let blk = self.getLocateStringBlock {
+            blk(self.currentPetLocateString!)
+        }
+    }
+    
 }

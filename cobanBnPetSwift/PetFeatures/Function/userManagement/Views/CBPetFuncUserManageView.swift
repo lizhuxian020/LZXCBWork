@@ -65,6 +65,7 @@ class CBPetFuncUserManageView: CBPetBaseView, UITableViewDelegate, UITableViewDa
             vvModel.userMangerUpdateParamModelBlock = {[weak self] (paramModel : CBPetHomeParamtersModel) -> Void in
                 self?.configView.configModel = paramModel
             }
+            self.userManageTableView.isHidden = !(vvModel.isAdmin == true)
         }
     }
     private func setupView() {
