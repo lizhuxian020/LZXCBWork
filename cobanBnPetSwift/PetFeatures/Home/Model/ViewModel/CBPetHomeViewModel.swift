@@ -479,12 +479,12 @@ extension CBPetHomeViewModel {
                 }
                  return;
              }
-            if (electric_pet == 1) { // 发起惩罚，三分钟后再试
-                self.isPunish = false
-                self.punishTime = NSDate.init().timeIntervalSince1970
-                /* 三分钟后再试*/
-                Timer.scheduledTimer(timeInterval: 180, target: self, selector: #selector(self.timerPunish), userInfo: nil, repeats: false)
-            }
+//            if (electric_pet == 1) { // 发起惩罚，三分钟后再试
+            self.isPunish = false
+            self.punishTime = NSDate.init().timeIntervalSince1970
+            /* 三分钟后再试*/
+            Timer.scheduledTimer(timeInterval: 180, target: self, selector: #selector(self.timerPunish), userInfo: nil, repeats: false)
+//            }
          }) { (failureModel) in
              MBProgressHUD.hide(for: CBPetUtils.getWindow(), animated: true)
          }
