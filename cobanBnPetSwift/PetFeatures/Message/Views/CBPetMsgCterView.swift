@@ -11,6 +11,7 @@ import UIKit
 class CBPetMsgCterView: CBPetBaseView,UITableViewDelegate, UITableViewDataSource {
     
     public var locateString: String?
+    public var deviceName: String?
 
     private lazy var msgTableView:UITableView = {
         let tableV:UITableView = UITableView(frame: CGRect.zero, style: .plain)
@@ -69,7 +70,10 @@ class CBPetMsgCterView: CBPetBaseView,UITableViewDelegate, UITableViewDataSource
                         } else if model.title == "唤醒记录".localizedStr && msgCterModel.message_type == "9" {
                             self!.arrayDataSource[index].add_time = msgCterModel.add_time
                             self!.arrayDataSource[index].countMessage = msgCterModel.countMessage
-                            self!.arrayDataSource[index].text = "\(self?.locateString)"
+                            
+                            let text = NSString.init(format: "设备\"%@\"，位置在\"%@\"".localizedStr as NSString, self?.deviceName ?? "", self?.locateString ?? "")
+                            
+                            self!.arrayDataSource[index].text = text as String
                             self!.arrayDataSource[index].message_type = msgCterModel.message_type
                         }
                     }

@@ -64,12 +64,16 @@ class CBPetMsgCterViewController: CBPetBaseViewController {
         self.homeViewModel?.getCurrentPetLocateString({[weak self] locateString in
             self?.msgCenterView.locateString = locateString
         })
+        self.msgCenterView.deviceName = self.homeViewModel?.homeInfoModel?.pet.name
         self.msgCenterView.setupViewModel(viewModel: self.msgCterViewModel)
         self.msgCterViewModel.pushBlock = { [weak self] (objc:Any) in
             self?.msgDetailAction(objc: objc)
         }
         self.msgCterViewModel.MJHeaderRefreshReloadDataBlock = { [weak self] (tag:Int) in
-            self?.getMessageListInfoReuqest()
+            self?.homeViewModel?.getCurrentPetLocateString({[weak self] locateString in
+                self?.msgCenterView.locateString = locateString
+                self?.getMessageListInfoReuqest()
+            })
         }
         self.msgCterViewModel.MJFooterRefreshReloadDataBlock = { [weak self] (tag:Int) in
             self?.getMessageListInfoReuqest()

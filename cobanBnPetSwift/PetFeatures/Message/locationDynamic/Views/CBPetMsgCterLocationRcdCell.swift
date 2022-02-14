@@ -37,6 +37,11 @@ class CBPetMsgCterLocationRcdCell: CBPetBaseTableViewCell,BMKGeoCodeSearchDelega
     private lazy var showBtn_text:CBPetBaseButton = {
         let btn = CBPetBaseButton(title: "展开".localizedStr, titleColor: KPetTextColor, font: UIFont(name: CBPingFangSC_Regular, size: 12*KFitHeightRate)!)
         btn.setTitle("收起".localizedStr, for: .selected)
+        btn.titleLabel?.textAlignment = .left
+        btn.titleLabel?.snp_makeConstraints({ make in
+            make.left.right.equalTo(0)
+            make.top.bottom.equalTo(0)
+        })
         return btn
     }()
     private lazy var showBtn_image:CBPetBaseButton = {
@@ -105,7 +110,7 @@ class CBPetMsgCterLocationRcdCell: CBPetBaseTableViewCell,BMKGeoCodeSearchDelega
         self.showBtn_text.snp_makeConstraints { (make) in
             make.top.equalTo(self.lineView.snp_bottom).offset(12*KFitHeightRate)
             make.left.equalTo(self.bgmView.snp_left).offset(15*KFitWidthRate)
-            make.size.equalTo(CGSize(width: 44*KFitWidthRate, height: 20*KFitHeightRate))
+            make.size.equalTo(CGSize(width: 100*KFitWidthRate, height: 20*KFitHeightRate))
             make.bottom.equalTo(self.bgmView.snp_bottom).offset(-12*KFitHeightRate)
         }
         let showImage = UIImage(named: "pet_msg_hideDetail")!

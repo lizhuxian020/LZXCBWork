@@ -915,7 +915,7 @@ extension CBPetHomeViewModel {
     }
     
     func getCurrentPetLocateString(_ blk: ((_ locateString: String) -> Void)?) {
-        if self.currentPetLocateString != nil {
+        if self.currentPetLocateString != nil && self.currentPetLocateString != "未知".localizedStr {
             blk?(self.currentPetLocateString!)
             return
         }
@@ -924,7 +924,18 @@ extension CBPetHomeViewModel {
         }
         let locate = CLLocationCoordinate2D.init(latitude: Double(self.homeInfoModel?.pet.device.location.lat ?? "0")!, longitude: Double(self.homeInfoModel?.pet.device.location.lng ?? "0")!)
         if AppDelegate.shareInstance.IsShowGoogleMap {
-            
+            let geocoder = GMSGeocoder.init()
+            geocoder.reverseGeocodeCoordinate(locate) {[weak self] response, error in
+                if let res = response?.results(),
+                   res.count > 0 {
+                    let address = res[0]
+                    let addressStr = "\(address.country ?? "")" + "\(address.administrativeArea ?? "")" + "\(address.locality ?? "")" + "\(address.subLocality ?? "")" + "\(address.thoroughfare ?? "")"
+                    self?.currentPetLocateString = addressStr
+                } else {
+                    self?.currentPetLocateString = "未知".localizedStr
+                }
+                blk?((self?.currentPetLocateString)!)
+            }
         } else {
             self.searcher.delegate = self
             let reverseGeoCodeOpetion = BMKReverseGeoCodeSearchOption.init()
