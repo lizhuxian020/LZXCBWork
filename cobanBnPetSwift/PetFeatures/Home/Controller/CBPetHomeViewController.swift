@@ -82,11 +82,6 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         let popV = CBPetFuncPubnishmentView.init(frame: CGRect(x: 0, y: 0, width: SCREEN_WIDTH, height: SCREEN_HEIGHT))
         return popV
     }()
-    /* 定位信息popView，点击定位会弹出来*/
-//    private lazy var locatePopView:CBPetFuncLocatePopView = {
-//        let popV = CBPetFuncLocatePopView.init(frame: CGRect(x: 0, y: CGFloat(NavigationBarHeigt), width: SCREEN_WIDTH, height: 112*KFitHeightRate))
-//        return popV
-//    }()
     private lazy var inputPopView:CBPetWakeUpPopView = {
         let popV = CBPetWakeUpPopView.init(frame: CGRect(x: 0, y: 0, width: SCREEN_WIDTH, height: SCREEN_HEIGHT))
         popV.delegate = self
@@ -115,16 +110,11 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-//        self.locatePopView.isHidden = false
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         // 暂停定时器
         self.paseTimer()
-//        self.locatePopView.isHidden = true
-        //self.locatePopView.dissmiss()
-        
-        CBPetCtrlPanelView.share.removeView()
         CBPetTopSwitchBtnView.share.removeView()
         CBPetBottomSwitchBtnView.share.removeView()
     }
@@ -400,23 +390,10 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
     }
     
     override func didClickBlankAreaOfMap() {
-//        self.locatePopView.dissmiss()
     }
     
     private func switchPet(petModel : CBPetPsnalCterPetModel!) {
         
-    }
-    
-    private func drawCtrlPanel() {
-        // [1,9)的随机数
-        // arc4random_uniform(UInt32(9) + 1) {
-        let progressFloat = CBPetUtils.randomBetween(firstNum: 0.0, secondNum: 1.0)
-        CBLog(message: "随机百分比:\(progressFloat)")
-        /* 回调圆的比例 值为0-1 */
-        guard CBPetCtrlPanelView.share.drawProgressBlocks == nil else {
-            CBPetCtrlPanelView.share.drawProgressBlocks!(CGFloat(progressFloat)) //0.88
-            return
-        }
     }
     //MARK: - 定时器暂停、开始、继续
     /* 暂停*/
@@ -464,8 +441,6 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
                 /* 首页数据源刷新*/
                 if objc is CBBaseNetworkModel {
                     self?.pickerViewByStatus(successModel: objc as! CBBaseNetworkModel)
-//                    self?.locatePopView.updateSingleLocateData(model:self?.homeViewModel.homeInfoModel ?? CBPetHomeInfoModel.init())
-//                    self?.functionPopView.updateFunctionDataSource()
                     self?.toolPopView.updateContent()
                     self?.toolAssistanceView.updateContent()
                 }
@@ -542,54 +517,12 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
     private func pickerViewByStatus (successModel:CBBaseNetworkModel) {
         if successModel.status == "0" {
             /// 接受状态,有绑定的宠物
-//            self.updateData()
-//            self.initBarWith(title: self.homeViewModel.homeInfoModel?.pet.name ?? "首页".localizedStr, isBack: false)
-//            self.rightBtn.removeTarget(self, action: #selector(switchDeviceClick), for: .touchUpInside)
-//            if let value = self.homeViewModel.homeInfoModel?.msgUnReadCount {
-//                if value == "1" {
-//                    initBarRight(imageName: "pet_messageCenter_red",action: #selector(jumpToMessageCenter))
-//                } else if value == "0" {
-//                    initBarRight(imageName: "pet_messageCenter",action: #selector(jumpToMessageCenter))
-//                } else {
-//                    initBarRight(imageName: "pet_messageCenter",action: #selector(jumpToMessageCenter))
-//                }
-//            } else {
-//                initBarRight(imageName: "pet_messageCenter",action: #selector(jumpToMessageCenter))
-//            }
             self.view.backgroundColor = .white
             self.functionPopView.isHidden = false
             
             self.bindDeviceResultView.isHidden = true
             self.bindDeviceView.isHidden = true
-            
-//            if self.isAllowShowPanel == true {
-//                let progressFloat = CGFloat(0.3)//CBPetUtils.randomBetween(firstNum: 0.0, secondNum: 1.0)
-//                if UIViewController.getCurrentVC() is CBPetHomeViewController {
-//                    CBPetCtrlPanelView.share.showCtrlPanel(topColor: UIColor.init().colorWithHexString(hexString: "#F8563B"), bottomColor: UIColor.init().colorWithHexString(hexString: "#F8563B", alpha: 0.1),progressfloat:progressFloat) { [weak self] (isShow:Bool) in
-//                        if isShow {
-//                            self?.ctrlPanelPopView.popView()
-//                            self?.ctrlPanelPopView.setupViewModel(viewModel: self!.homeViewModel)
-//                            self!.addCtrlPanelPopViewClickMethod()
-//                            CBPetCtrlPanelView.share.bringToFront()
-////                            self?.homeViewModel.getDeviceParamtersRequest()
-//                        } else {
-//                            self?.ctrlPanelPopView.dissmiss()
-//                        }
-//                    }
-//                    /* 回调圆的比例 值为0-1 */
-//                    if let value = self.homeViewModel.homeInfoModel?.pet.device.location.baterry {
-//                        let valueNum = Float(value.valueStr) ?? 0
-//                        if CBPetCtrlPanelView.share.drawProgressBlocks != nil {
-//                            CBPetCtrlPanelView.share.drawProgressBlocks!(CGFloat(valueNum/100))
-//                        }
-//                    }
-//                }
-//            }
-//            self.isAllowShowPanel = false
-            
         } else {
-//            self.locatePopView.isHidden = true
-            CBPetCtrlPanelView.share.removeView()
             switch successModel.rescode {
             case "0031":
                 ///待处理,绑定请求已发送
@@ -815,7 +748,6 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
             if self.isOverTime(min: 3) == false {
                 return
             }
-//            self.locatePopView.popView()
             self.homeViewModel.singleLocateCommandRequest()
             break
         case "微聊".localizedStr:
@@ -898,24 +830,20 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
             let fenceVC = CBPetSetFenceViewController.init()
             fenceVC.homeViewModel = self.homeViewModel
             self.navigationController?.pushViewController(fenceVC, animated: true)
-//            CBPetCtrlPanelView.share.dismissCtrlViewClick()
             break
         case "设置回家语音".localizedStr:
             let setRcdVC = CBPetSelectRecordingVC.init()
             setRcdVC.homeViewModel = self.homeViewModel
             self.navigationController?.pushViewController(setRcdVC, animated: true)
-            CBPetCtrlPanelView.share.dismissCtrlViewClick()
             break
         case "设置时区".localizedStr:
             let selectTimeZVC = CBPetSelectTimeZViewController.init()
             selectTimeZVC.homeViewModel = self.homeViewModel
             self.navigationController?.pushViewController(selectTimeZVC, animated: true)
-            CBPetCtrlPanelView.share.dismissCtrlViewClick()
             break
         case "定时报告".localizedStr:
             let timeReportVC = CBPetSetTimeReportViewController.init()
             self.navigationController?.pushViewController(timeReportVC, animated: true)
-            CBPetCtrlPanelView.share.dismissCtrlViewClick()
             break
         default:
             break
