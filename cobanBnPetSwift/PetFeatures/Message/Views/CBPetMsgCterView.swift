@@ -64,10 +64,11 @@ class CBPetMsgCterView: CBPetBaseView,UITableViewDelegate, UITableViewDataSource
                             self!.arrayDataSource[index].add_time = msgCterModel.add_time
                             self!.arrayDataSource[index].text = ""
                             self!.arrayDataSource[index].message_type = "2020"
-                        } else if model.title == "唤醒记录".localizedStr {
+                        } else if model.title == "唤醒记录".localizedStr && msgCterModel.message_type == "9" {
                             self!.arrayDataSource[index].add_time = msgCterModel.add_time
+                            self!.arrayDataSource[index].countMessage = msgCterModel.countMessage
                             self!.arrayDataSource[index].text = ""
-                            self!.arrayDataSource[index].message_type = "9"
+                            self!.arrayDataSource[index].message_type = msgCterModel.message_type
                         }
                     }
                 }

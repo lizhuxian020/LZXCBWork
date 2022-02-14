@@ -35,8 +35,8 @@ class CBPetMsgCterLocationRcdCell: CBPetBaseTableViewCell,BMKGeoCodeSearchDelega
         return view
     }()
     private lazy var showBtn_text:CBPetBaseButton = {
-        let btn = CBPetBaseButton(title: "展开", titleColor: KPetTextColor, font: UIFont(name: CBPingFangSC_Regular, size: 12*KFitHeightRate)!)
-        btn.setTitle("收起", for: .selected)
+        let btn = CBPetBaseButton(title: "展开".localizedStr, titleColor: KPetTextColor, font: UIFont(name: CBPingFangSC_Regular, size: 12*KFitHeightRate)!)
+        btn.setTitle("收起".localizedStr, for: .selected)
         return btn
     }()
     private lazy var showBtn_image:CBPetBaseButton = {

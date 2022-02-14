@@ -1294,3 +1294,5 @@
 "添加唤醒时间" = "Add wake time";
 "唤醒时间" = "Wake time";
 "%ld分%ld秒后再试" = "Try again in %ldminutes %ldseconds";
+"请添加唤醒时间,选取小时和分钟" = "Please click add time, and choose hour and minute.";
+"该手机号码没有注册" = "This account is not registered";
