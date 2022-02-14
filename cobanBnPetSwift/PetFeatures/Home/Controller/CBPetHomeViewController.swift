@@ -83,10 +83,10 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         return popV
     }()
     /* 定位信息popView，点击定位会弹出来*/
-    private lazy var locatePopView:CBPetFuncLocatePopView = {
-        let popV = CBPetFuncLocatePopView.init(frame: CGRect(x: 0, y: CGFloat(NavigationBarHeigt), width: SCREEN_WIDTH, height: 112*KFitHeightRate))
-        return popV
-    }()
+//    private lazy var locatePopView:CBPetFuncLocatePopView = {
+//        let popV = CBPetFuncLocatePopView.init(frame: CGRect(x: 0, y: CGFloat(NavigationBarHeigt), width: SCREEN_WIDTH, height: 112*KFitHeightRate))
+//        return popV
+//    }()
     private lazy var inputPopView:CBPetWakeUpPopView = {
         let popV = CBPetWakeUpPopView.init(frame: CGRect(x: 0, y: 0, width: SCREEN_WIDTH, height: SCREEN_HEIGHT))
         popV.delegate = self
@@ -115,13 +115,13 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.locatePopView.isHidden = false
+//        self.locatePopView.isHidden = false
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         // 暂停定时器
         self.paseTimer()
-        self.locatePopView.isHidden = true
+//        self.locatePopView.isHidden = true
         //self.locatePopView.dissmiss()
         
         CBPetCtrlPanelView.share.removeView()
@@ -400,7 +400,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
     }
     
     override func didClickBlankAreaOfMap() {
-        self.locatePopView.dissmiss()
+//        self.locatePopView.dissmiss()
     }
     
     private func switchPet(petModel : CBPetPsnalCterPetModel!) {
@@ -464,7 +464,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
                 /* 首页数据源刷新*/
                 if objc is CBBaseNetworkModel {
                     self?.pickerViewByStatus(successModel: objc as! CBBaseNetworkModel)
-                    self?.locatePopView.updateSingleLocateData(model:self?.homeViewModel.homeInfoModel ?? CBPetHomeInfoModel.init())
+//                    self?.locatePopView.updateSingleLocateData(model:self?.homeViewModel.homeInfoModel ?? CBPetHomeInfoModel.init())
 //                    self?.functionPopView.updateFunctionDataSource()
                     self?.toolPopView.updateContent()
                     self?.toolAssistanceView.updateContent()
@@ -510,10 +510,14 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
                 }
                 break
             case .singleLocate:
-                let str = objc as! String
-                if str == "单次定位".localizedStr {
+                let netModel = objc as! CBBaseNetworkModel
+                if netModel.status == "0" {
+                    //更新点击时间，开始计时
+                    self?.clickLocateTime = NSDate.init().timeIntervalSince1970
                     /* 获取首页信息*/
                     self?.homeViewModel.getHomeInfoRequest()
+                } else {
+                    
                 }
                 break
             case .setFence:
@@ -584,7 +588,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
 //            self.isAllowShowPanel = false
             
         } else {
-            self.locatePopView.isHidden = true
+//            self.locatePopView.isHidden = true
             CBPetCtrlPanelView.share.removeView()
             switch successModel.rescode {
             case "0031":
@@ -811,7 +815,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
             if self.isOverTime(min: 3) == false {
                 return
             }
-            self.locatePopView.popView()
+//            self.locatePopView.popView()
             self.homeViewModel.singleLocateCommandRequest()
             break
         case "微聊".localizedStr:
@@ -835,15 +839,14 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         }
     }
     private func isOverTime(min: Int) -> Bool {
-        guard let time = clickLocateTime else {
-            clickLocateTime = NSDate.init().timeIntervalSince1970
+        if clickLocateTime == nil {
             return true
         }
         let currentTime = NSDate.init().timeIntervalSince1970
-        let duration = currentTime - time
+        let duration = currentTime - clickLocateTime!
         let result = duration >= Double(min * 60)
         if result {
-            clickLocateTime = currentTime
+//            clickLocateTime = currentTime
         } else {
             MBProgressHUD.showMessage(Msg: "定位中…".localizedStr, Deleay: 1.5)
         }

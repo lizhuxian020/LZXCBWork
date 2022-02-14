@@ -521,19 +521,19 @@ extension CBPetHomeViewModel {
                     MBProgressHUD.showMessage(Msg: "下发指令超时".localizedStr, Deleay: 1.5)
                 }
                 guard self?.updateDataBlock == nil else {
-                    self?.updateDataBlock!(.singleLocate,"单次定位".localizedStr)
+                    self?.updateDataBlock!(.singleLocate,successModel)
                     return
                 }
                  return;
              }
             guard self?.updateDataBlock == nil else {
-                self?.updateDataBlock!(.singleLocate,"单次定位".localizedStr)
+                self?.updateDataBlock!(.singleLocate,successModel)
                 return
             }
          }) { [weak self] (failureModel) in
              MBProgressHUD.hide(for: CBPetUtils.getWindow(), animated: true)
             guard self?.updateDataBlock == nil else {
-                self?.updateDataBlock!(.singleLocate,"单次定位".localizedStr)
+                self?.updateDataBlock!(.singleLocate,failureModel)
                 return
             }
          }
