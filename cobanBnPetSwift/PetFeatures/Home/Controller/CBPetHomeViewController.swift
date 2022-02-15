@@ -656,7 +656,11 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
     private func functionClickJump (title:String) {
         switch title {
         case "互动".localizedStr:
-            self.toolAssistanceView.show(frame: self.toolPopView.getInteractionIconFrame())
+            if self.toolAssistanceView.superview != nil {
+                self.toolAssistanceView.hide()
+            } else {
+                self.toolAssistanceView.show(frame: self.toolPopView.getInteractionIconFrame())
+            }
             break
         case "喊话".localizedStr:
             if CBPetUtils.checkMicrophonePermission(resultBlock: { [weak self] (isAllow) in

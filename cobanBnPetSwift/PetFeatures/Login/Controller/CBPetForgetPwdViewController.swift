@@ -269,7 +269,7 @@ class CBPetForgetPwdViewController: CBPetBaseViewController {
             MBProgressHUD.showMessage(Msg: "请输入6-12位字符密码".localizedStr, Deleay: 1.5)
             return
         }
-        guard self.inputFirtPwdView.textTF.text!.isValidateAlphaNumberPwd() == false else {
+        guard self.inputFirtPwdView.textTF.text!.isValidateAlphaNumberPwd() == true else {
             MBProgressHUD.showMessage(Msg: "请输入6-12位字符密码".localizedStr, Deleay: 1.5)
             return
         }
@@ -281,7 +281,7 @@ class CBPetForgetPwdViewController: CBPetBaseViewController {
             MBProgressHUD.showMessage(Msg: "两次输入的密码不同".localizedStr, Deleay: 1.5)
             return
         }
-        guard self.inputSecondPwdView.textTF.text!.isValidateAlphaNumberPwd() == false else {
+        guard self.inputSecondPwdView.textTF.text!.isValidateAlphaNumberPwd() == true else {
             MBProgressHUD.showMessage(Msg: "请输入6-12位字符密码".localizedStr, Deleay: 1.5)
             return
         }

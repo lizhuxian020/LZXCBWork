@@ -137,7 +137,7 @@ extension String {
     }
     //有效的字母数字密码 6-12位
     func isValidateAlphaNumberPwd() -> Bool {
-        let regex = "^(?!\\d+$|[a-zA-Z]+$)\\w{6,12}$"
+        let regex = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$"
         let identityCardPredicate = NSPredicate.init(format: "SELF MATCHES %@", regex)
         return identityCardPredicate.evaluate(with: self)
     }
