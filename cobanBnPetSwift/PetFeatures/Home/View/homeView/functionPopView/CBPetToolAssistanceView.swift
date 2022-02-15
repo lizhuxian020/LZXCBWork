@@ -40,6 +40,13 @@ class CBPetToolAssistanceView : CBPetBaseView {
         }
     }
     
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        let pointInContent = self.convert(point, to: self.contentView)
+        let isInContent = self.contentView.bounds.contains(pointInContent)
+        let isInNavi = CGRect.init(x: 0, y: 0, width: SCREEN_WIDTH, height: kNavAndStatusHeight).contains(point)
+        return isInNavi || isInContent
+    }
+    
     public func hide() {
         self.removeFromSuperview()
     }

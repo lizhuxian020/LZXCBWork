@@ -126,6 +126,10 @@ class CBPetScanInputVC: CBPetBaseViewController {
             }
             ///返回错误信息
             guard successModel.status == "0" else {
+                if successModel.rescode == "0030" {
+                    MBProgressHUD.showMessage(Msg: "您已经绑定了这个设备".localizedStr, Deleay: 2.0)
+                    return
+                }
                 MBProgressHUD.showMessage(Msg: successModel.resmsg ?? "请求超时".localizedStr, Deleay: 2.0)
                 return;
             }

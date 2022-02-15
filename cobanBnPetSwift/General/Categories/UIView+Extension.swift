@@ -29,7 +29,7 @@ extension UIView {
         }
     }
     
-    private var tapGes : UITapGestureRecognizer? {
+    public var tapGes : UITapGestureRecognizer? {
         set {
             objc_setAssociatedObject(self, &tapGesId, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }

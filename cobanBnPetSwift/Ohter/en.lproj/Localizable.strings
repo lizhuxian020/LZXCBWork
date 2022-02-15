@@ -1298,3 +1298,5 @@
 "该手机号码没有注册" = "This account is not registered";
 "设备\"%@\"，位置在\"%@\"" = "Device \"%@\" wakeup, location is \"%@\"";
 "您已经绑定了这个设备" = "You have bind the pets!";
+"宠物定位" = "Pet location";
+"暂不解除" = "Cancel";

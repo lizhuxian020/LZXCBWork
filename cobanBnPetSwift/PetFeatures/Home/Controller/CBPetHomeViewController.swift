@@ -377,6 +377,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
     }
     
     override func didClickBlankAreaOfMap() {
+        self.toolAssistanceView.hide()
     }
     
     private func switchPet(petModel : CBPetPsnalCterPetModel!) {

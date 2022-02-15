@@ -91,7 +91,7 @@ class CBPetPsnalCterEditPetInfoVC: CBPetBaseViewController,UIImagePickerControll
                 CBPetPopView.share.showAlert(title: "", subTitle: "温馨提醒！您将解除该APP上的关联设备同时设备相对应的宠物资料也一并删除".localizedStr, comfirmBtnText: "解除".localizedStr, cancelBtnText: "暂不解除".localizedStr, comfirmColor: KPetAppColor, cancelColor: KPet999999Color, completeBtnBlock: { [weak self] () -> Void in
                     self!.unBindDeviceRqeust()
                 }, cancelBtnBlock: { () -> Void in
-                    CBLog(message: "暂不解除")
+                    CBLog(message: "暂不解除".localizedStr)
                 })
             }
         }

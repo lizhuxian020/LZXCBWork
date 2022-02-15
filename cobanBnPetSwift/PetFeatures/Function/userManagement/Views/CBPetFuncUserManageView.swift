@@ -66,6 +66,7 @@ class CBPetFuncUserManageView: CBPetBaseView, UITableViewDelegate, UITableViewDa
                 self?.configView.configModel = paramModel
             }
             self.userManageTableView.isHidden = !(vvModel.isAdmin == true)
+            self.addUserBtn.isHidden = self.userManageTableView.isHidden
         }
     }
     private func setupView() {
