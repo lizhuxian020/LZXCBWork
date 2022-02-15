@@ -247,7 +247,7 @@ class CBPetScanToBindDeviceVC: CBPetBaseViewController, AVCaptureMetadataOutputO
             let result = metadataObject.stringValue
             CBLog(message: "扫描到结果:\(result!)")
             self.valudateIMEIRequest(scannedStr: result ?? "")
-            //self.session?.startRunning()
+//            self.session?.startRunning()
         }
     }
     //MARK: -- 输入绑定号
@@ -268,7 +268,14 @@ class CBPetScanToBindDeviceVC: CBPetBaseViewController, AVCaptureMetadataOutputO
             }
             ///返回错误信息
             guard successModel.status == "0" else {
-                MBProgressHUD.showMessage(Msg: successModel.resmsg ?? "请求超时".localizedStr, Deleay: 2.0)
+                if successModel.rescode == "0024" {
+                    MBProgressHUD.showMessage(Msg: "设备已离线".localizedStr, Deleay: 1.5)
+                }  else if successModel.rescode == "0029" {
+                    MBProgressHUD.showMessage(Msg: "下发指令超时".localizedStr, Deleay: 1.5)
+                } else {                
+                    MBProgressHUD.showMessage(Msg: successModel.resmsg ?? "请求超时".localizedStr, Deleay: 2.0)
+                }
+                self?.session?.startRunning()
                 return;
             }
             let imeiJson = JSON.init(successModel.data as Any)
@@ -276,11 +283,13 @@ class CBPetScanToBindDeviceVC: CBPetBaseViewController, AVCaptureMetadataOutputO
                 self?.bindDeviceByValudateIMEI(imeiStr: scannedStr)
                 return
             }
+            self?.session?.startRunning()
             MBProgressHUD.showMessage(Msg: "设备绑定号码不存在".localizedStr, Deleay: 1.5)
         }) { [weak self] (failureModel) in
             if let value = self?.view {
                 MBProgressHUD.hide(for: value, animated: true)
             }
+            self?.session?.startRunning()
         }
     }
     //MARK: - 绑定设备
@@ -301,6 +310,7 @@ class CBPetScanToBindDeviceVC: CBPetBaseViewController, AVCaptureMetadataOutputO
             }
             ///返回错误信息
             guard successModel.status == "0" else {
+                self?.session?.startRunning()
                 if successModel.rescode == "0030" {
                     MBProgressHUD.showMessage(Msg: "您已经绑定了这个设备".localizedStr, Deleay: 2.0)
                     return
