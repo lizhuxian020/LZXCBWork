@@ -17,7 +17,7 @@ class CBPetSwitchPetCollectionVCell: UICollectionViewCell {
         return imageView
     }()
     private lazy var textLb:UILabel = {
-        let lb = UILabel(text: "新增".localizedStr, textColor: KPetTextColor, font: UIFont.init(name: CBPingFangSC_Regular, size: 14*KFitHeightRate)!, textAlignment: .center)
+        let lb = UILabel(text: "新增".localizedStr, textColor: KPetTextColor, font: UIFont.init(name: CBPingFangSC_Regular, size: 14*KFitHeightRate)!, textAlignment: .left)
         lb.numberOfLines = 1
         return lb
     }()
@@ -32,15 +32,16 @@ class CBPetSwitchPetCollectionVCell: UICollectionViewCell {
         
         self.backgroundColor = UIColor.clear
         
-        self.addSubview(self.imgeView)
-        self.imgeView.snp_makeConstraints { (make) in
-            make.centerX.equalTo(self)
-            make.top.equalTo(10*KFitHeightRate)
-            make.size.equalTo(CGSize(width: 52*KFitHeightRate, height: 52*KFitHeightRate))
-        }
+//        self.addSubview(self.imgeView)
+//        self.imgeView.snp_makeConstraints { (make) in
+//            make.centerX.equalTo(self)
+//            make.top.equalTo(10*KFitHeightRate)
+//            make.size.equalTo(CGSize(width: 52*KFitHeightRate, height: 52*KFitHeightRate))
+//        }
         self.addSubview(self.textLb)
         self.textLb.snp_makeConstraints { (make) in
-            make.top.equalTo(self.imgeView.snp_bottom).offset(10*KFitHeightRate)
+//            make.top.equalTo(self.imgeView.snp_bottom).offset(10*KFitHeightRate)
+            make.centerY.equalTo(self)
             make.centerX.equalTo(self)
             make.left.right.equalTo(0)
         }

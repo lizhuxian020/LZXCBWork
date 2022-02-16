@@ -15,8 +15,8 @@ import UIKit
 class CBPetSwitchPetAlertView : CBPetBaseView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate {
     
     let itemW = SCREEN_WIDTH/5
-    let itemH = 100*KFitHeightRate
-    let contentH : CGFloat = 300.0
+    let itemH = 50*KFitHeightRate
+    let contentH : CGFloat = 150.0
     
     /// 点击完成按钮的回调
     public var selectBlock:((_ petModel:CBPetPsnalCterPetModel) -> Void)?
