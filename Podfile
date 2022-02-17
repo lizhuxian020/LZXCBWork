@@ -39,11 +39,15 @@ pod 'HandyJSON'
 pod 'SnapKit'
 
 # 友盟推送
-pod 'UMCCommon'
-pod 'UMCSecurityPlugins'
-pod 'UMCAnalytics'
-pod 'UMCPush'
-pod 'UMCErrorCatch'
+#pod 'UMCCommon'
+#pod 'UMCSecurityPlugins'
+#pod 'UMCAnalytics'
+#pod 'UMCPush'
+#pod 'UMCErrorCatch'
+
+pod 'UMCommon'#//原为'UMCCommon'
+pod 'UMPush'#//原为'UMCPush'
+pod 'UMDevice'
 
 
 pod 'QFDatePicker'

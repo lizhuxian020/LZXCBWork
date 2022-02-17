@@ -39,14 +39,11 @@ PODS:
   - SnapKit (4.2.0)
   - SVProgressHUD (2.2.5)
   - SwiftyJSON (5.0.0)
-  - UMCAnalytics (6.0.5):
-    - UMCCommon
-  - UMCCommon (2.1.1)
-  - UMCErrorCatch (1.0.0):
-    - UMCCommon
-  - UMCPush (3.2.4):
-    - UMCCommon
-  - UMCSecurityPlugins (1.0.6)
+  - UMCommon (7.3.6):
+    - UMDevice
+  - UMDevice (2.2.1)
+  - UMPush (4.0.2):
+    - UMCommon
 
 DEPENDENCIES:
   - AFNetworking/NSURLSession (~> 3.1.0)
@@ -74,11 +71,9 @@ DEPENDENCIES:
   - SnapKit
   - SVProgressHUD
   - SwiftyJSON
-  - UMCAnalytics
-  - UMCCommon
-  - UMCErrorCatch
-  - UMCPush
-  - UMCSecurityPlugins
+  - UMCommon
+  - UMDevice
+  - UMPush
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
@@ -102,14 +97,12 @@ SPEC REPOS:
     - SnapKit
     - SVProgressHUD
     - SwiftyJSON
-    - UMCAnalytics
-    - UMCCommon
-    - UMCErrorCatch
-    - UMCPush
-    - UMCSecurityPlugins
   trunk:
     - AFNetworking
     - QFDatePicker
+    - UMCommon
+    - UMDevice
+    - UMPush
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
@@ -134,12 +127,10 @@ SPEC CHECKSUMS:
   SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
-  UMCAnalytics: 045be2cd1ec05aa95ad62405a850757f932e2d59
-  UMCCommon: 971f324a5a99c9d662ae040a815e7e3d7ef8b2a8
-  UMCErrorCatch: 51f1b68f920233e90a3fa6d51f0456174507ec78
-  UMCPush: 1edd856027dcf905333effb4040ace5d236a7316
-  UMCSecurityPlugins: 0831a08f3988f3cea9f1d3a7626cd9bee4fef150
+  UMCommon: c61df8457c275afd4f8a2fca10c7446d66220ac0
+  UMDevice: 053478c4b4d7292f31f0a275c227d3c4007a5571
+  UMPush: c420e1cf2d1c96f1257f390bc626314fb7e6d9e6
 
-PODFILE CHECKSUM: 0b3e0a36ef8eca4ff04b283df00505d45b3ad208
+PODFILE CHECKSUM: 81b762d6ecb7e9df50abbb8e131635d5cfd572ae
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.2
