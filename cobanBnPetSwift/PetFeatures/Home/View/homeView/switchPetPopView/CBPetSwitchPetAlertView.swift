@@ -14,9 +14,10 @@ import UIKit
 
 class CBPetSwitchPetAlertView : CBPetBaseView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate {
     
-    let itemW = SCREEN_WIDTH/5
-    let itemH = 50*KFitHeightRate
-    let contentH : CGFloat = 150.0
+    let itemW = SCREEN_WIDTH/4.5
+    let itemH = 40*KFitHeightRate
+    let itemIconH = 60*KFitHeightRate
+    let contentH : CGFloat = 300.0
     
     /// 点击完成按钮的回调
     public var selectBlock:((_ petModel:CBPetPsnalCterPetModel) -> Void)?
@@ -148,8 +149,13 @@ class CBPetSwitchPetAlertView : CBPetBaseView, UICollectionViewDataSource, UICol
             }
             let ddJson = JSON.init(successModel.data as Any)
             let petListModelObject = JSONDeserializer<CBPetPsnalCterPetAllModel>.deserializeFrom(dict: ddJson.dictionaryObject)
-            if let value = petListModelObject?.allPet {
-                self?.dataSource = value
+            if var value = petListModelObject?.allPet {
+                if let homeVM = self?.viewModel as? CBPetHomeViewModel {
+                    for i in 0..<value.count {
+                        value[i].isHomeSelectedPet = homeVM.homeInfoModel?.devUser.imei == value[i].imei
+                    }
+                    self?.dataSource = value
+                }
             }
 
             self!.getAddButtonData()
@@ -183,6 +189,11 @@ class CBPetSwitchPetAlertView : CBPetBaseView, UICollectionViewDataSource, UICol
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let model = self.dataSource[indexPath.row]
+        if let title = model.title, title.isEmpty == false {
+            return CGSize.init(width: itemW, height: itemIconH)
+        }
         return CGSize.init(width: itemW, height: itemH)
     }
     

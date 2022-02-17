@@ -56,6 +56,7 @@ struct CBPetPsnalCterPetModel:HandyJSON,Codable {
     
     /* 自己加的*/
     var app_addressStr:String?
+    var isHomeSelectedPet:Bool = false
     
     func getCoordinate2D() -> CLLocationCoordinate2D {
         return CLLocationCoordinate2DMake(Double(self.pet.device.location.lat ?? "0")!, Double(self.pet.device.location.lng ?? "0")!)

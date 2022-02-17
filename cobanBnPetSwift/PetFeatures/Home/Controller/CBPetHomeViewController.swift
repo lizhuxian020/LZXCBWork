@@ -277,6 +277,7 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         self.bindDeviceResultView.snp_makeConstraints({ (make) in
             make.edges.equalTo(UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0))
         })
+        self.switchPetAlertView.setupViewModel(viewModel: self.homeViewModel)
         self.bindDeviceResultView.setupViewModel(viewModel: self.homeViewModel)
 
         self.view.addSubview(self.bindDeviceView)
