@@ -208,7 +208,7 @@
 "喊话" = "Shout";
 "听听" = "Listen";
 "回家" = "Go home";
-"惩罚" = "Punishment";
+"惩罚" = "TrainPets";
 "定位" = "Position";
 "微聊" = "Chat";
 "用户管理" = "Manage users";
@@ -223,9 +223,9 @@
 "您暂未设置回家录音指令，" = "Not set a home recording command";
 "请前往录音 ..." = "go to the recording...";
 "我知道了" = "I know";
-"请设置您的惩罚时长" = "Set your punishment duration";
+"请设置您的惩罚时长" = "Set enhanced warning duration";
 "取消" = "Cancel";
-"发起惩罚" = "Punish";
+"发起惩罚" = "Enhanced warning";
 "附近宠物" = "Pet nearby";
 "宠友列表" = "Friende List";
 "宠友消息" = "Message";

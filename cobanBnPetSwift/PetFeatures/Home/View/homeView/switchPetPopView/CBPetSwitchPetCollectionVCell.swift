@@ -53,7 +53,7 @@ class CBPetSwitchPetCollectionVCell: UICollectionViewCell {
         self.addSubview(self.textLb)
         self.textLb.snp_makeConstraints { (make) in
             make.centerY.equalTo(self)
-            make.left.equalTo(0)
+            make.left.equalTo(5*KFitWidthRate)
             make.right.equalTo(self.checkImgView.snp_left).offset(-5*KFitWidthRate)
         }
     }
