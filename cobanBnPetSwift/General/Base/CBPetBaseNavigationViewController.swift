@@ -22,6 +22,7 @@ class CBPetBaseNavigationViewController: UINavigationController,UINavigationCont
         if children.count > 0 {
             viewController.hidesBottomBarWhenPushed = true
         }
+        NotificationCenter.default.post(name: NSNotification.Name.init(rawValue: KCBPushNewVCNotification), object: nil, userInfo: nil)
         super.pushViewController(viewController, animated: true)
     }
     deinit {

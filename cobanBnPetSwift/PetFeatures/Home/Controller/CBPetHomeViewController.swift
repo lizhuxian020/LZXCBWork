@@ -137,9 +137,13 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(noticeNofitication), name: NSNotification.Name.init(K_CBPetNoticeNotification), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(applicationWillBackground), name: NSNotification.Name.init(UIApplication.didEnterBackgroundNotification.rawValue), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(applicationBecomeActive), name: NSNotification.Name.init(UIApplication.didBecomeActiveNotification.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(pushNewVC), name: NSNotification.Name.init(rawValue: KCBPushNewVCNotification), object: nil)
         /* 获取七牛token*/
         self.homeViewModel.getQNFileTokenRequestMethod()
         updateDataSource()
+    }
+    @objc private func pushNewVC() {
+        self.toolAssistanceView.hide()
     }
     @objc private func applicationWillBackground() {
         self.paseTimer()

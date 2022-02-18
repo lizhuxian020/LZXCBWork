@@ -47,3 +47,5 @@ let KCBWtSingleChatNotification = "KCBWtSingleChatNotification"
 /* 消息通知*/
 let KCBWtMessageNotification = "KCBWtMessageNotification"
 
+/* 新页面推送*/
+let KCBPushNewVCNotification = "KCBPushNewVCNotification"
