@@ -46,6 +46,7 @@ class CBAvatarAnnotionView: BMKAnnotationView {
     
     private var nameLbl : UILabel = {
         let lbl = UILabel.init(text: "", textColor: KPet666666Color, font: UIFont(name: CBPingFang_SC_Bold, size: 14*KFitHeightRate)!, textAlignment: NSTextAlignment.center)
+        lbl.numberOfLines = 1
         lbl.backgroundColor = .white
         lbl.isHidden = true
         return lbl
