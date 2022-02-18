@@ -310,7 +310,7 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
             statusTxt = "设备：".localizedStr + "未连接".localizedStr
             break
         case "1":
-            statusTxt = "设备：".localizedStr + "已连接".localizedStr
+            statusTxt = "设备：".localizedStr + getSimCardTypeStr() + "已连接".localizedStr
             break
         default:
             statusTxt = "设备：无".localizedStr
