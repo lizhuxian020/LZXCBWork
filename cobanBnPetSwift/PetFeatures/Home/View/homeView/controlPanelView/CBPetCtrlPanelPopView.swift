@@ -60,7 +60,7 @@ class CBPetCtrlPanelPopView: CBPetBaseView,UITableViewDelegate, UITableViewDataS
        return bgmV
     }()
     private lazy var deviceStatusLb:UILabel = {
-       let lb = UILabel(text: "设备状态：已连接", textColor: KPetAppColor, font: UIFont(name: CBPingFangSC_Regular, size: 12*KFitHeightRate)!)
+       let lb = UILabel(text: "设备：已连接", textColor: KPetAppColor, font: UIFont(name: CBPingFangSC_Regular, size: 12*KFitHeightRate)!)
        return lb
     }()
     private lazy var percentLb:UILabel = {
@@ -201,14 +201,14 @@ class CBPetCtrlPanelPopView: CBPetBaseView,UITableViewDelegate, UITableViewDataS
         }
         if let value = CBPetHomeInfoTool.getHomeInfo().pet.device.online {
             if value.valueStr == "0" {
-                self.deviceStatusLb.text = "设备状态：".localizedStr + getSimCardTypeStr() + "未连接".localizedStr
+                self.deviceStatusLb.text = "设备：".localizedStr + getSimCardTypeStr() + "未连接".localizedStr
             } else if value.valueStr == "1" {
-                self.deviceStatusLb.text = "设备状态：".localizedStr + getSimCardTypeStr() + "已连接".localizedStr
+                self.deviceStatusLb.text = "设备：".localizedStr + getSimCardTypeStr() + "已连接".localizedStr
             } else {
-                self.deviceStatusLb.text = "设备状态：无".localizedStr
+                self.deviceStatusLb.text = "设备：无".localizedStr
             }
         } else {
-            self.deviceStatusLb.text = "设备状态：无".localizedStr
+            self.deviceStatusLb.text = "设备：无".localizedStr
         }
         if let value = CBPetHomeInfoTool.getHomeInfo().pet.device.location.baterry {
             self.percentLb.text = "\(value.valueStr)%"

@@ -65,6 +65,16 @@ class CBPetFuncPubnishmentView: CBPetBaseView {
             make.size.equalTo(CGSize(width: SCREEN_WIDTH, height: 180*KFitHeightRate))
         }
         
+        let view = UIView.init()
+        self.addSubview(view)
+        view.snp_makeConstraints { make in
+            make.top.left.right.equalTo(self)
+            make.bottom.equalTo(self.bgmView.snp_top)
+        }
+        view.tapBlk = { [weak self] in
+            self?.dissmiss()
+        }
+        
         self.bgmView.addSubview(self.titleLb)
         self.titleLb.snp_makeConstraints { (make) in
             make.centerX.equalTo(self.bgmView)

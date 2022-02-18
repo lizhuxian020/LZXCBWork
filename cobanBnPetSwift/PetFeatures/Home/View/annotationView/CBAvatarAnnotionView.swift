@@ -75,6 +75,7 @@ class CBAvatarAnnotionView: BMKAnnotationView {
         self.nameLbl.snp_makeConstraints { (make) in
             make.centerX.equalTo(self.defaultImageView.snp_centerX)
             make.bottom.equalTo(self.avtarImgView.snp_top).offset(-5)
+            make.width.equalTo(img.size.width+12)
         }
     }
     required init?(coder: NSCoder) {

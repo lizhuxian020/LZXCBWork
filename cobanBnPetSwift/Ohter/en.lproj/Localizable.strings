@@ -255,10 +255,10 @@
 "电子围栏，当宠物出围栏时app能收到报警并提示主人。注意：开启此功能后会打开设备的GPS，耗电量会增加。" = "Electronic fence, when the pet goes out of the fence, the app can receive an alarm and remind the owner. Note: After enabling this function, the GPS of the device will be turned on, and the power consumption will increase.";
 "挂失后，只要设备开机就自动发送位置给APP，请耐心等候。" = "After reporting the loss, the location will be sent to the APP automatically as long as the device is turned on, please be patient.";
 "挂失" = "Loss";
-"设备状态：未连接" = "Device Status: Not Connected";
-"设备状态：已连接" = "Device Status: Connected";
-"设备状态：无" = "Device Status: None";
-"设备状态：" = "Device Status: ";
+"设备：未连接" = "Device: Not Connected";
+"设备：已连接" = "Device: Connected";
+"设备：无" = "Device: None";
+"设备：" = "Device: ";
 "无" = "None";
 "已连接" = "Connected";
 "未连接" = "Not Connected";

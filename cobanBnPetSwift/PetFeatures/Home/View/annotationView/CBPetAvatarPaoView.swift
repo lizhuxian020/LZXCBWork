@@ -70,7 +70,7 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
     }()
     
     private var statusLbl : UILabel = {
-        let v = UILabel(text: "设备状态：已连接", textColor: KPetAppColor, font: UIFont(name: CBPingFangSC_Regular, size: 12*KFitHeightRate)!)
+        let v = UILabel(text: "设备：已连接", textColor: KPetAppColor, font: UIFont(name: CBPingFangSC_Regular, size: 12*KFitHeightRate)!)
         return v
     }()
     
@@ -221,21 +221,20 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
             make.left.equalTo(batteryContainer)
             make.top.equalTo(batteryContainer).offset(10*KFitHeightRate)
         }
-       
+        
+        batteryContainer.addSubview(batteryLbl)
+        batteryLbl.snp_makeConstraints { make in
+            make.centerY.equalTo(statusLbl)
+            make.right.equalTo(batteryContainer)
+            make.bottom.equalTo(batteryContainer).offset(-10*KFitHeightRate)
+        }
+        
         let powerImage = UIImage(named: "pet_home_power")!
         batteryImgView.image = powerImage
         batteryContainer.addSubview(batteryImgView)
         batteryImgView.snp_makeConstraints { make in
-            make.top.equalTo(self.statusLbl.snp_bottom).offset(5*KFitHeightRate)
-            make.left.equalTo(batteryContainer)
-            make.bottom.equalTo(batteryContainer).offset(-10*KFitHeightRate)
-        }
-        
-        batteryContainer.addSubview(batteryLbl)
-        batteryLbl.snp_makeConstraints { make in
-            make.centerY.equalTo(self.batteryImgView)
-            make.left.equalTo(self.batteryImgView.snp_right).offset(5*KFitWidthRate)
-//            make.centerY.equalTo(statusLbl)
+            make.centerY.equalTo(statusLbl)
+            make.right.equalTo(batteryLbl.snp_left).offset(-5*KFitWidthRate)
         }
         
         batteryImgView.addSubview(batteryView)
@@ -308,13 +307,13 @@ class CBPetAvatarPaoView : CBPetBaseView, BMKGeoCodeSearchDelegate {
         var statusTxt : String?
         switch online {
         case "0":
-            statusTxt = "设备状态：".localizedStr + getSimCardTypeStr() + "未连接".localizedStr
+            statusTxt = "设备：".localizedStr + "未连接".localizedStr
             break
         case "1":
-            statusTxt = "设备状态：".localizedStr + getSimCardTypeStr() + "已连接".localizedStr
+            statusTxt = "设备：".localizedStr + "已连接".localizedStr
             break
         default:
-            statusTxt = "设备状态：无".localizedStr
+            statusTxt = "设备：无".localizedStr
         }
         self.statusLbl.text = statusTxt
     }
