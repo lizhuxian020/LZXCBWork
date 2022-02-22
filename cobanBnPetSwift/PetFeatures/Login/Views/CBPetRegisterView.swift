@@ -306,7 +306,7 @@ class CBPetRegisterView: CBPetBaseView {
             return
         }
         guard (self.viewModel as! CBPetLoginViewModel).registerBlock == nil else {
-            (self.viewModel as! CBPetLoginViewModel).registerBlock!(self.inputPhoneView.textTF.text!,self.inputVerificationCodeView.textTF.text!,self.inputFirtPwdView.textTF.text!)
+            (self.viewModel as! CBPetLoginViewModel).registerBlock!(self.inputPhoneView.textTF.text!,self.inputVerificationCodeView.textTF.text!,self.inputFirtPwdView.textTF.text!,(isGoogle() ? "" : self.areaCodeBTF.text!))
             return
         }
     }

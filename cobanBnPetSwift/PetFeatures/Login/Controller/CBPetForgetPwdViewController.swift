@@ -298,7 +298,11 @@ class CBPetForgetPwdViewController: CBPetBaseViewController {
     }
     //MARK: - 重置密码request
     private func retsetPwdRequest() {
-        let paramters:[String:String] = ["account":self.inputPhoneView.textTF.text!,"pwd":CBPetUtils.md5(Str: self.inputFirtPwdView.textTF.text!),"code":self.inputVerificationCodeView.textTF.text!,"crCode":""]
+        var newCode = self.areaCodeBTF.text!
+        if newCode.hasPrefix("+") {
+            newCode = newCode.subString(from: 1)
+        }
+        let paramters:[String:String] = ["account":self.inputPhoneView.textTF.text!,"pwd":CBPetUtils.md5(Str: self.inputFirtPwdView.textTF.text!),"code":self.inputVerificationCodeView.textTF.text!,"crCode":isGoogle() ? "" : newCode]
         CBPetNetworkingManager.share.resetPwdRequest(paramters: paramters, successBlock: { [weak self] (successModel) in
             if let value = self?.view {
                 MBProgressHUD.hide(for: value, animated: true)

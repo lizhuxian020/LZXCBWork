@@ -61,9 +61,9 @@ class CBPetLoginViewController: CBPetBaseViewController {
                 mainViewModel!.getVerificationCodeUpdateViewBlock!(coutDown,isFinished)
             }
             
-            mainViewModel.registerBlock = { [weak self] (_ email:String,_ code:String,_ pwd:String) -> Void in
+            mainViewModel.registerBlock = { [weak self] (_ email:String,_ code:String,_ pwd:String,_ crCode:String) -> Void in
                 CBLog(message: "注册vc:\(333)")
-                self?.registerRequest(email: email, code: code, pwd: pwd)
+                self?.registerRequest(email: email, code: code, pwd: pwd, crCode: crCode)
             }
             
             mainViewModel.loginBlock = { [weak self] (phone:String,pwd:String) -> Void in
@@ -177,10 +177,19 @@ class CBPetLoginViewController: CBPetBaseViewController {
 
     }
     //MARK: - 注册
-    private func registerRequest(email:String,code:String,pwd:String) {
-        let paramters:Dictionary = ["email":email,"pwd":CBPetUtils.md5(Str: pwd),"code":code]//"terminal_type":"0"
+    private func registerRequest(email:String,code:String,pwd:String,crCode:String) {
+        var paramters:Dictionary<String, Any>?
+        if AppDelegate.isShowGoogle() {
+            paramters = ["email":email,"pwd":CBPetUtils.md5(Str: pwd),"code":code]//"terminal_type":"0"
+        } else {
+            var newCode = crCode
+            if newCode.hasPrefix("+") {
+                newCode = newCode.subString(from: 1)
+            }
+            paramters = ["phone":email,"pwd":CBPetUtils.md5(Str: pwd),"code":code,"crCode":newCode]//"terminal_type":"0"
+        }
         MBProgressHUD.showAdded(to: self.view, animated: true)
-        CBPetNetworkingManager.share.registerRequest(paramters: paramters, successBlock: { [weak self] (successModel) in
+        CBPetNetworkingManager.share.registerRequest(paramters: paramters!, successBlock: { [weak self] (successModel) in
             if let value = self?.view {
                 MBProgressHUD.hide(for: value, animated: true)
             }
