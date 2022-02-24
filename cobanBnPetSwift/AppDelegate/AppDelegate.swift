@@ -32,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
     class public func isShowGoogle() -> Bool {
         let userLanguage:[String] = UserDefaults.standard.object(forKey: "AppleLanguages") as! [String]
         var IsShowGoogleMap = true
-        if userLanguage.first?.hasPrefix("zh") == true {
+        if userLanguage.first?.hasPrefix("zh-Hans") == true {
             IsShowGoogleMap = false
         }
         return IsShowGoogleMap

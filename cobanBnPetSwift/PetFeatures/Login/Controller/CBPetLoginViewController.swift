@@ -97,10 +97,16 @@ class CBPetLoginViewController: CBPetBaseViewController {
             }
             /* 返回错误信息*/
             guard successModel.status == "0" else {
-                if successModel.status == "102" {
+                switch successModel.status {
+                case "102":
                     MBProgressHUD.showMessage(Msg: "密码错误".localizedStr, Deleay: 2.0)
-                } else {
+                    break
+                case "101":
+                    MBProgressHUD.showMessage(Msg: "用户名不存在".localizedStr, Deleay: 2.0)
+                    break
+                default:
                     MBProgressHUD.showMessage(Msg: successModel.resmsg ?? "请求超时".localizedStr, Deleay: 2.0)
+                    break
                 }
                 return;
             }
