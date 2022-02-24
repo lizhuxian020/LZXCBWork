@@ -309,12 +309,14 @@ class CBPetForgetPwdViewController: CBPetBaseViewController {
             }
             /* 返回错误信息*/
             guard successModel.status == "0" else {
-                if successModel.status == "104" {
+                switch successModel.status {
+                case "103","104":
                     MBProgressHUD.showMessage(Msg: "验证码错误".localizedStr, Deleay: 2.0)
-                } else{
+                    break
+                default:
                     MBProgressHUD.showMessage(Msg: successModel.resmsg ?? "请求超时".localizedStr, Deleay: 2.0)
                 }
-                return;
+                return
             }
             MBProgressHUD.showMessage(Msg: "重置成功".localizedStr, Deleay: 1.5)
             self!.navigationController?.popViewController(animated: true)

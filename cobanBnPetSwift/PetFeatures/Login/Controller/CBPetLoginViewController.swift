@@ -199,14 +199,17 @@ class CBPetLoginViewController: CBPetBaseViewController {
             }
             /* 返回错误信息*/
             guard successModel.status == "0" else {
-                if successModel.status == "109" {
+                switch successModel.status {
+                case "109":
                     MBProgressHUD.showMessage(Msg: "此账号已被注册".localizedStr, Deleay: 2.0)
-                } else if successModel.status == "104" {
+                    break
+                case "103","104":
                     MBProgressHUD.showMessage(Msg: "验证码错误".localizedStr, Deleay: 2.0)
-                } else {
+                    break
+                default:
                     MBProgressHUD.showMessage(Msg: successModel.resmsg ?? "请求超时".localizedStr, Deleay: 2.0)
                 }
-                return;
+                return
             }
             MBProgressHUD.showMessage(Msg: "注册成功".localizedStr, Deleay: 1.5)
             self?.endCountDownMethod(sender: self?.tempBtn ?? CBPetBaseButton.init())
