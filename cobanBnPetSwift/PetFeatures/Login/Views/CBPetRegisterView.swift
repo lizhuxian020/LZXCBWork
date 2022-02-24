@@ -278,7 +278,11 @@ class CBPetRegisterView: CBPetBaseView {
     //MARK: - 注册
     @objc private func regiseterClick() {
         guard self.inputPhoneView.textTF.text!.isEmpty == false else {
-            MBProgressHUD.showMessage(Msg: "请输入邮箱".localizedStr, Deleay: 1.5)
+            if isGoogle() {
+                MBProgressHUD.showMessage(Msg: "请输入邮箱".localizedStr, Deleay: 1.5)
+            } else {
+                MBProgressHUD.showMessage(Msg: "请输入手机号码".localizedStr, Deleay: 1.5)
+            }
             return
         }
         guard self.inputVerificationCodeView.textTF.text!.isEmpty == false else {

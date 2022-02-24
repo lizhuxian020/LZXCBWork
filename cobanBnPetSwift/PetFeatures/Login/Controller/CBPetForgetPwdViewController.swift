@@ -258,7 +258,11 @@ class CBPetForgetPwdViewController: CBPetBaseViewController {
     //MARK: - 确定重置密码
     @objc private func retsetPwdRequestClick() {
         guard self.inputPhoneView.textTF.text!.isEmpty == false else {
-            MBProgressHUD.showMessage(Msg: "请输入手机号/邮箱".localizedStr, Deleay: 1.5)
+            if isGoogle() {
+                MBProgressHUD.showMessage(Msg: "请输入邮箱".localizedStr, Deleay: 1.5)
+            } else {
+                MBProgressHUD.showMessage(Msg: "请输入手机号码".localizedStr, Deleay: 1.5)
+            }
             return
         }
         guard self.inputVerificationCodeView.textTF.text!.count > 0 else {
