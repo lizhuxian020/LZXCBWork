@@ -97,7 +97,11 @@ class CBPetLoginViewController: CBPetBaseViewController {
             }
             /* 返回错误信息*/
             guard successModel.status == "0" else {
-                MBProgressHUD.showMessage(Msg: successModel.resmsg ?? "请求超时".localizedStr, Deleay: 2.0)
+                if successModel.status == "102" {
+                    MBProgressHUD.showMessage(Msg: "密码错误".localizedStr, Deleay: 2.0)
+                } else {
+                    MBProgressHUD.showMessage(Msg: successModel.resmsg ?? "请求超时".localizedStr, Deleay: 2.0)
+                }
                 return;
             }
             MBProgressHUD.showMessage(Msg: "登录成功".localizedStr, Deleay: 2.0)
@@ -149,7 +153,7 @@ class CBPetLoginViewController: CBPetBaseViewController {
                     MBProgressHUD.showMessage(Msg: successModel.resmsg ?? "请求超时".localizedStr, Deleay: 2.0)
                     return;
                 }
-                MBProgressHUD.showMessage(Msg: "发送成功", Deleay: 1.5)
+                MBProgressHUD.showMessage(Msg: "发送成功".localizedStr, Deleay: 1.5)
                 self!.startCountDownMethod(sender: sender)
             } failureBlock: { [weak self] (failureModel) in
                 if let value = self?.view {
@@ -167,7 +171,7 @@ class CBPetLoginViewController: CBPetBaseViewController {
                 MBProgressHUD.showMessage(Msg: successModel.resmsg ?? "请求超时".localizedStr, Deleay: 2.0)
                 return;
             }
-            MBProgressHUD.showMessage(Msg: "发送成功", Deleay: 1.5)
+            MBProgressHUD.showMessage(Msg: "发送成功".localizedStr, Deleay: 1.5)
             self!.startCountDownMethod(sender: sender)
         } failureBlock: {  [weak self] (failureModel) in
             if let value = self?.view {
@@ -195,7 +199,13 @@ class CBPetLoginViewController: CBPetBaseViewController {
             }
             /* 返回错误信息*/
             guard successModel.status == "0" else {
-                MBProgressHUD.showMessage(Msg: successModel.resmsg ?? "请求超时".localizedStr, Deleay: 2.0)
+                if successModel.status == "109" {
+                    MBProgressHUD.showMessage(Msg: "此账号已被注册".localizedStr, Deleay: 2.0)
+                } else if successModel.status == "104" {
+                    MBProgressHUD.showMessage(Msg: "验证码错误".localizedStr, Deleay: 2.0)
+                } else {
+                    MBProgressHUD.showMessage(Msg: successModel.resmsg ?? "请求超时".localizedStr, Deleay: 2.0)
+                }
                 return;
             }
             MBProgressHUD.showMessage(Msg: "注册成功".localizedStr, Deleay: 1.5)

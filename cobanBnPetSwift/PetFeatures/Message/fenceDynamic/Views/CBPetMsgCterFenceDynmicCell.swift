@@ -128,11 +128,7 @@ class CBPetMsgCterFenceDynmicCell: CBPetBaseTableViewCell,BMKMapViewDelegate,BMK
         self.backgroundColor = KPetBgmColor
         
         /* 判断系统语言展示百度地图或者谷歌地图*/
-        let userLanguage:[String] = UserDefaults.standard.object(forKey: "AppleLanguages") as! [String]
-        AppDelegate.shareInstance.IsShowGoogleMap = false
-        if userLanguage.first?.hasPrefix("en") == true {
-            AppDelegate.shareInstance.IsShowGoogleMap = true
-        }
+        AppDelegate.shareInstance.IsShowGoogleMap = AppDelegate.isShowGoogle()
     
         self.contentView.addSubview(self.timeLb)
         self.contentView.addSubview(self.bgmView)

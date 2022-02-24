@@ -224,7 +224,7 @@ class CBPetForgetPwdViewController: CBPetBaseViewController {
                     MBProgressHUD.showMessage(Msg: successModel.resmsg ?? "请求超时".localizedStr, Deleay: 2.0)
                     return;
                 }
-                MBProgressHUD.showMessage(Msg: "发送成功", Deleay: 1.5)
+                MBProgressHUD.showMessage(Msg: "发送成功".localizedStr, Deleay: 1.5)
                 self!.startCountDownMethod(sender: self!.getVerificationBtn)
             } failureBlock: { [weak self] (failureModel) in
                 if let value = self?.view {
@@ -246,7 +246,7 @@ class CBPetForgetPwdViewController: CBPetBaseViewController {
                     MBProgressHUD.showMessage(Msg: successModel.resmsg ?? "请求超时".localizedStr, Deleay: 2.0)
                     return;
                 }
-                MBProgressHUD.showMessage(Msg: "发送成功", Deleay: 1.5)
+                MBProgressHUD.showMessage(Msg: "发送成功".localizedStr, Deleay: 1.5)
                 self!.startCountDownMethod(sender: self!.getVerificationBtn)
             }) { [weak self] (failureModel) in
                 if let value = self?.view {
@@ -309,10 +309,14 @@ class CBPetForgetPwdViewController: CBPetBaseViewController {
             }
             /* 返回错误信息*/
             guard successModel.status == "0" else {
-                MBProgressHUD.showMessage(Msg: successModel.resmsg ?? "请求超时".localizedStr, Deleay: 2.0)
+                if successModel.status == "104" {
+                    MBProgressHUD.showMessage(Msg: "验证码错误".localizedStr, Deleay: 2.0)
+                } else{
+                    MBProgressHUD.showMessage(Msg: successModel.resmsg ?? "请求超时".localizedStr, Deleay: 2.0)
+                }
                 return;
             }
-            MBProgressHUD.showMessage(Msg: "重置成功", Deleay: 1.5)
+            MBProgressHUD.showMessage(Msg: "重置成功".localizedStr, Deleay: 1.5)
             self!.navigationController?.popViewController(animated: true)
         }) { [weak self] (failureModel) in
             if let value = self?.view {

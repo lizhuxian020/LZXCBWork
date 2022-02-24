@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         return appDelegate
     }()
     /* 全局变量是否展示google地图*/
-    @objc open var IsShowGoogleMap:Bool = false
+    @objc open var IsShowGoogleMap:Bool = true
     @objc open var isShowPlayBackView:Bool = false
     /* 车联网状态栏*/
     @objc open var customizedStatusBar:UIView?
@@ -31,9 +31,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
     
     class public func isShowGoogle() -> Bool {
         let userLanguage:[String] = UserDefaults.standard.object(forKey: "AppleLanguages") as! [String]
-        var IsShowGoogleMap = false
-        if userLanguage.first?.hasPrefix("en") == true {
-            IsShowGoogleMap = true
+        var IsShowGoogleMap = true
+        if userLanguage.first?.hasPrefix("zh") == true {
+            IsShowGoogleMap = false
         }
         return IsShowGoogleMap
     }
@@ -74,11 +74,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         self.window?.makeKeyAndVisible()
         
         /* 判断系统语言展示百度地图或者谷歌地图*/
-        let userLanguage:[String] = UserDefaults.standard.object(forKey: "AppleLanguages") as! [String]
-        IsShowGoogleMap = false
-        if userLanguage.first?.hasPrefix("en") == true {
-            IsShowGoogleMap = true
-        }
+        IsShowGoogleMap = AppDelegate.isShowGoogle()
         
         monitorNotification()
         initConfiguration(launchOptions: launchOptions)
@@ -285,12 +281,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         // 从userDefault中获取到的，返回的是一个数组,表示在当前APP下使用过的。["zh-Hans-CN","en"]
-        let userLanguage:[String] = UserDefaults.standard.object(forKey: "AppleLanguages") as! [String]
-        IsShowGoogleMap = false
-        guard userLanguage.first?.hasPrefix("en") == false else {
-            IsShowGoogleMap = true
-            return
-        }
+        IsShowGoogleMap = AppDelegate.isShowGoogle()
         /* 设置别名*/
         if let model = CBPetLoginModelTool.getUser(),let value = model.uid {
             UMessage.addAlias(value, type: "bnclw_user_id") { (response, error) in

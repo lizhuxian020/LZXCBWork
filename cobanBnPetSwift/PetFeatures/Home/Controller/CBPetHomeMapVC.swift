@@ -77,11 +77,7 @@ class CBPetHomeMapVC: CBPetBaseViewController, BMKMapViewDelegate,BMKGeoCodeSear
         
         self.view.backgroundColor = UIColor.white
         /* 判断系统语言展示百度地图或者谷歌地图*/
-        let userLanguage:[String] = UserDefaults.standard.object(forKey: "AppleLanguages") as! [String]
-        AppDelegate.shareInstance.IsShowGoogleMap = false
-        if userLanguage.first?.hasPrefix("en") == true {
-            AppDelegate.shareInstance.IsShowGoogleMap = true
-        }
+        AppDelegate.shareInstance.IsShowGoogleMap = AppDelegate.isShowGoogle()
         
         self.view.addSubview(self.baiduView)
         self.baiduView.addSubview(self.baiduMapView)

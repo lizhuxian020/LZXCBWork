@@ -142,9 +142,10 @@ extension String {
         return identityCardPredicate.evaluate(with: self)
     }
     func isValidatePhoneNumber() -> Bool {
-        let regex = "^((1[0-9])|(1[0-9])|(1[0-9]))\\d{9}$"
-        let identityCardPredicate = NSPredicate.init(format: "SELF MATCHES %@", regex)
-        return identityCardPredicate.evaluate(with: self)
+//        let regex = "^((1[0-9])|(1[0-9])|(1[0-9]))\\d{9}$"
+//        let identityCardPredicate = NSPredicate.init(format: "SELF MATCHES %@", regex)
+//        return identityCardPredicate.evaluate(with: self)
+        return self.isEmpty == false
     }
 }
 extension Float {
