@@ -10,7 +10,7 @@ import UIKit
 import Foundation
 
 /* host */
-var HOST = "http://www.baanool.net:" //http://192.200.113.170:8765/
+var HOST = "http://47.115.170.183:" //http://192.200.113.170:8765/
 //"http://test.baanool.net:"//
 
 var PORT_login = "8089"  
