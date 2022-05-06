@@ -18,7 +18,7 @@
 //static NSString *baseUrl = @"http://120.76.63.241/BNCLW_Server/";               // 测试环境
 //static NSString *baseUrl = @"http://192.168.1.138:8080/BNCLW_Server";           // 开发环境
 //static NSString *baseUrl = @"http://47.107.57.114:7271/apiServer";              // 线上环境（ip废弃）
-static NSString *baseUrl = @"http://47.115.170.183:7271/apiServer";              // 线上环境(域名)
+static NSString *baseUrl = @"http://www.baanool.net:7271/apiServer";              // 线上环境(域名)
 
 static NSString *requestRounting = @"/api";
 

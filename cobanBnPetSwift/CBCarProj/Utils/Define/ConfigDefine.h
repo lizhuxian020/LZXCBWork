@@ -9,7 +9,7 @@
 #ifndef ConfigDefine_h
 #define ConfigDefine_h
 
-#define BASE_URL_CarNet @"http://47.115.170.183:8089" //@"http://www.baanool.net:8089/BNCLW_Server/"            // 正式环境(域名)
+#define BASE_URL_CarNet @"http://www.baanool.net:8089" //@"http://www.baanool.net:8089/BNCLW_Server/"            // 正式环境(域名)
 //@"http://test.baanool.net:8089"
 
 #endif /* ConfigDefine_h */
