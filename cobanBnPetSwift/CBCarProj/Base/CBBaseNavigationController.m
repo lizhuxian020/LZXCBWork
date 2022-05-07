@@ -27,6 +27,19 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.delegate = self;
+
+    if (@available(iOS 13.0, *)) {
+        UINavigationBarAppearance *app = [UINavigationBarAppearance new];
+        [app configureWithOpaqueBackground];  // 重置背景和阴影颜色
+        [app setTitleTextAttributes:@{
+            NSFontAttributeName: [UIFont systemFontOfSize:18],
+            NSForegroundColorAttributeName: UIColor.whiteColor
+        }];
+        app.backgroundColor = [UIColor colorWithHexString:@"#2E2F41"];
+        [app setShadowColor:UIColor.clearColor];
+        [[UINavigationBar appearance] setScrollEdgeAppearance:app];
+        [[UINavigationBar appearance] setStandardAppearance:app];
+    }
 }
 - (void)dealloc {
     self.navigationController.delegate = nil;
