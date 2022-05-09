@@ -89,7 +89,7 @@
         make.centerY.equalTo(_playBtn);
         make.height.mas_equalTo(15 * KFitHeightRate);
     }];
-    _playLabel = [MINUtils createLabelWithText: @"播放速度" size: 15 * KFitHeightRate alignment: NSTextAlignmentLeft textColor: [UIColor whiteColor ]];
+    _playLabel = [MINUtils createLabelWithText: Localized(@"播放速度") size: 15 * KFitHeightRate alignment: NSTextAlignmentLeft textColor: [UIColor whiteColor ]];
     //_playLabel.backgroundColor = [UIColor redColor];
     [self addSubview: _playLabel];
     [_playLabel mas_makeConstraints:^(MASConstraintMaker *make) {

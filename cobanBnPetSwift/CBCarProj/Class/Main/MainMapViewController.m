@@ -149,6 +149,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [self showMyLocation];
     // 开启定时器，每20s刷新，各设备详情
     [self startTimer];
+    [AppDelegate isShowGoogle];
 }
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear: animated];

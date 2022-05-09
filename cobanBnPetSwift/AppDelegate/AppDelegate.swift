@@ -29,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
     /* 角标*/
     var badgeNumber:NSInteger = 0
     
-    class public func isShowGoogle() -> Bool {
+    @objc class public func isShowGoogle() -> Bool {
         let userLanguage:[String] = UserDefaults.standard.object(forKey: "AppleLanguages") as! [String]
         var IsShowGoogleMap = true
         if userLanguage.first?.hasPrefix("zh-Hans") == true {
