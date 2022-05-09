@@ -80,8 +80,8 @@
 - (void)initBarWithTitle:(NSString *)title isBack:(BOOL)isBack
 {
 //    self.navigationController.navigationBar.barTintColor = KWtBlueColor;
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-    [self.navigationController.navigationBar setBackgroundImage: [UIImage imageNamed: @"tabbar"] forBarMetrics: UIBarMetricsDefault];
+//    self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
+//    [self.navigationController.navigationBar setBackgroundImage: [UIImage imageNamed: @"tabbar"] forBarMetrics: UIBarMetricsDefault];
     self.title = title;
     if (isBack == YES) {
         UIImage *backImage = [UIImage imageNamed: @"小箭头左边返回"];

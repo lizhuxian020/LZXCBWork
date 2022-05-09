@@ -102,8 +102,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         // 跳转到登陆页面
         let nav = CBPetBaseNavigationViewController.init(rootViewController: loginVC)
         self.window?.rootViewController = nav
+        
+        AppDelegate.setNavigationBGColor();
+        
         return true
     }
+    
+    @objc class func setNavigationBGColor() {
+        if #available(iOS 13.0, *) {
+             let app = UINavigationBarAppearance()
+             app.configureWithOpaqueBackground()  // 重置背景和阴影颜色
+             app.titleTextAttributes = [
+                   NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18),
+                   NSAttributedString.Key.foregroundColor: UIColor.white
+             ]
+            app.backgroundColor = UIColor.init().colorWithHexString(hexString: "#2E2F41")  // 设置导航栏背景色
+             app.shadowColor = .clear
+             UINavigationBar.appearance().scrollEdgeAppearance = app  // 带scroll滑动的页面
+             UINavigationBar.appearance().standardAppearance = app // 常规页面。描述导航栏以标准高度
+        } else {
+            UINavigationBar.appearance().barTintColor = UIColor.init().colorWithHexString(hexString: "#2E2F41")
+            UINavigationBar.appearance().isTranslucent = true
+            UINavigationBar.appearance().titleTextAttributes = [
+                NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18),
+                NSAttributedString.Key.foregroundColor: UIColor.white
+          ]
+        }
+        UIApplication.shared.statusBarStyle = .lightContent;
+    }
+    
     func initConfiguration(launchOptions:[UIApplication.LaunchOptionsKey: Any]?) {
         /* 百度*/
         let baiduManager = BMKMapManager.init()
@@ -232,7 +259,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
     // MARK: -- 进入车联网主页面
     @objc func switchCarNetMainViewController() {
         self.window?.rootViewController = self.carHomeVC
-        self.customizedStatusBar?.backgroundColor = UIColor.black
+//        self.customizedStatusBar?.backgroundColor = UIColor.black
     }
     // MARK: -- 切换到登录页面
     @objc func switchToLoginView() {

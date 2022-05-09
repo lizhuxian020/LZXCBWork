@@ -7,6 +7,7 @@
 //
 
 #import "CBWtBaseNavigationController.h"
+#import "cobanBnPetSwift-Swift.h"
 
 @interface CBWtBaseNavigationController ()<UINavigationControllerDelegate>
 
@@ -27,6 +28,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.delegate = self;
+    
+    [AppDelegate setNavigationBGColor];
 }
 - (void)dealloc {
     self.navigationController.delegate = nil;

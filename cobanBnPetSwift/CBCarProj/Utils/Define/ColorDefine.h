@@ -16,7 +16,8 @@
 //vc背景色
 #define kViewVCBackgroundColor [UIColor whiteColor]
 //导航栏颜色
-#define kNavBarBgColor [UIColor colorWithHexString:@"494949"]//RGB(26, 151, 251)//[UIColor whiteColor]
+//#define kNavBarBgColor [UIColor colorWithHexString:@"494949"]//RGB(26, 151, 251)//[UIColor whiteColor]
+#define kNavBarBgColor [UIColor colorWithHexString:@"2E2F41"]
 //主色调
 #define kAppMainColor RGB(26, 151, 251)//kRGB(28.0,150.0,242.0)
 //棕色

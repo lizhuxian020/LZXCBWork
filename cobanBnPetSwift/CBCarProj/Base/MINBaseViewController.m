@@ -24,7 +24,7 @@
         self.navigationController.interactivePopGestureRecognizer.delegate = self;
     }
     
-    [AppDelegate shareInstance].customizedStatusBar.backgroundColor = [UIColor blackColor];
+//    [AppDelegate shareInstance].customizedStatusBar.backgroundColor = [UIColor blackColor];
 }
 - (void)dealloc {
     self.navigationController.interactivePopGestureRecognizer.delegate = nil;
@@ -56,14 +56,14 @@
              //获取keyWindow
              UIWindow *keyWindow = [self getKeyWindow];
              [AppDelegate shareInstance].customizedStatusBar = [[UIView alloc] initWithFrame:keyWindow.windowScene.statusBarManager.statusBarFrame];
-             [AppDelegate shareInstance].customizedStatusBar.backgroundColor = [UIColor blackColor];
+//             [AppDelegate shareInstance].customizedStatusBar.backgroundColor = [UIColor blackColor];
              [keyWindow addSubview:[AppDelegate shareInstance].customizedStatusBar];
          }
-        [AppDelegate shareInstance].customizedStatusBar.backgroundColor = [UIColor blackColor];
+//        [AppDelegate shareInstance].customizedStatusBar.backgroundColor = [UIColor blackColor];
      } else {
          [AppDelegate shareInstance].customizedStatusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
          if ([[AppDelegate shareInstance].customizedStatusBar respondsToSelector:@selector(setBackgroundColor:)]) {
-             [AppDelegate shareInstance].customizedStatusBar.backgroundColor = [UIColor blackColor];
+//             [AppDelegate shareInstance].customizedStatusBar.backgroundColor = [UIColor blackColor];
          }
     }
 }
