@@ -753,9 +753,9 @@ class CBPetHomeViewController: CBPetHomeMapVC, CBPetWakeUpPopViewDelegate {
             }
             break
         case "定位".localizedStr:
-            if self.isOverTime(min: 3) == false {
-                return
-            }
+//            if self.isOverTime(min: 3) == false {
+//                return
+//            }
             self.homeViewModel.singleLocateCommandRequest()
             break
         case "微聊".localizedStr:
