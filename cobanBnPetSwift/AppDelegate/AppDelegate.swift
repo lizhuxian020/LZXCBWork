@@ -22,7 +22,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         return appDelegate
     }()
     /* 全局变量是否展示google地图*/
-    @objc open var IsShowGoogleMap:Bool = true
+    @objc open var IsShowGoogleMap:Bool = true {
+        didSet {
+            print(IsShowGoogleMap)
+        }
+    }
     @objc open var isShowPlayBackView:Bool = false
     /* 车联网状态栏*/
     @objc open var customizedStatusBar:UIView?

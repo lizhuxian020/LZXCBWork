@@ -325,12 +325,22 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     return _switchMapType;
 }
 - (void)switchMap:(UIButton *)sender {
-    if (_googleMapView.mapType == kGMSTypeHybrid) {
-        [_switchMapType setImage:[UIImage imageNamed:@"car_map_statellite_11"]forState:UIControlStateNormal];
-        _googleMapView.mapType = kGMSTypeNormal;
+    if ([AppDelegate shareInstance].IsShowGoogleMap) {
+        if (_googleMapView.mapType == kGMSTypeHybrid) {
+            [_switchMapType setImage:[UIImage imageNamed:@"car_map_statellite_11"]forState:UIControlStateNormal];
+            _googleMapView.mapType = kGMSTypeNormal;
+        } else {
+            [_switchMapType setImage:[UIImage imageNamed:@"car_map_normal_11"]forState:UIControlStateNormal];
+            _googleMapView.mapType = kGMSTypeHybrid;
+        }
     } else {
-        [_switchMapType setImage:[UIImage imageNamed:@"car_map_normal_11"]forState:UIControlStateNormal];
-        _googleMapView.mapType = kGMSTypeHybrid;
+        if (_baiduMapView.mapType == BMKMapTypeSatellite) {
+            [_switchMapType setImage:[UIImage imageNamed:@"car_map_statellite_11"]forState:UIControlStateNormal];
+            [_baiduMapView setMapType:BMKMapTypeStandard];
+        } else {
+            [_switchMapType setImage:[UIImage imageNamed:@"car_map_normal_11"]forState:UIControlStateNormal];
+            [_baiduMapView setMapType:BMKMapTypeSatellite];
+        }
     }
 }
 - (void)showSelectDevice:(CBHomeLeftMenuDeviceInfoModel *)deviceInfoModel {
@@ -1751,7 +1761,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     NSLog(@"latitude = %f, longitude = %f dd%@", curCoordinate2D.latitude, curCoordinate2D.longitude,[AppDelegate shareInstance].IsShowGoogleMap?@"yes":@"no");
 
     /* 确定当前地区是国内还是国外后，选择使用地图的类型 */
-    [AppDelegate shareInstance].IsShowGoogleMap = ![CBCommonTools checkIsChina:CLLocationCoordinate2DMake(curCoordinate2D.latitude,curCoordinate2D.longitude)];
+//    [AppDelegate shareInstance].IsShowGoogleMap = ![CBCommonTools checkIsChina:CLLocationCoordinate2DMake(curCoordinate2D.latitude,curCoordinate2D.longitude)];
     
     [self baiduMap];
     [self googleMap];
