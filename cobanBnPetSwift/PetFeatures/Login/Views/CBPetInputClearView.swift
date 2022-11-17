@@ -32,7 +32,6 @@ class CBPetInputClaerView: UIView {
     
     lazy var textTF:UITextField = {
         let tf = UITextField(textColor: KPetTextColor, font: UIFont.init(name: CBPingFangSC_Regular, size: 14*KFitHeightRate)!, placeholder: "", placeholderColor: KPetPlaceholdColor, placeholderFont: UIFont.init(name: CBPingFangSC_Regular, size: 14*KFitHeightRate)!)
-        tf.placeholder = "哈哈哈"
         self.contentView.addSubview(tf)
         return tf
     }()
@@ -116,7 +115,7 @@ class CBPetInputClaerView: UIView {
     }
     
     private func setupClearBtn() {
-        self.clearBtn.backgroundColor = UIColor.red
+        self.clearBtn.backgroundColor = UIColor.white
         self.clearBtn.snp_makeConstraints { make in
             make.right.equalTo(-10*KFitWidthRate)
             make.centerY.equalTo(self.contentView)

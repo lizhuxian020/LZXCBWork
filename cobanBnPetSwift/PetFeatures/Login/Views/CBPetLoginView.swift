@@ -30,44 +30,49 @@ class CBPetLoginView: CBPetBaseView {
         self.bgmView.addSubview(lbl)
         return lbl
     }()
-    public lazy var inputPhoneView:CBPetTFInputView = {
-        let inputView = CBPetTFInputView.init()
-        if isGoogle() {
-            inputView.setInputView(title: "邮箱".localizedStr, placeholdStr: "请输入邮箱".localizedStr)
-        } else {
-            inputView.setInputView(title: "手机号码".localizedStr, placeholdStr: "请输入手机号码".localizedStr)
-        }
-        inputView.textTF.addChangeTextTarget()
-        inputView.textTF.maxTextNumber = 50
-        self.bgmView.addSubview(inputView)
-        return inputView
-    }()
-    private lazy var areaCodeBTF:UITextField = {
-        let tf = UITextField(text: "+86", textColor: KPetAppColor, font: UIFont.init(name: CBPingFangSC_Regular, size: 14*KFitHeightRate)!, placeholder: "请输入国家码".localizedStr)
-        tf.textAlignment = .right
-        tf.keyboardType = .numberPad
-        self.bgmView.addSubview(tf)
-        tf.isHidden = isGoogle()
-        return tf
-    }()
-    private lazy var inputPwdView:CBPetTFInputView = {
-        let inputView = CBPetTFInputView.init()
-        inputView.setInputView(title: "密码".localizedStr, placeholdStr: "请输入登录密码".localizedStr)
-        inputView.textTF.maxTextNumber = 25
-        //inputView.textTF.maxTextNumber = 3
-        inputView.textTF.addChangeTextTarget()
-        self.bgmView.addSubview(inputView)
-        return inputView
-    }()
-    private lazy var showPwdBtn:CBPetBaseButton = {
-        let btn = CBPetBaseButton(title: "", titleColor: KPetAppColor, font: UIFont.init(name: CBPingFangSC_Regular, size: 14*KFitHeightRate)!, imageName: "pet_login_showPwd")
-        btn.setImage(UIImage.init(named: "pet_login_hidePwd"), for: .selected)
-        self.inputPwdView.addSubview(btn)
-        btn.adjustsImageWhenHighlighted = false
-        return btn
-    }()
+//    public lazy var inputPhoneView:CBPetTFInputView = {
+//        let inputView = CBPetTFInputView.init()
+//        if isGoogle() {
+//            inputView.setInputView(title: "邮箱".localizedStr, placeholdStr: "请输入邮箱".localizedStr)
+//        } else {
+//            inputView.setInputView(title: "手机号码".localizedStr, placeholdStr: "请输入手机号码".localizedStr)
+//        }
+//        inputView.textTF.addChangeTextTarget()
+//        inputView.textTF.maxTextNumber = 50
+//        self.bgmView.addSubview(inputView)
+//        return inputView
+//    }()
+//    private lazy var areaCodeBTF:UITextField = {
+//        let tf = UITextField(text: "+86", textColor: KPetAppColor, font: UIFont.init(name: CBPingFangSC_Regular, size: 14*KFitHeightRate)!, placeholder: "请输入国家码".localizedStr)
+//        tf.textAlignment = .right
+//        tf.keyboardType = .numberPad
+//        self.bgmView.addSubview(tf)
+//        tf.isHidden = isGoogle()
+//        return tf
+//    }()
+//    private lazy var inputPwdView:CBPetTFInputView = {
+//        let inputView = CBPetTFInputView.init()
+//        inputView.setInputView(title: "密码".localizedStr, placeholdStr: "请输入登录密码".localizedStr)
+//        inputView.textTF.maxTextNumber = 25
+//        //inputView.textTF.maxTextNumber = 3
+//        inputView.textTF.addChangeTextTarget()
+//        self.bgmView.addSubview(inputView)
+//        return inputView
+//    }()
+//    private lazy var showPwdBtn:CBPetBaseButton = {
+//        let btn = CBPetBaseButton(title: "", titleColor: KPetAppColor, font: UIFont.init(name: CBPingFangSC_Regular, size: 14*KFitHeightRate)!, imageName: "pet_login_showPwd")
+//        btn.setImage(UIImage.init(named: "pet_login_hidePwd"), for: .selected)
+//        self.inputPwdView.addSubview(btn)
+//        btn.adjustsImageWhenHighlighted = false
+//        return btn
+//    }()
     private lazy var phoneEmailView:CBPetInputClaerView = {
         let v = CBPetInputClaerView.init(rightText: nil,clickBlk: nil)
+        if isGoogle() {
+            v.setInputView(placeholder: "请输入邮箱".localizedStr)
+        } else {
+            v.setInputView(placeholder: "请输入手机号码".localizedStr)
+        }
         self.bgmView.addSubview(v)
         return v
     }()
@@ -75,6 +80,7 @@ class CBPetLoginView: CBPetBaseView {
         let v = CBPetInputClaerView.init(rightText: "忘记密码".localizedStr) {
             print("clickforget")
         }
+        v.setInputView(placeholder: "请输入登录密码".localizedStr)
         self.bgmView.addSubview(v)
         return v
     }()
@@ -87,12 +93,12 @@ class CBPetLoginView: CBPetBaseView {
         self.bgmView.addSubview(v)
         return v
     }()
-    private lazy var forgetPwdBtn:UIButton = {
-        let btn = UIButton(title: "忘记密码?".localizedStr, titleColor: KPetAppColor, font: UIFont.init(name: CBPingFangSC_Regular, size: 12*KFitHeightRate)!)
-        self.bgmView.addSubview(btn)
-        btn.adjustsImageWhenHighlighted = false
-        return btn
-    }()
+//    private lazy var forgetPwdBtn:UIButton = {
+//        let btn = UIButton(title: "忘记密码?".localizedStr, titleColor: KPetAppColor, font: UIFont.init(name: CBPingFangSC_Regular, size: 12*KFitHeightRate)!)
+//        self.bgmView.addSubview(btn)
+//        btn.adjustsImageWhenHighlighted = false
+//        return btn
+//    }()
     private lazy var loginBtn:CBPetBaseButton = {
         let btn = CBPetBaseButton(title: "登录".localizedStr, titleColor: UIColor.white, font: kLoginBtnFont)
         btn.setShadow(backgroundColor: KPetAppColor, cornerRadius: 20*KFitHeightRate, shadowColor: KPetAppColor, shadowOpacity: 0.35, shadowOffset: CGSize(width: 4, height: 0), shadowRadius: 8)
@@ -124,9 +130,6 @@ class CBPetLoginView: CBPetBaseView {
     override func setupViewModel(viewModel: Any) {
         self.viewModel = viewModel
     }
-    override func layoutSubviews() {
-        super.layoutSubviews()
-    }
     private func setupView() {
         self.bgmView.snp_makeConstraints { (make) in
             make.edges.equalTo(0)
@@ -142,44 +145,44 @@ class CBPetLoginView: CBPetBaseView {
             make.top.equalTo(self.titleLbl.snp_bottom).offset(kLoginAppNameMarginTop)
         }
         
-        self.inputPhoneView.snp_makeConstraints { (make) in
-            make.left.equalTo(kLoginContentHorizontalMargin)
-            make.right.equalTo((-kLoginContentHorizontalMargin))
-            make.height.equalTo(50*KFitHeightRate)
-            make.top.equalTo(self.appNameLbl.snp_bottom).offset(kLoginInputAreaMarginTop)
-        }
-        self.areaCodeBTF.snp_makeConstraints { (make) in
-            make.right.equalTo(self.inputPhoneView.snp_right).offset(0)
-            make.centerY.equalTo(self.inputPhoneView.textTF.snp_centerY)
-        }
-        if CBPetLoginModelTool.getUser()?.email?.isValidateEmail() == true {
-            self.inputPhoneView.textTF.text = CBPetLoginModelTool.getUser()?.email
-        } else {
-            self.inputPhoneView.textTF.text = ""
-        }
-        self.inputPwdView.snp_makeConstraints { (make) in
-            make.left.equalTo(kLoginContentHorizontalMargin)
-            make.right.equalTo((-kLoginContentHorizontalMargin))
-            make.height.equalTo(50*KFitHeightRate)
-            make.top.equalTo(self.inputPhoneView.snp_bottom).offset(kLoginInputSpaceBetween)
-        }
-        self.showPwdBtn.snp_makeConstraints { (make) in
-            make.right.equalTo(self.inputPwdView.snp_right).offset(0)
-            make.centerY.equalTo(self.inputPwdView.textTF.snp_centerY)
-        }
-        self.showPwdBtn.addTarget(self, action: #selector(hideOrShowPwdClick), for: .touchUpInside)
-        self.forgetPwdBtn.snp_makeConstraints { (make) in
-            make.left.equalTo(40*KFitWidthRate)
-            make.height.equalTo(15*KFitHeightRate)
-            make.top.equalTo(self.inputPwdView.snp_bottom).offset(12*KFitHeightRate)
-        }
-        self.forgetPwdBtn.addTarget(self, action: #selector(forgetPwdClick), for: .touchUpInside)
+//        self.inputPhoneView.snp_makeConstraints { (make) in
+//            make.left.equalTo(kLoginContentHorizontalMargin)
+//            make.right.equalTo((-kLoginContentHorizontalMargin))
+//            make.height.equalTo(50*KFitHeightRate)
+//            make.top.equalTo(self.appNameLbl.snp_bottom).offset(kLoginInputAreaMarginTop)
+//        }
+//        self.areaCodeBTF.snp_makeConstraints { (make) in
+//            make.right.equalTo(self.inputPhoneView.snp_right).offset(0)
+//            make.centerY.equalTo(self.inputPhoneView.textTF.snp_centerY)
+//        }
+//        if CBPetLoginModelTool.getUser()?.email?.isValidateEmail() == true {
+//            self.inputPhoneView.textTF.text = CBPetLoginModelTool.getUser()?.email
+//        } else {
+//            self.inputPhoneView.textTF.text = ""
+//        }
+//        self.inputPwdView.snp_makeConstraints { (make) in
+//            make.left.equalTo(kLoginContentHorizontalMargin)
+//            make.right.equalTo((-kLoginContentHorizontalMargin))
+//            make.height.equalTo(50*KFitHeightRate)
+//            make.top.equalTo(self.inputPhoneView.snp_bottom).offset(kLoginInputSpaceBetween)
+//        }
+//        self.showPwdBtn.snp_makeConstraints { (make) in
+//            make.right.equalTo(self.inputPwdView.snp_right).offset(0)
+//            make.centerY.equalTo(self.inputPwdView.textTF.snp_centerY)
+//        }
+//        self.showPwdBtn.addTarget(self, action: #selector(hideOrShowPwdClick), for: .touchUpInside)
+//        self.forgetPwdBtn.snp_makeConstraints { (make) in
+//            make.left.equalTo(40*KFitWidthRate)
+//            make.height.equalTo(15*KFitHeightRate)
+//            make.top.equalTo(self.inputPwdView.snp_bottom).offset(12*KFitHeightRate)
+//        }
+//        self.forgetPwdBtn.addTarget(self, action: #selector(forgetPwdClick), for: .touchUpInside)
         
         
         self.phoneEmailView.snp_makeConstraints { make in
             make.left.equalTo(kLoginContentHorizontalMargin)
             make.right.equalTo((-kLoginContentHorizontalMargin))
-            make.top.equalTo(self.forgetPwdBtn.snp_bottom).offset(kLoginInputSpaceBetween)
+            make.top.equalTo(self.appNameLbl.snp_bottom).offset(kLoginInputAreaMarginTop)
         }
         
         self.pwdView.snp_makeConstraints { make in
@@ -225,11 +228,11 @@ class CBPetLoginView: CBPetBaseView {
             return
         }
     }
-    //MARK: - 是否隐藏密码
-    @objc private func hideOrShowPwdClick(sender:UIButton) {
-        sender.isSelected = !sender.isSelected
-        self.inputPwdView.textTF.isSecureTextEntry = sender.isSelected
-    }
+//    //MARK: - 是否隐藏密码
+//    @objc private func hideOrShowPwdClick(sender:UIButton) {
+//        sender.isSelected = !sender.isSelected
+//        self.inputPwdView.textTF.isSecureTextEntry = sender.isSelected
+//    }
 //    //MARK: - 验证码、密码登录切换
 //    @objc private func pwdOrVerificationLoginClick(sender:CBPetBaseButton) {
 //        sender.isSelected = !sender.isSelected
@@ -251,18 +254,20 @@ class CBPetLoginView: CBPetBaseView {
 //    }
     //MARK: - 登录
     @objc private func loginClick(sender:CBPetBaseButton) {
-        guard self.inputPhoneView.textTF.text!.isEmpty == false else {
-            MBProgressHUD.showMessage(Msg: "请输入账号".localizedStr, Deleay: 1.5)
-            return
-        }
-        guard self.inputPwdView.textTF.text!.isEmpty == false else {
-            MBProgressHUD.showMessage(Msg: "请输入登录密码".localizedStr, Deleay: 1.5)
-            return
-        }
-        guard (self.viewModel as! CBPetLoginViewModel).loginBlock == nil else {
-            (self.viewModel as! CBPetLoginViewModel).loginBlock!(self.inputPhoneView.textTF.text!,self.inputPwdView.textTF.text!)
-            return
-        }
+        
+        //TODO: LZXTODO
+//        guard self.inputPhoneView.textTF.text!.isEmpty == false else {
+//            MBProgressHUD.showMessage(Msg: "请输入账号".localizedStr, Deleay: 1.5)
+//            return
+//        }
+//        guard self.inputPwdView.textTF.text!.isEmpty == false else {
+//            MBProgressHUD.showMessage(Msg: "请输入登录密码".localizedStr, Deleay: 1.5)
+//            return
+//        }
+//        guard (self.viewModel as! CBPetLoginViewModel).loginBlock == nil else {
+//            (self.viewModel as! CBPetLoginViewModel).loginBlock!(self.inputPhoneView.textTF.text!,self.inputPwdView.textTF.text!)
+//            return
+//        }
         
     }
     

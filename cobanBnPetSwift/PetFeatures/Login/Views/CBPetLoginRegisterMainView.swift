@@ -65,15 +65,16 @@ class CBPetLoginRegisterMainView: CBPetBaseView {
         /* 判断传过来的viewModel类 是否 为 vc传过来的viewModel类*/
         if self.viewModel is CBPetLoginViewModel {
             ///注册成功后 切换至登录页面
-            (self.viewModel as! CBPetLoginViewModel).registerUpdateViewBlock = { [weak self] (phone:String) -> Void in
-                self?.switchClick(sender: self!.loginBtnClick)
-                self?.loginView.inputPhoneView.textTF.text = phone
-                /* 重置注册页面数据*/
-                self?.registerView.inputPhoneView.textTF.text = ""
-                self?.registerView.inputVerificationCodeView.textTF.text = ""
-                self?.registerView.inputFirtPwdView.textTF.text = ""
-                self?.registerView.inputSecondPwdView.textTF.text = ""
-            }
+            ///TODO: LZXTODO
+//            (self.viewModel as! CBPetLoginViewModel).registerUpdateViewBlock = { [weak self] (phone:String) -> Void in
+//                self?.switchClick(sender: self!.loginBtnClick)
+//                self?.loginView.inputPhoneView.textTF.text = phone
+//                /* 重置注册页面数据*/
+//                self?.registerView.inputPhoneView.textTF.text = ""
+//                self?.registerView.inputVerificationCodeView.textTF.text = ""
+//                self?.registerView.inputFirtPwdView.textTF.text = ""
+//                self?.registerView.inputSecondPwdView.textTF.text = ""
+//            }
             
             (self.viewModel as! CBPetLoginViewModel).showResgiterBlock = { [weak self] () in
                 self?.loginView.isHidden = true

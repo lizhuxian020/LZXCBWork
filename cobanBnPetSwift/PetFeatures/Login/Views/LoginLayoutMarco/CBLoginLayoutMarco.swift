@@ -10,7 +10,7 @@ import UIKit
 
 //登录页面的UI布局参数
 
-let kLoginContentHorizontalMargin = 40*KFitWidthRate
+let kLoginContentHorizontalMargin = 15*KFitWidthRate
 let kLoginTitleMarginTop = 60*KFitWidthRate
 let kLoginAppNameMarginTop = 10*KFitWidthRate
 let kLoginInputAreaMarginTop = 20*KFitWidthRate
