@@ -16,9 +16,19 @@ class CBPetLoginView: CBPetBaseView {
     
     private lazy var bgmView:UIView = {
         let bgmView = UIView.init()
-        bgmView.backgroundColor = UIColor.white
+        bgmView.backgroundColor = UIColor.clear
         self.addSubview(bgmView)
         return bgmView
+    }()
+    private lazy var titleLbl:UILabel = {
+        let lbl = UILabel(text: "欢迎登录".localizedStr, textColor: UIColor.white, font: kLoginTitleFont)
+        self.bgmView.addSubview(lbl)
+        return lbl
+    }()
+    private lazy var appNameLbl:UILabel = {
+        let lbl = UILabel(text: "巴诺物联网".localizedStr, textColor: KPetAppColor, font: kLoginAppNameFont)
+        self.bgmView.addSubview(lbl)
+        return lbl
     }()
     public lazy var inputPhoneView:CBPetTFInputView = {
         let inputView = CBPetTFInputView.init()
@@ -63,19 +73,26 @@ class CBPetLoginView: CBPetBaseView {
         return btn
     }()
     private lazy var loginBtn:CBPetBaseButton = {
-        let btn = CBPetBaseButton(title: "登录".localizedStr, titleColor: UIColor.white, font: UIFont.init(name: CBPingFangSC_Regular, size: 16*KFitHeightRate)!)
+        let btn = CBPetBaseButton(title: "登录".localizedStr, titleColor: UIColor.white, font: kLoginBtnFont)
         btn.setShadow(backgroundColor: KPetAppColor, cornerRadius: 20*KFitHeightRate, shadowColor: KPetAppColor, shadowOpacity: 0.35, shadowOffset: CGSize(width: 4, height: 0), shadowRadius: 8)
         self.bgmView.addSubview(btn)
         btn.adjustsImageWhenHighlighted = false
         return btn
     }()
-    private lazy var verificationCodeLgoinBtn:CBPetBaseButton = {
-        let btn = CBPetBaseButton(title: "验证码登录".localizedStr, titleColor: KPetAppColor, font: UIFont.init(name: CBPingFangSC_Regular, size: 16*KFitHeightRate)!, borderWidth: 0.5, borderColor: KPetAppColor, cornerRadius: 20*KFitHeightRate)
-        btn.setTitle("登录密码登录".localizedStr, for: .selected)
+    private lazy var registerBtn:CBPetBaseButton = {
+        let btn = CBPetBaseButton(title: "注册".localizedStr, titleColor: UIColor.black, font: kLoginBtnFont)
+        btn.setShadow(backgroundColor: UIColor.white, cornerRadius: 20*KFitHeightRate, shadowColor: KPetAppColor, shadowOpacity: 0.35, shadowOffset: CGSize(width: 4, height: 0), shadowRadius: 8)
         self.bgmView.addSubview(btn)
         btn.adjustsImageWhenHighlighted = false
         return btn
     }()
+//    private lazy var verificationCodeLgoinBtn:CBPetBaseButton = {
+//        let btn = CBPetBaseButton(title: "验证码登录".localizedStr, titleColor: KPetAppColor, font: UIFont.init(name: CBPingFangSC_Regular, size: 16*KFitHeightRate)!, borderWidth: 0.5, borderColor: KPetAppColor, cornerRadius: 20*KFitHeightRate)
+//        btn.setTitle("登录密码登录".localizedStr, for: .selected)
+//        self.bgmView.addSubview(btn)
+//        btn.adjustsImageWhenHighlighted = false
+//        return btn
+//    }()
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -94,11 +111,21 @@ class CBPetLoginView: CBPetBaseView {
             make.edges.equalTo(0)
         }
         
+        self.titleLbl.snp_makeConstraints { make in
+            make.left.equalTo(kLoginContentHorizontalMargin)
+            make.top.equalTo(self.bgmView.snp_top).offset(kLoginTitleMarginTop)
+        }
+        
+        self.appNameLbl.snp_makeConstraints { make in
+            make.left.equalTo(kLoginContentHorizontalMargin)
+            make.top.equalTo(self.titleLbl.snp_bottom).offset(kLoginAppNameMarginTop)
+        }
+        
         self.inputPhoneView.snp_makeConstraints { (make) in
-            make.left.equalTo(40*KFitWidthRate)
-            make.right.equalTo((-40*KFitWidthRate))
+            make.left.equalTo(kLoginContentHorizontalMargin)
+            make.right.equalTo((-kLoginContentHorizontalMargin))
             make.height.equalTo(50*KFitHeightRate)
-            make.top.equalTo(self.bgmView.snp_top).offset(60*KFitHeightRate)
+            make.top.equalTo(self.appNameLbl.snp_bottom).offset(kLoginInputAreaMarginTop)
         }
         self.areaCodeBTF.snp_makeConstraints { (make) in
             make.right.equalTo(self.inputPhoneView.snp_right).offset(0)
@@ -110,10 +137,10 @@ class CBPetLoginView: CBPetBaseView {
             self.inputPhoneView.textTF.text = ""
         }
         self.inputPwdView.snp_makeConstraints { (make) in
-            make.left.equalTo(40*KFitWidthRate)
-            make.right.equalTo((-40*KFitWidthRate))
+            make.left.equalTo(kLoginContentHorizontalMargin)
+            make.right.equalTo((-kLoginContentHorizontalMargin))
             make.height.equalTo(50*KFitHeightRate)
-            make.top.equalTo(self.inputPhoneView.snp_bottom).offset(24*KFitHeightRate)
+            make.top.equalTo(self.inputPhoneView.snp_bottom).offset(kLoginInputSpaceBetween)
         }
         self.showPwdBtn.snp_makeConstraints { (make) in
             make.right.equalTo(self.inputPwdView.snp_right).offset(0)
@@ -127,13 +154,21 @@ class CBPetLoginView: CBPetBaseView {
         }
         self.forgetPwdBtn.addTarget(self, action: #selector(forgetPwdClick), for: .touchUpInside)
         self.loginBtn.snp_makeConstraints { (make) in
-            make.left.equalTo(40*KFitWidthRate)
-            make.right.equalTo((-40*KFitWidthRate))
+            make.left.equalTo(kLoginContentHorizontalMargin)
+            make.right.equalTo((-kLoginContentHorizontalMargin))
             make.height.equalTo(40*KFitHeightRate)
-            make.top.equalTo(self.forgetPwdBtn.snp_bottom).offset(44*KFitHeightRate)
+            make.top.equalTo(self.forgetPwdBtn.snp_bottom).offset(kLoginBtnAreaMarginTop)
         }
         
         self.loginBtn.addTarget(self, action: #selector(loginClick), for: .touchUpInside)
+        
+        self.registerBtn.snp_makeConstraints { make in
+            make.left.equalTo(kLoginContentHorizontalMargin)
+            make.right.equalTo((-kLoginContentHorizontalMargin))
+            make.height.equalTo(40*KFitHeightRate)
+            make.top.equalTo(self.loginBtn.snp_bottom).offset(kLoginBtnSpaceBetween)
+        }
+        self.registerBtn.addTarget(self, action: #selector(registerClick), for: .touchUpInside)
 //        self.verificationCodeLgoinBtn.snp_makeConstraints { (make) in
 //            make.left.equalTo(40*KFitWidthRate)
 //            make.right.equalTo((-40*KFitWidthRate))
@@ -154,25 +189,25 @@ class CBPetLoginView: CBPetBaseView {
         sender.isSelected = !sender.isSelected
         self.inputPwdView.textTF.isSecureTextEntry = sender.isSelected
     }
-    //MARK: - 验证码、密码登录切换
-    @objc private func pwdOrVerificationLoginClick(sender:CBPetBaseButton) {
-        sender.isSelected = !sender.isSelected
-        guard sender.isSelected else {
-            // 密码登录界面
-            self.inputPwdView.titleLb.text = "登录密码".localizedStr
-            self.inputPwdView.textTF.placeholder = "请输入登录密码".localizedStr
-            self.showPwdBtn.setImage(UIImage.init(named: "pet_login_showPwd"), for: .normal)
-            self.showPwdBtn.setImage(UIImage.init(named: "pet_login_hidePwd"), for: .selected)
-            self.showPwdBtn.setTitle("", for: .normal)
-            return
-        }
-        // 验证码界面
-        self.inputPwdView.titleLb.text = "手机验证码".localizedStr
-        self.inputPwdView.textTF.placeholder = "请输入手机验证码".localizedStr
-        self.showPwdBtn.setImage(UIImage.init(), for: .normal)
-        self.showPwdBtn.setImage(UIImage.init(), for: .selected)
-        self.showPwdBtn.setTitle("获取验证码".localizedStr, for: .normal)
-    }
+//    //MARK: - 验证码、密码登录切换
+//    @objc private func pwdOrVerificationLoginClick(sender:CBPetBaseButton) {
+//        sender.isSelected = !sender.isSelected
+//        guard sender.isSelected else {
+//            // 密码登录界面
+//            self.inputPwdView.titleLb.text = "登录密码".localizedStr
+//            self.inputPwdView.textTF.placeholder = "请输入登录密码".localizedStr
+//            self.showPwdBtn.setImage(UIImage.init(named: "pet_login_showPwd"), for: .normal)
+//            self.showPwdBtn.setImage(UIImage.init(named: "pet_login_hidePwd"), for: .selected)
+//            self.showPwdBtn.setTitle("", for: .normal)
+//            return
+//        }
+//        // 验证码界面
+//        self.inputPwdView.titleLb.text = "手机验证码".localizedStr
+//        self.inputPwdView.textTF.placeholder = "请输入手机验证码".localizedStr
+//        self.showPwdBtn.setImage(UIImage.init(), for: .normal)
+//        self.showPwdBtn.setImage(UIImage.init(), for: .selected)
+//        self.showPwdBtn.setTitle("获取验证码".localizedStr, for: .normal)
+//    }
     //MARK: - 登录
     @objc private func loginClick(sender:CBPetBaseButton) {
         guard self.inputPhoneView.textTF.text!.isEmpty == false else {
@@ -188,6 +223,15 @@ class CBPetLoginView: CBPetBaseView {
             return
         }
         
+    }
+    
+    //MARK: - 注册页面
+    @objc private func registerClick(sender:CBPetBaseButton) {
+        guard let viewModel = self.viewModel as? CBPetLoginViewModel,
+              let registerBlock = viewModel.showResgiterBlock else {
+                  return;
+              }
+        registerBlock();
     }
 
     /*

@@ -25,9 +25,11 @@ class CBPetLoginViewController: CBPetBaseViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
     deinit {
         //print("登录控制器CBPetLoginViewController---被释放了")

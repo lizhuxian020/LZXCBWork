@@ -659,6 +659,8 @@
 		43F4FDED248672CD0072B233 /* CBPetFuncChatPetInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F4FDEC248672CD0072B233 /* CBPetFuncChatPetInfoView.swift */; };
 		43F4FDEF248672EB0072B233 /* CBPetFuncChatPetInfoTabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F4FDEE248672EB0072B233 /* CBPetFuncChatPetInfoTabCell.swift */; };
 		6D032D9B1335E2208C8FB6B3 /* libPods-cobanBnPetSwift.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A1F41BDFD0FBDF918826F4E /* libPods-cobanBnPetSwift.a */; };
+		A2F9C5002925D1C400715AF9 /* CBPetInputClearView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F9C4FF2925D1C400715AF9 /* CBPetInputClearView.swift */; };
+		A2F9C5032926135E00715AF9 /* CBLoginLayoutMarco.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F9C5022926135E00715AF9 /* CBLoginLayoutMarco.swift */; };
 		B1212C642795CE8B0044E7CC /* CBPetSwitchPetAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1212C632795CE8B0044E7CC /* CBPetSwitchPetAlertView.swift */; };
 		B15F916F27A19F53000953B6 /* CBPetGMSMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15F916E27A19F53000953B6 /* CBPetGMSMarker.swift */; };
 		B16C38C52793208D0058EAC4 /* CBPetMultiVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16C38C42793208D0058EAC4 /* CBPetMultiVC.swift */; };
@@ -1829,6 +1831,8 @@
 		43F4FDEA2486727B0072B233 /* CBPetFuncChatPetInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetFuncChatPetInfoVC.swift; sourceTree = "<group>"; };
 		43F4FDEC248672CD0072B233 /* CBPetFuncChatPetInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetFuncChatPetInfoView.swift; sourceTree = "<group>"; };
 		43F4FDEE248672EB0072B233 /* CBPetFuncChatPetInfoTabCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetFuncChatPetInfoTabCell.swift; sourceTree = "<group>"; };
+		A2F9C4FF2925D1C400715AF9 /* CBPetInputClearView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetInputClearView.swift; sourceTree = "<group>"; };
+		A2F9C5022926135E00715AF9 /* CBLoginLayoutMarco.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBLoginLayoutMarco.swift; sourceTree = "<group>"; };
 		B1212C632795CE8B0044E7CC /* CBPetSwitchPetAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetSwitchPetAlertView.swift; sourceTree = "<group>"; };
 		B15F916E27A19F53000953B6 /* CBPetGMSMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetGMSMarker.swift; sourceTree = "<group>"; };
 		B16C38C42793208D0058EAC4 /* CBPetMultiVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetMultiVC.swift; sourceTree = "<group>"; };
@@ -5251,11 +5255,13 @@
 		439E904F2475A496004ED9AD /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				A2F9C5012926134600715AF9 /* LoginLayoutMarco */,
 				439E90512475A496004ED9AD /* CBPetLoginRegisterMainView.swift */,
 				439E90502475A496004ED9AD /* CBPetRegisterView.swift */,
 				439E90522475A496004ED9AD /* CBPetLoginView.swift */,
 				439E90542475A496004ED9AD /* CBPetTFInputView.swift */,
 				439E90532475A496004ED9AD /* CBTriangleView.swift */,
+				A2F9C4FF2925D1C400715AF9 /* CBPetInputClearView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -5322,6 +5328,14 @@
 				2A1F41BDFD0FBDF918826F4E /* libPods-cobanBnPetSwift.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A2F9C5012926134600715AF9 /* LoginLayoutMarco */ = {
+			isa = PBXGroup;
+			children = (
+				A2F9C5022926135E00715AF9 /* CBLoginLayoutMarco.swift */,
+			);
+			path = LoginLayoutMarco;
 			sourceTree = "<group>";
 		};
 		B16C38C227931F590058EAC4 /* MultiVC */ = {
@@ -6089,6 +6103,7 @@
 				17CDAC1524CEBE5600BB9F8B /* SubAccountTableViewCell.m in Sources */,
 				17CDAC1024CEBE5600BB9F8B /* PlaceModel.m in Sources */,
 				4344F14E276F60130004379E /* CBPetTimeReportPickTime.swift in Sources */,
+				A2F9C5032926135E00715AF9 /* CBLoginLayoutMarco.swift in Sources */,
 				435B2537247D661D006CC6A1 /* CBPetFunctionCollectionCell.swift in Sources */,
 				1782BF2424C0427E00544C36 /* UIButton+ImageAndTitle.m in Sources */,
 				435B2540247D8035006CC6A1 /* CBPetFunctionShoutView.swift in Sources */,
@@ -6121,6 +6136,7 @@
 				179F136E24865FE6004DB559 /* CBPetPersonalPageVC.swift in Sources */,
 				17CDAB9D24CEBE5500BB9F8B /* DPieScaler.m in Sources */,
 				17CDAC1224CEBE5600BB9F8B /* MINLabel.m in Sources */,
+				A2F9C5002925D1C400715AF9 /* CBPetInputClearView.swift in Sources */,
 				1782BFA524C0427E00544C36 /* CBWtBaseNetworkModel.m in Sources */,
 				17CDAC0B24CEBE5600BB9F8B /* AboutUsViewController.m in Sources */,
 				437B3E77247F5C67005365D9 /* CBPetNoRecordingView.swift in Sources */,

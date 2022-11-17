@@ -42,13 +42,13 @@ class CBPetLoginRegisterMainView: CBPetBaseView {
     }()
     private lazy var loginView:CBPetLoginView = {
         let loginV = CBPetLoginView.init()
-        loginV.backgroundColor = UIColor.white
+        loginV.backgroundColor = UIColor.clear
         self.addSubview(loginV)
         return loginV
     }()
     private lazy var registerView:CBPetRegisterView = {
         let registerV = CBPetRegisterView.init()
-        registerV.backgroundColor = UIColor.white
+        registerV.backgroundColor = UIColor.clear
         registerV.isHidden = true
         self.addSubview(registerV)
         return registerV
@@ -64,8 +64,6 @@ class CBPetLoginRegisterMainView: CBPetBaseView {
         self.viewModel = viewModel
         /* 判断传过来的viewModel类 是否 为 vc传过来的viewModel类*/
         if self.viewModel is CBPetLoginViewModel {
-            self.loginView.setupViewModel(viewModel: self.viewModel)
-            self.registerView.setupViewModel(viewModel: self.viewModel)
             ///注册成功后 切换至登录页面
             (self.viewModel as! CBPetLoginViewModel).registerUpdateViewBlock = { [weak self] (phone:String) -> Void in
                 self?.switchClick(sender: self!.loginBtnClick)
@@ -76,45 +74,54 @@ class CBPetLoginRegisterMainView: CBPetBaseView {
                 self?.registerView.inputFirtPwdView.textTF.text = ""
                 self?.registerView.inputSecondPwdView.textTF.text = ""
             }
+            
+            (self.viewModel as! CBPetLoginViewModel).showResgiterBlock = { [weak self] () in
+                self?.loginView.isHidden = true
+                self?.registerView.isHidden = false
+            }
+            (self.viewModel as! CBPetLoginViewModel).showLoginBlock = { [weak self] () in
+                self?.loginView.isHidden = false
+                self?.registerView.isHidden = true
+            }
+            self.loginView.setupViewModel(viewModel: self.viewModel)
+            self.registerView.setupViewModel(viewModel: self.viewModel)
         }
     }
     private func setupView() {
         self.imageViewBgm.snp_makeConstraints { (make) in
             make.edges.equalTo(UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0))
         }
-        self.loginBtn.snp_makeConstraints { (make) in
-            make.top.equalTo(self.snp_top).offset(142*KFitHeightRate)
-            make.right.equalTo(self.snp_centerX).offset(-45*KFitWidthRate)
-            make.height.equalTo(50*KFitHeightRate)
-        }
-        self.loginBtn.layoutBtn(status: .CBVerticalCenterTitleAndImage, space: 4*KFitHeightRate)
-        
-        self.signUpBtn.snp_makeConstraints { (make) in
-            make.centerY.equalTo(self.loginBtn.snp_centerY)
-            make.left.equalTo(self.snp_centerX).offset(45*KFitWidthRate)
-            make.height.equalTo(50*KFitHeightRate)
-        }
-        
-        self.loginBtnClick.snp_makeConstraints { (make) in
-            make.top.equalTo(self.snp_top).offset(142*KFitHeightRate)
-            make.right.equalTo(self.snp_centerX).offset(-45*KFitWidthRate)
-            make.size.equalTo(CGSize(width: 60*KFitWidthRate, height: 60*KFitHeightRate))
-        }
-        self.loginBtnClick.addTarget(self, action: #selector(switchClick), for: .touchUpInside)
-        self.signUpBtnClick.snp_makeConstraints { (make) in
-            make.centerY.equalTo(self.loginBtn.snp_centerY)
-            make.left.equalTo(self.snp_centerX).offset(45*KFitWidthRate)
-            make.size.equalTo(CGSize(width: 60*KFitWidthRate, height: 60*KFitHeightRate))
-        }
-        self.signUpBtnClick.addTarget(self, action: #selector(switchClick), for: .touchUpInside)
+//        self.loginBtn.snp_makeConstraints { (make) in
+//            make.top.equalTo(self.snp_top).offset(142*KFitHeightRate)
+//            make.right.equalTo(self.snp_centerX).offset(-45*KFitWidthRate)
+//            make.height.equalTo(50*KFitHeightRate)
+//        }
+//        self.loginBtn.layoutBtn(status: .CBVerticalCenterTitleAndImage, space: 4*KFitHeightRate)
+//
+//        self.signUpBtn.snp_makeConstraints { (make) in
+//            make.centerY.equalTo(self.loginBtn.snp_centerY)
+//            make.left.equalTo(self.snp_centerX).offset(45*KFitWidthRate)
+//            make.height.equalTo(50*KFitHeightRate)
+//        }
+//
+//        self.loginBtnClick.snp_makeConstraints { (make) in
+//            make.top.equalTo(self.snp_top).offset(142*KFitHeightRate)
+//            make.right.equalTo(self.snp_centerX).offset(-45*KFitWidthRate)
+//            make.size.equalTo(CGSize(width: 60*KFitWidthRate, height: 60*KFitHeightRate))
+//        }
+//        self.loginBtnClick.addTarget(self, action: #selector(switchClick), for: .touchUpInside)
+//        self.signUpBtnClick.snp_makeConstraints { (make) in
+//            make.centerY.equalTo(self.loginBtn.snp_centerY)
+//            make.left.equalTo(self.snp_centerX).offset(45*KFitWidthRate)
+//            make.size.equalTo(CGSize(width: 60*KFitWidthRate, height: 60*KFitHeightRate))
+//        }
+//        self.signUpBtnClick.addTarget(self, action: #selector(switchClick), for: .touchUpInside)
         
         self.loginView.snp_makeConstraints { (make) in
-            make.top.equalTo(self.loginBtn.snp_bottom).offset(-4*KFitHeightRate)
-            make.left.right.bottom.equalTo(0)
+            make.edges.equalTo(UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0))
         }
         self.registerView.snp_makeConstraints { (make) in
-            make.top.equalTo(self.loginBtn.snp_bottom).offset(-4*KFitHeightRate)
-            make.left.right.bottom.equalTo(0)
+            make.edges.equalTo(UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0))
         }
     }
     

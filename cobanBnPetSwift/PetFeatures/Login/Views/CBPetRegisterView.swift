@@ -14,11 +14,21 @@ class CBPetRegisterView: CBPetBaseView {
         return AppDelegate.isShowGoogle()
     }
 
-    private lazy var bgmView:UIScrollView = {
-        let bgmView = UIScrollView.init()
-        bgmView.backgroundColor = UIColor.white
+    private lazy var bgmView:UIView = {
+        let bgmView = UIView.init()
+        bgmView.backgroundColor = UIColor.clear
         self.addSubview(bgmView)
         return bgmView
+    }()
+    private lazy var titleLbl:UILabel = {
+        let lbl = UILabel(text: "欢迎登录".localizedStr, textColor: UIColor.white, font: kLoginTitleFont)
+        self.bgmView.addSubview(lbl)
+        return lbl
+    }()
+    private lazy var appNameLbl:UILabel = {
+        let lbl = UILabel(text: "巴诺物联网".localizedStr, textColor: KPetAppColor, font: kLoginAppNameFont)
+        self.bgmView.addSubview(lbl)
+        return lbl
     }()
     public lazy var inputPhoneView:CBPetTFInputView = {
         let inputView = CBPetTFInputView.init()
@@ -99,19 +109,26 @@ class CBPetRegisterView: CBPetBaseView {
         self.bgmView.addSubview(inputView)
         return inputView
     }()
-    private lazy var inputNameView:CBPetTFInputView = {
-        let inputView = CBPetTFInputView.init()
-        inputView.setInputView(title: "姓名".localizedStr, placeholdStr: "请输入您的姓名".localizedStr)
-        self.bgmView.addSubview(inputView)
-        return inputView
-    }()
+//    private lazy var inputNameView:CBPetTFInputView = {
+//        let inputView = CBPetTFInputView.init()
+//        inputView.setInputView(title: "姓名".localizedStr, placeholdStr: "请输入您的姓名".localizedStr)
+//        self.bgmView.addSubview(inputView)
+//        return inputView
+//    }()
     private lazy var regiseterBtn:UIButton = {
-        let btn = UIButton(title: "注册".localizedStr, titleColor: UIColor.white, font: UIFont.init(name: CBPingFangSC_Regular, size: 16*KFitHeightRate)!)
+        let btn = UIButton(title: "注册".localizedStr, titleColor: UIColor.white, font: kLoginBtnFont)
         btn.setShadow(backgroundColor: KPetAppColor, cornerRadius: 20*KFitHeightRate, shadowColor: KPetAppColor, shadowOpacity: 0.35, shadowOffset: CGSize(width: 4, height: 0), shadowRadius: 8)
         self.bgmView.addSubview(btn)
         btn.adjustsImageWhenHighlighted = false
         return btn
         
+    }()
+    private lazy var pwdLoginBtn:UIButton = {
+        let btn = UIButton(title: "密码登录".localizedStr, titleColor: UIColor.black, font: kLoginBtnFont)
+        btn.setShadow(backgroundColor: UIColor.white, cornerRadius: 20*KFitHeightRate, shadowColor: KPetAppColor, shadowOpacity: 0.35, shadowOffset: CGSize(width: 4, height: 0), shadowRadius: 8)
+        self.bgmView.addSubview(btn)
+        btn.adjustsImageWhenHighlighted = false
+        return btn
     }()
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -146,11 +163,21 @@ class CBPetRegisterView: CBPetBaseView {
             make.top.equalTo(0)
             make.left.right.bottom.equalTo(0)
         }
+        self.titleLbl.snp_makeConstraints { make in
+            make.left.equalTo(kLoginContentHorizontalMargin)
+            make.top.equalTo(self.bgmView.snp_top).offset(kLoginTitleMarginTop)
+        }
+        
+        self.appNameLbl.snp_makeConstraints { make in
+            make.left.equalTo(kLoginContentHorizontalMargin)
+            make.top.equalTo(self.titleLbl.snp_bottom).offset(kLoginAppNameMarginTop)
+        }
+        
         self.inputPhoneView.snp_makeConstraints { (make) in
-            make.left.equalTo(40*KFitWidthRate)
-            make.width.equalTo(SCREEN_WIDTH-80*KFitWidthRate)
+            make.left.equalTo(kLoginContentHorizontalMargin)
+            make.right.equalTo((-kLoginContentHorizontalMargin))
             make.height.equalTo(50*KFitHeightRate)
-            make.top.equalTo(self.bgmView.snp_top).offset(60*KFitHeightRate)
+            make.top.equalTo(self.appNameLbl.snp_bottom).offset(kLoginInputAreaMarginTop)
         }
         self.areaCodeBTF.snp_makeConstraints { (make) in
             make.right.equalTo(self.inputPhoneView.snp_right).offset(0)
@@ -177,12 +204,12 @@ class CBPetRegisterView: CBPetBaseView {
 //        }
 //        let tapGesture = UITapGestureRecognizer.init(target: self, action: #selector(fingerTap))
 //        self.verifyImageView.addGestureRecognizer(tapGesture)
-        
+
         self.inputVerificationCodeView.snp_makeConstraints { (make) in
-            make.left.equalTo(40*KFitWidthRate)
-            make.width.equalTo(SCREEN_WIDTH-80*KFitWidthRate)
+            make.left.equalTo(kLoginContentHorizontalMargin)
+            make.right.equalTo((-kLoginContentHorizontalMargin))
             make.height.equalTo(50*KFitHeightRate)
-            make.top.equalTo(self.inputPhoneView.snp_bottom).offset(24*KFitHeightRate)
+            make.top.equalTo(self.inputPhoneView.snp_bottom).offset(kLoginInputSpaceBetween)
         }
         self.getVerificationBtn.snp_makeConstraints { (make) in
             make.right.equalTo(self.inputVerificationCodeView.snp_right).offset(0)
@@ -190,45 +217,53 @@ class CBPetRegisterView: CBPetBaseView {
         }
         self.getVerificationBtn.addTarget(self, action: #selector(getVerificationCodeClick), for: .touchUpInside)
         self.inputFirtPwdView.snp_makeConstraints { (make) in
-            make.left.equalTo(40*KFitWidthRate)
-            make.width.equalTo(SCREEN_WIDTH-80*KFitWidthRate)
+            make.left.equalTo(kLoginContentHorizontalMargin)
+            make.right.equalTo((-kLoginContentHorizontalMargin))
             make.height.equalTo(50*KFitHeightRate)
-            make.top.equalTo(self.inputVerificationCodeView.snp_bottom).offset(24*KFitHeightRate)
+            make.top.equalTo(self.inputVerificationCodeView.snp_bottom).offset(kLoginInputSpaceBetween)
         }
         self.showFirstPwdBtn.snp_makeConstraints { (make) in
             make.right.equalTo(self.inputFirtPwdView.snp_right).offset(0)
             make.centerY.equalTo(self.inputFirtPwdView.textTF.snp_centerY)
         }
         self.showFirstPwdBtn.addTarget(self, action: #selector(hideOrShowPwdClick), for: .touchUpInside)
-        
+
         self.inputSecondPwdView.snp_makeConstraints { (make) in
-            make.left.equalTo(40*KFitWidthRate)
-            make.width.equalTo(SCREEN_WIDTH-80*KFitWidthRate)
+            make.left.equalTo(kLoginContentHorizontalMargin)
+            make.right.equalTo((-kLoginContentHorizontalMargin))
             make.height.equalTo(50*KFitHeightRate)
-            make.top.equalTo(self.inputFirtPwdView.snp_bottom).offset(24*KFitHeightRate)
+            make.top.equalTo(self.inputFirtPwdView.snp_bottom).offset(kLoginInputSpaceBetween)
         }
         self.showSecondPwdBtn.snp_makeConstraints { (make) in
             make.right.equalTo(self.inputSecondPwdView.snp_right).offset(0)
             make.centerY.equalTo(self.inputSecondPwdView.textTF.snp_centerY)
         }
         self.showSecondPwdBtn.addTarget(self, action: #selector(hideOrShowPwdClick), for: .touchUpInside)
-        
-        self.inputNameView.snp_makeConstraints { (make) in
-            make.left.equalTo(40*KFitWidthRate)
-            make.width.equalTo(SCREEN_WIDTH-80*KFitWidthRate)
-            //make.height.equalTo(50*KFitHeightRate)
-            make.height.equalTo(0*KFitHeightRate)
-            make.top.equalTo(self.inputSecondPwdView.snp_bottom).offset(24*KFitHeightRate)
-        }
-        self.inputNameView.lineView.isHidden = true
+
+//        self.inputNameView.snp_makeConstraints { (make) in
+//            make.left.equalTo(40*KFitWidthRate)
+//            make.width.equalTo(SCREEN_WIDTH-80*KFitWidthRate)
+//            //make.height.equalTo(50*KFitHeightRate)
+//            make.height.equalTo(0*KFitHeightRate)
+//            make.top.equalTo(self.inputSecondPwdView.snp_bottom).offset(24*KFitHeightRate)
+//        }
+//        self.inputNameView.lineView.isHidden = true
         self.regiseterBtn.snp_makeConstraints { (make) in
-            make.left.equalTo(40*KFitWidthRate)
-            make.width.equalTo(SCREEN_WIDTH-80*KFitWidthRate)
+            make.left.equalTo(kLoginContentHorizontalMargin)
+            make.right.equalTo((-kLoginContentHorizontalMargin))
             make.height.equalTo(40*KFitHeightRate)
-            make.top.equalTo(self.inputNameView.snp_bottom).offset(24*KFitHeightRate)
-            make.bottom.equalTo(self.bgmView.snp_bottom).offset(-80*KFitHeightRate)
+            make.top.equalTo(self.inputSecondPwdView.snp_bottom).offset(kLoginBtnAreaMarginTop)
+//            make.bottom.equalTo(self.bgmView.snp_bottom).offset(-80*KFitHeightRate)
         }
         self.regiseterBtn.addTarget(self, action: #selector(regiseterClick), for: .touchUpInside)
+
+        self.pwdLoginBtn.snp_makeConstraints { make in
+            make.left.equalTo(kLoginContentHorizontalMargin)
+            make.right.equalTo((-kLoginContentHorizontalMargin))
+            make.height.equalTo(40*KFitHeightRate)
+            make.top.equalTo(self.regiseterBtn.snp_bottom).offset(kLoginBtnSpaceBetween)
+        }
+        self.pwdLoginBtn.addTarget(self, action: #selector(pwdLoginClick), for: .touchUpInside)
     }
     //MARK: - 是否隐藏密码
     @objc private func hideOrShowPwdClick(sender:CBPetBaseButton) {
@@ -313,6 +348,12 @@ class CBPetRegisterView: CBPetBaseView {
             (self.viewModel as! CBPetLoginViewModel).registerBlock!(self.inputPhoneView.textTF.text!,self.inputVerificationCodeView.textTF.text!,self.inputFirtPwdView.textTF.text!,(isGoogle() ? "" : self.areaCodeBTF.text!))
             return
         }
+    }
+    //MARK: - 展示登录页
+    @objc private func pwdLoginClick() {
+        guard let viewModel = self.viewModel as? CBPetLoginViewModel,
+              let showLoginBlk = viewModel.showLoginBlock else {return}
+        showLoginBlk();
     }
     /* 检查输入的图形验证码的有效性*/
     private func verifyGraphic() {

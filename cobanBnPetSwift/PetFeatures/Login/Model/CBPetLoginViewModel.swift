@@ -21,6 +21,9 @@ class CBPetLoginViewModel: CBPetBaseViewModel {
     var loginBlock:((_ phone:String,_ pwd:String) -> Void)?
     var forgetBlock:(() -> Void)?
     
+    var showLoginBlock:(() -> Void)? //跳到登录页
+    var showResgiterBlock:(() -> Void)? //跳到注册页
+    
     var getVerificationCodeBlock:((_ sender:CBPetBaseButton,_ phone:String,_ areaCode:String) -> Void)?
     var getVerificationCodeUpdateViewBlock:((_ coutDown:Int,_ isFinished:Bool) -> Void)?
     
