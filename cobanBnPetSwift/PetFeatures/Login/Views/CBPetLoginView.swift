@@ -66,6 +66,27 @@ class CBPetLoginView: CBPetBaseView {
         btn.adjustsImageWhenHighlighted = false
         return btn
     }()
+    private lazy var phoneEmailView:CBPetInputClaerView = {
+        let v = CBPetInputClaerView.init(rightText: nil,clickBlk: nil)
+        self.bgmView.addSubview(v)
+        return v
+    }()
+    private lazy var pwdView:CBPetInputClaerView = {
+        let v = CBPetInputClaerView.init(rightText: "忘记密码".localizedStr) {
+            print("clickforget")
+        }
+        self.bgmView.addSubview(v)
+        return v
+    }()
+    private lazy var smsView:CBPetInputClaerView = {
+        let v = CBPetInputClaerView.init(rightText: "获取验证码".localizedStr) {
+            [weak self] in
+            print("clickSMS")
+            self?.smsView.startCountDown()
+        }
+        self.bgmView.addSubview(v)
+        return v
+    }()
     private lazy var forgetPwdBtn:UIButton = {
         let btn = UIButton(title: "忘记密码?".localizedStr, titleColor: KPetAppColor, font: UIFont.init(name: CBPingFangSC_Regular, size: 12*KFitHeightRate)!)
         self.bgmView.addSubview(btn)
@@ -153,11 +174,31 @@ class CBPetLoginView: CBPetBaseView {
             make.top.equalTo(self.inputPwdView.snp_bottom).offset(12*KFitHeightRate)
         }
         self.forgetPwdBtn.addTarget(self, action: #selector(forgetPwdClick), for: .touchUpInside)
+        
+        
+        self.phoneEmailView.snp_makeConstraints { make in
+            make.left.equalTo(kLoginContentHorizontalMargin)
+            make.right.equalTo((-kLoginContentHorizontalMargin))
+            make.top.equalTo(self.forgetPwdBtn.snp_bottom).offset(kLoginInputSpaceBetween)
+        }
+        
+        self.pwdView.snp_makeConstraints { make in
+            make.left.equalTo(kLoginContentHorizontalMargin)
+            make.right.equalTo((-kLoginContentHorizontalMargin))
+            make.top.equalTo(self.phoneEmailView.snp_bottom).offset(kLoginInputSpaceBetween)
+        }
+        
+        self.smsView.snp_makeConstraints { make in
+            make.left.equalTo(kLoginContentHorizontalMargin)
+            make.right.equalTo((-kLoginContentHorizontalMargin))
+            make.top.equalTo(self.pwdView.snp_bottom).offset(kLoginInputSpaceBetween)
+        }
+        
         self.loginBtn.snp_makeConstraints { (make) in
             make.left.equalTo(kLoginContentHorizontalMargin)
             make.right.equalTo((-kLoginContentHorizontalMargin))
             make.height.equalTo(40*KFitHeightRate)
-            make.top.equalTo(self.forgetPwdBtn.snp_bottom).offset(kLoginBtnAreaMarginTop)
+            make.top.equalTo(self.smsView.snp_bottom).offset(kLoginBtnAreaMarginTop)
         }
         
         self.loginBtn.addTarget(self, action: #selector(loginClick), for: .touchUpInside)
