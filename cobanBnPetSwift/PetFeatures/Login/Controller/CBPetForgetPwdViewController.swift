@@ -92,6 +92,8 @@ class CBPetForgetPwdViewController: CBPetBaseViewController {
 
         // Do any additional setup after loading the view.
         
+        AppDelegate.setNavigationBGColor(UIColor.white)
+        
         setupView()
         
         self.forgetPwdViewModel.getVerificationImage()
@@ -101,8 +103,9 @@ class CBPetForgetPwdViewController: CBPetBaseViewController {
             //self?.verifyImageView.image = graphicsImage
         }
     }
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
+    override func viewWillDisappear(_ animated: Bool) {
+        super .viewWillDisappear(animated)
+        AppDelegate.setNavigationBGColor(nil)
     }
     private func setupView() {
         self.view.backgroundColor = UIColor.white
@@ -117,10 +120,10 @@ class CBPetForgetPwdViewController: CBPetBaseViewController {
         default:
             break
         }
-        self.initBarRight(title: "确定".localizedStr, action: #selector(retsetPwdRequestClick))
-        self.rightBtn.setTitleColor(KPetAppColor, for: .normal)
-        self.rightBtn.setTitleColor(KPetAppColor, for: .highlighted)
-        self.rightBtn.titleLabel?.font = UIFont.init(name: CBPingFangSC_Regular, size: 14*KFitHeightRate)
+//        self.initBarRight(title: "确定".localizedStr, action: #selector(retsetPwdRequestClick))
+//        self.rightBtn.setTitleColor(KPetAppColor, for: .normal)
+//        self.rightBtn.setTitleColor(KPetAppColor, for: .highlighted)
+//        self.rightBtn.titleLabel?.font = UIFont.init(name: CBPingFangSC_Regular, size: 14*KFitHeightRate)
         
         self.inputPhoneView.snp_makeConstraints { (make) in
             make.left.equalTo(20*KFitWidthRate)

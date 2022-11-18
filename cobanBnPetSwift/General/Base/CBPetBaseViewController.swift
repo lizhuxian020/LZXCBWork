@@ -122,6 +122,7 @@ class CBPetBaseViewController: UIViewController,UIGestureRecognizerDelegate {
             || className.isEqual(to: "CBPetFunctionChatVC")
             || className.isEqual(to: "CBPetPersonalPageVC")
             || className.isEqual(to: "CBPetSetFenceViewController")
+            || className.isEqual(to: "CBPetForgetPwdViewController")
             || className.isEqual(to: "CBPetFenceAlarmViewController") {
             /* 状态栏 black黑底白字 default白底黑字*/
             self.navigationController?.navigationBar.barStyle = .black
