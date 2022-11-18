@@ -90,6 +90,7 @@
 //其余机型的状态栏高度在常规状态下是20，特殊状态下（通话中或热点被接入）是40。
 #define KIs_iPhoneXStyle (([[UIApplication sharedApplication] statusBarFrame].size.height >= 44.0f) ? (YES):(NO))
 
+#define kStatusBarHeight [UIApplication sharedApplication].statusBarFrame.size.height
 #define PPNavigationBarHeight  ([UIApplication sharedApplication].statusBarFrame.size.height + 44.0)//((KIs_iPhoneXStyle)? 88 : 64.0)
 //tabbar的高度
 #define TabBARHEIGHT  ((KIs_iPhoneXStyle) ? 83 : 49)

@@ -47,7 +47,7 @@
 #import "CBCarPaopaoView.h"
 #import "AddDeviceViewController.h"
 #import "cobanBnPetSwift-Swift.h"
-
+#import "UIView+Badge.h"
 
 @interface MainMapViewController ()
 <BMKMapViewDelegate, CLLocationManagerDelegate, GMSMapViewDelegate,
@@ -138,6 +138,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 @property (nonatomic, strong) UIButton *qrScanBtn;
 @property (nonatomic, strong) UIButton *alertBtn;
 @property (nonatomic, strong) UIButton *personBtn;
+@property (nonatomic, strong) UIButton *locateBtn;
 @end
 
 @implementation MainMapViewController
@@ -586,7 +587,81 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [self baiduMap];
     [self googleMap];
 //    [self switchMapType];
+    [self createBtns];
 }
+
+- (void)createBtns {
+    self.deviceListBtn = [self createBtn:@"停留统计"];
+    [self.deviceListBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(@(kStatusBarHeight + 20));
+        make.left.equalTo(@15);
+        make.width.height.equalTo(@40);
+    }];
+    [self.deviceListBtn addTarget:self action:@selector(didClickDeviceListBtn) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.qrScanBtn = [self createBtn:@"停留时长"];
+    [self.qrScanBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.deviceListBtn.mas_right).offset(15);
+        make.top.width.height.equalTo(self.deviceListBtn);
+    }];
+    [self.qrScanBtn addTarget:self action:@selector(didClickScanBtn) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.alertBtn = [self createBtn:@"已下载视频"];
+    [self.alertBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.width.height.equalTo(self.deviceListBtn);
+        make.left.equalTo(self.qrScanBtn.mas_right).mas_offset(15);
+    }];
+    [self.alertBtn addTarget:self action:@selector(didClickAlertBtn) forControlEvents:UIControlEventTouchUpInside];
+    self.alertBtn.BadgeValue = @"99";
+    
+    self.personBtn = [self createBtn:@"报表-选中"];
+    [self.personBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.width.height.equalTo(self.deviceListBtn);
+        make.right.equalTo(@-15);
+    }];
+    [self.personBtn addTarget:self action:@selector(didClickPersonBtn) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.locateBtn = [self createBtn:@"播放条-按钮"];
+    [self.locateBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.width.height.equalTo(self.personBtn);
+        make.bottom.equalTo(@(-TabBARHEIGHT-20));
+    }];
+    [self.locateBtn addTarget:self action:@selector(didClickLocateBtn) forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (UIButton *)createBtn:(NSString *)imgName {
+    UIButton *btn = [UIButton new];
+    [btn setImage:[UIImage imageNamed:imgName] forState:UIControlStateNormal];
+    btn.backgroundColor = KWtCellBackColor;
+//    btn.layer.masksToBounds = YES;
+    btn.layer.cornerRadius = 20;
+    [self.view addSubview:btn];
+    return btn;
+}
+
+#pragma mark - 按钮点击时间
+- (void)didClickDeviceListBtn {
+    [self leftBtnClick];
+}
+
+- (void)didClickScanBtn {
+    AddDeviceViewController *bindVC = [[AddDeviceViewController alloc]init];
+    bindVC.isBind = YES;
+    [self.navigationController pushViewController:bindVC animated:YES];
+}
+
+- (void)didClickAlertBtn {
+    NSLog(@"%s", __FUNCTION__);
+}
+
+- (void)didClickPersonBtn {
+    NSLog(@"%s", __FUNCTION__);
+}
+
+- (void)didClickLocateBtn {
+    NSLog(@"%s", __FUNCTION__);
+}
+
 #pragma mark - GoogleMaps
 - (UIView *)mapView:(GMSMapView *)mapView markerInfoWindow:(GMSMarker *)marker {
     /*在标记即将被选中时调用，并提供一个可选的自定义信息窗口来 如果此方法返回UIView，则用于该标记。*/
