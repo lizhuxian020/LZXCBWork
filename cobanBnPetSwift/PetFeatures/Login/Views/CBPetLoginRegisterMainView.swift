@@ -64,17 +64,18 @@ class CBPetLoginRegisterMainView: CBPetBaseView {
         self.viewModel = viewModel
         /* 判断传过来的viewModel类 是否 为 vc传过来的viewModel类*/
         if self.viewModel is CBPetLoginViewModel {
-            ///注册成功后 切换至登录页面
-            ///TODO: LZXTODO
-//            (self.viewModel as! CBPetLoginViewModel).registerUpdateViewBlock = { [weak self] (phone:String) -> Void in
-//                self?.switchClick(sender: self!.loginBtnClick)
-//                self?.loginView.inputPhoneView.textTF.text = phone
-//                /* 重置注册页面数据*/
+            //注册成功后 切换至登录页面
+            (self.viewModel as! CBPetLoginViewModel).registerUpdateViewBlock = { [weak self] (phone:String) -> Void in
+                (self?.viewModel as! CBPetLoginViewModel).showLoginBlock?()
+                
+                self?.loginView.phoneEmailView.textTF.text = phone
+                /* 重置注册页面数据*/
+                //TODO: LZXTODO
 //                self?.registerView.inputPhoneView.textTF.text = ""
 //                self?.registerView.inputVerificationCodeView.textTF.text = ""
 //                self?.registerView.inputFirtPwdView.textTF.text = ""
 //                self?.registerView.inputSecondPwdView.textTF.text = ""
-//            }
+            }
             
             (self.viewModel as! CBPetLoginViewModel).showResgiterBlock = { [weak self] () in
                 self?.loginView.isHidden = true
@@ -126,49 +127,49 @@ class CBPetLoginRegisterMainView: CBPetBaseView {
         }
     }
     
-    @objc func switchClick(sender:UIButton) {
-        if sender == self.loginBtnClick {
-            self.loginBtn.setImage(UIImage.init(named: "pet_login_upArrow"), for: .normal)
-            self.loginBtn.titleLabel?.font = UIFont.init(name: CBPingFang_SC_Bold, size: 24)
-            self.loginBtn.snp_remakeConstraints { (make) in
-                make.top.equalTo(self.snp_top).offset(142*KFitHeightRate)
-                make.right.equalTo(self.snp_centerX).offset(-45*KFitWidthRate)
-                make.height.equalTo(50*KFitHeightRate)
-            }
-            self.loginBtn.layoutBtn(status: .CBVerticalCenterTitleAndImage, space: 4*KFitHeightRate)
-            
-            self.signUpBtn.setImage(UIImage.init(), for: .normal)
-            self.signUpBtn.titleLabel?.font = UIFont.init(name: CBPingFang_SC_Bold, size: 16)
-            self.signUpBtn.snp_remakeConstraints { (make) in
-                make.centerY.equalTo(self.loginBtn.snp_centerY)
-                make.left.equalTo(self.snp_centerX).offset(45*KFitWidthRate)
-                make.height.equalTo(50*KFitHeightRate)
-            }
-            
-            self.loginView.isHidden = false
-            self.registerView.isHidden = true
-            
-        } else if sender == self.signUpBtnClick {
-            self.loginBtn.setImage(UIImage.init(), for: .normal)
-            self.loginBtn.titleLabel?.font = UIFont.init(name: CBPingFang_SC_Bold, size: 16)
-            self.loginBtn.snp_remakeConstraints { (make) in
-                make.centerY.equalTo(self.signUpBtn.snp_centerY)
-                make.right.equalTo(self.snp_centerX).offset(-45*KFitWidthRate)
-                make.height.equalTo(50*KFitHeightRate)
-            }
-            self.signUpBtn.setImage(UIImage.init(named: "pet_login_upArrow"), for: .normal)
-            self.signUpBtn.titleLabel?.font = UIFont.init(name: CBPingFang_SC_Bold, size: 24)
-            self.signUpBtn.snp_remakeConstraints { (make) in
-                make.top.equalTo(self.snp_top).offset(142*KFitHeightRate)
-                make.left.equalTo(self.snp_centerX).offset(45*KFitWidthRate)
-                make.height.equalTo(50*KFitHeightRate)
-            }
-            self.signUpBtn.layoutBtn(status: .CBVerticalCenterTitleAndImage, space: 4*KFitHeightRate)
-            
-            self.loginView.isHidden = true
-            self.registerView.isHidden = false
-        }
-    }
+//    @objc func switchClick(sender:UIButton) {
+//        if sender == self.loginBtnClick {
+//            self.loginBtn.setImage(UIImage.init(named: "pet_login_upArrow"), for: .normal)
+//            self.loginBtn.titleLabel?.font = UIFont.init(name: CBPingFang_SC_Bold, size: 24)
+//            self.loginBtn.snp_remakeConstraints { (make) in
+//                make.top.equalTo(self.snp_top).offset(142*KFitHeightRate)
+//                make.right.equalTo(self.snp_centerX).offset(-45*KFitWidthRate)
+//                make.height.equalTo(50*KFitHeightRate)
+//            }
+//            self.loginBtn.layoutBtn(status: .CBVerticalCenterTitleAndImage, space: 4*KFitHeightRate)
+//
+//            self.signUpBtn.setImage(UIImage.init(), for: .normal)
+//            self.signUpBtn.titleLabel?.font = UIFont.init(name: CBPingFang_SC_Bold, size: 16)
+//            self.signUpBtn.snp_remakeConstraints { (make) in
+//                make.centerY.equalTo(self.loginBtn.snp_centerY)
+//                make.left.equalTo(self.snp_centerX).offset(45*KFitWidthRate)
+//                make.height.equalTo(50*KFitHeightRate)
+//            }
+//
+//            self.loginView.isHidden = false
+//            self.registerView.isHidden = true
+//
+//        } else if sender == self.signUpBtnClick {
+//            self.loginBtn.setImage(UIImage.init(), for: .normal)
+//            self.loginBtn.titleLabel?.font = UIFont.init(name: CBPingFang_SC_Bold, size: 16)
+//            self.loginBtn.snp_remakeConstraints { (make) in
+//                make.centerY.equalTo(self.signUpBtn.snp_centerY)
+//                make.right.equalTo(self.snp_centerX).offset(-45*KFitWidthRate)
+//                make.height.equalTo(50*KFitHeightRate)
+//            }
+//            self.signUpBtn.setImage(UIImage.init(named: "pet_login_upArrow"), for: .normal)
+//            self.signUpBtn.titleLabel?.font = UIFont.init(name: CBPingFang_SC_Bold, size: 24)
+//            self.signUpBtn.snp_remakeConstraints { (make) in
+//                make.top.equalTo(self.snp_top).offset(142*KFitHeightRate)
+//                make.left.equalTo(self.snp_centerX).offset(45*KFitWidthRate)
+//                make.height.equalTo(50*KFitHeightRate)
+//            }
+//            self.signUpBtn.layoutBtn(status: .CBVerticalCenterTitleAndImage, space: 4*KFitHeightRate)
+//
+//            self.loginView.isHidden = true
+//            self.registerView.isHidden = false
+//        }
+//    }
     
     /*
     // Only override draw() if you perform custom drawing.

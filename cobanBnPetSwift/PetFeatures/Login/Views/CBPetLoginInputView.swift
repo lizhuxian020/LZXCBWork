@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CBPetInputClaerView: UIView {
+class CBPetLoginInputView: UIView {
     
     func setInputView(placeholder: String) {
         self.textTF.placeholder = placeholder
@@ -76,12 +76,12 @@ class CBPetInputClaerView: UIView {
     }
     
     
-    convenience init(rightText: String?, clickBlk: (() -> Void)?) {
+    convenience init(isPwd: Bool, rightText: String?, clickBlk: (() -> Void)?) {
         self.init()
         self.textBtnBlk = clickBlk
         self.setUpRightView(rightText: rightText)
         self.setUpTF()
-        self.textTF.isSecureTextEntry = true
+        self.textTF.isSecureTextEntry = isPwd
     }
     
 //    convenience init(isSms: Bool) {

@@ -66,8 +66,8 @@ class CBPetLoginView: CBPetBaseView {
 //        btn.adjustsImageWhenHighlighted = false
 //        return btn
 //    }()
-    private lazy var phoneEmailView:CBPetInputClaerView = {
-        let v = CBPetInputClaerView.init(rightText: nil,clickBlk: nil)
+    lazy var phoneEmailView:CBPetLoginInputView = {
+        let v = CBPetLoginInputView.init(isPwd: false, rightText: nil,clickBlk: nil)
         if isGoogle() {
             v.setInputView(placeholder: "请输入邮箱".localizedStr)
         } else {
@@ -76,30 +76,31 @@ class CBPetLoginView: CBPetBaseView {
         self.bgmView.addSubview(v)
         return v
     }()
-    private lazy var pwdView:CBPetInputClaerView = {
-        let v = CBPetInputClaerView.init(rightText: "忘记密码".localizedStr) {
-            print("clickforget")
-        }
-        v.setInputView(placeholder: "请输入登录密码".localizedStr)
-        self.bgmView.addSubview(v)
-        return v
-    }()
-    private lazy var smsView:CBPetInputClaerView = {
-        let v = CBPetInputClaerView.init(rightText: "获取验证码".localizedStr) {
+    lazy var pwdView:CBPetLoginInputView = {
+        let v = CBPetLoginInputView.init(isPwd: true, rightText: "忘记密码".localizedStr) {
             [weak self] in
-            print("clickSMS")
-            self?.smsView.startCountDown()
+            self?.forgetPwdClick()
         }
-        v.setInputView(placeholder: "请输入验证码".localizedStr)
-        self.bgmView.addSubview(v)
-        return v
-    }()
-    private lazy var pwdBtnView:CBPetInputClaerView = {
-        let v = CBPetInputClaerView.init(isPwd: true)
         v.setInputView(placeholder: "请输入登录密码".localizedStr)
         self.bgmView.addSubview(v)
         return v
     }()
+//    private lazy var smsView:CBPetInputClaerView = {
+//        let v = CBPetInputClaerView.init(rightText: "获取验证码".localizedStr) {
+//            [weak self] in
+//            print("clickSMS")
+//            self?.smsView.startCountDown()
+//        }
+//        v.setInputView(placeholder: "请输入验证码".localizedStr)
+//        self.bgmView.addSubview(v)
+//        return v
+//    }()
+//    private lazy var pwdBtnView:CBPetInputClaerView = {
+//        let v = CBPetInputClaerView.init(isPwd: true)
+//        v.setInputView(placeholder: "请输入登录密码".localizedStr)
+//        self.bgmView.addSubview(v)
+//        return v
+//    }()
 //    private lazy var forgetPwdBtn:UIButton = {
 //        let btn = UIButton(title: "忘记密码?".localizedStr, titleColor: KPetAppColor, font: UIFont.init(name: CBPingFangSC_Regular, size: 12*KFitHeightRate)!)
 //        self.bgmView.addSubview(btn)
@@ -198,23 +199,23 @@ class CBPetLoginView: CBPetBaseView {
             make.top.equalTo(self.phoneEmailView.snp_bottom).offset(kLoginInputSpaceBetween)
         }
         
-        self.smsView.snp_makeConstraints { make in
-            make.left.equalTo(kLoginContentHorizontalMargin)
-            make.right.equalTo((-kLoginContentHorizontalMargin))
-            make.top.equalTo(self.pwdView.snp_bottom).offset(kLoginInputSpaceBetween)
-        }
-        
-        self.pwdBtnView.snp_makeConstraints { make in
-            make.left.equalTo(kLoginContentHorizontalMargin)
-            make.right.equalTo((-kLoginContentHorizontalMargin))
-            make.top.equalTo(self.smsView.snp_bottom).offset(kLoginInputSpaceBetween)
-        }
+//        self.smsView.snp_makeConstraints { make in
+//            make.left.equalTo(kLoginContentHorizontalMargin)
+//            make.right.equalTo((-kLoginContentHorizontalMargin))
+//            make.top.equalTo(self.pwdView.snp_bottom).offset(kLoginInputSpaceBetween)
+//        }
+//
+//        self.pwdBtnView.snp_makeConstraints { make in
+//            make.left.equalTo(kLoginContentHorizontalMargin)
+//            make.right.equalTo((-kLoginContentHorizontalMargin))
+//            make.top.equalTo(self.smsView.snp_bottom).offset(kLoginInputSpaceBetween)
+//        }
         
         self.loginBtn.snp_makeConstraints { (make) in
             make.left.equalTo(kLoginContentHorizontalMargin)
             make.right.equalTo((-kLoginContentHorizontalMargin))
             make.height.equalTo(40*KFitHeightRate)
-            make.top.equalTo(self.pwdBtnView.snp_bottom).offset(kLoginBtnAreaMarginTop)
+            make.top.equalTo(self.pwdView.snp_bottom).offset(kLoginBtnAreaMarginTop)
         }
         
         self.loginBtn.addTarget(self, action: #selector(loginClick), for: .touchUpInside)
@@ -267,20 +268,18 @@ class CBPetLoginView: CBPetBaseView {
 //    }
     //MARK: - 登录
     @objc private func loginClick(sender:CBPetBaseButton) {
-        
-        //TODO: LZXTODO
-//        guard self.inputPhoneView.textTF.text!.isEmpty == false else {
-//            MBProgressHUD.showMessage(Msg: "请输入账号".localizedStr, Deleay: 1.5)
-//            return
-//        }
-//        guard self.inputPwdView.textTF.text!.isEmpty == false else {
-//            MBProgressHUD.showMessage(Msg: "请输入登录密码".localizedStr, Deleay: 1.5)
-//            return
-//        }
-//        guard (self.viewModel as! CBPetLoginViewModel).loginBlock == nil else {
-//            (self.viewModel as! CBPetLoginViewModel).loginBlock!(self.inputPhoneView.textTF.text!,self.inputPwdView.textTF.text!)
-//            return
-//        }
+        guard self.phoneEmailView.textTF.text!.isEmpty == false else {
+            MBProgressHUD.showMessage(Msg: "请输入账号".localizedStr, Deleay: 1.5)
+            return
+        }
+        guard self.pwdView.textTF.text!.isEmpty == false else {
+            MBProgressHUD.showMessage(Msg: "请输入登录密码".localizedStr, Deleay: 1.5)
+            return
+        }
+        guard (self.viewModel as! CBPetLoginViewModel).loginBlock == nil else {
+            (self.viewModel as! CBPetLoginViewModel).loginBlock!(self.phoneEmailView.textTF.text!,self.pwdView.textTF.text!)
+            return
+        }
         
     }
     
