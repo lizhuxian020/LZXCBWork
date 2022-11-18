@@ -163,11 +163,6 @@ class CBPetLoginView: CBPetBaseView {
 //            make.right.equalTo(self.inputPhoneView.snp_right).offset(0)
 //            make.centerY.equalTo(self.inputPhoneView.textTF.snp_centerY)
 //        }
-//        if CBPetLoginModelTool.getUser()?.email?.isValidateEmail() == true {
-//            self.inputPhoneView.textTF.text = CBPetLoginModelTool.getUser()?.email
-//        } else {
-//            self.inputPhoneView.textTF.text = ""
-//        }
 //        self.inputPwdView.snp_makeConstraints { (make) in
 //            make.left.equalTo(kLoginContentHorizontalMargin)
 //            make.right.equalTo((-kLoginContentHorizontalMargin))
@@ -234,6 +229,12 @@ class CBPetLoginView: CBPetBaseView {
 //            make.top.equalTo(self.loginBtn.snp_bottom).offset(24*KFitHeightRate)
 //        }
 //        self.verificationCodeLgoinBtn.addTarget(self, action: #selector(pwdOrVerificationLoginClick), for: .touchUpInside)
+        
+        if let user = CBPetLoginModelTool.getUser() {
+            self.phoneEmailView.textTF.text =
+            user.phone != nil && user.phone!.isValidatePhoneNumber() ? user.phone :
+            user.email != nil && user.email!.isValidateEmail() ? user.email : ""
+        }
     }
     //MARK: - 忘记密码
     @objc func forgetPwdClick() {
