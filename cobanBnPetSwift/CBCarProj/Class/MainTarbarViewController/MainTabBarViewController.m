@@ -64,7 +64,13 @@
     }
     ContorlViewController *ControlVC = self.viewControllers[1];
     FormViewController *formVC = self.viewControllers[2];
-    ControlVC.tabBarItem = [self controller:ControlVC title:Localized(@"控制") size:12 selectedImage:@"控制-选中状态" selectedColor:kRGB(26, 151, 251) normalImage:imageNorlStr_control normalColor:normalColor_control];
+    ControlVC.tabBarItem = [self controller:ControlVC
+                                      title:Localized(@"控制")
+                                       size:12
+                              selectedImage:@"控制-选中状态"
+                              selectedColor:kRGB(26, 151, 251)
+                                normalImage:imageNorlStr_control
+                                normalColor:normalColor_control];
     formVC.tabBarItem = [self controller:formVC title:Localized(@"报表") size:12 selectedImage:@"报表-选中" selectedColor:kRGB(26, 151, 251) normalImage:imageNorlStr_form normalColor:normalColor_form];
     
     [self setUpTabBarItem:ControlVC selectedColor:kRGB(26, 151, 251) normalColor:normalColor_control];
@@ -95,67 +101,78 @@
 
 - (void)createUI
 {
-    self.tabBar.backgroundColor = kRGB(255, 255, 255);
+//    self.tabBar.backgroundColor = kRGB(255, 255, 255);
+    self.tabBar.backgroundColor = kNavBarBgColor;
 }
 
 - (void)loadViewControllers {
+    
+    UIColor *normalColor = kTextFieldColor;
+    UIColor *selectedColor = UIColor.whiteColor;
+    
+    
     MainMapViewController *locationVC = [[MainMapViewController alloc] init];
     CBBaseNavigationController *locationNavControl = [[CBBaseNavigationController alloc] initWithRootViewController: locationVC];
-    locationVC.tabBarItem = [self controller:locationVC title:Localized(@"定位") size:12 selectedImage:@"定位-选中状态" selectedColor:kRGB(26, 151, 251) normalImage:@"定位" normalColor:kRGB(137, 137, 137)];
-    
-    NSString *imageNorlStr_control;
-    UIColor *normalColor_control = [UIColor redColor];
-    NSString *imageNorlStr_form;
-    UIColor *normalColor_form = [UIColor redColor];
-    CBPetLoginModel *userLogin = [CBPetLoginModelTool getUser];
-    CBHomeLeftMenuDeviceInfoModel *deviceModelInfo = [CBCommonTools CBdeviceInfo];
-    // 没有选中
-    if (deviceModelInfo == nil) {
-        imageNorlStr_control = @"控制";
-        normalColor_control = RGB(210, 210, 210);
-        imageNorlStr_form = @"报表";
-        normalColor_form = RGB(210, 210, 210);
-    } else {
-        // 0为查看权限
-        if ([userLogin.auth isEqualToString:@"0"]) { //|| kStringIsEmpty(userLogin.auth)
-            imageNorlStr_control = @"控制";
-            normalColor_control = RGB(210, 210, 210);
-            imageNorlStr_form = @"报表";
-            normalColor_form = RGB(210, 210, 210);
-        } else {
-            imageNorlStr_control = @"控制";
-            normalColor_control = kRGB(137, 137, 137);
-            imageNorlStr_form = @"报表";
-            normalColor_form = kRGB(137, 137, 137);
-        }
-    }
+    locationVC.tabBarItem = [self controller:locationVC title:Localized(@"首页") size:12 selectedImage:@"定位-选中状态" normalImage:@"定位"];
+//    CBPetLoginModel *userLogin = [CBPetLoginModelTool getUser];
+//    CBHomeLeftMenuDeviceInfoModel *deviceModelInfo = [CBCommonTools CBdeviceInfo];
+//    // 没有选中
+//    if (deviceModelInfo == nil) {
+//        imageNorlStr_control = @"控制";
+//        normalColor_control = RGB(210, 210, 210);
+//        imageNorlStr_form = @"报表";
+//        normalColor_form = RGB(210, 210, 210);
+//    } else {
+//        // 0为查看权限
+//        if ([userLogin.auth isEqualToString:@"0"]) { //|| kStringIsEmpty(userLogin.auth)
+//            imageNorlStr_control = @"控制";
+//            normalColor_control = RGB(210, 210, 210);
+//            imageNorlStr_form = @"报表";
+//            normalColor_form = RGB(210, 210, 210);
+//        } else {
+//            imageNorlStr_control = @"控制";
+//            normalColor_control = kRGB(137, 137, 137);
+//            imageNorlStr_form = @"报表";
+//            normalColor_form = kRGB(137, 137, 137);
+//        }
+//    }
     ContorlViewController *ControlVC = [[ContorlViewController alloc] init];
     CBBaseNavigationController *ControlNavControl = [[CBBaseNavigationController alloc] initWithRootViewController: ControlVC];
-    ControlVC.tabBarItem = [self controller:ControlVC title:Localized(@"控制") size:12 selectedImage:@"控制-选中状态" selectedColor:kRGB(26, 151, 251) normalImage:imageNorlStr_control normalColor:normalColor_control];
+    ControlVC.tabBarItem = [self controller:ControlVC
+                                      title:Localized(@"电子围栏")
+                                       size:12
+                              selectedImage:@"控制-选中状态"
+                                normalImage:@"控制"];
     
     FormViewController *formVC = [[FormViewController alloc] init];
     CBBaseNavigationController *formNavControl = [[CBBaseNavigationController alloc] initWithRootViewController: formVC];
-    formVC.tabBarItem = [self controller:formVC title:Localized(@"报表") size:12 selectedImage:@"报表-选中" selectedColor:kRGB(26, 151, 251) normalImage:imageNorlStr_form normalColor:normalColor_form];
+    formVC.tabBarItem = [self controller:formVC
+                                   title:Localized(@"报表")
+                                    size:12
+                           selectedImage:@"报表-选中"
+                            normalImage:@"报表"];
     
     MineViewController *mineVC = [[MineViewController alloc] init];
     CBBaseNavigationController *mineNavControl = [[CBBaseNavigationController alloc] initWithRootViewController: mineVC];
-    mineVC.tabBarItem = [self controller:mineVC title:Localized(@"我的") size:12 selectedImage:@"我的-选中" selectedColor:kRGB(26, 151, 251) normalImage:@"我的" normalColor:kRGB(137, 137, 137)];
+    mineVC.tabBarItem = [self controller:mineVC
+                                   title:Localized(@"我的")
+                                    size:12
+                           selectedImage:@"我的-选中"
+                             normalImage:@"我的"];
     
     NSArray *controllersArrs = @[locationNavControl, ControlNavControl, formNavControl, mineNavControl];
     self.viewControllers = controllersArrs;
     
-    [self setUpTabBarItem:locationVC selectedColor:kRGB(26, 151, 251) normalColor:kRGB(137, 137, 137)];
-    [self setUpTabBarItem:ControlVC selectedColor:kRGB(26, 151, 251) normalColor:normalColor_control];
-    [self setUpTabBarItem:formVC selectedColor:kRGB(26, 151, 251) normalColor:normalColor_form];
-    [self setUpTabBarItem:mineVC selectedColor:kRGB(26, 151, 251) normalColor:kRGB(137, 137, 137)];
+    [self setUpTabBarItem:locationVC selectedColor:selectedColor normalColor:normalColor];
+    [self setUpTabBarItem:ControlVC selectedColor:selectedColor normalColor:normalColor];
+    [self setUpTabBarItem:formVC selectedColor:selectedColor normalColor:normalColor];
+    [self setUpTabBarItem:mineVC selectedColor:selectedColor normalColor:normalColor];
 }
 - (UITabBarItem *)controller:(UIViewController *)controller
              title:(NSString *)title
               size:(CGFloat)size
      selectedImage:(NSString *)selectedImage
-     selectedColor:(UIColor *)selectedColor
-       normalImage:(NSString *)normalImage
-       normalColor:(UIColor *)normalColor {
+       normalImage:(NSString *)normalImage {
     controller.title = title;
     UIImage *imageSelect = [UIImage imageNamed:selectedImage];
     UIImage *imageNormal = [UIImage imageNamed:normalImage];
