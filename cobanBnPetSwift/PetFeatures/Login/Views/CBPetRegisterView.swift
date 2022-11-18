@@ -44,7 +44,6 @@ class CBPetRegisterView: CBPetBaseView {
         let v = CBPetLoginInputView.init(isPwd: false, rightText: "获取验证码".localizedStr) {
             [weak self] in
             self?.getVerificationCodeClick()
-//            self?.smsView.startCountDown()
         }
         v.setInputView(placeholder: "请输入验证码".localizedStr)
         self.bgmView.addSubview(v)

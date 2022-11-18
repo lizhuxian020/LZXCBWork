@@ -24,17 +24,17 @@ class CBPetLoginInputView: UIView {
     func invalidTimer() {
         self.timer?.invalidate()
         self.timer = nil
-        self.count = 10
+        self.count = 60
         self.textBtn.setTitleColor(KPetAppColor, for: .normal)
         self.textBtn.setTitle("获取验证码".localizedStr, for: .normal)
     }
     
     var timer: Timer?
-    var count: Int = 10
+    var count: Int = 60
     
     lazy var contentView: UIView = {
         let v = UIView.init()
-        v.backgroundColor = UIColor.white
+        v.backgroundColor = KPetBgmColor
         self.addSubview(v)
         return v
     }()
@@ -147,7 +147,6 @@ class CBPetLoginInputView: UIView {
     }
     
     private func setupClearBtn() {
-        self.clearBtn.backgroundColor = UIColor.white
         self.clearBtn.snp_makeConstraints { make in
             make.right.equalTo(-10*KFitWidthRate)
             make.centerY.equalTo(self.contentView)
