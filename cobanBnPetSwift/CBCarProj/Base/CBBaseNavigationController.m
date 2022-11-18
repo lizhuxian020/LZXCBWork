@@ -29,7 +29,7 @@
     // Do any additional setup after loading the view.
     self.delegate = self;
 
-    [AppDelegate setNavigationBGColor:nil :nil];
+    [AppDelegate setNavigationBGColor:UIColor.blueColor :nil];
 }
 - (void)dealloc {
     self.navigationController.delegate = nil;

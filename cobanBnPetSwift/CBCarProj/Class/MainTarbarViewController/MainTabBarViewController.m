@@ -68,10 +68,12 @@
                                       title:Localized(@"控制")
                                        size:12
                               selectedImage:@"控制-选中状态"
-                              selectedColor:kRGB(26, 151, 251)
-                                normalImage:imageNorlStr_control
-                                normalColor:normalColor_control];
-    formVC.tabBarItem = [self controller:formVC title:Localized(@"报表") size:12 selectedImage:@"报表-选中" selectedColor:kRGB(26, 151, 251) normalImage:imageNorlStr_form normalColor:normalColor_form];
+                                normalImage:imageNorlStr_control];
+    formVC.tabBarItem = [self controller:formVC
+                                   title:Localized(@"报表")
+                                    size:12
+                           selectedImage:@"报表-选中"
+                             normalImage:imageNorlStr_form];
     
     [self setUpTabBarItem:ControlVC selectedColor:kRGB(26, 151, 251) normalColor:normalColor_control];
     [self setUpTabBarItem:formVC selectedColor:kRGB(26, 151, 251) normalColor:normalColor_form];

@@ -133,17 +133,22 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 @property (nonatomic,strong) CBCarPaopaoView *paopaoView;
 @property (nonatomic,strong) CBNoDataView *noDeviceDataView;
 
-@property (nonatomic,strong) UIButton *switchMapType;
+//@property (nonatomic,strong) UIButton *switchMapType;
+@property (nonatomic, strong) UIButton *deviceListBtn;
+@property (nonatomic, strong) UIButton *qrScanBtn;
+@property (nonatomic, strong) UIButton *alertBtn;
+@property (nonatomic, strong) UIButton *personBtn;
 @end
 
 @implementation MainMapViewController
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear: animated];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
     [_baiduMapView viewWillAppear];
-    _baiduMapView.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放
-    _baiduLocationService.delegate = self;
-    self.navigationItem.title = [CBCommonTools CBdeviceInfo].name?:@"";
+//    _baiduMapView.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放
+//    _baiduLocationService.delegate = self;
+//    self.navigationItem.title = [CBCommonTools CBdeviceInfo].name?:@"";
     
     // 判断当前地区是国内还是国外
     [self showMyLocation];
@@ -153,9 +158,10 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 }
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear: animated];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
     [_baiduMapView viewWillDisappear];
-    _baiduMapView.delegate = nil; // 不用时，置nil
-    _baiduLocationService.delegate = nil;
+//    _baiduMapView.delegate = nil; // 不用时，置nil
+//    _baiduLocationService.delegate = nil;
     
     // 隐藏菜单栏
     [self hideListView];
@@ -302,47 +308,47 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     }
     return _noDeviceDataView;
 }
-- (UIButton *)switchMapType {
-    if (!_switchMapType) {
-        _switchMapType = [[UIButton alloc]init];
-        [_switchMapType setImage:[UIImage imageNamed:@"car_map_statellite_11"] forState:UIControlStateNormal];
-        _switchMapType.backgroundColor = UIColor.grayColor;
-        _switchMapType.layer.masksToBounds = YES;
-        _switchMapType.layer.cornerRadius = 20;
-        [_switchMapType addTarget:self action:@selector(switchMap:) forControlEvents:UIControlEventTouchUpInside];
-        [self.view addSubview:_switchMapType];
-        [_switchMapType mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(PPNavigationBarHeight+15);
-            make.right.mas_equalTo(-15);
-            make.size.mas_equalTo(CGSizeMake(40, 40));
-        }];
-        if ([AppDelegate shareInstance].IsShowGoogleMap == YES) {
-            _switchMapType.hidden = false;
-        } else {
-            _switchMapType.hidden = false;
-        }
-    }
-    return _switchMapType;
-}
-- (void)switchMap:(UIButton *)sender {
-    if ([AppDelegate shareInstance].IsShowGoogleMap) {
-        if (_googleMapView.mapType == kGMSTypeHybrid) {
-            [_switchMapType setImage:[UIImage imageNamed:@"car_map_statellite_11"]forState:UIControlStateNormal];
-            _googleMapView.mapType = kGMSTypeNormal;
-        } else {
-            [_switchMapType setImage:[UIImage imageNamed:@"car_map_normal_11"]forState:UIControlStateNormal];
-            _googleMapView.mapType = kGMSTypeHybrid;
-        }
-    } else {
-        if (_baiduMapView.mapType == BMKMapTypeSatellite) {
-            [_switchMapType setImage:[UIImage imageNamed:@"car_map_statellite_11"]forState:UIControlStateNormal];
-            [_baiduMapView setMapType:BMKMapTypeStandard];
-        } else {
-            [_switchMapType setImage:[UIImage imageNamed:@"car_map_normal_11"]forState:UIControlStateNormal];
-            [_baiduMapView setMapType:BMKMapTypeSatellite];
-        }
-    }
-}
+//- (UIButton *)switchMapType {
+//    if (!_switchMapType) {
+//        _switchMapType = [[UIButton alloc]init];
+//        [_switchMapType setImage:[UIImage imageNamed:@"car_map_statellite_11"] forState:UIControlStateNormal];
+//        _switchMapType.backgroundColor = UIColor.grayColor;
+//        _switchMapType.layer.masksToBounds = YES;
+//        _switchMapType.layer.cornerRadius = 20;
+//        [_switchMapType addTarget:self action:@selector(switchMap:) forControlEvents:UIControlEventTouchUpInside];
+//        [self.view addSubview:_switchMapType];
+//        [_switchMapType mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.top.mas_equalTo(PPNavigationBarHeight+15);
+//            make.right.mas_equalTo(-15);
+//            make.size.mas_equalTo(CGSizeMake(40, 40));
+//        }];
+//        if ([AppDelegate shareInstance].IsShowGoogleMap == YES) {
+//            _switchMapType.hidden = false;
+//        } else {
+//            _switchMapType.hidden = false;
+//        }
+//    }
+//    return _switchMapType;
+//}
+//- (void)switchMap:(UIButton *)sender {
+//    if ([AppDelegate shareInstance].IsShowGoogleMap) {
+//        if (_googleMapView.mapType == kGMSTypeHybrid) {
+//            [_switchMapType setImage:[UIImage imageNamed:@"car_map_statellite_11"]forState:UIControlStateNormal];
+//            _googleMapView.mapType = kGMSTypeNormal;
+//        } else {
+//            [_switchMapType setImage:[UIImage imageNamed:@"car_map_normal_11"]forState:UIControlStateNormal];
+//            _googleMapView.mapType = kGMSTypeHybrid;
+//        }
+//    } else {
+//        if (_baiduMapView.mapType == BMKMapTypeSatellite) {
+//            [_switchMapType setImage:[UIImage imageNamed:@"car_map_statellite_11"]forState:UIControlStateNormal];
+//            [_baiduMapView setMapType:BMKMapTypeStandard];
+//        } else {
+//            [_switchMapType setImage:[UIImage imageNamed:@"car_map_normal_11"]forState:UIControlStateNormal];
+//            [_baiduMapView setMapType:BMKMapTypeSatellite];
+//        }
+//    }
+//}
 - (void)showSelectDevice:(CBHomeLeftMenuDeviceInfoModel *)deviceInfoModel {
     CLLocationCoordinate2D coor = CLLocationCoordinate2DMake(deviceInfoModel.lat.doubleValue,  deviceInfoModel.lng.doubleValue);
     // 更新选中的设备在地图中位置
@@ -556,28 +562,30 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 }
 #pragma mark - CreateUI
 - (void)createUI {
-    [self initBarWithTitle: Localized(@"定位") isBack: NO];
-    if (self.deviceInfoModelSelect) {
-        self.navigationItem.title = self.deviceInfoModelSelect.name?:@"";
-    } else {
-        self.navigationItem.title = @"";
-    }
-    // 导航右侧按钮隐藏
-    UIImage *backImage = [UIImage imageNamed: @"列表"];
-    UIButton *backBtn = [[UIButton alloc] initWithFrame: CGRectMake(0, 0,  44,  44)];
-    [backBtn addTarget: self action: @selector(leftBtnClick) forControlEvents: UIControlEventTouchUpInside];
-    [backBtn setImage: [UIImage imageNamed: @"列表-有状态"] forState: UIControlStateSelected];
-    [backBtn setImage: backImage forState: UIControlStateNormal];
-    [backBtn setImageEdgeInsets: UIEdgeInsetsMake(0, 0, 0, 20)];
-    UIBarButtonItem *barItem = [[UIBarButtonItem alloc] initWithCustomView: backBtn];
-    UIBarButtonItem * spaceItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    //将宽度设为负值
-    spaceItem.width = 10 * KFitWidthRate;
-    self.navigationItem.leftBarButtonItems = @[barItem, spaceItem];
+//    [self initBarWithTitle: Localized(@"定位") isBack: NO];
+//    if (self.deviceInfoModelSelect) {
+//        self.navigationItem.title = self.deviceInfoModelSelect.name?:@"";
+//    } else {
+//        self.navigationItem.title = @"";
+//    }
+//    // 导航右侧按钮隐藏
+//    UIImage *backImage = [UIImage imageNamed: @"列表"];
+//    UIButton *backBtn = [[UIButton alloc] initWithFrame: CGRectMake(0, 0,  44,  44)];
+//    [backBtn addTarget: self action: @selector(leftBtnClick) forControlEvents: UIControlEventTouchUpInside];
+//    [backBtn setImage: [UIImage imageNamed: @"列表-有状态"] forState: UIControlStateSelected];
+//    [backBtn setImage: backImage forState: UIControlStateNormal];
+//    [backBtn setImageEdgeInsets: UIEdgeInsetsMake(0, 0, 0, 20)];
+//    UIBarButtonItem *barItem = [[UIBarButtonItem alloc] initWithCustomView: backBtn];
+//    UIBarButtonItem * spaceItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+//    //将宽度设为负值
+//    spaceItem.width = 10 * KFitWidthRate;
+//    self.navigationItem.leftBarButtonItems = @[barItem, spaceItem];
+    
+    
     
     [self baiduMap];
     [self googleMap];
-    [self switchMapType];
+//    [self switchMapType];
 }
 #pragma mark - GoogleMaps
 - (UIView *)mapView:(GMSMapView *)mapView markerInfoWindow:(GMSMarker *)marker {
@@ -1573,6 +1581,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
                 BMKSportNode *sportModel = [[BMKSportNode alloc] init];
                 CLLocationCoordinate2D coor = CLLocationCoordinate2DMake(trackModel.lat,trackModel.lng);
                 
+                //TODO: LZXTest, 模拟器，无设备，中文，进入了isGoogleMap
                 if ([AppDelegate shareInstance].IsShowGoogleMap) {
                     // google地图
                     sportModel.coordinate = coor;
@@ -1652,7 +1661,9 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
                         [self.baiduMapView addOverlay:pathPloyline_realTime];
                     }
                     self.navigationItem.title = self.deviceInfoModelSelect.name?:@"";
-                    if (self.deviceInfoModelSelect.dno == nil) return ;
+                    if (self.deviceInfoModelSelect.dno == nil) {
+                        break;
+                    }
                     if (deviceInfoModel.dno) {
                         deviceInfoModel.zoomLevel = self.deviceInfoModelSelect.zoomLevel;
                         self.deviceInfoModelSelect = deviceInfoModel;
