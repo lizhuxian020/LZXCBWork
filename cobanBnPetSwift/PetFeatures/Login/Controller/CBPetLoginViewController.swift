@@ -21,7 +21,7 @@ class CBPetLoginViewController: CBPetBaseViewController {
         self.view.addSubview(logView)
         return logView
     }()
-    private var tempBtn:CBPetBaseButton?
+    private var smsInpuView:CBPetLoginInputView?
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -50,18 +50,17 @@ class CBPetLoginViewController: CBPetBaseViewController {
                 self?.forgetPwdClick()
             }
             
-            mainViewModel.getVerificationCodeBlock = { [weak self] (sender:CBPetBaseButton,phone:String,areaCode:String) -> Void in
-                //self?.startCountDownMethod(sender: sender)
+            mainViewModel.getVerificationCodeBlock = { [weak self] (sender:CBPetLoginInputView,phone:String,areaCode:String) -> Void in
                 var newCode = areaCode
                 if newCode.hasPrefix("+") {
                     newCode = newCode.subString(from: 1)
                 }
-                self?.getRegisterCodeRequest(sender: sender,email: phone,areaCode: newCode)
-                self?.tempBtn = sender
+                self?.smsInpuView = sender
+                self?.getRegisterCodeRequest(email: phone,areaCode: newCode)
             }
-            self.counDownBlock = { [weak mainViewModel] (coutDown:Int,isFinished:Bool) -> Void in
-                mainViewModel!.getVerificationCodeUpdateViewBlock!(coutDown,isFinished)
-            }
+//            self.counDownBlock = { [weak mainViewModel] (coutDown:Int,isFinished:Bool) -> Void in
+//                mainViewModel!.getVerificationCodeUpdateViewBlock!(coutDown,isFinished)
+//            }
             
             mainViewModel.registerBlock = { [weak self] (_ email:String,_ code:String,_ pwd:String,_ crCode:String) -> Void in
                 CBLog(message: "注册vc:\(333)")
@@ -149,7 +148,7 @@ class CBPetLoginViewController: CBPetBaseViewController {
         }
     }
     //MARK: - 获取注册邮箱验证码
-    private func getRegisterCodeRequest(sender:CBPetBaseButton,email:String,areaCode:String) {
+    private func getRegisterCodeRequest(email:String,areaCode:String) {
         MBProgressHUD.showAdded(to: self.view, animated: true)
         if AppDelegate.isShowGoogle() {
             CBPetNetworkingManager.share.getEmailCode(Email: email, Type: "1") { [weak self] (successModel) in
@@ -162,7 +161,8 @@ class CBPetLoginViewController: CBPetBaseViewController {
                     return;
                 }
                 MBProgressHUD.showMessage(Msg: "发送成功".localizedStr, Deleay: 1.5)
-                self!.startCountDownMethod(sender: sender)
+                self?.smsInpuView?.startCountDown()
+//                self!.startCountDownMethod(sender: sender)
             } failureBlock: { [weak self] (failureModel) in
                 if let value = self?.view {
                     MBProgressHUD.hide(for: value, animated: true)
@@ -180,7 +180,8 @@ class CBPetLoginViewController: CBPetBaseViewController {
                 return;
             }
             MBProgressHUD.showMessage(Msg: "发送成功".localizedStr, Deleay: 1.5)
-            self!.startCountDownMethod(sender: sender)
+//            self!.startCountDownMethod(sender: sender)
+            self?.smsInpuView?.startCountDown()
         } failureBlock: {  [weak self] (failureModel) in
             if let value = self?.view {
                 MBProgressHUD.hide(for: value, animated: true)
@@ -220,7 +221,7 @@ class CBPetLoginViewController: CBPetBaseViewController {
                 return
             }
             MBProgressHUD.showMessage(Msg: "注册成功".localizedStr, Deleay: 1.5)
-            self?.endCountDownMethod(sender: self?.tempBtn ?? CBPetBaseButton.init())
+            self?.smsInpuView?.invalidTimer()
             guard self?.loginViewModel.registerUpdateViewBlock == nil else {
                 self?.loginViewModel.registerUpdateViewBlock!(email)
                 return

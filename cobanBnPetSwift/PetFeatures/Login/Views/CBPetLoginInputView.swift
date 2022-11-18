@@ -20,6 +20,15 @@ class CBPetLoginInputView: UIView {
         self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(timerFired), userInfo: nil, repeats: true)
     }
     
+    
+    func invalidTimer() {
+        self.timer?.invalidate()
+        self.timer = nil
+        self.count = 10
+        self.textBtn.setTitleColor(KPetAppColor, for: .normal)
+        self.textBtn.setTitle("获取验证码".localizedStr, for: .normal)
+    }
+    
     var timer: Timer?
     var count: Int = 10
     
@@ -170,11 +179,6 @@ class CBPetLoginInputView: UIView {
         return self.isShowPwd ? "pet_login_showPwd" : "pet_login_hidePwd"
     }
     
-    private func invalidTimer() {
-        self.timer?.invalidate()
-        self.timer = nil
-    }
-    
     @objc private func timerFired() {
         if self.count != 1 && self.count > 0 {
             self.textBtn.isEnabled = false
@@ -185,9 +189,6 @@ class CBPetLoginInputView: UIView {
         } else {
             self.textBtn.isEnabled = true
             self.invalidTimer()
-            self.count = 10
-            self.textBtn.setTitleColor(KPetAppColor, for: .normal)
-            self.textBtn.setTitle("获取验证码".localizedStr, for: .normal)
         }
     }
     
