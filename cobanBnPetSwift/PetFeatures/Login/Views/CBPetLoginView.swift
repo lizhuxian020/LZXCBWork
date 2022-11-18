@@ -90,6 +90,13 @@ class CBPetLoginView: CBPetBaseView {
             print("clickSMS")
             self?.smsView.startCountDown()
         }
+        v.setInputView(placeholder: "请输入验证码".localizedStr)
+        self.bgmView.addSubview(v)
+        return v
+    }()
+    private lazy var pwdBtnView:CBPetInputClaerView = {
+        let v = CBPetInputClaerView.init(isPwd: true)
+        v.setInputView(placeholder: "请输入登录密码".localizedStr)
         self.bgmView.addSubview(v)
         return v
     }()
@@ -197,11 +204,17 @@ class CBPetLoginView: CBPetBaseView {
             make.top.equalTo(self.pwdView.snp_bottom).offset(kLoginInputSpaceBetween)
         }
         
+        self.pwdBtnView.snp_makeConstraints { make in
+            make.left.equalTo(kLoginContentHorizontalMargin)
+            make.right.equalTo((-kLoginContentHorizontalMargin))
+            make.top.equalTo(self.smsView.snp_bottom).offset(kLoginInputSpaceBetween)
+        }
+        
         self.loginBtn.snp_makeConstraints { (make) in
             make.left.equalTo(kLoginContentHorizontalMargin)
             make.right.equalTo((-kLoginContentHorizontalMargin))
             make.height.equalTo(40*KFitHeightRate)
-            make.top.equalTo(self.smsView.snp_bottom).offset(kLoginBtnAreaMarginTop)
+            make.top.equalTo(self.pwdBtnView.snp_bottom).offset(kLoginBtnAreaMarginTop)
         }
         
         self.loginBtn.addTarget(self, action: #selector(loginClick), for: .touchUpInside)

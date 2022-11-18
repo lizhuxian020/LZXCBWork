@@ -44,6 +44,15 @@ class CBPetInputClaerView: UIView {
         return btn
     }()
     
+    var showPwdBtn: Bool = false
+    var isShowPwd: Bool = false
+    lazy var pwdBtn: UIButton = {
+        let btn = UIButton.init(imageName: self.pwdBtnImgName())
+        self.contentView.addSubview(btn)
+        btn.addTarget(self, action: #selector(clickPwdBtn), for: .touchUpInside)
+        return btn
+    }()
+    
     var textBtnBlk: (()->Void)?
     var isSms: Bool = false
     lazy var textBtn: UIButton = {
@@ -72,11 +81,20 @@ class CBPetInputClaerView: UIView {
         self.textBtnBlk = clickBlk
         self.setUpRightView(rightText: rightText)
         self.setUpTF()
+        self.textTF.isSecureTextEntry = true
     }
     
-    convenience init(isSms: Bool) {
+//    convenience init(isSms: Bool) {
+//        self.init()
+//        self.setupSMS()
+//        self.setUpTF()
+//    }
+    
+    convenience init(isPwd: Bool) {
         self.init()
-        self.setupSMS()
+        self.setupPwd()
+        self.setUpTF()
+        self.textTF.isSecureTextEntry = true
     }
     
     private func setupContentView() {
@@ -95,9 +113,14 @@ class CBPetInputClaerView: UIView {
             make.top.bottom.equalTo(0)
             make.left.equalTo(10*KFitWidthRate)
             make.right.equalTo(
-                self.showClear ? self.clearBtn.snp_left : self.textBtn.snp_left
+                self.rightView().snp_left
             ).offset(-5*KFitWidthRate)
         }
+    }
+    
+    private func rightView() -> UIView {
+        return self.showClear ? self.clearBtn :
+        self.showPwdBtn ? self.pwdBtn : self.textBtn;
     }
     
     private func setUpRightView(rightText: String?) {
@@ -122,15 +145,29 @@ class CBPetInputClaerView: UIView {
             make.width.height.equalTo(contentHeight*2/3)
         }
     }
+//
+//    private func setupSMS() {
+//        self.isSms = true;
+//        self.showClear = false
+//        self.textBtn.setTitle("获取验证码".localizedStr, for: .normal)
+//        self.textBtn.snp_makeConstraints { make in
+//            make.right.equalTo(-10*KFitWidthRate)
+//            make.centerY.equalTo(self.contentView)
+//        }
+//    }
     
-    private func setupSMS() {
-        self.isSms = true;
+    private func setupPwd() {
+        self.showPwdBtn = true
         self.showClear = false
-        self.textBtn.setTitle("获取验证码".localizedStr, for: .normal)
-        self.textBtn.snp_makeConstraints { make in
+        self.pwdBtn.snp_makeConstraints { make in
             make.right.equalTo(-10*KFitWidthRate)
             make.centerY.equalTo(self.contentView)
+            make.width.height.equalTo(contentHeight*2/3)
         }
+    }
+    
+    private func pwdBtnImgName() -> String {
+        return self.isShowPwd ? "pet_login_showPwd" : "pet_login_hidePwd"
     }
     
     private func invalidTimer() {
@@ -160,5 +197,12 @@ class CBPetInputClaerView: UIView {
     
     @objc private func clickTextBtn() {
         self.textBtnBlk?()
+    }
+    
+    @objc private func clickPwdBtn() {
+        self.textTF.isSecureTextEntry = !self.textTF.isSecureTextEntry
+        self.isShowPwd = !self.textTF.isSecureTextEntry
+        self.pwdBtn.setImage(UIImage.init(named: self.pwdBtnImgName()), for: .normal)
+        self.pwdBtn.setImage(UIImage.init(named: self.pwdBtnImgName()), for: .highlighted)
     }
 }
