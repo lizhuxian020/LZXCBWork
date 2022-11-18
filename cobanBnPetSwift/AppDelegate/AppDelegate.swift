@@ -107,12 +107,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         let nav = CBPetBaseNavigationViewController.init(rootViewController: loginVC)
         self.window?.rootViewController = nav
         
-        AppDelegate.setNavigationBGColor(nil);
+        AppDelegate.setNavigationBGColor(nil, nil);
         
         return true
     }
     
-    @objc class func setNavigationBGColor(_ color: UIColor?) {
+    @objc class func setNavigationBGColor(_ color: UIColor?, _ naviBar: UINavigationBar?) {
+        let navigationBar : UINavigationBar = naviBar ?? UINavigationBar.appearance()
         if #available(iOS 13.0, *) {
              let app = UINavigationBarAppearance()
              app.configureWithOpaqueBackground()  // 重置背景和阴影颜色
@@ -123,12 +124,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
              ]
             app.backgroundColor = color ?? UIColor.init().colorWithHexString(hexString: "#2E2F41")  // 设置导航栏背景色
              app.shadowColor = .clear
-             UINavigationBar.appearance().scrollEdgeAppearance = app  // 带scroll滑动的页面
-             UINavigationBar.appearance().standardAppearance = app // 常规页面。描述导航栏以标准高度
+            navigationBar.scrollEdgeAppearance = app  // 带scroll滑动的页面
+            navigationBar.standardAppearance = app // 常规页面。描述导航栏以标准高度
         } else {
-            UINavigationBar.appearance().barTintColor = color ?? UIColor.init().colorWithHexString(hexString: "#2E2F41")
-            UINavigationBar.appearance().isTranslucent = true
-            UINavigationBar.appearance().titleTextAttributes = [
+            navigationBar.barTintColor = color ?? UIColor.init().colorWithHexString(hexString: "#2E2F41")
+            navigationBar.isTranslucent = true
+            navigationBar.titleTextAttributes = [
                 NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18),
                 NSAttributedString.Key.foregroundColor:
                     color != nil ? UIColor.black : UIColor.white

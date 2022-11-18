@@ -126,7 +126,7 @@ class CBPetForgetPwdViewController: CBPetBaseViewController {
 
         // Do any additional setup after loading the view.
         
-        AppDelegate.setNavigationBGColor(UIColor.white)
+        AppDelegate.setNavigationBGColor(UIColor.white, self.navigationController?.navigationBar)
         
         setupView()
         
@@ -139,7 +139,7 @@ class CBPetForgetPwdViewController: CBPetBaseViewController {
     }
     override func viewWillDisappear(_ animated: Bool) {
         super .viewWillDisappear(animated)
-        AppDelegate.setNavigationBGColor(nil)
+        AppDelegate.setNavigationBGColor(nil, self.navigationController?.navigationBar)
     }
     private func setupView() {
         self.view.backgroundColor = UIColor.white

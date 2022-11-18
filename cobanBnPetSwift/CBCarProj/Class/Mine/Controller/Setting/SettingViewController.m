@@ -60,7 +60,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0) { // 修改密码
-        ChangePassViewController *changePass = [[ChangePassViewController alloc] init];
+        CBPetUpdatePwdViewController *changePass = [[CBPetUpdatePwdViewController alloc] init];
         [self.navigationController pushViewController: changePass animated: YES];
     }else if(indexPath.row == 1){ // 关于我们
         AboutUsViewController *aboutUsVC = [[AboutUsViewController alloc] init];

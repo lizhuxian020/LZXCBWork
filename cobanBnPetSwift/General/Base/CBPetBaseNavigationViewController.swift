@@ -17,7 +17,7 @@ class CBPetBaseNavigationViewController: UINavigationController,UINavigationCont
         
         self.delegate = self
         
-        AppDelegate.setNavigationBGColor(nil)
+        AppDelegate.setNavigationBGColor(nil, nil)
     }
     
     override func pushViewController(_ viewController: UIViewController, animated: Bool) {

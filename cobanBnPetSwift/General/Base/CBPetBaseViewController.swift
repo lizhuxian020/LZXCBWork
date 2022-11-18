@@ -99,45 +99,45 @@ class CBPetBaseViewController: UIViewController,UIGestureRecognizerDelegate {
     }
     //MARK: - 设置导航栏背景色是否透明
     public func setupNavigationAttributesMethod() {
-        let className = self.getClassName()
-        /*  需要设置导航栏透明的控制器 */
-        if className.isEqual(to: "CBPetPersonalPageVC")
-            || className.isEqual(to: "CBPetLoginViewController") {
-        //|| className.isEqual(to: "CBPetPersonalCenterVC") {
-            /*设置导航栏背景图片为一个空的image，这样就透明了*/
-            self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-            /* 去掉透明后导航栏下边的黑边*/
-            self.navigationController?.navigationBar.shadowImage = UIImage()
-        } else {
-            /* 如果不想让其他页面的导航栏变为透明 需要置nil*/
-            self.navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
-        }
-        //MARK: - 设置导航栏背景色,状态栏
-        /* 登录、首页、扫描设备二维码、输入绑定号、绑定成功、微聊、个人主页、虚拟围栏、围栏警告  导航栏背景色为黑色*/
-        if className.isEqual(to: "CBPetLoginViewController")
-            || className.isEqual(to: "CBPetHomeViewController")
-            || className.isEqual(to: "CBPetScanToBindDeviceVC")
-            || className.isEqual(to: "CBPetScanInputVC")
-            || className.isEqual(to: "CBPetBindSuccessVC")
-            || className.isEqual(to: "CBPetFunctionChatVC")
-            || className.isEqual(to: "CBPetPersonalPageVC")
-            || className.isEqual(to: "CBPetSetFenceViewController")
-            || className.isEqual(to: "CBPetForgetPwdViewController")
-            || className.isEqual(to: "CBPetFenceAlarmViewController") {
-            /* 状态栏 black黑底白字 default白底黑字*/
-            self.navigationController?.navigationBar.barStyle = .black
-            self.navigationController?.navigationBar.barTintColor = KPetNavigationBarColor
-            self.navigationController!.navigationBar.tintColor = UIColor.white
-            let dict:NSDictionary = [NSAttributedString.Key.foregroundColor: UIColor.white,NSAttributedString.Key.font : UIFont.init(name: CBPingFang_SC_Bold, size: 16*KFitHeightRate) as Any]
-            self.navigationController?.navigationBar.titleTextAttributes = dict as? [NSAttributedString.Key : AnyObject]
-        } else {
-            /* 状态栏 black黑底白字 default白底黑字*/
-            self.navigationController?.navigationBar.barStyle = .default
-            self.navigationController?.navigationBar.barTintColor = UIColor.white
-            self.navigationController?.navigationBar.tintColor = UIColor.white
-            let dict:NSDictionary = [NSAttributedString.Key.foregroundColor: KPetTextColor,NSAttributedString.Key.font : UIFont.init(name: CBPingFang_SC_Bold, size: 16*KFitHeightRate) as Any]
-            self.navigationController?.navigationBar.titleTextAttributes = dict as? [NSAttributedString.Key : AnyObject]
-        }
+//        let className = self.getClassName()
+//        /*  需要设置导航栏透明的控制器 */
+//        if className.isEqual(to: "CBPetPersonalPageVC")
+//            || className.isEqual(to: "CBPetLoginViewController") {
+//        //|| className.isEqual(to: "CBPetPersonalCenterVC") {
+//            /*设置导航栏背景图片为一个空的image，这样就透明了*/
+//            self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+//            /* 去掉透明后导航栏下边的黑边*/
+//            self.navigationController?.navigationBar.shadowImage = UIImage()
+//        } else {
+//            /* 如果不想让其他页面的导航栏变为透明 需要置nil*/
+//            self.navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+//        }
+//        //MARK: - 设置导航栏背景色,状态栏
+//        /* 登录、首页、扫描设备二维码、输入绑定号、绑定成功、微聊、个人主页、虚拟围栏、围栏警告  导航栏背景色为黑色*/
+//        if className.isEqual(to: "CBPetLoginViewController")
+//            || className.isEqual(to: "CBPetHomeViewController")
+//            || className.isEqual(to: "CBPetScanToBindDeviceVC")
+//            || className.isEqual(to: "CBPetScanInputVC")
+//            || className.isEqual(to: "CBPetBindSuccessVC")
+//            || className.isEqual(to: "CBPetFunctionChatVC")
+//            || className.isEqual(to: "CBPetPersonalPageVC")
+//            || className.isEqual(to: "CBPetSetFenceViewController")
+//            || className.isEqual(to: "CBPetForgetPwdViewController")
+//            || className.isEqual(to: "CBPetFenceAlarmViewController") {
+//            /* 状态栏 black黑底白字 default白底黑字*/
+//            self.navigationController?.navigationBar.barStyle = .black
+//            self.navigationController?.navigationBar.barTintColor = KPetNavigationBarColor
+//            self.navigationController!.navigationBar.tintColor = UIColor.white
+//            let dict:NSDictionary = [NSAttributedString.Key.foregroundColor: UIColor.white,NSAttributedString.Key.font : UIFont.init(name: CBPingFang_SC_Bold, size: 16*KFitHeightRate) as Any]
+//            self.navigationController?.navigationBar.titleTextAttributes = dict as? [NSAttributedString.Key : AnyObject]
+//        } else {
+//            /* 状态栏 black黑底白字 default白底黑字*/
+//            self.navigationController?.navigationBar.barStyle = .default
+//            self.navigationController?.navigationBar.barTintColor = UIColor.white
+//            self.navigationController?.navigationBar.tintColor = UIColor.white
+//            let dict:NSDictionary = [NSAttributedString.Key.foregroundColor: KPetTextColor,NSAttributedString.Key.font : UIFont.init(name: CBPingFang_SC_Bold, size: 16*KFitHeightRate) as Any]
+//            self.navigationController?.navigationBar.titleTextAttributes = dict as? [NSAttributedString.Key : AnyObject]
+//        }
     }
     //MARK: - 返回按钮的icon
     private func returnBackImageName() -> String {
@@ -150,6 +150,7 @@ class CBPetBaseViewController: UIViewController,UIGestureRecognizerDelegate {
             || className.isEqual(to: "CBPetFunctionChatVC")
             || className.isEqual(to: "CBPetPersonalPageVC")
             || className.isEqual(to: "CBPetSetFenceViewController")
+            || className.isEqual(to: "CBPetMsgCterViewController")
             || className.isEqual(to: "CBPetFenceAlarmViewController") {
             return "pet_leftArrow_white"
         } else {
