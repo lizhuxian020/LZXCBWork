@@ -1841,6 +1841,7 @@
 		B16C38C42793208D0058EAC4 /* CBPetMultiVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetMultiVC.swift; sourceTree = "<group>"; };
 		B17F1D16279461430040434F /* CBPetMultiVCNaviBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetMultiVCNaviBar.swift; sourceTree = "<group>"; };
 		B17F1D19279463640040434F /* CBPetMultiViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetMultiViewModel.swift; sourceTree = "<group>"; };
+		B19B58052929304B00AC1162 /* MainViewConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewConfig.h; sourceTree = "<group>"; };
 		B1E7040A2798727100060475 /* CBPetToolAssistanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetToolAssistanceView.swift; sourceTree = "<group>"; };
 		B1EF2F2A279C554D0050BF05 /* CBPetAvatarPaoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetAvatarPaoView.swift; sourceTree = "<group>"; };
 		B1EF2F2C279EFB000050BF05 /* CBPetFuncUserManageOtherConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetFuncUserManageOtherConfigView.swift; sourceTree = "<group>"; };
@@ -4146,6 +4147,7 @@
 		17CDAA6724CEBE5500BB9F8B /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				B19B58042929304B00AC1162 /* Marco */,
 				B101D4DB2927CABD007EA942 /* Category */,
 				17CDAA6824CEBE5500BB9F8B /* MainMapViewController.h */,
 				17CDAA9624CEBE5500BB9F8B /* MainMapViewController.m */,
@@ -5383,6 +5385,14 @@
 				B17F1D19279463640040434F /* CBPetMultiViewModel.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		B19B58042929304B00AC1162 /* Marco */ = {
+			isa = PBXGroup;
+			children = (
+				B19B58052929304B00AC1162 /* MainViewConfig.h */,
+			);
+			path = Marco;
 			sourceTree = "<group>";
 		};
 		FCDD743A446F819B118ED245 /* Pods */ = {

@@ -9,6 +9,7 @@
 #import "CBHomeLeftMenuView.h"
 #import "CBHomeLeftMenuModel.h"
 #import "CBHomeLeftMenuTableView.h"
+#import "MainViewConfig.h"
 
 @interface CBHomeLeftMenuView ()<UIScrollViewDelegate>
 {
@@ -57,44 +58,33 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.0];
-        KLeftMenuWidth = self.width - 21.5*KFitWidthRate - 16*KFitHeightRate;
+        KLeftMenuWidth = self.width;
         [self bgmView];
         
         self.index = index;
         self.sliderArray = slideArray;
         self.tableViewArray = [NSMutableArray array];
         
-        [self initTopBtns];
-        
-        [self initSlideView];
-        
         // 搜索view
         [self textFieldView];
         
-        [self initScrollView];
+        [self initTopBtns];
         
+        [self initSlideView];
+
+        [self initScrollView];
+
         [self initDownTableViews];
     }
     return self;
 }
 - (UIView *)bgmView {
     if (!_bgmView) {
-        UIImage *image = [UIImage imageNamed: @"列表框"];
-        UIImageView *backImageView = [[UIImageView alloc] initWithImage: image];
-        backImageView.alpha = 0.5;//
-        [self addSubview: backImageView];
-        [backImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.right.top.bottom.equalTo(self);
-        }];
-        
         _bgmView = [UIView new];
-        _bgmView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.0];
+        _bgmView.backgroundColor = kViewVCBackgroundColor;
         [self addSubview:_bgmView];
         [_bgmView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self).with.offset(16 * KFitHeightRate);
-            make.left.equalTo(self).with.offset(9 * KFitWidthRate);
-            make.right.equalTo(self).with.offset(-12.5 * KFitWidthRate);
-            make.bottom.equalTo(self).with.offset(-15 * KFitWidthRate);
+            make.edges.equalTo(@0);
         }];
     }
     return _bgmView;
@@ -102,24 +92,30 @@
 #pragma mark -- 实例化顶部菜单
 - (void)initTopBtns {
     CGFloat width = KLeftMenuWidth/self.sliderArray.count;
-    UIScrollView *scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(9*KFitWidthRate, 16*KFitHeightRate, KLeftMenuWidth, 40*KFitHeightRate)];
-    scrollView.backgroundColor = kRGB(26, 151, 251);//[UIColor colorWithHexString:@"#898989"];
+//    UIScrollView *scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, KLeftMenuWidth, HomeLeftMenu_TitleHeight)];
+    UIScrollView *scrollView = [[UIScrollView alloc] init];
+//    scrollView.backgroundColor = kRGB(26, 151, 251);//[UIColor colorWithHexString:@"#898989"];
     scrollView.showsHorizontalScrollIndicator = NO;
     scrollView.showsVerticalScrollIndicator = NO;
     scrollView.bounces = NO;
     scrollView.delegate = self;
-    scrollView.contentSize = CGSizeMake(width*self.sliderArray.count, 0);
+    scrollView.contentSize = CGSizeMake(KLeftMenuWidth, 0);
     [self.bgmView addSubview:scrollView];
     _topScrollView = scrollView;
+    [_topScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.textFieldView.mas_bottom).mas_offset(HomeLeftMenu_Padding);
+        make.left.right.equalTo(@0);
+        make.height.equalTo(@HomeLeftMenu_TitleHeight);
+    }];
 
     self.buttonsArray = [NSMutableArray array];
     for (int i = 0; i < self.sliderArray.count; i ++) {
-        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(width*i, 0, width, 40*KFitHeightRate)];
-        button.tag = 100+i;
+        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(width*i, 0, width, HomeLeftMenu_TitleHeight)];
+//        button.tag = HomeLetfMenu_TitleBtnBaseTag+i;
         if (i == 0)
             _selectBtn = button;
         button.titleLabel.font = i==0?[UIFont systemFontOfSize: 14*KFitHeightRate]:[UIFont systemFontOfSize: 14*KFitHeightRate];
-        [button setTitleColor:i==0?[UIColor whiteColor]:[UIColor blackColor] forState:UIControlStateNormal];
+        [button setTitleColor:i==0?HomeLeftMenu_TitleSelectedColor:HomeLeftMenu_TitleNormalColor forState:UIControlStateNormal];
         CBHomeLeftMenuSliderModel *model = self.sliderArray[i];
         [button setTitle:model.title forState:UIControlStateNormal];
         [button addTarget:self action:@selector(tabButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -131,42 +127,41 @@
 - (void)initSlideView {
     CGFloat width = KLeftMenuWidth/self.sliderArray.count;
     CGFloat siderWidth = width;//20;
-    _slideLineView = [[UIView alloc] initWithFrame:CGRectMake((width-siderWidth)/2.0, 40*KFitHeightRate - 2, siderWidth, 2)];
-    [_slideLineView setBackgroundColor:[UIColor whiteColor]];
+    _slideLineView = [[UIView alloc] initWithFrame:CGRectMake((width-siderWidth)/2.0, HomeLeftMenu_TitleHeight - HomeLeftMenu_TitleLineHeight, siderWidth, HomeLeftMenu_TitleLineHeight)];
+    [_slideLineView setBackgroundColor:[UIColor blackColor]];
     [_topScrollView addSubview:_slideLineView];
 }
 - (UIView *)textFieldView {
     if (!_textFieldView) {
         _textFieldView = [[UIView alloc] init];
-        _textFieldView.backgroundColor = [UIColor whiteColor];//kRGB(243, 244, 245);
+//        _textFieldView.backgroundColor = [UIColor whiteColor];//kRGB(243, 244, 245);
         [self.bgmView addSubview: _textFieldView];
         [_textFieldView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.mas_equalTo(self.bgmView.mas_left).offset(9*KFitWidthRate);
-            make.width.mas_equalTo(KLeftMenuWidth);
-            make.top.equalTo(self.topScrollView.mas_bottom).with.offset(12.5 * KFitHeightRate);
-            make.height.mas_equalTo(40 * KFitHeightRate);
+            make.left.mas_equalTo(HomeLeftMenu_Padding);
+            make.right.mas_equalTo(-HomeLeftMenu_Padding);
+//            make.top.equalTo(self.topScrollView.mas_bottom).with.offset(12.5 * KFitHeightRate);
+            make.top.mas_equalTo(HomeLeftMenu_Padding);
+            make.height.mas_equalTo(HomeLeftMenu_TitleHeight);
         }];
+        _textFieldView.layer.borderWidth = 1;
+        _textFieldView.layer.borderColor = UIColor.grayColor.CGColor;
+        _textFieldView.layer.cornerRadius = 3;
         
         _searchTextFeild = [MINUtils createTextFieldWithHoldText:Localized(@"输入车牌号码") fontSize: 13 * KFitHeightRate];
-        UIView * leftView = [[UIView alloc] initWithFrame:CGRectMake(12.5 * KFitWidthRate,0, 60 * KFitWidthRate,30 * KFitHeightRate)];
+        UIView * leftView = [[UIView alloc] init];
         UIImage *image = [UIImage imageNamed: @"搜索"];
         UIImageView *imageView = [[UIImageView alloc] initWithImage: image];
         [leftView addSubview: imageView];
         [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.center.equalTo(leftView);
-            make.size.mas_equalTo(CGSizeMake(image.size.width * KFitWidthRate, image.size.height * KFitWidthRate));
+            make.edges.equalTo(@0);
         }];
-        leftView.backgroundColor = [UIColor clearColor];
         _searchTextFeild.leftView = leftView;
         _searchTextFeild.leftViewMode = UITextFieldViewModeAlways;
         [_textFieldView addSubview: _searchTextFeild];
         [_searchTextFeild mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(_textFieldView);
-            make.centerY.equalTo(_textFieldView);
-            make.height.mas_equalTo(30 * KFitHeightRate);
-            make.right.equalTo(_textFieldView).with.offset(12.5 * KFitWidthRate);
+            make.edges.equalTo(@0);
         }];
-        
+
         [_searchTextFeild addTarget:self action:@selector(responseToTextfeildValueChange:) forControlEvents:UIControlEventEditingChanged];
         [_searchTextFeild addTarget:self action:@selector(responseToTextfeildBegainEdit:) forControlEvents:UIControlEventEditingDidBegin];
         [_searchTextFeild addTarget:self action:@selector(responseToTextfeildDidEnd:) forControlEvents:UIControlEventEditingDidEnd];
@@ -176,9 +171,10 @@
 }
 #pragma mark -- 实例化ScrollView
 - (void)initScrollView {
-    _mainScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(9 * KFitWidthRate, CGRectGetMaxY(self.topScrollView.frame) + 12.5*KFitHeightRate + 40*KFitHeightRate, KLeftMenuWidth, self.height - (CGRectGetMaxY(self.topScrollView.frame) + 12.5*KFitHeightRate + 40*KFitHeightRate) - 16*KFitHeightRate - 15*KFitHeightRate)];
+//    _mainScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(9 * KFitWidthRate, CGRectGetMaxY(self.topScrollView.frame) + 12.5*KFitHeightRate + 40*KFitHeightRate, KLeftMenuWidth, self.height - (CGRectGetMaxY(self.topScrollView.frame) + 12.5*KFitHeightRate + 40*KFitHeightRate) - 16*KFitHeightRate - 15*KFitHeightRate)];
+    _mainScrollView = [[UIScrollView alloc] init];
     _mainScrollView.contentSize = CGSizeMake(KLeftMenuWidth*self.sliderArray.count, 0);
-    _mainScrollView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.0];
+//    _mainScrollView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.0];
     _mainScrollView.showsVerticalScrollIndicator = NO;
     _mainScrollView.showsHorizontalScrollIndicator = NO;
     _mainScrollView.pagingEnabled = YES;
@@ -186,6 +182,11 @@
     _mainScrollView.delegate = self;
     //_mainScrollView.scrollEnabled = NO;
     [self.bgmView addSubview:_mainScrollView];
+    [_mainScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.topScrollView.mas_bottom);
+        make.left.right.equalTo(@0);
+        make.bottom.equalTo(@0);
+    }];
 }
 #pragma mark --初始化下方的TableViews
 - (void)initDownTableViews {
@@ -277,7 +278,7 @@
 #pragma mark --根据scrollView的滚动位置复用tableView，减少内存开支
 - (void)updateTableWithPageNumber:(NSUInteger)pageNumber {
     self.index = pageNumber;
-    [self changeBackColorWithPage:100+pageNumber];
+    [self changeBackColorWithPage:pageNumber];
     int tabviewTag = pageNumber % 2;
     CGRect tableNewFrame = CGRectMake(pageNumber*KLeftMenuWidth, 0, KLeftMenuWidth, _mainScrollView.frame.size.height);
 
@@ -294,18 +295,18 @@
 - (void)tabButton:(id)sender {
     UIButton *button = sender;
     // 记录选择的菜单
-    self.index = button.tag - 100;
-    [self changeBackColorWithPage:button.tag];
+    self.index = [self.buttonsArray indexOfObject:sender];
+    [self changeBackColorWithPage:self.index];
     self.isLoad = NO;
-    [_mainScrollView setContentOffset:CGPointMake((button.tag-100) * KLeftMenuWidth, 0) animated:YES];
+    [_mainScrollView setContentOffset:CGPointMake((self.index) * KLeftMenuWidth, 0) animated:YES];
 }
 #pragma mark -- 改变按钮颜色
 - (void)changeBackColorWithPage:(NSInteger)currentPage {
-    UIButton *currentBtn = [_topScrollView viewWithTag:currentPage];
+    UIButton *currentBtn = self.buttonsArray[currentPage];
     if (![currentBtn isEqual:_selectBtn]) {
-        [_selectBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [_selectBtn setTitleColor:HomeLeftMenu_TitleNormalColor forState:UIControlStateNormal];
 
-        [currentBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [currentBtn setTitleColor:HomeLeftMenu_TitleSelectedColor forState:UIControlStateNormal];
     }
     _selectBtn = currentBtn;
 }
