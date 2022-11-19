@@ -119,81 +119,46 @@
 - (void)setDeviceInfoModel:(CBHomeLeftMenuDeviceInfoModel *)deviceInfoModel {
     
     _deviceInfoModel = deviceInfoModel;
-    if (deviceInfoModel) {
-        UIImage *image = nil;
-        if ([deviceInfoModel.online isEqualToString:@"1"]) {
-            // 1 在线
-            if ([deviceInfoModel.warmed isEqualToString:@"1"]) {
-                // 1 报警
-                self.warmedImageView.hidden = NO;
-                image = [CBCommonTools returnDeveceListImageStr:deviceInfoModel.icon isOnline:deviceInfoModel.online isWarmed:deviceInfoModel.warmed];
-                self.deviceImageView.image = image;
-                [self.deviceImageView mas_updateConstraints:^(MASConstraintMaker *make) {
-                    make.centerY.equalTo(self);
-                    make.centerX.equalTo(self.mas_left).with.offset(20 * KFitWidthRate);
-                    make.height.mas_equalTo(image.size.height * KFitHeightRate);
-                    make.width.mas_equalTo(image.size.width * KFitWidthRate);
-                }];
-            } else {
-                // 0或nil 未报警
-                self.warmedImageView.hidden = YES;
-                image = [CBCommonTools returnDeveceListImageStr:deviceInfoModel.icon isOnline:deviceInfoModel.online isWarmed:deviceInfoModel.warmed];
-                self.deviceImageView.image = image;
-                [self.deviceImageView mas_updateConstraints:^(MASConstraintMaker *make) {
-                    make.centerY.equalTo(self);
-                    make.centerX.equalTo(self.mas_left).with.offset(20 * KFitWidthRate);
-                    make.height.mas_equalTo(image.size.height * KFitHeightRate);
-                    make.width.mas_equalTo(image.size.width * KFitWidthRate);
-                }];
-            }
-        } else {
-            // 0 离线
-            self.warmedImageView.hidden = YES;
-            if ([deviceInfoModel.warmed isEqualToString:@"1"]) {
-                // 1 报警
-                self.warmedImageView.hidden = NO;
-                image = [CBCommonTools returnDeveceListImageStr:deviceInfoModel.icon isOnline:deviceInfoModel.online isWarmed:deviceInfoModel.warmed];
-                self.deviceImageView.image = image;
-                [self.deviceImageView mas_updateConstraints:^(MASConstraintMaker *make) {
-                    make.centerY.equalTo(self);
-                    make.centerX.equalTo(self.mas_left).with.offset(20 * KFitWidthRate);
-                    make.height.mas_equalTo(image.size.height * KFitHeightRate);
-                    make.width.mas_equalTo(image.size.width * KFitWidthRate);
-                }];
-            } else {
-                image = [CBCommonTools returnDeveceListImageStr:deviceInfoModel.icon isOnline:deviceInfoModel.online isWarmed:deviceInfoModel.warmed];
-                self.deviceImageView.image = image;
-                [self.deviceImageView mas_updateConstraints:^(MASConstraintMaker *make) {
-                    make.centerY.equalTo(self);
-                    make.centerX.equalTo(self.mas_left).with.offset(20 * KFitWidthRate);
-                    make.height.mas_equalTo(image.size.height * KFitHeightRate);
-                    make.width.mas_equalTo(image.size.width * KFitWidthRate);
-                }];
-                
-            }
-        }
-        
-        _deviceNameLabel.text = deviceInfoModel.name?:@"";
-        if ([deviceInfoModel.devStatus isEqualToString:@"0"]) {
-            self.deviceStatusLabel.text = Localized(@"未使用");
-            self.deviceStatusLabel.textColor = [UIColor redColor];
-        } else if ([deviceInfoModel.devStatus isEqualToString:@"1"]) {
-            if ([deviceInfoModel.online isEqualToString:@"1"]) {
-                self.deviceStatusLabel.text = Localized(@"行驶中");
-                self.deviceStatusLabel.textColor = kRGB(26, 151, 251);
-            } else {
-                self.deviceStatusLabel.text = Localized(@"离线");
-            }
-        } else if ([deviceInfoModel.devStatus isEqualToString:@"2"]) {
-            if ([deviceInfoModel.online isEqualToString:@"1"]) {
-                self.deviceStatusLabel.text = Localized(@"静止");
-                self.deviceStatusLabel.textColor = [UIColor redColor];
-            } else {
-                self.deviceStatusLabel.text = Localized(@"离线");
-            }
-        } else {
-            self.deviceStatusLabel.text = Localized(@"未使用");
-        }
+    self.warmedImageView.hidden = YES;
+    if (!deviceInfoModel) {
+        return;
+    }
+    
+    UIImage *image = nil;
+    NSDictionary *dic = @{
+        @"iconStr": deviceInfoModel.icon ?: @"",
+        @"onlineStr": deviceInfoModel.online ?: @"",
+        @"warmedStr": deviceInfoModel.warmed ?: @"",
+        @"devStatus": deviceInfoModel.devStatus ?: @"",
+    };
+    if ([deviceInfoModel.warmed isEqualToString:@"1"]) {
+        self.warmedImageView.hidden = NO;
+    }
+    if ([deviceInfoModel.online isEqualToString:@"1"]) {
+        image = [CBCommonTools returnDeveceListImageWithDic:dic];
+        self.deviceImageView.image = image;
+        [self.deviceImageView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(self);
+            make.centerX.equalTo(self.mas_left).with.offset(20 * KFitWidthRate);
+            make.height.mas_equalTo(image.size.height * KFitHeightRate);
+            make.width.mas_equalTo(image.size.width * KFitWidthRate);
+        }];
+    }
+    _deviceNameLabel.text = deviceInfoModel.name?:@"";
+    if ([deviceInfoModel.devStatus isEqualToString:@"0"]) {
+        self.deviceStatusLabel.text = Localized(@"未使用");
+        self.deviceStatusLabel.textColor = [UIColor redColor];
+    } else if (![deviceInfoModel.online isEqualToString:@"1"]) {
+        self.deviceStatusLabel.text = Localized(@"离线");
+        self.deviceStatusLabel.textColor = kRGB(137 , 137, 137);
+    } else if ([deviceInfoModel.devStatus isEqualToString:@"1"]) {
+        self.deviceStatusLabel.text = Localized(@"行驶中");
+        self.deviceStatusLabel.textColor = kRGB(26, 151, 251);
+    } else if ([deviceInfoModel.devStatus isEqualToString:@"2"]) {
+        self.deviceStatusLabel.text = Localized(@"静止");
+        self.deviceStatusLabel.textColor = [UIColor redColor];
+    } else {
+        self.deviceStatusLabel.text = Localized(@"未使用");
     }
 }
 - (void)layoutSubviews {

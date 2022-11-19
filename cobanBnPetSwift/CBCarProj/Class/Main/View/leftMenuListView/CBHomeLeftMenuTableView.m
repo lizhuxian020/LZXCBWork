@@ -62,20 +62,16 @@ static NSString *homeHeadViewIndentifer = @"homeHeadViewIndentifer";
 //    self.arrayData = [NSMutableArray array];
 //    self.arrayAllData = [NSMutableArray array];
 //    [self reloadData];
+    
     kWeakSelf(self);
     if (!self.mj_header) {
         self.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
             kStrongSelf(self);
             [self.arrayData removeAllObjects];
             [self getMyDeviceListRequest];
-            
         }];
-        
-        [self getMyDeviceListRequest];
-    } else {
-        
-        [self getMyDeviceListRequest];
     }
+    [self getMyDeviceListRequest];
 }
 #pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -138,7 +134,7 @@ static NSString *homeHeadViewIndentifer = @"homeHeadViewIndentifer";
     return 40*KFitHeightRate;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 53 * KFitHeightRate;
+    return 50 * KFitHeightRate;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     return 0.001f;

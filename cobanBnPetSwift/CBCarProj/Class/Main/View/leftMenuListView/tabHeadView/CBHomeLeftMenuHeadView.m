@@ -7,6 +7,7 @@
 //
 
 #import "CBHomeLeftMenuHeadView.h"
+#import "MainViewConfig.h"
 
 @interface CBHomeLeftMenuHeadView ()
 /** 卡片view */
@@ -50,9 +51,9 @@
         
         [self addSubview:_cardView];
         [_cardView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.mas_equalTo(0*KFitWidthRate);
-            make.right.mas_equalTo(-0*KFitWidthRate);
-            make.top.mas_equalTo(13*KFitHeightRate);
+            make.left.mas_equalTo(HomeLeftMenu_Padding);
+            make.right.mas_equalTo(-HomeLeftMenu_Padding);
+            make.top.mas_equalTo(HomeLeftMenu_Padding);
             make.bottom.mas_equalTo(0);
         }];
     }

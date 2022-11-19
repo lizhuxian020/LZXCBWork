@@ -244,93 +244,80 @@
     CLLocationCoordinate2D baiduCoor = BMKCoordTrans(coor, BMK_COORDTYPE_BD09LL,BMK_COORDTYPE_COMMON);
     return baiduCoor;
 }
-// 返回设备列表的icon
+
 + (UIImage *)returnDeveceListImageStr:(NSString *)iconStr isOnline:(NSString *)onlineStr isWarmed:(NSString *)warmedStr {
+    NSDictionary *dic = @{
+        @"iconStr": iconStr ?: @"",
+        @"onlineStr": onlineStr ?: @"",
+        @"warmedStr": warmedStr ?: @"",
+        @"devStatus": @"",
+    };
+    return [self returnDeveceListImageWithDic:dic];
+}
+
+// 返回设备列表的icon
++ (UIImage *)returnDeveceListImageWithDic:(NSDictionary *)dic {
+    NSString *iconStr = dic[@"iconStr"];
+    NSString *onlineStr = dic[@"onlineStr"];
+    NSString *warmedStr = dic[@"warmedStr"];
+    NSString *devStatus = dic[@"devStatus"];
     UIImage *image = nil;
-    if ([onlineStr isEqualToString:@"1"]) {
-        // 1 在线
-        if ([warmedStr isEqualToString:@"1"]) {
-            // 1 报警
-            //self.warmedImageView.hidden = NO;
-            if ([iconStr isEqualToString:@"0"]) {
-                image = [UIImage imageNamed: @"定位图-报警"];
-            } else if ([iconStr isEqualToString:@"1"]) {
-                image = [UIImage imageNamed: @"人物-报警"];
-            } else if ([iconStr isEqualToString:@"2"]) {
-                image = [UIImage imageNamed: @"宠物-报警"];
-            } else if ([iconStr isEqualToString:@"3"]) {
-                image = [UIImage imageNamed: @"单车-报警"];
-            } else if ([iconStr isEqualToString:@"4"]) {
-                image = [UIImage imageNamed: @"摩托车-报警"];
-            } else if ([iconStr isEqualToString:@"5"]) {
-                image = [UIImage imageNamed: @"小车-报警"];
-            } else if ([iconStr isEqualToString:@"6"]) {
-                image = [UIImage imageNamed: @"货车-报警"];
-            } else if ([iconStr isEqualToString:@"7"]) {
-                image = [UIImage imageNamed: @"行李箱-报警"];
+    if ([warmedStr isEqualToString:@"1"]) {
+        if ([iconStr isEqualToString:@"0"]) {
+            image = [UIImage imageNamed: @"定位图-报警"];
+        } else if ([iconStr isEqualToString:@"1"]) {
+            image = [UIImage imageNamed: @"人物-报警"];
+        } else if ([iconStr isEqualToString:@"2"]) {
+            image = [UIImage imageNamed: @"宠物-报警"];
+        } else if ([iconStr isEqualToString:@"3"]) {
+            image = [UIImage imageNamed: @"单车-报警"];
+        } else if ([iconStr isEqualToString:@"4"]) {
+            image = [UIImage imageNamed: @"摩托车-报警"];
+        } else if ([iconStr isEqualToString:@"5"]) {
+            image = [UIImage imageNamed: @"小车-报警"];
+        } else if ([iconStr isEqualToString:@"6"]) {
+            image = [UIImage imageNamed: @"货车-报警"];
+        } else if ([iconStr isEqualToString:@"7"]) {
+            image = [UIImage imageNamed: @"行李箱-报警"];
+        }
+    } else if ([onlineStr isEqualToString:@"1"]) {
+        if ([iconStr isEqualToString:@"0"]) {
+            image = [UIImage imageNamed: @"定位图"];
+            if ([devStatus isEqualToString:@"2"]) {
+                image = [UIImage imageNamed: @"定位-静止"];
             }
-        } else {
-            // 0或nil 未报警
-            //self.warmedImageView.hidden = YES;
-            if ([iconStr isEqualToString:@"0"]) {
-                image = [UIImage imageNamed: @"定位图"];
-            } else if ([iconStr isEqualToString:@"1"]) {
-                image = [UIImage imageNamed: @"人物"];
-            } else if ([iconStr isEqualToString:@"2"]) {
-                image = [UIImage imageNamed: @"宠物"];
-            } else if ([iconStr isEqualToString:@"3"]) {
-                image = [UIImage imageNamed: @"单车"];
-            } else if ([iconStr isEqualToString:@"4"]) {
-                image = [UIImage imageNamed: @"摩托车"];
-            } else if ([iconStr isEqualToString:@"5"]) {
-                image = [UIImage imageNamed: @"小车"];
-            } else if ([iconStr isEqualToString:@"6"]) {
-                image = [UIImage imageNamed: @"货车"];
-            } else if ([iconStr isEqualToString:@"7"]) {
-                image = [UIImage imageNamed: @"行李箱"];
-            }
+        } else if ([iconStr isEqualToString:@"1"]) {
+            image = [UIImage imageNamed: @"人物"];
+        } else if ([iconStr isEqualToString:@"2"]) {
+            image = [UIImage imageNamed: @"宠物"];
+        } else if ([iconStr isEqualToString:@"3"]) {
+            image = [UIImage imageNamed: @"单车"];
+        } else if ([iconStr isEqualToString:@"4"]) {
+            image = [UIImage imageNamed: @"摩托车"];
+        } else if ([iconStr isEqualToString:@"5"]) {
+            image = [UIImage imageNamed: @"小车"];
+        } else if ([iconStr isEqualToString:@"6"]) {
+            image = [UIImage imageNamed: @"货车"];
+        } else if ([iconStr isEqualToString:@"7"]) {
+            image = [UIImage imageNamed: @"行李箱"];
         }
     } else {
-        // 0 离线
-        //self.warmedImageView.hidden = YES;
-        if ([warmedStr isEqualToString:@"1"]) {
-            // 1 报警
-            //self.warmedImageView.hidden = NO;
-            if ([iconStr isEqualToString:@"0"]) {
-                image = [UIImage imageNamed: @"定位图-报警"];
-            } else if ([iconStr isEqualToString:@"1"]) {
-                image = [UIImage imageNamed: @"人物-报警"];
-            } else if ([iconStr isEqualToString:@"2"]) {
-                image = [UIImage imageNamed: @"宠物-报警"];
-            } else if ([iconStr isEqualToString:@"3"]) {
-                image = [UIImage imageNamed: @"单车-报警"];
-            } else if ([iconStr isEqualToString:@"4"]) {
-                image = [UIImage imageNamed: @"摩托车-报警"];
-            } else if ([iconStr isEqualToString:@"5"]) {
-                image = [UIImage imageNamed: @"小车-报警"];
-            } else if ([iconStr isEqualToString:@"6"]) {
-                image = [UIImage imageNamed: @"货车-报警"];
-            } else if ([iconStr isEqualToString:@"7"]) {
-                image = [UIImage imageNamed: @"行李箱-报警"];
-            }
-        } else {
-            if ([iconStr isEqualToString:@"0"]) {
-                image = [UIImage imageNamed: @"定位图-离线"];
-            } else if ([iconStr isEqualToString:@"1"]) {
-                image = [UIImage imageNamed: @"人物-离线"];
-            } else if ([iconStr isEqualToString:@"2"]) {
-                image = [UIImage imageNamed: @"宠物-离线"];
-            } else if ([iconStr isEqualToString:@"3"]) {
-                image = [UIImage imageNamed: @"单车-离线"];
-            } else if ([iconStr isEqualToString:@"4"]) {
-                image = [UIImage imageNamed: @"摩托车-离线"];
-            } else if ([iconStr isEqualToString:@"5"]) {
-                image = [UIImage imageNamed: @"小车-离线"];
-            } else if ([iconStr isEqualToString:@"6"]) {
-                image = [UIImage imageNamed: @"货车-离线"];
-            } else if ([iconStr isEqualToString:@"7"]) {
-                image = [UIImage imageNamed: @"行李箱-离线"];
-            }
+        if ([iconStr isEqualToString:@"0"]) {
+            image = [UIImage imageNamed: @"定位图-离线"];
+        } else if ([iconStr isEqualToString:@"1"]) {
+            image = [UIImage imageNamed: @"人物-离线"];
+        } else if ([iconStr isEqualToString:@"2"]) {
+            image = [UIImage imageNamed: @"宠物-离线"];
+        } else if ([iconStr isEqualToString:@"3"]) {
+            image = [UIImage imageNamed: @"单车-离线"];
+        } else if ([iconStr isEqualToString:@"4"]) {
+            image = [UIImage imageNamed: @"摩托车-离线"];
+        } else if ([iconStr isEqualToString:@"5"]) {
+            image = [UIImage imageNamed: @"小车-离线"];
+        } else if ([iconStr isEqualToString:@"6"]) {
+            image = [UIImage imageNamed: @"货车-离线"];
+        } else if ([iconStr isEqualToString:@"7"]) {
+            image = [UIImage imageNamed: @"行李箱-离线"];
         }
     }
     return image;
