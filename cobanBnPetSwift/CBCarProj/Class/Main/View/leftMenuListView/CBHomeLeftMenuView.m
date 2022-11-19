@@ -266,16 +266,16 @@
             break;
     }
 }
-//#pragma mark -- scrollView的代理方法
-//-(void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
-//    [self scrollViewDidEndDecelerating:scrollView];
-//}
-//- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-//    if ([scrollView isEqual:_mainScrollView]) {
-//        _currentPage = [NSString stringWithFormat:@"%.2f",_mainScrollView.contentOffset.x/KLeftMenuWidth].floatValue;
-//        [self updateTableWithPageNumber:_currentPage];
-//    }
-//}
+#pragma mark -- scrollView的代理方法
+-(void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
+    [self scrollViewDidEndDecelerating:scrollView];
+}
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    if ([scrollView isEqual:_mainScrollView]) {
+        _currentPage = [NSString stringWithFormat:@"%.2f",_mainScrollView.contentOffset.x/KLeftMenuWidth].floatValue;
+        [self updateTableWithPageNumber:_currentPage];
+    }
+}
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if ([_mainScrollView isEqual:scrollView]) {
         CGFloat slideX= scrollView.contentOffset.x/self.sliderArray.count+(KLeftMenuWidth/self.sliderArray.count-_slideLineView.width)/2.0;
@@ -288,22 +288,22 @@
         scrollView.contentOffset = point;
     }
 }
-////#pragma mark --根据scrollView的滚动位置复用tableView，减少内存开支
-//- (void)updateTableWithPageNumber:(NSUInteger)pageNumber {
-//    self.index = pageNumber;
-//    [self changeBackColorWithPage:pageNumber];
+//#pragma mark --根据scrollView的滚动位置复用tableView，减少内存开支
+- (void)updateTableWithPageNumber:(NSUInteger)pageNumber {
+    self.index = pageNumber;
+    [self changeBackColorWithPage:pageNumber];
 //    int tabviewTag = pageNumber % 2;
 //    CGRect tableNewFrame = CGRectMake(pageNumber*KLeftMenuWidth, 0, KLeftMenuWidth, _mainScrollView.frame.size.height);
-//
-//    CBHomeLeftMenuTableView *reuseTableView = _tableViewArray[tabviewTag];
-//    CBHomeLeftMenuSliderModel *model = self.sliderArray[pageNumber];
-//
+
+    CBHomeLeftMenuTableView *reuseTableView = _tableViewArray[pageNumber];
+    CBHomeLeftMenuSliderModel *model = self.sliderArray[pageNumber];
+
 //    reuseTableView.frame = tableNewFrame;
 //    if (!self.isLoad) {
-//
-//        [reuseTableView reloadDataWithModel:model];
+
+    [reuseTableView reloadDataWithModel:model];
 //    }
-//}
+}
 #pragma mark -- 点击顶部的按钮所触发的方法
 - (void)tabButton:(id)sender {
 //    UIButton *button = sender;

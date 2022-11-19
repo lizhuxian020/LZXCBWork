@@ -89,6 +89,14 @@
     
 }
 
+- (void)didMoveToIndex:(int)index {
+    if (index == self.index) {
+        return;
+    }
+    [self unSelected:self.index];
+    [self didSelected:index];
+}
+
 - (void)didClickTitle:(UITapGestureRecognizer *)tap {
     int index = tap.view.tag - 100;
     if (index == self.index) {

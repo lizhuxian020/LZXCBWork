@@ -87,6 +87,7 @@
     }];
     self.containerView.pagingEnabled = YES;
     self.containerView.bounces = NO;
+    self.containerView.delegate = self;
     
     self.deviceView = [[CBHomeLeftMenuView alloc] initWithFrame:CGRectZero withSlideArray:self.slider_array index:0];
     [self.containerView addSubview:self.deviceView];
@@ -111,6 +112,8 @@
         make.left.equalTo(self.groupView.mas_right);
         make.top.width.height.equalTo(self.deviceView);
     }];
+    
+    self.containerView.contentSize = CGSizeMake(SCREEN_WIDTH * 3, 0);
 }
 
 - (void)createTableView
@@ -136,6 +139,15 @@
         }
     }
     return _slider_array;
+}
+
+#pragma mark --ScrollViewDelegate
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
+    int index = [NSString stringWithFormat:@"%.2f",scrollView.contentOffset.x/SCREEN_WIDTH].floatValue;
+    [self.headerView didMoveToIndex:index];
+}
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    [self scrollViewDidEndScrollingAnimation:scrollView];
 }
 
 #pragma mark - tableview delegate & datasource
