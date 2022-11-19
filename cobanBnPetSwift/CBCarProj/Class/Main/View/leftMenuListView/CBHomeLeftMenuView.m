@@ -58,7 +58,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.0];
-        KLeftMenuWidth = self.width;
+        KLeftMenuWidth = self.width ?: SCREEN_WIDTH;
         [self bgmView];
         
         self.index = index;

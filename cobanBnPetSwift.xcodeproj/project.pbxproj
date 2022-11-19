@@ -662,6 +662,7 @@
 		A2F9C5002925D1C400715AF9 /* CBPetLoginInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F9C4FF2925D1C400715AF9 /* CBPetLoginInputView.swift */; };
 		A2F9C5032926135E00715AF9 /* CBLoginLayoutMarco.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F9C5022926135E00715AF9 /* CBLoginLayoutMarco.swift */; };
 		B101D4DE2927CF32007EA942 /* UIView+Badge.m in Sources */ = {isa = PBXBuildFile; fileRef = B101D4DD2927CF32007EA942 /* UIView+Badge.m */; };
+		B11EBFDF29294F790000DA24 /* CBCBCarMineHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = B11EBFDE29294F790000DA24 /* CBCBCarMineHeaderView.m */; };
 		B1212C642795CE8B0044E7CC /* CBPetSwitchPetAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1212C632795CE8B0044E7CC /* CBPetSwitchPetAlertView.swift */; };
 		B15F916F27A19F53000953B6 /* CBPetGMSMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15F916E27A19F53000953B6 /* CBPetGMSMarker.swift */; };
 		B16C38C52793208D0058EAC4 /* CBPetMultiVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16C38C42793208D0058EAC4 /* CBPetMultiVC.swift */; };
@@ -1836,6 +1837,8 @@
 		A2F9C5022926135E00715AF9 /* CBLoginLayoutMarco.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBLoginLayoutMarco.swift; sourceTree = "<group>"; };
 		B101D4DC2927CF32007EA942 /* UIView+Badge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Badge.h"; sourceTree = "<group>"; };
 		B101D4DD2927CF32007EA942 /* UIView+Badge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Badge.m"; sourceTree = "<group>"; };
+		B11EBFDD29294F790000DA24 /* CBCBCarMineHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBCBCarMineHeaderView.h; sourceTree = "<group>"; };
+		B11EBFDE29294F790000DA24 /* CBCBCarMineHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBCBCarMineHeaderView.m; sourceTree = "<group>"; };
 		B1212C632795CE8B0044E7CC /* CBPetSwitchPetAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetSwitchPetAlertView.swift; sourceTree = "<group>"; };
 		B15F916E27A19F53000953B6 /* CBPetGMSMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetGMSMarker.swift; sourceTree = "<group>"; };
 		B16C38C42793208D0058EAC4 /* CBPetMultiVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetMultiVC.swift; sourceTree = "<group>"; };
@@ -3968,6 +3971,7 @@
 		17CDAA1C24CEBE5400BB9F8B /* Mine */ = {
 			isa = PBXGroup;
 			children = (
+				B11EBFD829294F300000DA24 /* Mine */,
 				17CDAA1D24CEBE5400BB9F8B /* Controller */,
 				17CDAA4424CEBE5400BB9F8B /* Model */,
 				17CDAA4E24CEBE5400BB9F8B /* View */,
@@ -3978,8 +3982,6 @@
 		17CDAA1D24CEBE5400BB9F8B /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				17CDAA2624CEBE5400BB9F8B /* MineViewController.h */,
-				17CDAA3A24CEBE5400BB9F8B /* MineViewController.m */,
 				17CDAA1E24CEBE5400BB9F8B /* AlarmMessageSetting */,
 				17CDAA2324CEBE5400BB9F8B /* GroupManager */,
 				17CDAA2724CEBE5400BB9F8B /* DeviceManager */,
@@ -5353,6 +5355,33 @@
 			path = Category;
 			sourceTree = "<group>";
 		};
+		B11EBFD829294F300000DA24 /* Mine */ = {
+			isa = PBXGroup;
+			children = (
+				B11EBFDA29294F470000DA24 /* View */,
+				B11EBFD929294F390000DA24 /* Controller */,
+			);
+			path = Mine;
+			sourceTree = "<group>";
+		};
+		B11EBFD929294F390000DA24 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				17CDAA2624CEBE5400BB9F8B /* MineViewController.h */,
+				17CDAA3A24CEBE5400BB9F8B /* MineViewController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		B11EBFDA29294F470000DA24 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				B11EBFDD29294F790000DA24 /* CBCBCarMineHeaderView.h */,
+				B11EBFDE29294F790000DA24 /* CBCBCarMineHeaderView.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		B16C38C227931F590058EAC4 /* MultiVC */ = {
 			isa = PBXGroup;
 			children = (
@@ -5611,6 +5640,7 @@
 				17CDAB5924CEBE5500BB9F8B /* NumberData.m in Sources */,
 				17CDAB8324CEBE5500BB9F8B /* PieAnimationManager.m in Sources */,
 				B1212C642795CE8B0044E7CC /* CBPetSwitchPetAlertView.swift in Sources */,
+				B11EBFDF29294F790000DA24 /* CBCBCarMineHeaderView.m in Sources */,
 				1782BF7524C0427E00544C36 /* GuardInSchoolViewController.m in Sources */,
 				17CDAB5F24CEBE5500BB9F8B /* BarData.m in Sources */,
 				17CDABBF24CEBE5600BB9F8B /* lstate.c in Sources */,
