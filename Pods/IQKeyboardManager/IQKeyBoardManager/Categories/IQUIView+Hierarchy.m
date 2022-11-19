@@ -48,7 +48,7 @@ Class UIQueuingScrollViewClass;         //UIPageViewController
 
 Class UISearchBarTextFieldClass;        //UISearchBar
 
-+(void)initialize
++(void)load
 {
     [super initialize];
     

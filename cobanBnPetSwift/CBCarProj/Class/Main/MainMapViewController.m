@@ -48,6 +48,7 @@
 #import "AddDeviceViewController.h"
 #import "cobanBnPetSwift-Swift.h"
 #import "UIView+Badge.h"
+#import "MainViewConfig.h"
 
 @interface MainMapViewController ()
 <BMKMapViewDelegate, CLLocationManagerDelegate, GMSMapViewDelegate,
@@ -537,14 +538,14 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     self.isListViewShow = YES;
     [self.view bringSubviewToFront:self.sliderView];
     [UIView animateWithDuration: 0.3 animations:^{
-        self.sliderView.frame = CGRectMake(0, kNavAndStatusHeight, 305 * KFitWidthRate, 415 * KFitHeightRate);
+        self.sliderView.frame = CGRectMake(0, kNavAndStatusHeight, HomeLeftMenu_Width, HomeLeftMenu_Height);
     }];
     [self.sliderView requestData];
 }
 - (void)hideListView {
     self.isListViewShow = NO;
     [UIView animateWithDuration: 0.3 animations:^{
-        self.sliderView.frame = CGRectMake(0, -415 * KFitHeightRate, 305 * KFitWidthRate, 415 * KFitHeightRate);
+        self.sliderView.frame = CGRectMake(0, -HomeLeftMenu_Height, HomeLeftMenu_Width, HomeLeftMenu_Height);
     }];
 }
 - (void)tarbarLongPress {
