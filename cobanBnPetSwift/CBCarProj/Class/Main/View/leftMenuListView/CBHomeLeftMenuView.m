@@ -190,10 +190,11 @@
 }
 #pragma mark --初始化下方的TableViews
 - (void)initDownTableViews {
-    for (int i = 0; i < 2; i ++) {
-        CBHomeLeftMenuTableView *tableView = [[CBHomeLeftMenuTableView alloc] initWithFrame:CGRectMake(i*KLeftMenuWidth, 0, KLeftMenuWidth, _mainScrollView.frame.size.height - TabPaddingBARHEIGHT) style:UITableViewStyleGrouped];
-        tableView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.0];
-        tableView.tag = i;
+    UIView *last = nil;
+    for (int i = 0; i < self.sliderArray.count; i ++) {
+//        CBHomeLeftMenuTableView *tableView = [[CBHomeLeftMenuTableView alloc] initWithFrame:CGRectMake(i*KLeftMenuWidth, 0, KLeftMenuWidth, _mainScrollView.frame.size.height - TabPaddingBARHEIGHT) style:UITableViewStyleGrouped];
+        CBHomeLeftMenuTableView *tableView = [[CBHomeLeftMenuTableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+//        tableView.tag = i;
         [_tableViewArray addObject:tableView];
         [_mainScrollView addSubview:tableView];
         if (i == 0) {
@@ -201,6 +202,18 @@
                 _currentPage = 0;
             }
         }
+        
+        [tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(@0);
+            if (last) {
+                make.left.equalTo(last.mas_right);
+            } else {
+                make.left.equalTo(@0);
+            }
+            make.width.height.equalTo(_mainScrollView);
+            
+        }];
+//        tableView
         kWeakSelf(self);
         tableView.returnBlock = ^(id  _Nonnull objc) {
             kStrongSelf(self);
@@ -216,16 +229,16 @@
                 }
             }
         };
+        last = tableView;
     }
 }
 - (void)requestData {
     UIButton *btn = self.buttonsArray[self.index];
     [self tabButton:btn];
     
-     int tabviewTag = self.index % 2;
-    CBHomeLeftMenuTableView *reuseTableView = _tableViewArray[tabviewTag];
-    CBHomeLeftMenuSliderModel *model = _sliderArray[self.index];
-    [reuseTableView reloadDataWithModel:model];
+//    CBHomeLeftMenuTableView *reuseTableView = _tableViewArray[self.index];
+//    CBHomeLeftMenuSliderModel *model = _sliderArray[self.index];
+//    [reuseTableView reloadDataWithModel:model];
 }
 - (void)updateMenuTitle {
     UIButton *btnFirst = self.buttonsArray[0];
@@ -253,16 +266,16 @@
             break;
     }
 }
-#pragma mark -- scrollView的代理方法
--(void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
-    [self scrollViewDidEndDecelerating:scrollView];
-}
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    if ([scrollView isEqual:_mainScrollView]) {
-        _currentPage = [NSString stringWithFormat:@"%.2f",_mainScrollView.contentOffset.x/KLeftMenuWidth].floatValue;
-        [self updateTableWithPageNumber:_currentPage];
-    }
-}
+//#pragma mark -- scrollView的代理方法
+//-(void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
+//    [self scrollViewDidEndDecelerating:scrollView];
+//}
+//- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+//    if ([scrollView isEqual:_mainScrollView]) {
+//        _currentPage = [NSString stringWithFormat:@"%.2f",_mainScrollView.contentOffset.x/KLeftMenuWidth].floatValue;
+//        [self updateTableWithPageNumber:_currentPage];
+//    }
+//}
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if ([_mainScrollView isEqual:scrollView]) {
         CGFloat slideX= scrollView.contentOffset.x/self.sliderArray.count+(KLeftMenuWidth/self.sliderArray.count-_slideLineView.width)/2.0;
@@ -275,30 +288,34 @@
         scrollView.contentOffset = point;
     }
 }
-#pragma mark --根据scrollView的滚动位置复用tableView，减少内存开支
-- (void)updateTableWithPageNumber:(NSUInteger)pageNumber {
-    self.index = pageNumber;
-    [self changeBackColorWithPage:pageNumber];
-    int tabviewTag = pageNumber % 2;
-    CGRect tableNewFrame = CGRectMake(pageNumber*KLeftMenuWidth, 0, KLeftMenuWidth, _mainScrollView.frame.size.height);
-
-    CBHomeLeftMenuTableView *reuseTableView = _tableViewArray[tabviewTag];
-    CBHomeLeftMenuSliderModel *model = self.sliderArray[pageNumber];
-
-    reuseTableView.frame = tableNewFrame;
-    if (!self.isLoad) {
-        
-        [reuseTableView reloadDataWithModel:model];
-    }
-}
+////#pragma mark --根据scrollView的滚动位置复用tableView，减少内存开支
+//- (void)updateTableWithPageNumber:(NSUInteger)pageNumber {
+//    self.index = pageNumber;
+//    [self changeBackColorWithPage:pageNumber];
+//    int tabviewTag = pageNumber % 2;
+//    CGRect tableNewFrame = CGRectMake(pageNumber*KLeftMenuWidth, 0, KLeftMenuWidth, _mainScrollView.frame.size.height);
+//
+//    CBHomeLeftMenuTableView *reuseTableView = _tableViewArray[tabviewTag];
+//    CBHomeLeftMenuSliderModel *model = self.sliderArray[pageNumber];
+//
+//    reuseTableView.frame = tableNewFrame;
+//    if (!self.isLoad) {
+//
+//        [reuseTableView reloadDataWithModel:model];
+//    }
+//}
 #pragma mark -- 点击顶部的按钮所触发的方法
 - (void)tabButton:(id)sender {
-    UIButton *button = sender;
+//    UIButton *button = sender;
     // 记录选择的菜单
     self.index = [self.buttonsArray indexOfObject:sender];
     [self changeBackColorWithPage:self.index];
     self.isLoad = NO;
     [_mainScrollView setContentOffset:CGPointMake((self.index) * KLeftMenuWidth, 0) animated:YES];
+    
+    CBHomeLeftMenuTableView *reuseTableView = _tableViewArray[self.index];
+    CBHomeLeftMenuSliderModel *model = _sliderArray[self.index];
+    [reuseTableView reloadDataWithModel:model];
 }
 #pragma mark -- 改变按钮颜色
 - (void)changeBackColorWithPage:(NSInteger)currentPage {
@@ -319,12 +336,11 @@
 #pragma mark - UITextfeild的输入内容
 - (void)responseToTextfeildValueChange:(UITextField *)sender {
     //self.currentTF = sender;
-    NSLog(@" %s", __FUNCTION__);
-    UIButton *btn = self.buttonsArray[self.index];
-    [self tabButton:btn];
+//    NSLog(@" %s", __FUNCTION__);
+//    UIButton *btn = self.buttonsArray[self.index];
+//    [self tabButton:btn];
     
-    int tabviewTag = self.index % 2;
-    CBHomeLeftMenuTableView *reuseTableView = _tableViewArray[tabviewTag];
+    CBHomeLeftMenuTableView *reuseTableView = _tableViewArray[self.index];
     CBHomeLeftMenuSliderModel *model = _sliderArray[self.index];
     model.KeyWord = sender.text?:@"";
     [reuseTableView reloadDataWithModel:model];
