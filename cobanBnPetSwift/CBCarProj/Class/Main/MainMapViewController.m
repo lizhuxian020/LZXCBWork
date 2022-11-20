@@ -184,6 +184,9 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    //更新一下值
+    [AppDelegate shareInstance].IsShowGoogleMap = [AppDelegate isShowGoogle];
+    
     [self createUI];
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(tarbarLongPress) name: kTabbarItemLongPress object: nil];
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(hidePlayBackView) name: @"kHidePlayBackView" object: nil];
@@ -446,7 +449,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
             make.left.right.bottom.top.equalTo(self.view);
         }];
         _baiduView.hidden = [AppDelegate shareInstance].IsShowGoogleMap;
-        _baiduMapView = [[BMKMapView alloc]initWithFrame:CGRectMake(0, PPNavigationBarHeight, SCREEN_WIDTH, SCREEN_HEIGHT - PPNavigationBarHeight - 0)];
+        _baiduMapView = [[BMKMapView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
         _baiduMapView.zoomLevel = 14;//18;//20;//18;//16;
         _baiduMapView.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放
         _baiduMapView.backgroundColor = [UIColor whiteColor];
@@ -1657,7 +1660,6 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
                 BMKSportNode *sportModel = [[BMKSportNode alloc] init];
                 CLLocationCoordinate2D coor = CLLocationCoordinate2DMake(trackModel.lat,trackModel.lng);
                 
-                //TODO: LZXTest, 模拟器，无设备，中文，进入了isGoogleMap
                 if ([AppDelegate shareInstance].IsShowGoogleMap) {
                     // google地图
                     sportModel.coordinate = coor;
