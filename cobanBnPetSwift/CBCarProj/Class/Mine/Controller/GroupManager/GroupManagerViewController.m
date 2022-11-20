@@ -226,6 +226,7 @@
     };
     if (section != 0) {
         [headerView addLeftGesture];
+        [self.scrollGesture requireGestureRecognizerToFail:headerView.gesture];
         headerView.headerLongPressGesture = ^(NSInteger section, DeviceHeaderView *headView) {
             weakSelf.selectHeaderView = headView;
             [weakSelf editGroupClick];
@@ -238,6 +239,10 @@
                 [weakSelf deleteGroupWithSection: section];
             }
         };
+        [headerView setEditBtnClick:^(NSInteger section, DeviceHeaderView *headView) {
+            weakSelf.selectHeaderView = headView;
+            [weakSelf editGroupClick];
+        }];
         headerView.leftSwipeClick = ^(DeviceHeaderView *headView) {
             __weak DeviceHeaderView *weakHeadView = headView;
 //            if (weakSelf.deleteHeaderView != nil) { // 先收回之前的head的删除按钮

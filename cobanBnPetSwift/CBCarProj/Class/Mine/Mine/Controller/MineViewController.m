@@ -106,6 +106,7 @@
     
     //由于已经存在这个页面了, 就这样引着吧
     self.groupVC = [[GroupManagerViewController alloc] init];
+    self.groupVC.scrollGesture = self.containerView.panGestureRecognizer;
     [self addChildViewController:self.groupVC];
     self.groupView = self.groupVC.view;
     [self.containerView addSubview:self.groupView];

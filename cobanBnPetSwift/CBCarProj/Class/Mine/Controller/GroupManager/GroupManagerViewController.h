@@ -10,4 +10,7 @@
 
 @interface GroupManagerViewController : MINBaseViewController
 
+//外部wrapper的滑动手势
+@property (nonatomic, strong) UIGestureRecognizer *scrollGesture;
+
 @end

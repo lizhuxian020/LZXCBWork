@@ -16,7 +16,7 @@
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.backgroundColor = kBackColor;
         _backView = [[UIView alloc] init];
-        _backView.backgroundColor = kCellBackColor;
+//        _backView.backgroundColor = kCellBackColor;
         [self.contentView addSubview: _backView];
         [_backView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.bottom.equalTo(self);

@@ -92,15 +92,33 @@
         [_headerBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.right.left.bottom.equalTo(backView);
         }];
-        _deleteBtn = [MINUtils createNoBorderBtnWithTitle: @"删除" titleColor: [UIColor whiteColor] fontSize: 15 * KFitWidthRate backgroundColor: kRGB(252, 30 , 28)];
-        [_deleteBtn addTarget: self action: @selector(deviceDeleteBtnClick) forControlEvents: UIControlEventTouchUpInside];
-        [backView addSubview: _deleteBtn];
-        [_deleteBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        
+        
+//        _editBtn = [MINUtils createNoBorderBtnWithTitle: @"编辑" titleColor: [UIColor whiteColor] fontSize: 15 * KFitWidthRate backgroundColor: kRGB(252, 30 , 28)];
+        _editBtn = [MINUtils createBtnWithNormalImage:[UIImage imageNamed:@"编辑"] selectedImage:[UIImage imageNamed:@"编辑"]];
+        _editBtn.backgroundColor = UIColor.orangeColor;
+        [_editBtn addTarget: self action: @selector(deviceEditBtnClick) forControlEvents: UIControlEventTouchUpInside];
+        [backView addSubview: _editBtn];
+        [_editBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.bottom.equalTo(backView);
             make.left.equalTo(backView.mas_right);
             make.width.mas_equalTo(80 * KFitWidthRate);
         }];
+        _editBtn.hidden  = YES;
+        
+//        _deleteBtn = [MINUtils createNoBorderBtnWithTitle: @"删除" titleColor: [UIColor whiteColor] fontSize: 15 * KFitWidthRate backgroundColor: kRGB(252, 30 , 28)];
+        _deleteBtn = [MINUtils createBtnWithNormalImage:[UIImage imageNamed:@"删除"] selectedImage:[UIImage imageNamed:@"删除"]];
+        _deleteBtn.backgroundColor = UIColor.orangeColor;
+        [_deleteBtn addTarget: self action: @selector(deviceDeleteBtnClick) forControlEvents: UIControlEventTouchUpInside];
+        [backView addSubview: _deleteBtn];
+        [_deleteBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.bottom.equalTo(backView);
+            make.left.equalTo(_editBtn.mas_right);
+            make.width.mas_equalTo(80 * KFitWidthRate);
+        }];
         _deleteBtn.hidden = YES;
+        
+        
         UILongPressGestureRecognizer *longPressGR = [[UILongPressGestureRecognizer alloc] initWithTarget: self action: @selector(longPressGRClick:)];
         longPressGR.minimumPressDuration = 0.6f;
         [self addGestureRecognizer: longPressGR];
@@ -133,10 +151,11 @@
     if (self.deleteBtn != nil) {
         [self.superview layoutIfNeeded];
         [UIView animateWithDuration: 0.3 animations:^{
-            [self.deleteBtn mas_updateConstraints:^(MASConstraintMaker *make) {
-                make.left.mas_equalTo(self.deleteBtn.superview.mas_right).with.offset(-80 * KFitWidthRate);
+            [self.editBtn mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.left.mas_equalTo(self.editBtn.superview.mas_right).with.offset(-80 * 2 * KFitWidthRate);
             }];
             self.deleteBtn.hidden = NO;
+            self.editBtn.hidden = NO;
             [self.superview layoutIfNeeded];
         }];
     }
@@ -147,12 +166,13 @@
     if (self.deleteBtn != nil) {
         [self.superview layoutIfNeeded];
         [UIView animateWithDuration: 0.3 animations:^{
-            [self.deleteBtn mas_updateConstraints:^(MASConstraintMaker *make) {
-                make.left.mas_equalTo(self.deleteBtn.superview.mas_right);
+            [self.editBtn mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.left.mas_equalTo(self.editBtn.superview.mas_right);
             }];
             [self.superview layoutIfNeeded];
         } completion:^(BOOL finished) {
             self.deleteBtn.hidden = YES;
+            self.editBtn.hidden = YES;
         }];
     }
 }
@@ -164,10 +184,18 @@
     }
 }
 
+- (void)deviceEditBtnClick
+{
+    if (self.editBtnClick) {
+        self.editBtnClick(self.section, self);
+    }
+}
+
 - (void)addLeftGesture
 {
     UISwipeGestureRecognizer *leftSwipeGR = [[UISwipeGestureRecognizer alloc] initWithTarget: self action: @selector(leftSwipeGR:)];
     [leftSwipeGR setDirection: UISwipeGestureRecognizerDirectionLeft];
+    self.gesture = leftSwipeGR;
     [self addGestureRecognizer: leftSwipeGR];
 }
 
