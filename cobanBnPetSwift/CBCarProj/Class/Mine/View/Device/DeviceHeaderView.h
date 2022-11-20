@@ -15,6 +15,7 @@
 @property (nonatomic, assign) NSInteger section;
 @property (nonatomic, strong) UIButton *deleteBtn;
 @property (nonatomic, strong) UIButton *editBtn;
+@property (nonatomic, assign) BOOL isEdit;
 @property (nonatomic, copy) void (^headerBtnClick)(NSInteger section);
 @property (nonatomic, copy) void (^deleteBtnClick)(NSInteger section);
 @property (nonatomic, copy) void (^editBtnClick)(NSInteger section,DeviceHeaderView *headView);

@@ -158,13 +158,15 @@
 
 - (void)createTableView
 {
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+    self.tableView.backgroundColor = kBackColor;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     [self.view addSubview: self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view).with.offset(12.5);
-        make.left.right.bottom.equalTo(self.view);
+        make.left.right.bottom.top.equalTo(self.view);
     }];
 }
 #pragma mark -- popView  delegate
@@ -187,11 +189,12 @@
     if (cell.isEdit == YES) {
         [cell hideDeleteBtn];
     }else {
-        self.indexPath = indexPath;
-        if (self.dataArr.count > indexPath.row) {
-            SubAccountModel *model = self.dataArr[indexPath.row];
-            [self.accountPopView popView:model];
-        }
+        NSLog(@"jumpToNewVC");
+//        self.indexPath = indexPath;
+//        if (self.dataArr.count > indexPath.row) {
+//            SubAccountModel *model = self.dataArr[indexPath.row];
+//            [self.accountPopView popView:model];
+//        }
         //[self showAlertView];
         //[self.accountPopView popView];
     }
@@ -294,12 +297,22 @@
         cell = [[SubAccountTableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier: cellIndentify];
     }
     [cell addLeftSwipeGesture];
+    [cell.swipeGestures enumerateObjectsUsingBlock:^(UISwipeGestureRecognizer * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [self.scrollGesture requireGestureRecognizerToFail:obj];
+    }];
 //    [cell setAccountName: @"123123" name: @"MIN" pass: @"123321123"];
     cell.indexPath = indexPath;
     [cell hideDeleteBtn];
     __weak typeof(self) weakSelf = self;
     [cell setDeleteBtnClick:^(NSIndexPath *indexPath) {
         [weakSelf deleteAccountRequestWithIndexPath: indexPath];
+    }];
+    [cell setEditBtnClick:^(NSIndexPath *indexPath) {
+        weakSelf.indexPath = indexPath;
+        if (weakSelf.dataArr.count > indexPath.row) {
+            SubAccountModel *model = weakSelf.dataArr[indexPath.row];
+            [weakSelf.accountPopView popView:model];
+        }
     }];
     if (self.dataArr.count > indexPath.row) {
         SubAccountModel *model = self.dataArr[indexPath.row];
@@ -341,16 +354,20 @@
     [view addSubview: accountLabel];
     [accountLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.equalTo(view);
-        make.width.mas_equalTo(100 * KFitWidthRate);
-        make.centerX.mas_equalTo(view.mas_centerX).offset(-SCREEN_WIDTH/4);
+//        make.width.mas_equalTo(100 * KFitWidthRate);
+//        make.centerX.mas_equalTo(view.mas_centerX).offset(-SCREEN_WIDTH/4);
+        make.left.equalTo(@0);
+//        make.width.equalTo(view).dividedBy(3);
     }];
     UILabel *nameLabel = [MINUtils createLabelWithText: Localized(@"名称") size: 12 * KFitHeightRate alignment: NSTextAlignmentCenter textColor: labelColor];
     [view addSubview: nameLabel];
     [nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.equalTo(view);
         //make.left.equalTo(accountLabel.mas_right);
-        make.centerX.mas_equalTo(view.mas_centerX);
-        make.width.mas_equalTo(75 * KFitWidthRate);
+//        make.centerX.mas_equalTo(view.mas_centerX);
+//        make.width.mas_equalTo(75 * KFitWidthRate);
+        make.left.equalTo(accountLabel.mas_right);
+        make.width.equalTo(accountLabel);
     }];
 //    UILabel *passLabel = [MINUtils createLabelWithText: Localized(@"密码") size: 12 * KFitHeightRate alignment: NSTextAlignmentCenter textColor: labelColor];
 //    [view addSubview: passLabel];
@@ -359,12 +376,14 @@
 //        make.left.equalTo(nameLabel.mas_right);
 //        make.width.mas_equalTo(114 * KFitWidthRate);
 //    }];
-    UILabel *permissionLabel = [MINUtils createLabelWithText:Localized(@"权限设置") size: 12 * KFitHeightRate alignment: NSTextAlignmentCenter textColor: labelColor];
+    UILabel *permissionLabel = [MINUtils createLabelWithText:Localized(@"权限") size: 12 * KFitHeightRate alignment: NSTextAlignmentCenter textColor: labelColor];
     [view addSubview: permissionLabel];
     [permissionLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.right.bottom.equalTo(view);
         //make.left.equalTo(passLabel.mas_right);
-        make.centerX.mas_equalTo(view.mas_centerX).offset(SCREEN_WIDTH/4);
+//        make.centerX.mas_equalTo(view.mas_centerX).offset(SCREEN_WIDTH/4);
+        make.left.equalTo(nameLabel.mas_right);
+        make.width.equalTo(nameLabel);
     }];
     return view;
 }

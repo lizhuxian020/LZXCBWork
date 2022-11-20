@@ -30,7 +30,9 @@
 
 @property (nonatomic, strong) UIView *groupView;
 @property (nonatomic, strong) GroupManagerViewController *groupVC;
+
 @property (nonatomic, strong) UIView *subAcccountView;
+@property (nonatomic, strong) SubAccountManagerViewController *subAccountVC;
 @end
 
 @implementation MineViewController
@@ -115,8 +117,10 @@
         make.top.width.height.equalTo(self.deviceView);
     }];
     
-    self.subAcccountView = [UIView new];
-    self.subAcccountView.backgroundColor = UIColor.blueColor;
+    self.subAccountVC = [[SubAccountManagerViewController alloc] init];
+    self.subAccountVC.scrollGesture = self.containerView.panGestureRecognizer;
+    [self addChildViewController:self.subAccountVC];
+    self.subAcccountView = self.subAccountVC.view;
     [self.containerView addSubview:self.subAcccountView];
     [self.subAcccountView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.groupView.mas_right);

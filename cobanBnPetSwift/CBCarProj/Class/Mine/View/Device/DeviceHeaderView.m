@@ -158,6 +158,7 @@
             self.editBtn.hidden = NO;
             [self.superview layoutIfNeeded];
         }];
+        self.isEdit = YES;
     }
 }
 
@@ -174,6 +175,7 @@
             self.deleteBtn.hidden = YES;
             self.editBtn.hidden = YES;
         }];
+        self.isEdit = NO;
     }
 }
 
@@ -194,7 +196,7 @@
 - (void)addLeftGesture
 {
     UISwipeGestureRecognizer *leftSwipeGR = [[UISwipeGestureRecognizer alloc] initWithTarget: self action: @selector(leftSwipeGR:)];
-    [leftSwipeGR setDirection: UISwipeGestureRecognizerDirectionLeft];
+    [leftSwipeGR setDirection: UISwipeGestureRecognizerDirectionLeft | UISwipeGestureRecognizerDirectionRight];
     self.gesture = leftSwipeGR;
     [self addGestureRecognizer: leftSwipeGR];
 }
@@ -204,7 +206,11 @@
     if (self.leftSwipeClick) {
         self.leftSwipeClick(self);
     }
-    [self showDeleteBtn];
+    if (self.isEdit) {
+        [self hideDeleteBtn];
+    } else {    
+        [self showDeleteBtn];
+    }
 }
 
 
