@@ -16,6 +16,7 @@
 #import "cobanBnPetSwift-Swift.h"
 #import "CBCBCarMineHeaderView.h"
 #import "CBHomeLeftMenuView.h"
+#import "AddDeviceViewController.h"
 
 @interface MineViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, copy) NSArray *dataArrs;
@@ -33,6 +34,8 @@
 
 @property (nonatomic, strong) UIView *subAcccountView;
 @property (nonatomic, strong) SubAccountManagerViewController *subAccountVC;
+
+@property (nonatomic, strong) MyDeviceViewController *deviceVC;
 @end
 
 @implementation MineViewController
@@ -78,6 +81,23 @@
         kStrongSelf(self);
         [self.containerView setContentOffset:CGPointMake(self.view.width * index, 0) animated:YES];
     }];
+    [self.headerView setDidClickSubTitle:^(int index) {
+        kStrongSelf(self);
+        switch (index) {
+            case 0:
+                [self.deviceVC addDeviceName];
+                break;
+            case 1:
+                [self.groupVC createGroupClick];
+                break;
+            case 2:
+                [self.subAccountVC rightBtnClick];
+                break;;
+                
+            default:
+                break;
+        }
+    }];
 }
 
 - (void)createContent {
@@ -105,6 +125,11 @@
             NSLog(@"%@", model);
         }
     }];
+    
+    self.deviceVC = [MyDeviceViewController new];
+    [self addChildViewController:self.deviceVC];
+    [self.deviceVC view];
+    [self.deviceVC requestDataWithHud:nil];
     
     //由于已经存在这个页面了, 就这样引着吧
     self.groupVC = [[GroupManagerViewController alloc] init];

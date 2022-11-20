@@ -17,6 +17,8 @@
 
 @property (nonatomic, strong) NSArray *dataSource;
 
+@property (nonatomic, strong) NSArray<UIView *> *subTitleArr;
+
 @property (nonatomic, strong) UIView *line;
 
 @property (nonatomic, strong) NSMutableArray<UILabel *> *titleArr;
@@ -69,24 +71,49 @@
         lastLbl = lbl;
     }
     
-    UILabel *lbl = [UILabel new];
-    [self addSubview:lbl];
-    lbl.text = @"添加";
-    lbl.textColor = KWtAppMainColor;
-    lbl.font = __CM_NormalFont;
-    [lbl mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(@0);
-        make.right.equalTo(@-15);
-    }];
-    lbl.userInteractionEnabled  =YES;
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didClickAdd)];
-    [lbl addGestureRecognizer:tap];
+    [self createSubTitle];
     
     self.titleArr = mArr;
     self.line = [UIView new];
     self.line.backgroundColor = UIColor.blackColor;
     [self addSubview:self.line];
     
+}
+
+- (void)createSubTitle {
+    
+    UIButton *scanBtn = [MINUtils createBtnWithNormalImage:[UIImage imageNamed:@"单选-选中"] selectedImage:[UIImage imageNamed:@"单选-选中"]];
+    UITapGestureRecognizer *scanBtnTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didClickAdd:)];
+    [scanBtn addGestureRecognizer:scanBtnTap];
+    
+    
+    UILabel *addGroupLbl = [UILabel new];
+    addGroupLbl.text = @"添加组";
+    addGroupLbl.textColor = KWtAppMainColor;
+    addGroupLbl.font = __CM_NormalFont;
+    addGroupLbl.userInteractionEnabled  =YES;
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didClickAdd:)];
+    [addGroupLbl addGestureRecognizer:tap];
+    
+    UILabel *addSubAccountLbl = [UILabel new];
+    addSubAccountLbl.text = @"添加";
+    addSubAccountLbl.textColor = KWtAppMainColor;
+    addSubAccountLbl.font = __CM_NormalFont;
+    addSubAccountLbl.userInteractionEnabled  =YES;
+    UITapGestureRecognizer *addSubAccountLblTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didClickAdd:)];
+    [addSubAccountLbl addGestureRecognizer:addSubAccountLblTap];
+    
+    self.subTitleArr = @[scanBtn, addGroupLbl, addSubAccountLbl];
+    
+    for (UIView *view in self.subTitleArr) {
+        [self addSubview:view];
+        [view mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(@0);
+            make.right.equalTo(@-15);
+        }];
+        view.hidden = YES;
+    }
+    scanBtn.hidden = NO;
 }
 
 - (void)didMoveToIndex:(int)index {
@@ -106,8 +133,10 @@
     [self didSelected:index];
 }
 
-- (void)didClickAdd {
-    NSLog(@"%s", __FUNCTION__);
+- (void)didClickAdd:(UIGestureRecognizer *)gesture {
+    if (self.didClickSubTitle) {
+        self.didClickSubTitle([self.subTitleArr indexOfObject:gesture.view]);
+    }
 }
 
 
@@ -116,6 +145,8 @@
     UILabel *lbl = self.titleArr[index];
     lbl.font = __CM_SelectedFont;
     lbl.textColor = __CM_SelectedColor;
+    
+    [self setupSubTitle:index];
 //    [self setNeedsLayout];
 //    [self setupLine:index];
     self.didClickTitle(self.index);
@@ -125,6 +156,12 @@
     UILabel *lbl = self.titleArr[index];
     lbl.font = __CM_NormalFont;
     lbl.textColor = __CM_NormalColor;
+}
+
+- (void)setupSubTitle:(int)index {
+    [self.subTitleArr enumerateObjectsUsingBlock:^(UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        obj.hidden = idx != index;
+    }];
 }
 
 - (void)setupLine:(int)index {

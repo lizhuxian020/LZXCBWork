@@ -10,4 +10,6 @@
 
 @interface MyDeviceViewController : MINBaseViewController
 
+- (void)requestDataWithHud:(MBProgressHUD *)hud;
+- (void)addDeviceName;
 @end

@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface CBCBCarMineHeaderView : UIView
 
 @property (nonatomic, copy) void (^didClickTitle)(int index);
-
+@property (nonatomic, copy) void (^didClickSubTitle)(int index);
 - (void)didMoveToIndex:(int)index;
 
 @end

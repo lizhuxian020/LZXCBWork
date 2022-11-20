@@ -13,4 +13,5 @@
 //外部wrapper的滑动手势
 @property (nonatomic, strong) UIGestureRecognizer *scrollGesture;
 
+- (void)createGroupClick;
 @end
