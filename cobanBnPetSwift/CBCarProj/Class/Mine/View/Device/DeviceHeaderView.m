@@ -23,25 +23,37 @@
             make.bottom.equalTo(self);
             make.top.left.equalTo(self).with.offset(12.5 * KFitHeightRate);
             make.right.equalTo(self).with.offset(-12.5 * KFitHeightRate);
+//            make.edges.equalTo(@0);
         }];
-        // 设置阴影的边框
-        CGFloat cornerRadius = 5.f * KFitHeightRate;
-        CAShapeLayer *layer = [[CAShapeLayer alloc] init];
-        CGMutablePathRef pathRef = CGPathCreateMutable();
-        CGRect bounds = CGRectMake(0, 0, SCREEN_HEIGHT - 25 * KFitWidthRate, 50 * KFitHeightRate);
-        CGPathMoveToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMaxY(bounds));
-        CGPathAddArcToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMinY(bounds), CGRectGetMidX(bounds), CGRectGetMinY(bounds), cornerRadius);
-        CGPathAddArcToPoint(pathRef, nil, CGRectGetMaxX(bounds) - 1, CGRectGetMinY(bounds), CGRectGetMaxX(bounds)- 1, CGRectGetMidY(bounds), cornerRadius);
-        CGPathAddLineToPoint(pathRef, nil, CGRectGetMaxX(bounds)- 1, CGRectGetMaxY(bounds));
-        CGPathAddLineToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMaxY(bounds));
-        layer.path = pathRef;
-        CFRelease(pathRef);
+        backView.layer.borderWidth = 1;
+        backView.layer.borderColor = kRGB(210, 210, 210).CGColor;
+        backView.layer.cornerRadius = 5.f * KFitHeightRate;
+        
+        
+//        // 设置阴影的边框
+//        CGFloat cornerRadius = 5.f * KFitHeightRate;
+//        CAShapeLayer *layer = [[CAShapeLayer alloc] init];
+//        CGMutablePathRef pathRef = CGPathCreateMutable();
+//        CGRect bounds = CGRectMake(0, 0, SCREEN_HEIGHT - 25 * KFitWidthRate, 50 * KFitHeightRate);
+//        CGPathMoveToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMaxY(bounds));
+//        CGPathAddArcToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMinY(bounds), CGRectGetMidX(bounds), CGRectGetMinY(bounds), cornerRadius);
+//        CGPathAddArcToPoint(pathRef, nil, CGRectGetMaxX(bounds) - 1, CGRectGetMinY(bounds), CGRectGetMaxX(bounds)- 1, CGRectGetMidY(bounds), cornerRadius);
+//        CGPathAddLineToPoint(pathRef, nil, CGRectGetMaxX(bounds)- 1, CGRectGetMaxY(bounds));
+//        CGPathAddLineToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMaxY(bounds));
+//        layer.path = pathRef;
+//        CFRelease(pathRef);
+        
+        
         //        UIBezierPath *path = [UIBezierPath bezierPath];
         //        [path moveToPoint:CGPointMake(CGRectGetMinX(bounds), CGRectGetMaxY(bounds))];
         //        [path addArc]
-        [backView.layer insertSublayer: layer atIndex: 0];
-        layer.strokeColor = kRGB(210, 210, 210).CGColor;
-        layer.fillColor = [UIColor clearColor].CGColor;
+        
+        
+//        [backView.layer insertSublayer: layer atIndex: 0];
+//        layer.strokeColor = kRGB(210, 210, 210).CGColor;
+//        layer.fillColor = [UIColor clearColor].CGColor;
+        
+        
         // 设置backView的阴影
         //        backView.layer.shadowColor = [UIColor grayColor].CGColor;
         //        backView.layer.shadowRadius = 3 * KFitHeightRate;
@@ -59,8 +71,8 @@
         [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(backView).with.offset(13 * KFitWidthRate);
             make.centerY.equalTo(backView);
-            make.height.mas_offset(20 * KFitHeightRate);
-            make.width.mas_offset(250 * KFitWidthRate);
+//            make.height.mas_offset(20 * KFitHeightRate);
+//            make.width.mas_offset(250 * KFitWidthRate);
         }];
         _arrowImageBtn = [[UIButton alloc] init];
         UIImage *arrowImage = [UIImage imageNamed:@"上边"];

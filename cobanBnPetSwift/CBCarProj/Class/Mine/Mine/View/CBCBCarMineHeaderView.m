@@ -56,7 +56,7 @@
             if (lastLbl) {
                 make.left.equalTo(lastLbl.mas_right).mas_offset(10);
             } else {
-                make.left.equalTo(@0);
+                make.left.equalTo(@(15*KFitWidthRate));
             }
                 
         }];

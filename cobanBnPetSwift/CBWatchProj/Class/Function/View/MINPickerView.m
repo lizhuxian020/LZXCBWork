@@ -138,8 +138,8 @@
     backView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent: 0.3];
     [self addSubview: backView];
     [backView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.equalTo(self);
-        make.height.mas_equalTo(SCREEN_HEIGHT);
+        make.left.right.top.bottom.equalTo(self);
+//        make.height.mas_equalTo(SCREEN_HEIGHT);
     }];
     contentView = [[UIView alloc] init];
     contentView.backgroundColor = KWtBackColor;

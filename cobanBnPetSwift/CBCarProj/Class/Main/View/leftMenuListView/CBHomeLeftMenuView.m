@@ -147,7 +147,7 @@
         _textFieldView.layer.borderColor = UIColor.grayColor.CGColor;
         _textFieldView.layer.cornerRadius = 3;
         
-        _searchTextFeild = [MINUtils createTextFieldWithHoldText:Localized(@"输入车牌号码") fontSize: 13 * KFitHeightRate];
+        _searchTextFeild = [MINUtils createTextFieldWithHoldText:Localized(@"设备号/车牌号/IMEI") fontSize: 13 * KFitHeightRate];
         UIView * leftView = [[UIView alloc] init];
         UIImage *image = [UIImage imageNamed: @"搜索"];
         UIImageView *imageView = [[UIImageView alloc] initWithImage: image];

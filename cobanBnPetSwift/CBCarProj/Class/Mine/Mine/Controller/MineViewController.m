@@ -29,6 +29,7 @@
 @property (nonatomic, strong) NSMutableArray *slider_array;
 
 @property (nonatomic, strong) UIView *groupView;
+@property (nonatomic, strong) GroupManagerViewController *groupVC;
 @property (nonatomic, strong) UIView *subAcccountView;
 @end
 
@@ -96,9 +97,17 @@
         make.width.height.equalTo(self.containerView);
     }];
     [self.deviceView requestData];
+    [self.deviceView setLeftMenuBlock:^(id  _Nonnull objc) {
+        if ([objc isKindOfClass:CBHomeLeftMenuDeviceInfoModel.class]) {
+            CBHomeLeftMenuDeviceInfoModel *model = objc;
+            NSLog(@"%@", model);
+        }
+    }];
     
-    self.groupView = UIView.new;
-    self.groupView.backgroundColor = UIColor.redColor;
+    //由于已经存在这个页面了, 就这样引着吧
+    self.groupVC = [[GroupManagerViewController alloc] init];
+    [self addChildViewController:self.groupVC];
+    self.groupView = self.groupVC.view;
     [self.containerView addSubview:self.groupView];
     [self.groupView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.deviceView.mas_right);

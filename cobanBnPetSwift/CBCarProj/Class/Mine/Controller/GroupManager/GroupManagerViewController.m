@@ -81,6 +81,9 @@
 }
 - (void)createTableView
 {
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+    self.tableView.backgroundColor = kBackColor;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -190,7 +193,17 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 63 * KFitHeightRate;
+    return 50 * KFitHeightRate;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 0.01f;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    return UIView.new;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -302,37 +315,37 @@
     [self.tableView reloadData];
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-    DeviceTableViewCell *deviceCell = (DeviceTableViewCell *)cell;
-    if (deviceCell.isCreate == NO) {
-        CGFloat cornerRadius = 5.f * KFitHeightRate;
-        cell.backgroundColor = UIColor.clearColor;
-        CAShapeLayer *layer = [[CAShapeLayer alloc] init];
-        CGMutablePathRef pathRef = CGPathCreateMutable();
-        CGRect bounds = CGRectMake(0, 0, SCREEN_HEIGHT - 25 * KFitWidthRate, 50 * KFitHeightRate);
-        if (indexPath.row == [tableView numberOfRowsInSection:indexPath.section] - 1) { // 最后一个
-            CGPathMoveToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMinY(bounds));
-            CGPathAddArcToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMaxY(bounds), CGRectGetMidX(bounds), CGRectGetMaxY(bounds), cornerRadius);
-            CGPathAddArcToPoint(pathRef, nil, CGRectGetMaxX(bounds) - 1, CGRectGetMaxY(bounds), CGRectGetMaxX(bounds) -1, CGRectGetMidY(bounds), cornerRadius);
-            CGPathAddLineToPoint(pathRef, nil, CGRectGetMaxX(bounds)-1, CGRectGetMinY(bounds));
-        }else { // 中间的view
-            CGPathMoveToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMaxY(bounds));
-            CGPathAddLineToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMinY(bounds));
-            CGPathMoveToPoint(pathRef, nil, CGRectGetMaxX(bounds)-1, CGRectGetMaxY(bounds));
-            CGPathAddLineToPoint(pathRef, nil, CGRectGetMaxX(bounds)-1, CGRectGetMinY(bounds));
-        }
-        layer.path = pathRef;
-        CFRelease(pathRef);
-        //颜色修改
-        layer.fillColor = kCellBackColor.CGColor;
-        layer.strokeColor = kRGB(210, 210, 210).CGColor;
-        
-        [deviceCell.backView.layer insertSublayer: layer atIndex: 0];
-        layer.strokeColor = kRGB(210, 210, 210).CGColor;
-        layer.fillColor = [UIColor clearColor].CGColor;
-        deviceCell.isCreate = YES;
-    }
-}
+//- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+//    DeviceTableViewCell *deviceCell = (DeviceTableViewCell *)cell;
+//    if (deviceCell.isCreate == NO) {
+//        CGFloat cornerRadius = 5.f * KFitHeightRate;
+//        cell.backgroundColor = UIColor.clearColor;
+//        CAShapeLayer *layer = [[CAShapeLayer alloc] init];
+//        CGMutablePathRef pathRef = CGPathCreateMutable();
+//        CGRect bounds = CGRectMake(0, 0, SCREEN_HEIGHT - 25 * KFitWidthRate, 50 * KFitHeightRate);
+//        if (indexPath.row == [tableView numberOfRowsInSection:indexPath.section] - 1) { // 最后一个
+//            CGPathMoveToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMinY(bounds));
+//            CGPathAddArcToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMaxY(bounds), CGRectGetMidX(bounds), CGRectGetMaxY(bounds), cornerRadius);
+//            CGPathAddArcToPoint(pathRef, nil, CGRectGetMaxX(bounds) - 1, CGRectGetMaxY(bounds), CGRectGetMaxX(bounds) -1, CGRectGetMidY(bounds), cornerRadius);
+//            CGPathAddLineToPoint(pathRef, nil, CGRectGetMaxX(bounds)-1, CGRectGetMinY(bounds));
+//        }else { // 中间的view
+//            CGPathMoveToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMaxY(bounds));
+//            CGPathAddLineToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMinY(bounds));
+//            CGPathMoveToPoint(pathRef, nil, CGRectGetMaxX(bounds)-1, CGRectGetMaxY(bounds));
+//            CGPathAddLineToPoint(pathRef, nil, CGRectGetMaxX(bounds)-1, CGRectGetMinY(bounds));
+//        }
+//        layer.path = pathRef;
+//        CFRelease(pathRef);
+//        //颜色修改
+//        layer.fillColor = kCellBackColor.CGColor;
+//        layer.strokeColor = kRGB(210, 210, 210).CGColor;
+//
+//        [deviceCell.backView.layer insertSublayer: layer atIndex: 0];
+//        layer.strokeColor = kRGB(210, 210, 210).CGColor;
+//        layer.fillColor = [UIColor clearColor].CGColor;
+//        deviceCell.isCreate = YES;
+//    }
+//}
 
 #pragma mark -- 添加分组
 - (void)createGroupClick
@@ -389,7 +402,7 @@
             [self.view addSubview: pickerView];
             [pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.left.right.top.equalTo(self.view);
-                make.height.mas_equalTo(SCREEN_HEIGHT);
+                make.bottom.equalTo(@(-TabBARHEIGHT));
             }];
             [pickerView showView];
         }
@@ -456,8 +469,6 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-
 
 /*
 #pragma mark - Navigation
