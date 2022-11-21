@@ -140,6 +140,9 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 @property (nonatomic, strong) UIButton *alertBtn;
 @property (nonatomic, strong) UIButton *personBtn;
 @property (nonatomic, strong) UIButton *locateBtn;
+
+//是否开始跟踪
+@property (nonatomic, assign) BOOL isStartTrack;
 @end
 
 @implementation MainMapViewController
@@ -278,6 +281,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
             CBHomeLeftMenuDeviceInfoModel *model = (CBHomeLeftMenuDeviceInfoModel *)objc;
             // 刷新本地存储的 选中设备
             model.zoomLevel = self.deviceInfoModelSelect.zoomLevel;
+            model.devStatus = self.deviceInfoModelSelect.devStatus;
             self.deviceInfoModelSelect = model;
             [CBCommonTools saveCBdeviceInfo:model];
             // 左侧菜单隐藏
@@ -1005,6 +1009,14 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
                 [self dealWithWarmedStatusRequestDeno:obj annotationView:view];
             }
                 break;
+            case CBCarPaopaoViewClickTypeTrack: {
+                if (self.isStartTrack) {
+                    [self setEndTrack];
+                } else {
+                    [self setCanStartTrack];
+                }
+                break;
+            }
             default:
                 break;
         }
@@ -1061,17 +1073,24 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         NSLog(@"反geo检索发送失败");
     }
 }
-- (void)navigationClick {
-    MKMapItem *myLocation = [MKMapItem mapItemForCurrentLocation];
-    CLLocationCoordinate2D coor = CLLocationCoordinate2DMake(self.deviceInfoModelSelect.lat.doubleValue,self.deviceInfoModelSelect.lng.doubleValue);
-    MKMapItem *toLocation = [[MKMapItem alloc]initWithPlacemark:[[MKPlacemark alloc]initWithCoordinate:coor]];
-    
-    //toLocation.name = @"Car location"
-    NSArray *items = @[myLocation,toLocation];
-    NSDictionary *options = @{ MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeWalking, MKLaunchOptionsMapTypeKey: [NSNumber numberWithInteger:MKMapTypeStandard], MKLaunchOptionsShowsTrafficKey:@YES };
-    [MKMapItem openMapsWithItems:items launchOptions:options];
+
+#pragma mark ------------paoViewActions------------
+#pragma mark --跟踪
+- (void)setCanStartTrack {
+    self.isStartTrack = YES;
+    [HUD showHUDWithText:Localized(@"开始跟踪") withDelay:2.0];
+    [self getDeviceLocationInfoRequest];
 }
-#pragma mark -- 处理报警
+- (void)setEndTrack {
+    self.isStartTrack = NO;
+    // 20s刷新轨迹数组,初始化
+    [self initTrackLine];
+    // 20s刷新的轨迹的line和路径
+    self.polyline_realTime = [[GMSPolyline alloc] init];
+    self.linePath_realTime = [GMSMutablePath path];
+    [self.linePath_realTime removeAllCoordinates];
+}
+#pragma mark --处理报警
 - (void)dealWithWarmedStatusRequestDeno:(NSString *)deno annotationView:(BMKAnnotationView *)annotationView {
     kWeakSelf(self);
     [MBProgressHUD showHUDIcon:self.googleView animated:YES];
@@ -1110,7 +1129,18 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         [HUD showHUDWithText:Localized(@"请求超时") withDelay:3.0];
     }];
 }
-#pragma mark -- 获取设备轨迹
+#pragma mark --导航
+- (void)navigationClick {
+    MKMapItem *myLocation = [MKMapItem mapItemForCurrentLocation];
+    CLLocationCoordinate2D coor = CLLocationCoordinate2DMake(self.deviceInfoModelSelect.lat.doubleValue,self.deviceInfoModelSelect.lng.doubleValue);
+    MKMapItem *toLocation = [[MKMapItem alloc]initWithPlacemark:[[MKPlacemark alloc]initWithCoordinate:coor]];
+    
+    //toLocation.name = @"Car location"
+    NSArray *items = @[myLocation,toLocation];
+    NSDictionary *options = @{ MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeWalking, MKLaunchOptionsMapTypeKey: [NSNumber numberWithInteger:MKMapTypeStandard], MKLaunchOptionsShowsTrafficKey:@YES };
+    [MKMapItem openMapsWithItems:items launchOptions:options];
+}
+#pragma mark --获取设备轨迹
 - (void)requestTrackDataWithModel:(NSString *)dno {
     [self.trackSelectTimePopView popView];
     self.trackSelectTimePopView.dno = dno;
@@ -1655,105 +1685,24 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
                     [self.navigationController pushViewController:bindVC animated:YES];
                 };
                 
-                TrackModel *trackModel = [[TrackModel alloc]init];//[TrackModel yy_modelWithDictionary:baseModel.data];
-                trackModel.lat = deviceInfoModel.lat.doubleValue;
-                trackModel.lng = deviceInfoModel.lng.doubleValue;
-                trackModel.speed = deviceInfoModel.speed.doubleValue;
-                BMKSportNode *sportModel = [[BMKSportNode alloc] init];
-                CLLocationCoordinate2D coor = CLLocationCoordinate2DMake(trackModel.lat,trackModel.lng);
-                
-                if ([AppDelegate shareInstance].IsShowGoogleMap) {
-                    // google地图
-                    sportModel.coordinate = coor;
-                    //[sportNodes_realTime addObject:sportModel];
-                    if (!(deviceInfoModel.lat.doubleValue == self.deviceInfoModelSelect.lat.doubleValue && deviceInfoModel.lng.doubleValue == self.deviceInfoModelSelect.lng.doubleValue)) {
-                        // 位置不变
-                        //CGFloat distance = [_googleMapView getd];
-                        // 第二个点有距离的时候再打点
-                        [self->sportNodes_realTime addObject:sportModel];
-                    }
-                    sportNodeNum_realTime = sportNodes_realTime.count;
-                    
-                    // 有两点时，创建轨迹
-                    if (sportNodes_realTime.count > 1) {
-                        self.polyline_realTime.strokeColor = kRGB(128, 189, 86);
-                        self.polyline_realTime.strokeWidth = 2*KFitWidthRate;
-                        for(int idx = 0; idx < sportNodes_realTime.count; idx++)
-                        {
-                            BMKSportNode *node = [sportNodes_realTime objectAtIndex:idx];
-                            CLLocationCoordinate2D location = node.coordinate;
-                            [self.linePath_realTime addCoordinate:location];
-                            
-                            // 添加轨迹上的圆点
-                            if (idx > 0 && idx < (sportNodes_realTime.count - 1)) {
-                                
-                                GMSMarker *mark_point = [[GMSMarker alloc] init];
-                                mark_point.appearAnimation = kGMSMarkerAnimationNone;//kGMSMarkerAnimationPop;
-                                mark_point.position = location;
-                                CBTrackPointView *iconView = [[CBTrackPointView alloc]initWithFrame:CGRectMake(0, 0, 10*KFitWidthRate, 10*KFitWidthRate)];
-                                mark_point.iconView = iconView;
-                                mark_point.groundAnchor = CGPointMake(0.5, 0.5);
-                                mark_point.map = self.googleMapView;
-                            }
-                        }
-                        BMKSportNode *firstNode = [sportNodes_realTime objectAtIndex:0];
-                        CLLocationCoordinate2D coordinate = firstNode.coordinate;
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            _googleMapView.camera = [GMSCameraPosition cameraWithLatitude:coordinate.latitude longitude:coordinate.longitude zoom:self.deviceInfoModelSelect.zoomLevel.integerValue];
-                        });
-                        self.polyline_realTime.path = self.linePath_realTime;
-                        self.polyline_realTime.map = _googleMapView;
-                    }
-                    self.navigationItem.title = self.deviceInfoModelSelect.name?:@"";
-                    if (self.deviceInfoModelSelect.dno == nil) return;
-                    if (deviceInfoModel.dno) {
-                        deviceInfoModel.zoomLevel = self.deviceInfoModelSelect.zoomLevel;
-                        //TODO: LZXTODO由于这里赋值了deviceInfoModelSelect，导致devStatus不见了
-                        self.deviceInfoModelSelect = deviceInfoModel;
-                        [CBCommonTools saveCBdeviceInfo:self.deviceInfoModelSelect];
-                    }
-                    //更新中心位置
-                    [self.googleMapView setCamera:[GMSCameraPosition cameraWithLatitude:self.deviceInfoModelSelect.lat.doubleValue longitude:self.deviceInfoModelSelect.lng.doubleValue zoom:self.deviceInfoModelSelect.zoomLevel.integerValue]];
-                } else {
-                    // 百度地图
-                    [self setupMapZoomLevelMethod];
-                    sportModel.coordinate = coor;
-                    if (!(deviceInfoModel.lat.doubleValue == self.deviceInfoModelSelect.lat.doubleValue && deviceInfoModel.lng.doubleValue == self.deviceInfoModelSelect.lng.doubleValue)) {
-                        // 位置不变 不打点
-                        [sportNodes_realTime addObject:sportModel];
-                    }
-                    sportNodeNum_realTime = sportNodes_realTime.count;
-                    
-                    // 有两点时，创建轨迹
-                    if (sportNodes_realTime.count > 1) {
-                        CLLocationCoordinate2D paths[sportNodeNum_realTime];
-                        for (NSInteger i = 0; i < sportNodeNum_realTime ; i++) {
-                            BMKSportNode *node = sportNodes_realTime[i];
-                            paths[i] = node.coordinate;
-                        }
-                        // 添加圆点标注
-                        for (NSInteger i = 0; i < sportNodeNum_realTime ; i++) {
-                            sportPointAnnotation_realTime = [[CBSportAnnotation alloc]init];
-                            sportPointAnnotation_realTime.coordinate = paths[i];
-                            [self.baiduMapView addAnnotation:sportPointAnnotation_realTime];
-                        }
-                        // 创建轨迹路径
-                        pathPloyline_realTime = [BMKPolyline polylineWithCoordinates: paths count:sportNodeNum_realTime];
-                        [self.baiduMapView addOverlay:pathPloyline_realTime];
-                    }
-                    self.navigationItem.title = self.deviceInfoModelSelect.name?:@"";
-                    if (self.deviceInfoModelSelect.dno == nil) {
-                        break;
-                    }
-                    if (deviceInfoModel.dno) {
-                        deviceInfoModel.zoomLevel = self.deviceInfoModelSelect.zoomLevel;
-                        self.deviceInfoModelSelect = deviceInfoModel;
-                        [CBCommonTools saveCBdeviceInfo:self.deviceInfoModelSelect];
-                    }
-                    //更新中心位置
-                    CLLocationCoordinate2D coorData = CLLocationCoordinate2DMake(self.deviceInfoModelSelect.lat.doubleValue, self.deviceInfoModelSelect.lng.doubleValue);
-                    [self.baiduMapView setCenterCoordinate:coorData animated: YES];
+                if (self.isStartTrack) {
+                    [self startTrack:deviceInfoModel];
                 }
+                
+                self.navigationItem.title = self.deviceInfoModelSelect.name?:@"";
+                if (self.deviceInfoModelSelect.dno == nil) {
+                    return;
+                }
+                if (deviceInfoModel.dno) {
+                    deviceInfoModel.zoomLevel = self.deviceInfoModelSelect.zoomLevel;
+                    deviceInfoModel.devStatus = self.deviceInfoModelSelect.devStatus;
+                    self.deviceInfoModelSelect = deviceInfoModel;
+                    [CBCommonTools saveCBdeviceInfo:self.deviceInfoModelSelect];
+                }
+                
+                //更新中心位置
+                [self updateMapCenter];
+//                [self saveTrackInfo:deviceInfoModel];
             }
                 break;
             default:
@@ -1783,6 +1732,93 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
             }];
         }
     }];
+}
+//- (void)saveTrackInfo:(CBHomeLeftMenuDeviceInfoModel *)deviceInfoModel {
+//
+//}
+- (void)startTrack:(CBHomeLeftMenuDeviceInfoModel *)deviceInfoModel {
+    TrackModel *trackModel = [[TrackModel alloc]init];//[TrackModel yy_modelWithDictionary:baseModel.data];
+    trackModel.lat = deviceInfoModel.lat.doubleValue;
+    trackModel.lng = deviceInfoModel.lng.doubleValue;
+    trackModel.speed = deviceInfoModel.speed.doubleValue;
+    BMKSportNode *sportModel = [[BMKSportNode alloc] init];
+    CLLocationCoordinate2D coor = CLLocationCoordinate2DMake(trackModel.lat,trackModel.lng);
+    
+    if ([AppDelegate shareInstance].IsShowGoogleMap) {
+        // google地图
+        sportModel.coordinate = coor;
+        //[sportNodes_realTime addObject:sportModel];
+        if (!(deviceInfoModel.lat.doubleValue == self.deviceInfoModelSelect.lat.doubleValue && deviceInfoModel.lng.doubleValue == self.deviceInfoModelSelect.lng.doubleValue)) {
+            // 位置不变
+            //CGFloat distance = [_googleMapView getd];
+            // 第二个点有距离的时候再打点
+            [self->sportNodes_realTime addObject:sportModel];
+        }
+        sportNodeNum_realTime = sportNodes_realTime.count;
+        
+        // 有两点时，创建轨迹
+        if (sportNodes_realTime.count > 1) {
+            self.polyline_realTime.strokeColor = kRGB(128, 189, 86);
+            self.polyline_realTime.strokeWidth = 2*KFitWidthRate;
+            for(int idx = 0; idx < sportNodes_realTime.count; idx++)
+            {
+                BMKSportNode *node = [sportNodes_realTime objectAtIndex:idx];
+                CLLocationCoordinate2D location = node.coordinate;
+                [self.linePath_realTime addCoordinate:location];
+                
+                // 添加轨迹上的圆点
+                if (idx > 0 && idx < (sportNodes_realTime.count - 1)) {
+                    
+                    GMSMarker *mark_point = [[GMSMarker alloc] init];
+                    mark_point.appearAnimation = kGMSMarkerAnimationNone;//kGMSMarkerAnimationPop;
+                    mark_point.position = location;
+                    CBTrackPointView *iconView = [[CBTrackPointView alloc]initWithFrame:CGRectMake(0, 0, 10*KFitWidthRate, 10*KFitWidthRate)];
+                    mark_point.iconView = iconView;
+                    mark_point.groundAnchor = CGPointMake(0.5, 0.5);
+                    mark_point.map = self.googleMapView;
+                }
+            }
+//            BMKSportNode *firstNode = [sportNodes_realTime objectAtIndex:0];
+//            CLLocationCoordinate2D coordinate = firstNode.coordinate;
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                _googleMapView.camera = [GMSCameraPosition cameraWithLatitude:coordinate.latitude longitude:coordinate.longitude zoom:self.deviceInfoModelSelect.zoomLevel.integerValue];
+//            });
+            self.polyline_realTime.path = self.linePath_realTime;
+            self.polyline_realTime.map = _googleMapView;
+        }
+        //更新中心位置
+        [self.googleMapView setCamera:[GMSCameraPosition cameraWithLatitude:self.deviceInfoModelSelect.lat.doubleValue longitude:self.deviceInfoModelSelect.lng.doubleValue zoom:self.deviceInfoModelSelect.zoomLevel.integerValue]];
+    } else {
+        // 百度地图
+        [self setupMapZoomLevelMethod];
+        sportModel.coordinate = coor;
+        if (!(deviceInfoModel.lat.doubleValue == self.deviceInfoModelSelect.lat.doubleValue && deviceInfoModel.lng.doubleValue == self.deviceInfoModelSelect.lng.doubleValue)) {
+            // 位置不变 不打点
+            [sportNodes_realTime addObject:sportModel];
+        }
+        sportNodeNum_realTime = sportNodes_realTime.count;
+        
+        // 有两点时，创建轨迹
+        if (sportNodes_realTime.count > 1) {
+            CLLocationCoordinate2D paths[sportNodeNum_realTime];
+            for (NSInteger i = 0; i < sportNodeNum_realTime ; i++) {
+                BMKSportNode *node = sportNodes_realTime[i];
+                paths[i] = node.coordinate;
+            }
+            // 添加圆点标注
+            for (NSInteger i = 0; i < sportNodeNum_realTime ; i++) {
+                sportPointAnnotation_realTime = [[CBSportAnnotation alloc]init];
+                sportPointAnnotation_realTime.coordinate = paths[i];
+                [self.baiduMapView addAnnotation:sportPointAnnotation_realTime];
+            }
+            // 创建轨迹路径
+            pathPloyline_realTime = [BMKPolyline polylineWithCoordinates: paths count:sportNodeNum_realTime];
+            [self.baiduMapView addOverlay:pathPloyline_realTime];
+        }
+        //更新中心位置
+        CLLocationCoordinate2D coorData = CLLocationCoordinate2DMake(self.deviceInfoModelSelect.lat.doubleValue, self.deviceInfoModelSelect.lng.doubleValue);
+        [self.baiduMapView setCenterCoordinate:coorData animated: YES];
+    }
 }
 #pragma mark -- 从缓存里获取设备详情，并居中显示,刷新地图
 - (void)getLocalDeviceInfoBaseModel {
@@ -2045,6 +2081,20 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 - (void)setupMapZoomLevelMethod {
     if (self.deviceInfoModelSelect.zoomLevel) {
         self.baiduMapView.zoomLevel = self.deviceInfoModelSelect.zoomLevel.integerValue;//20;
+    }
+}
+- (void)updateMapCenter {
+    if (!self.deviceInfoModelSelect) {
+        return;
+    }
+    if ([AppDelegate shareInstance].IsShowGoogleMap) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.googleMapView.camera = [GMSCameraPosition cameraWithLatitude:self.deviceInfoModelSelect.lat.doubleValue longitude:self.deviceInfoModelSelect.lng.doubleValue zoom:self.deviceInfoModelSelect.zoomLevel.integerValue];
+        });
+    } else {
+        //更新中心位置
+        CLLocationCoordinate2D coorData = CLLocationCoordinate2DMake(self.deviceInfoModelSelect.lat.doubleValue, self.deviceInfoModelSelect.lng.doubleValue);
+        [self.baiduMapView setCenterCoordinate:coorData animated: YES];
     }
 }
 #pragma mark -- UITabBarViewController delegate

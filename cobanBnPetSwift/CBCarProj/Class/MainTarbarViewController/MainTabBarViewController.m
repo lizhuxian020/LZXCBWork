@@ -105,7 +105,7 @@
 {
 //    self.tabBar.backgroundColor = kRGB(255, 255, 255);
     self.tabBar.translucent = NO;
-//    self.tabBar.backgroundColor = kAppMainColor;
+    self.tabBar.backgroundColor = UIColor.blackColor;
     self.tabBar.backgroundImage = [UIImage imageWithColor:UIColor.blackColor];
 }
 
