@@ -17,7 +17,11 @@
 @property (nonatomic, strong) UIView *bottomView;
 
 @property (nonatomic, strong) UILabel *titleLabel;
-//@property (nonatomic, strong) UIButton *playBackBtn;
+@property (nonatomic, strong) UIImageView *arrowView;
+
+@property (nonatomic, strong) UIView *followBtn;
+@property (nonatomic, strong) UIView *playBackBtn;
+@property (nonatomic, strong) UIView *moveBtn;
 //@property (nonatomic, strong) UIButton *deleteWarmBtn;
 //@property (nonatomic, strong) UIButton *closeBtn;
 //@property (nonatomic,strong) UIButton *navigationBtn;
@@ -201,6 +205,48 @@
     }
     return _titleLabel;
 }
+- (UIImageView *)arrowView {
+    if (!_arrowView) {
+        UIImage *img = [UIImage imageNamed:@"右边"];
+        _arrowView = [[UIImageView alloc] initWithImage:img];
+        [self.titleView addSubview:_arrowView];
+        [_arrowView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(@0);
+            make.right.equalTo(@-10);
+            make.size.mas_equalTo(img.size);
+        }];
+    }
+    return _arrowView;
+}
+- (UIView *)createBtn:(NSString *)title img:(NSString *)imgName {
+    UIView *view = [UIView new];
+    UIImage *img = [UIImage imageNamed:imgName];
+    UIImageView *imgv = [[UIImageView alloc] initWithImage:img];
+    [view addSubview:imgv];
+    UILabel *lbl = [MINUtils createLabelWithText:title size:14 alignment:NSTextAlignmentCenter textColor:UIColor.blackColor];
+    [view addSubview:lbl];
+    [imgv mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(@0);
+        make.centerX.equalTo(@0);
+        make.width.height.equalTo(@20);
+        make.left.greaterThanOrEqualTo(@0);
+        make.right.lessThanOrEqualTo(@0);
+    }];
+    [lbl mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(imgv.mas_bottom).mas_offset(5);
+        make.centerX.equalTo(@0);
+        make.bottom.equalTo(@0);
+        make.left.greaterThanOrEqualTo(@0);
+        make.right.lessThanOrEqualTo(@0);
+    }];
+    
+    UIView *containV = [UIView new];
+    [containV addSubview:view];
+    [view mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.centerX.equalTo(@0);
+    }];
+    return containV;
+}
 //- (UIButton *)playBackBtn {
 //    if (!_playBackBtn) {
 //        _playBackBtn = [MINUtils createNoBorderBtnWithTitle:Localized(@"回放") titleColor: [UIColor whiteColor] fontSize:15 * KFitWidthRate];
@@ -266,6 +312,29 @@
 //    }
 //    return _navigationBtn;
 //}
+- (void)setupBottom {
+    self.followBtn = [self createBtn:@"跟踪" img:@"单选-选中"];
+    self.playBackBtn = [self createBtn:@"回放" img:@"单选-选中"];
+    self.moveBtn = [self createBtn:@"位移" img:@"单选-选中"];
+    [self.bottomView addSubview:self.followBtn];
+    [self.bottomView addSubview:self.playBackBtn];
+    [self.bottomView addSubview:self.moveBtn];
+    [self.followBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.bottom.equalTo(@0);
+        make.left.equalTo(@0);
+    }];
+    [self.playBackBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.bottom.equalTo(@0);
+        make.left.equalTo(self.followBtn.mas_right);
+        make.width.equalTo(self.followBtn);
+    }];
+    [self.moveBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.bottom.equalTo(@0);
+        make.left.equalTo(self.playBackBtn.mas_right);
+        make.width.equalTo(self.playBackBtn);
+        make.right.equalTo(@0);
+    }];
+}
 - (void)setupView {
     self.backgroundColor = UIColor.clearColor;//[UIColor colorWithHexString:@"#000000" alpha:0.5];
     UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(taphandle:)];
@@ -277,6 +346,8 @@
     [self bottomView];
     
     [self titleLabel];
+    [self arrowView];
+    [self setupBottom];
 //    [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
 //        make.left.equalTo(_titleView).with.offset(15 * KFitWidthRate);
 //        make.top.bottom.equalTo(_titleView);
@@ -340,6 +411,11 @@
 //                             _gpsDriftLb,_ydControlLb,_vibrationLb,_accNoticeLb,_timeZone,_sleepModelLb,_gpsNumberLb,_gsmNumberLb,_timeLb,_addressLabel
     ];//_warmTypeLb
     [self restMutableArray:self.arrayLb addFromArray:arrLb];
+    
+    //同一行的放里面(不换行）
+    NSArray *sameLineLb = @[
+        _accLb,_doorLb,_oilLb,_gsmNumberLb,_gpsNumberLb
+    ];
 
 //    NSArray *arrT = @[@"经纬度:",
 ////                      @"纬度:",@"速度:",@"离线时长:0分",@"停留时长:0分",@"停留次数:0分",@"门状态:关",@"acc状态：关",@"油量:0L 0%",@"当天里程:0km",@"内电:关",@"外电:开",@"布防:开",@"撤防:开",@"低电报警:开",@"盲区报警:开",@"掉电报警:开",@"超速报警:开",@"振动报警:开",@"油量检测报警:开",@"GPS漂移抑制:开",@"油电控制:开",@"振动灵敏度:高",@"ACC工作通知:开",@"终端时区:8",@"休眠模式：时间休眠",@"GPS:0颗",@"GSM:27",@"上报时间:2020-05-18 13:35:32",@"四川省成都市高新区长虹科技大厦"
@@ -356,6 +432,11 @@
 //        lb.text = self.arrayTitles[i];
         [self.middleContentView addSubview:lb];
         [lb mas_makeConstraints:^(MASConstraintMaker *make) {
+            if ([sameLineLb containsObject:lb]) {
+                make.left.equalTo(lastLbl.mas_right).mas_offset(3);
+                make.top.equalTo(lastLbl);
+                return;;
+            }
             make.left.equalTo(@10);
             if (lastLbl) {
                 make.top.equalTo(lastLbl.mas_bottom).mas_offset(10);
@@ -374,6 +455,7 @@
     }
     [lastLbl mas_updateConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(@0);
+        make.width.equalTo(self.middleView).mas_offset(-20);
     }];
 }
 - (void)insertArrLbAndArrTitle:(NSInteger)index {
@@ -487,6 +569,7 @@
 }
 - (UILabel *)createLbTitle:(NSString *)text {
     UILabel *label = [MINUtils createLabelWithText:text size:10*KFitHeightRate alignment:NSTextAlignmentLeft textColor: k137Color];
+    label.numberOfLines = 0;
     return label;
 }
 #pragma mark -- button点击事件
@@ -529,6 +612,7 @@
     _middleView = nil;
     _bottomView = nil;
     _titleLabel = nil;
+    _arrowView = nil;
 //    _deleteWarmBtn = nil;
 //    _playBackBtn = nil;
 //    _closeBtn = nil;
