@@ -1708,6 +1708,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
                     if (self.deviceInfoModelSelect.dno == nil) return;
                     if (deviceInfoModel.dno) {
                         deviceInfoModel.zoomLevel = self.deviceInfoModelSelect.zoomLevel;
+                        //TODO: LZXTODO由于这里赋值了deviceInfoModelSelect，导致devStatus不见了
                         self.deviceInfoModelSelect = deviceInfoModel;
                         [CBCommonTools saveCBdeviceInfo:self.deviceInfoModelSelect];
                     }
