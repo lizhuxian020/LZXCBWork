@@ -159,6 +159,10 @@
             make.height.mas_equalTo(50 * KFitHeightRate);
             make.right.equalTo(self.bgmView).with.offset(-12 * KFitWidthRate);
         }];
+        kWeakSelf(self);
+        [_titleView bk_whenTapped:^{
+            [weakself didClickBtn:@"标题"];
+        }];
     }
     return _titleView;
 }
@@ -177,6 +181,11 @@
         [_middleView addSubview:_middleContentView];
         [_middleContentView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.equalTo(@0);
+            make.width.equalTo(_middleView);
+        }];
+        [_middleContentView bk_whenTapped:^{
+            //加个点击事件。免得点击消失
+            NSLog(@"加个点击事件。免得点击消失");
         }];
     }
     return _middleView;
@@ -244,6 +253,10 @@
     [containV addSubview:view];
     [view mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.centerX.equalTo(@0);
+    }];
+    kWeakSelf(self);
+    [containV bk_whenTapped:^{
+        [weakself didClickBtn:title];
     }];
     return containV;
 }
@@ -573,6 +586,9 @@
     return label;
 }
 #pragma mark -- button点击事件
+- (void)didClickBtn:(NSString *)title {
+    NSLog(@"%@", title);
+}
 - (void)btnClickType:(UIButton *)sender {
 //    if ([sender isEqual:self.playBackBtn]) {
 //        if (self.clickBlock) {

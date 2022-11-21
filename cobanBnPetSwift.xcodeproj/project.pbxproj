@@ -661,6 +661,8 @@
 		6D032D9B1335E2208C8FB6B3 /* libPods-cobanBnPetSwift.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A1F41BDFD0FBDF918826F4E /* libPods-cobanBnPetSwift.a */; };
 		A2F9C5002925D1C400715AF9 /* CBPetLoginInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F9C4FF2925D1C400715AF9 /* CBPetLoginInputView.swift */; };
 		A2F9C5032926135E00715AF9 /* CBLoginLayoutMarco.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F9C5022926135E00715AF9 /* CBLoginLayoutMarco.swift */; };
+		A2F9C508292B76A700715AF9 /* UIView+BlocksKit.m in Sources */ = {isa = PBXBuildFile; fileRef = A2F9C505292B76A600715AF9 /* UIView+BlocksKit.m */; };
+		A2F9C509292B76A700715AF9 /* UIGestureRecognizer+BlocksKit.m in Sources */ = {isa = PBXBuildFile; fileRef = A2F9C506292B76A600715AF9 /* UIGestureRecognizer+BlocksKit.m */; };
 		B101D4DE2927CF32007EA942 /* UIView+Badge.m in Sources */ = {isa = PBXBuildFile; fileRef = B101D4DD2927CF32007EA942 /* UIView+Badge.m */; };
 		B11EBFDF29294F790000DA24 /* CBCBCarMineHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = B11EBFDE29294F790000DA24 /* CBCBCarMineHeaderView.m */; };
 		B1212C642795CE8B0044E7CC /* CBPetSwitchPetAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1212C632795CE8B0044E7CC /* CBPetSwitchPetAlertView.swift */; };
@@ -1835,6 +1837,10 @@
 		43F4FDEE248672EB0072B233 /* CBPetFuncChatPetInfoTabCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetFuncChatPetInfoTabCell.swift; sourceTree = "<group>"; };
 		A2F9C4FF2925D1C400715AF9 /* CBPetLoginInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetLoginInputView.swift; sourceTree = "<group>"; };
 		A2F9C5022926135E00715AF9 /* CBLoginLayoutMarco.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBLoginLayoutMarco.swift; sourceTree = "<group>"; };
+		A2F9C504292B76A500715AF9 /* UIGestureRecognizer+BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIGestureRecognizer+BlocksKit.h"; sourceTree = "<group>"; };
+		A2F9C505292B76A600715AF9 /* UIView+BlocksKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+BlocksKit.m"; sourceTree = "<group>"; };
+		A2F9C506292B76A600715AF9 /* UIGestureRecognizer+BlocksKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIGestureRecognizer+BlocksKit.m"; sourceTree = "<group>"; };
+		A2F9C507292B76A600715AF9 /* UIView+BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+BlocksKit.h"; sourceTree = "<group>"; };
 		B101D4DC2927CF32007EA942 /* UIView+Badge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Badge.h"; sourceTree = "<group>"; };
 		B101D4DD2927CF32007EA942 /* UIView+Badge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Badge.m"; sourceTree = "<group>"; };
 		B11EBFDD29294F790000DA24 /* CBCBCarMineHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBCBCarMineHeaderView.h; sourceTree = "<group>"; };
@@ -5349,6 +5355,10 @@
 		B101D4DB2927CABD007EA942 /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				A2F9C504292B76A500715AF9 /* UIGestureRecognizer+BlocksKit.h */,
+				A2F9C506292B76A600715AF9 /* UIGestureRecognizer+BlocksKit.m */,
+				A2F9C507292B76A600715AF9 /* UIView+BlocksKit.h */,
+				A2F9C505292B76A600715AF9 /* UIView+BlocksKit.m */,
 				B101D4DC2927CF32007EA942 /* UIView+Badge.h */,
 				B101D4DD2927CF32007EA942 /* UIView+Badge.m */,
 			);
@@ -5907,6 +5917,7 @@
 				17CDABEC24CEBE5600BB9F8B /* FormProtocalModel.m in Sources */,
 				4347ED4724ACC0B300DED6BD /* CBPetFenceAnnotation.swift in Sources */,
 				1782BF8024C0427E00544C36 /* ForbiddenDetailOrAddForBiddenTimeViewController.m in Sources */,
+				A2F9C509292B76A700715AF9 /* UIGestureRecognizer+BlocksKit.m in Sources */,
 				17CDABD124CEBE5600BB9F8B /* lmem.c in Sources */,
 				17CDAB9724CEBE5500BB9F8B /* DRadarScaler.m in Sources */,
 				17CDABF624CEBE5600BB9F8B /* VideoTableViewCell.m in Sources */,
@@ -5946,6 +5957,7 @@
 				17CDAC6624CEBE5600BB9F8B /* CBControlAlertPopView.m in Sources */,
 				17CDAB5E24CEBE5500BB9F8B /* BarDataSet.m in Sources */,
 				1782BF2224C0427E00544C36 /* UIView+Animation.m in Sources */,
+				A2F9C508292B76A700715AF9 /* UIView+BlocksKit.m in Sources */,
 				1782BF5F24C0427E00544C36 /* CBTalkListTableView.m in Sources */,
 				439E90732475A497004ED9AD /* CBTriangleView.swift in Sources */,
 				1782BF9624C0427E00544C36 /* CBGuardSearchResultTableViewCell.m in Sources */,
