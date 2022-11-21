@@ -104,7 +104,9 @@
 - (void)createUI
 {
 //    self.tabBar.backgroundColor = kRGB(255, 255, 255);
-    self.tabBar.backgroundColor = kNavBarBgColor;
+    self.tabBar.translucent = NO;
+//    self.tabBar.backgroundColor = kAppMainColor;
+    self.tabBar.backgroundImage = [UIImage imageWithColor:UIColor.blackColor];
 }
 
 - (void)loadViewControllers {

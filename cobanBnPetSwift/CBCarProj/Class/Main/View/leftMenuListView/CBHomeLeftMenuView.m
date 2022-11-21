@@ -155,11 +155,18 @@
         [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.equalTo(@0);
         }];
-        _searchTextFeild.leftView = leftView;
-        _searchTextFeild.leftViewMode = UITextFieldViewModeAlways;
+        [_textFieldView addSubview:leftView];
+        [leftView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.top.bottom.equalTo(@0);
+            make.width.equalTo(leftView.mas_height);
+        }];
+//        _searchTextFeild.leftView = leftView;
+//        _searchTextFeild.leftViewMode = UITextFieldViewModeAlways;
         [_textFieldView addSubview: _searchTextFeild];
         [_searchTextFeild mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.edges.equalTo(@0);
+//            make.edges.equalTo(@0);
+            make.top.bottom.right.equalTo(@0);
+            make.left.equalTo(leftView.mas_right);
         }];
 
         [_searchTextFeild addTarget:self action:@selector(responseToTextfeildValueChange:) forControlEvents:UIControlEventEditingChanged];

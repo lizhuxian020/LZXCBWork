@@ -291,7 +291,9 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
             [MBProgressHUD showHUDIcon:self.view animated:YES];
             //刷新设备信息数据
             [self getDeviceLocationInfoRequest];
-            [[NSNotificationCenter defaultCenter] postNotificationName:K_TabBarColorChangeNotification object:nil];
+            
+            //与安卓同步，选中后不改变颜色
+//            [[NSNotificationCenter defaultCenter] postNotificationName:K_TabBarColorChangeNotification object:nil];
         };
     }
     return _sliderView;
@@ -506,8 +508,8 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         isAnimate = NO;
         
         // 地理反编码
-        self.searcher = [[BMKGeoCodeSearch alloc] init];
-        self.searcher.delegate = self;
+//        self.searcher = [[BMKGeoCodeSearch alloc] init];
+//        self.searcher.delegate = self;
         
         //是否启用指南针
         _googleMapView.settings.compassButton = YES;
