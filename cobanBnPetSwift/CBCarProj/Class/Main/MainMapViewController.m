@@ -117,8 +117,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 @property (nonatomic, strong)  CBHomeLeftMenuView *sliderView;
 /** 菜单数据源  */
 @property (nonatomic, strong) NSMutableArray *slider_array;
-/** 选中的设备  */
-@property (nonatomic, strong) CBHomeLeftMenuDeviceInfoModel *deviceInfoModelSelect;
+
 /** 轨迹选中view  */
 @property (nonatomic, strong) CBTrackSelectTimeView *trackSelectTimePopView;
 /**   */
@@ -593,7 +592,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 //    self.navigationItem.leftBarButtonItems = @[barItem, spaceItem];
     
     
-    
+    self.deviceInfoModelSelect = [CBCommonTools CBdeviceInfo];
     [self baiduMap];
     [self googleMap];
 //    [self switchMapType];
@@ -649,7 +648,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     return btn;
 }
 
-#pragma mark - 按钮点击时间
+#pragma mark - 按钮点击事件
 - (void)didClickDeviceListBtn {
     [self leftBtnClick];
 }
@@ -670,6 +669,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 
 - (void)didClickLocateBtn {
     NSLog(@"%s", __FUNCTION__);
+    [self requestDeviceSingleLocation];
 }
 
 #pragma mark - GoogleMaps
@@ -1083,6 +1083,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 }
 - (void)setEndTrack {
     self.isStartTrack = NO;
+    [HUD showHUDWithText:Localized(@"停止跟踪") withDelay:2.0];
     // 20s刷新轨迹数组,初始化
     [self initTrackLine];
     // 20s刷新的轨迹的line和路径

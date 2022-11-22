@@ -8,6 +8,10 @@
 
 #import "CBCarPaopaoView.h"
 
+#define __CarPaoTitle_Track Localized(@"跟踪")
+#define __CarPaoTitle_PlayBack Localized(@"回放")
+#define __CarPaoTitle_Move Localized(@"位移")
+
 @interface CBCarPaopaoView ()<UIGestureRecognizerDelegate,UIScrollViewDelegate>
 /** 背景view */
 @property (nonatomic,strong) UIImageView *bgmView;
@@ -326,9 +330,9 @@
 //    return _navigationBtn;
 //}
 - (void)setupBottom {
-    self.followBtn = [self createBtn:@"跟踪" img:@"单选-选中"];
-    self.playBackBtn = [self createBtn:@"回放" img:@"单选-选中"];
-    self.moveBtn = [self createBtn:@"位移" img:@"单选-选中"];
+    self.followBtn = [self createBtn:__CarPaoTitle_Track img:@"单选-选中"];
+    self.playBackBtn = [self createBtn:__CarPaoTitle_PlayBack img:@"单选-选中"];
+    self.moveBtn = [self createBtn:__CarPaoTitle_Move img:@"单选-选中"];
     [self.bottomView addSubview:self.followBtn];
     [self.bottomView addSubview:self.playBackBtn];
     [self.bottomView addSubview:self.moveBtn];
@@ -588,6 +592,21 @@
 #pragma mark -- button点击事件
 - (void)didClickBtn:(NSString *)title {
     NSLog(@"%@", title);
+    if ([title isEqualToString:__CarPaoTitle_Track]) {
+        if (self.clickBlock) {
+            self.clickBlock(CBCarPaopaoViewClickTypeTrack, self.dno);
+        }
+    }
+    if ([title isEqualToString:__CarPaoTitle_PlayBack]) {
+        if (self.clickBlock) {
+            self.clickBlock(CBCarPaopaoViewClickTypePlayBack, self.dno);
+        }
+    }
+    if ([title isEqualToString:__CarPaoTitle_Move]) {
+        if (self.clickBlock) {
+            self.clickBlock(CBCarPaopaoViewClickTypeMove, self.dno);
+        }
+    }
 }
 - (void)btnClickType:(UIButton *)sender {
 //    if ([sender isEqual:self.playBackBtn]) {

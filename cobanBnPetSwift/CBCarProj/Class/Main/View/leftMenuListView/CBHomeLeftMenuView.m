@@ -201,6 +201,7 @@
     for (int i = 0; i < self.sliderArray.count; i ++) {
 //        CBHomeLeftMenuTableView *tableView = [[CBHomeLeftMenuTableView alloc] initWithFrame:CGRectMake(i*KLeftMenuWidth, 0, KLeftMenuWidth, _mainScrollView.frame.size.height - TabPaddingBARHEIGHT) style:UITableViewStyleGrouped];
         CBHomeLeftMenuTableView *tableView = [[CBHomeLeftMenuTableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+        tableView.needToChooseFirst = i == 0;
 //        tableView.tag = i;
         [_tableViewArray addObject:tableView];
         [_mainScrollView addSubview:tableView];

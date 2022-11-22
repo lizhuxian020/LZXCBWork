@@ -10,6 +10,7 @@
 #import "CBHomeLeftMenuModel.h"
 #import "CBHomeLeftMenuHeadView.h"
 #import "CBHomeLeftMenuTableViewCell.h"
+#import "MainMapViewController.h"
 
 static NSString *homeHeadViewIndentifer = @"homeHeadViewIndentifer";
 
@@ -201,6 +202,10 @@ static NSString *homeHeadViewIndentifer = @"homeHeadViewIndentifer";
                 }
                 [self.mj_footer endRefreshingWithNoMoreData];
                 [self reloadData];
+                //判断首页是有已经有选中, 如无,则选中第一条
+                if (self.needToChooseFirst ) {
+                    [self tryToSelectFirOne];
+                }
             }
                 break;
             default:
@@ -218,6 +223,24 @@ static NSString *homeHeadViewIndentifer = @"homeHeadViewIndentifer";
         [MBProgressHUD hideHUDForView:self animated:YES];
         [HUD showHUDWithText:Localized(@"请求超时") withDelay:3.0];
     }];
+}
+
+- (void)tryToSelectFirOne {
+    UITabBarController *rootVC = UIApplication.sharedApplication.keyWindow.rootViewController;
+    if (![rootVC isKindOfClass:UITabBarController.class]) {
+        return;
+    }
+    UINavigationController *naviVC = rootVC.viewControllers.firstObject;
+    if (![naviVC isKindOfClass:UINavigationController.class]) {
+        return;
+    }
+    for (MainMapViewController *vc in naviVC.viewControllers) {
+        if ([vc isKindOfClass:MainMapViewController.class]) {
+            if (vc.deviceInfoModelSelect == nil && self.needToChooseFirst) {
+                [self tableView:self didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+            }
+        }
+    }
 }
 /*
 // Only override drawRect: if you perform custom drawing.

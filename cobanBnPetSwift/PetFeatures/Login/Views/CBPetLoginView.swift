@@ -73,7 +73,6 @@ class CBPetLoginView: CBPetBaseView {
         } else {
             v.setInputView(placeholder: "请输入手机号码".localizedStr)
         }
-        v.textTF.keyboardType = .emailAddress;
         self.bgmView.addSubview(v)
         return v
     }()

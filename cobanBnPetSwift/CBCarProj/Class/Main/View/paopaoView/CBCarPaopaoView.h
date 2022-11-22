@@ -23,6 +23,8 @@ typedef enum : NSInteger {
     CBCarPaopaoViewClickTypeNavigationClick = 104,
     /* 跟踪*/
     CBCarPaopaoViewClickTypeTrack = 105,
+    /* 位移*/
+    CBCarPaopaoViewClickTypeMove = 106,
 } CBCarPaopaoViewClickType;
 
 
