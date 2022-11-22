@@ -633,7 +633,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     self.locateBtn = [self createBtn:@"播放条-按钮"];
     [self.locateBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.width.height.equalTo(self.personBtn);
-        make.bottom.equalTo(@(-TabBARHEIGHT-20));
+        make.bottom.equalTo(@(-20));
     }];
     [self.locateBtn addTarget:self action:@selector(didClickLocateBtn) forControlEvents:UIControlEventTouchUpInside];
 }
@@ -1226,8 +1226,8 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         playBackView =  [[MINPlayBackView alloc] init];
         [self.view addSubview: playBackView];
         [playBackView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.right.equalTo(self.view);
-            make.bottom.equalTo(self.view).with.offset(-self.tabBarController.tabBar.frame.size.height);
+            make.bottom.left.right.equalTo(self.view);
+//            make.bottom.equalTo(self.view).with.offset(-self.tabBarController.tabBar.frame.size.height);
             make.height.mas_equalTo(120 * KFitHeightRate);
         }];
         __weak __typeof__(self) weakSelf = self;

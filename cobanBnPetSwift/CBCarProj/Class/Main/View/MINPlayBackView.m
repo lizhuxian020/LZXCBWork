@@ -152,17 +152,19 @@
 
 - (void)show
 {
-    UITabBarController *tabBarController = [[UITabBarController alloc] init];
-    [self mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.superview).with.offset(-tabBarController.tabBar.frame.size.height);
-    }];
+//    UITabBarController *tabBarController = [[UITabBarController alloc] init];
+//    [self mas_updateConstraints:^(MASConstraintMaker *make) {
+//        make.bottom.equalTo(self.superview).with.offset(-tabBarController.tabBar.frame.size.height);
+//    }];
+    self.hidden = NO;
 }
 
 - (void)hide
 {
-    [self mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.superview).with.offset(140 * KFitHeightRate);
-    }];
+//    [self mas_updateConstraints:^(MASConstraintMaker *make) {
+//        make.bottom.equalTo(self.superview).with.offset(140 * KFitHeightRate);
+//    }];
+    self.hidden = YES;
 }
 
 - (void)setCurrentTime:(CGFloat)currentTime
