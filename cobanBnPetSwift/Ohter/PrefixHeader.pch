@@ -75,6 +75,7 @@
 
 #import "UIView+BlocksKit.h"
 #import "CBBasePopView.h"
+#import "CBAlertBaseView.h"
 
 ///* oc 调用 swift*/
 //#import "cobanBnPetSwift-Swift.h"

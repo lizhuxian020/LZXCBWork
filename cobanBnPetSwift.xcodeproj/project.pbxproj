@@ -671,6 +671,7 @@
 		B17F1D17279461430040434F /* CBPetMultiVCNaviBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17F1D16279461430040434F /* CBPetMultiVCNaviBar.swift */; };
 		B17F1D1A279463640040434F /* CBPetMultiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17F1D19279463640040434F /* CBPetMultiViewModel.swift */; };
 		B1D3565F292E5EF400E677F7 /* CBBasePopView.m in Sources */ = {isa = PBXBuildFile; fileRef = B1D3565E292E5EF400E677F7 /* CBBasePopView.m */; };
+		B1D35662292E65FD00E677F7 /* CBAlertBaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = B1D35661292E65FD00E677F7 /* CBAlertBaseView.m */; };
 		B1E7040B2798727100060475 /* CBPetToolAssistanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1E7040A2798727100060475 /* CBPetToolAssistanceView.swift */; };
 		B1EF2F2B279C554D0050BF05 /* CBPetAvatarPaoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1EF2F2A279C554D0050BF05 /* CBPetAvatarPaoView.swift */; };
 		B1EF2F2D279EFB000050BF05 /* CBPetFuncUserManageOtherConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1EF2F2C279EFB000050BF05 /* CBPetFuncUserManageOtherConfigView.swift */; };
@@ -1854,6 +1855,8 @@
 		B19B58052929304B00AC1162 /* MainViewConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewConfig.h; sourceTree = "<group>"; };
 		B1D3565D292E5EF400E677F7 /* CBBasePopView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBBasePopView.h; sourceTree = "<group>"; };
 		B1D3565E292E5EF400E677F7 /* CBBasePopView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBBasePopView.m; sourceTree = "<group>"; };
+		B1D35660292E65FD00E677F7 /* CBAlertBaseView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBAlertBaseView.h; sourceTree = "<group>"; };
+		B1D35661292E65FD00E677F7 /* CBAlertBaseView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBAlertBaseView.m; sourceTree = "<group>"; };
 		B1E7040A2798727100060475 /* CBPetToolAssistanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetToolAssistanceView.swift; sourceTree = "<group>"; };
 		B1EF2F2A279C554D0050BF05 /* CBPetAvatarPaoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetAvatarPaoView.swift; sourceTree = "<group>"; };
 		B1EF2F2C279EFB000050BF05 /* CBPetFuncUserManageOtherConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetFuncUserManageOtherConfigView.swift; sourceTree = "<group>"; };
@@ -5451,6 +5454,8 @@
 			children = (
 				B1D3565D292E5EF400E677F7 /* CBBasePopView.h */,
 				B1D3565E292E5EF400E677F7 /* CBBasePopView.m */,
+				B1D35660292E65FD00E677F7 /* CBAlertBaseView.h */,
+				B1D35661292E65FD00E677F7 /* CBAlertBaseView.m */,
 			);
 			path = PopView;
 			sourceTree = "<group>";
@@ -5756,6 +5761,7 @@
 				17CDAB3124CEBE5500BB9F8B /* CBNoDataView.m in Sources */,
 				17CDAC6224CEBE5600BB9F8B /* CBControlInputPopView.m in Sources */,
 				4360DB3A2480FB9900D2A03C /* NSDate+Extension.swift in Sources */,
+				B1D35662292E65FD00E677F7 /* CBAlertBaseView.m in Sources */,
 				17CDABD824CEBE5600BB9F8B /* ldebug.c in Sources */,
 				17CDAC6D24CEBE5600BB9F8B /* CBBaseNavigationController.m in Sources */,
 				17CDABDE24CEBE5600BB9F8B /* LuaExportMetaData.m in Sources */,

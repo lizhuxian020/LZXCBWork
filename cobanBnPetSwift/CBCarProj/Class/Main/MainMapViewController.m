@@ -119,9 +119,8 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 @property (nonatomic, strong) NSMutableArray *slider_array;
 
 /** 轨迹选中view  */
-@property (nonatomic, strong) CBTrackSelectTimeView *trackSelectTimePopView;
+@property (nonatomic, strong) CBTrackSelectTimeView *playbackSelectTimeView;
 @property (nonatomic, strong) CBBasePopView *playbackTimeBasePopView;
-@property (nonatomic, strong) UIView *playbackPopContentView;
 /**   */
 @property (nonatomic, strong) NSTimer *playTrackTimer;
 /**   */
@@ -372,42 +371,27 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 }
 - (CBBasePopView *)playbackTimeBasePopView {
     if (!_playbackTimeBasePopView) {
-        _playbackTimeBasePopView = [[CBBasePopView alloc] initWithContentView:self.playbackPopContentView];
+        
+        
+        CBAlertBaseView *alertContentView = [[CBAlertBaseView alloc] initWithContentView:self.playbackSelectTimeView title:@"选择时间"];
+        kWeakSelf(self);
+        [alertContentView setDidClickCancel:^{
+            [weakself.playbackTimeBasePopView dismiss];
+        }];
+        [alertContentView setDidClickConfirm: ^{
+            [weakself.playbackTimeBasePopView dismiss];
+            [weakself requestTrackDataWithModelReal];
+        }];
+        
+        _playbackTimeBasePopView = [[CBBasePopView alloc] initWithContentView:alertContentView];
     }
     return _playbackTimeBasePopView;
 }
-- (UIView *)playbackPopContentView {
-    if (!_playbackPopContentView) {
-        _playbackPopContentView = [UIView new];
-        
-        _playbackPopContentView.backgroundColor = UIColor.whiteColor;
-        UILabel *lbl = [UILabel new];
-        lbl.text = @"ajklsdjalskd";
-        [_playbackPopContentView addSubview:lbl];
-        lbl.textAlignment = NSTextAlignmentCenter;
-        [lbl mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(@10);
-            make.bottom.equalTo(@-10);
-            make.left.right.equalTo(@0);
-        }];
+- (CBTrackSelectTimeView *)playbackSelectTimeView {
+    if (!_playbackSelectTimeView) {
+        _playbackSelectTimeView = [[CBTrackSelectTimeView alloc] init];
     }
-    return _playbackPopContentView;
-}
-- (CBTrackSelectTimeView *)trackSelectTimePopView {
-    if (!_trackSelectTimePopView) {
-        _trackSelectTimePopView = [[CBTrackSelectTimeView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
-        _trackSelectTimePopView.tapClickBlock = ^(id  _Nonnull obj) {
-        };
-        kWeakSelf(self);
-        _trackSelectTimePopView.btnClickBlick = ^(id  _Nonnull obj) {
-            kStrongSelf(self);
-            if ([obj isEqualToString:@"1"]) {
-                // 确定
-                [self requestTrackDataWithModelReal:self.trackSelectTimePopView.dno];
-            }
-        };
-    }
-    return _trackSelectTimePopView;
+    return _playbackSelectTimeView;
 }
 - (NSMutableArray *)rectangleCoordinateArr {
     if (!_rectangleCoordinateArr) {
@@ -1172,16 +1156,16 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 }
 #pragma mark --获取设备轨迹
 - (void)requestTrackDataWithModel:(NSString *)dno {
-//    [self.trackSelectTimePopView popView];
-//    self.trackSelectTimePopView.dno = dno;
+    self.playbackSelectTimeView.dno = dno;
     [self.playbackTimeBasePopView pop];
 }
-- (void)requestTrackDataWithModelReal:(NSString *)dno {
+- (void)requestTrackDataWithModelReal {
     __weak __typeof__(self) weakSelf = self;
+    [self.playbackSelectTimeView readyToRequest];
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:1];
-    dic[@"dno"] = dno;
-    dic[@"startTime"] = self.trackSelectTimePopView.dateStrStar?:@"";//@"2019-07-31";
-    dic[@"endTime"] = self.trackSelectTimePopView.dateStrEnd?:@"";//@"2019-08-01";
+    dic[@"dno"] = self.playbackSelectTimeView.dno;
+    dic[@"startTime"] = self.playbackSelectTimeView.dateStrStar?:@"";//@"2019-07-31";
+    dic[@"endTime"] = self.playbackSelectTimeView.dateStrEnd?:@"";//@"2019-08-01";
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     [[NetWorkingManager shared]getWithUrl:@"personController/getMyDeviceGPS" params: dic succeed:^(id response,BOOL isSucceed) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];

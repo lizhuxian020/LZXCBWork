@@ -12,13 +12,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CBTrackSelectTimeView : UIView
 
-@property (nonatomic,copy) void (^tapClickBlock)(id obj);
-@property (nonatomic,copy) void (^btnClickBlick)(id obj);
 @property (nonatomic,copy) NSString *dno;
 @property (nonatomic,copy) NSString *dateStrStar;
 @property (nonatomic,copy) NSString *dateStrEnd;
-- (void)popView;//弹出视图
-- (void)dismiss;//隐藏视图
+
+- (void)readyToRequest;
 @end
 
 NS_ASSUME_NONNULL_END

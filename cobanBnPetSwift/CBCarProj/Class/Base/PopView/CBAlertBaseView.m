@@ -1,0 +1,111 @@
+//
+//  CBAlertBaseView.m
+//  cobanBnPetSwift
+//
+//  Created by lee on 2022/11/23.
+//  Copyright © 2022 coban. All rights reserved.
+//
+
+#import "CBAlertBaseView.h"
+
+@interface CBAlertBaseView ()
+
+@property (nonatomic, copy) NSString *title;
+
+@property (nonatomic, strong) UILabel *titleLbl;
+
+@property (nonatomic, strong) UILabel *cancelLbl;
+
+@property (nonatomic, strong) UILabel *confirmLbl;
+
+@end
+
+@implementation CBAlertBaseView
+
+- (instancetype)initWithContentView:(UIView *)contentView title:(NSString *)title{
+    self = [super init];
+    if (self){
+        self.title = title;
+        self.contentView = contentView;
+        [self createUI];
+    }
+    return self;
+}
+
+- (void)createUI {
+    self.titleLbl = [MINUtils createLabelWithText:self.title size:14 alignment:NSTextAlignmentCenter textColor:UIColor.whiteColor];
+    UIView *titleC = [UIView new];
+    [titleC addSubview:self.titleLbl];
+    [self.titleLbl mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(@0);
+        make.top.equalTo(@5);
+        make.bottom.equalTo(@-5);
+    }];
+    [self addSubview:titleC];
+    [titleC mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.right.equalTo(@0);
+    }];
+    titleC.backgroundColor = UIColor.blackColor;
+    
+    
+    [self addSubview:self.contentView];
+    [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(@0);
+        make.top.equalTo(titleC.mas_bottom);
+    }];
+    
+    UIView *btnC = [UIView new];
+    btnC.backgroundColor = kBackColor;
+    [self addSubview:btnC];
+    [btnC mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.bottom.equalTo(@0);
+        make.top.equalTo(self.contentView.mas_bottom);
+        make.height.equalTo(@50);
+    }];
+    
+    self.cancelLbl = [MINUtils createLabelWithText:@"取消" size:15 alignment:NSTextAlignmentCenter textColor:UIColor.blackColor];
+    self.cancelLbl.font = [UIFont systemFontOfSize:15 weight:UIFontWeightBold];
+    [btnC addSubview:self.cancelLbl];
+    
+    self.confirmLbl = [MINUtils createLabelWithText:@"确定" size:15 alignment:NSTextAlignmentCenter textColor:kAppMainColor];
+    self.confirmLbl.font = [UIFont systemFontOfSize:15 weight:UIFontWeightBold];
+    [btnC addSubview:self.confirmLbl];
+    
+    
+    UIView *line = [UIView new];
+    line.backgroundColor = UIColor.blackColor;
+    [self.cancelLbl addSubview:line];
+    [line mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.right.bottom.equalTo(@0);
+        make.width.equalTo(@1);
+    }];
+    
+    [self.cancelLbl mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.bottom.equalTo(@0);
+    }];
+    [self.confirmLbl mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.right.bottom.equalTo(@0);
+        make.width.equalTo(self.cancelLbl);
+        make.left.equalTo(self.cancelLbl.mas_right);
+    }];
+    
+    self.cancelLbl.userInteractionEnabled = YES;
+    self.confirmLbl.userInteractionEnabled = YES;
+    
+    kWeakSelf(self);
+    [self.cancelLbl bk_whenTapped:^{
+        NSLog(@"%s", __FUNCTION__);
+        if (weakself.didClickCancel) {
+            weakself.didClickCancel();
+        }
+    }];
+    
+    [self.confirmLbl bk_whenTapped:^{
+        NSLog(@"%s", __FUNCTION__);
+        if (weakself.didClickConfirm){
+            weakself.didClickConfirm();
+        }
+    }];
+}
+
+@end
