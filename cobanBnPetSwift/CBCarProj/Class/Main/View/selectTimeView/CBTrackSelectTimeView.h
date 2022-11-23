@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,copy) NSString *dateStrStar;
 @property (nonatomic,copy) NSString *dateStrEnd;
 
-- (void)readyToRequest;
+- (BOOL)readyToRequest;
 @end
 
 NS_ASSUME_NONNULL_END

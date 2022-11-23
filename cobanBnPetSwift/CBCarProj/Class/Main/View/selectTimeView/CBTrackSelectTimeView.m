@@ -109,7 +109,7 @@
     }
 }
 
-- (void)readyToRequest {
+- (BOOL)readyToRequest {
     
     NSDate *nowDate = [NSDate date];
     NSDate *yesterdayDate = [nowDate dateByAddingTimeInterval:-24*60*60];
@@ -166,7 +166,19 @@
             break;
     }
     
-    NSLog(@"%s", __FUNCTION__);
+    NSDate *startD = [formatter dateFromString:self.dateStrStar];
+    NSDate *endD = [formatter dateFromString:self.dateStrEnd];
+    if (startD.timeIntervalSince1970 > endD.timeIntervalSince1970) {
+        [HUD showHUDWithText:Localized(@"开始时间不能大于结束时间") withDelay:1.2];
+        return NO;
+    }
+    
+    NSTimeInterval t = [endD timeIntervalSinceDate:startD];
+    if ([endD timeIntervalSinceDate:startD] > 24*60*60*7) {
+        [HUD showHUDWithText:Localized(@"时间跨度最大不能超过7天") withDelay:1.2];
+        return NO;
+    }
+    return YES;
 }
 
 @end

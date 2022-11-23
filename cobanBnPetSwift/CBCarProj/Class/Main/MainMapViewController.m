@@ -379,7 +379,6 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
             [weakself.playbackTimeBasePopView dismiss];
         }];
         [alertContentView setDidClickConfirm: ^{
-            [weakself.playbackTimeBasePopView dismiss];
             [weakself requestTrackDataWithModelReal];
         }];
         
@@ -1161,7 +1160,10 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 }
 - (void)requestTrackDataWithModelReal {
     __weak __typeof__(self) weakSelf = self;
-    [self.playbackSelectTimeView readyToRequest];
+    if (![self.playbackSelectTimeView readyToRequest]) {
+        return;
+    };
+    [self.playbackTimeBasePopView dismiss];
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:1];
     dic[@"dno"] = self.playbackSelectTimeView.dno;
     dic[@"startTime"] = self.playbackSelectTimeView.dateStrStar?:@"";//@"2019-07-31";
