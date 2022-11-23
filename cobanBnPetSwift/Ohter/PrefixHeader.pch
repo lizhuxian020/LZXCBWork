@@ -74,6 +74,7 @@
 #define kStautsRectHeight [[UIApplication sharedApplication] statusBarFrame].size.height
 
 #import "UIView+BlocksKit.h"
+#import "CBBasePopView.h"
 
 ///* oc 调用 swift*/
 //#import "cobanBnPetSwift-Swift.h"

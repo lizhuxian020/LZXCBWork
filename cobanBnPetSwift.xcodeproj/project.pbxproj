@@ -670,6 +670,7 @@
 		B16C38C52793208D0058EAC4 /* CBPetMultiVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16C38C42793208D0058EAC4 /* CBPetMultiVC.swift */; };
 		B17F1D17279461430040434F /* CBPetMultiVCNaviBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17F1D16279461430040434F /* CBPetMultiVCNaviBar.swift */; };
 		B17F1D1A279463640040434F /* CBPetMultiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17F1D19279463640040434F /* CBPetMultiViewModel.swift */; };
+		B1D3565F292E5EF400E677F7 /* CBBasePopView.m in Sources */ = {isa = PBXBuildFile; fileRef = B1D3565E292E5EF400E677F7 /* CBBasePopView.m */; };
 		B1E7040B2798727100060475 /* CBPetToolAssistanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1E7040A2798727100060475 /* CBPetToolAssistanceView.swift */; };
 		B1EF2F2B279C554D0050BF05 /* CBPetAvatarPaoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1EF2F2A279C554D0050BF05 /* CBPetAvatarPaoView.swift */; };
 		B1EF2F2D279EFB000050BF05 /* CBPetFuncUserManageOtherConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1EF2F2C279EFB000050BF05 /* CBPetFuncUserManageOtherConfigView.swift */; };
@@ -1851,6 +1852,8 @@
 		B17F1D16279461430040434F /* CBPetMultiVCNaviBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetMultiVCNaviBar.swift; sourceTree = "<group>"; };
 		B17F1D19279463640040434F /* CBPetMultiViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetMultiViewModel.swift; sourceTree = "<group>"; };
 		B19B58052929304B00AC1162 /* MainViewConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewConfig.h; sourceTree = "<group>"; };
+		B1D3565D292E5EF400E677F7 /* CBBasePopView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBBasePopView.h; sourceTree = "<group>"; };
+		B1D3565E292E5EF400E677F7 /* CBBasePopView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBBasePopView.m; sourceTree = "<group>"; };
 		B1E7040A2798727100060475 /* CBPetToolAssistanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetToolAssistanceView.swift; sourceTree = "<group>"; };
 		B1EF2F2A279C554D0050BF05 /* CBPetAvatarPaoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetAvatarPaoView.swift; sourceTree = "<group>"; };
 		B1EF2F2C279EFB000050BF05 /* CBPetFuncUserManageOtherConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetFuncUserManageOtherConfigView.swift; sourceTree = "<group>"; };
@@ -3873,6 +3876,7 @@
 		17CDA9DB24CEBE5400BB9F8B /* Class */ = {
 			isa = PBXGroup;
 			children = (
+				B1D3565B292E5ED800E677F7 /* Base */,
 				17CDA9DC24CEBE5400BB9F8B /* Form */,
 				17CDAA1C24CEBE5400BB9F8B /* Mine */,
 				17CDAA6724CEBE5500BB9F8B /* Main */,
@@ -5434,6 +5438,23 @@
 			path = Marco;
 			sourceTree = "<group>";
 		};
+		B1D3565B292E5ED800E677F7 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				B1D3565C292E5EE000E677F7 /* PopView */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
+		B1D3565C292E5EE000E677F7 /* PopView */ = {
+			isa = PBXGroup;
+			children = (
+				B1D3565D292E5EF400E677F7 /* CBBasePopView.h */,
+				B1D3565E292E5EF400E677F7 /* CBBasePopView.m */,
+			);
+			path = PopView;
+			sourceTree = "<group>";
+		};
 		FCDD743A446F819B118ED245 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -6211,6 +6232,7 @@
 				4389AA4B2482B6B100C4BDC3 /* CBPetFuncUserManageView.swift in Sources */,
 				435A3A6A247EC047005ABF5B /* CBPetFuncGohomeView.swift in Sources */,
 				17CDAB6024CEBE5500BB9F8B /* BaseLineBarSet.m in Sources */,
+				B1D3565F292E5EF400E677F7 /* CBBasePopView.m in Sources */,
 				17686E1A248A455B00E8EFF2 /* CBPetMsgCterFenceDynmicCell.swift in Sources */,
 				1782BFA224C0427E00544C36 /* CBWtMINAlertView.m in Sources */,
 				1782BF9424C0427E00544C36 /* RelatioshipCollectionViewCell.m in Sources */,
@@ -6487,7 +6509,7 @@
 				);
 				MARKETING_VERSION = 2.5;
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.coban.iot;
+				PRODUCT_BUNDLE_IDENTIFIER = com.coban.iotasd;
 				PRODUCT_MODULE_NAME = cobanBnPetSwift;
 				PRODUCT_NAME = "巴诺物联网";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -6531,7 +6553,7 @@
 				);
 				MARKETING_VERSION = 2.5;
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.coban.iot;
+				PRODUCT_BUNDLE_IDENTIFIER = com.coban.iotasd;
 				PRODUCT_MODULE_NAME = cobanBnPetSwift;
 				PRODUCT_NAME = "巴诺物联网";
 				PROVISIONING_PROFILE_SPECIFIER = "";

@@ -120,6 +120,8 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 
 /** 轨迹选中view  */
 @property (nonatomic, strong) CBTrackSelectTimeView *trackSelectTimePopView;
+@property (nonatomic, strong) CBBasePopView *playbackTimeBasePopView;
+@property (nonatomic, strong) UIView *playbackPopContentView;
 /**   */
 @property (nonatomic, strong) NSTimer *playTrackTimer;
 /**   */
@@ -367,6 +369,29 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     } else {
         [self.googleMapView setCamera:[GMSCameraPosition cameraWithLatitude:deviceInfoModel.lat.doubleValue longitude:deviceInfoModel.lng.doubleValue zoom:self.deviceInfoModelSelect.zoomLevel.integerValue]];
     }
+}
+- (CBBasePopView *)playbackTimeBasePopView {
+    if (!_playbackTimeBasePopView) {
+        _playbackTimeBasePopView = [[CBBasePopView alloc] initWithContentView:self.playbackPopContentView];
+    }
+    return _playbackTimeBasePopView;
+}
+- (UIView *)playbackPopContentView {
+    if (!_playbackPopContentView) {
+        _playbackPopContentView = [UIView new];
+        
+        _playbackPopContentView.backgroundColor = UIColor.whiteColor;
+        UILabel *lbl = [UILabel new];
+        lbl.text = @"ajklsdjalskd";
+        [_playbackPopContentView addSubview:lbl];
+        lbl.textAlignment = NSTextAlignmentCenter;
+        [lbl mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(@10);
+            make.bottom.equalTo(@-10);
+            make.left.right.equalTo(@0);
+        }];
+    }
+    return _playbackPopContentView;
 }
 - (CBTrackSelectTimeView *)trackSelectTimePopView {
     if (!_trackSelectTimePopView) {
@@ -1147,8 +1172,9 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 }
 #pragma mark --获取设备轨迹
 - (void)requestTrackDataWithModel:(NSString *)dno {
-    [self.trackSelectTimePopView popView];
-    self.trackSelectTimePopView.dno = dno;
+//    [self.trackSelectTimePopView popView];
+//    self.trackSelectTimePopView.dno = dno;
+    [self.playbackTimeBasePopView pop];
 }
 - (void)requestTrackDataWithModelReal:(NSString *)dno {
     __weak __typeof__(self) weakSelf = self;
