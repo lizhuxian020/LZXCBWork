@@ -7,6 +7,7 @@
 //
 
 #import "CBTrackSelectTimeView.h"
+#import "_CBTSTChooseTimeView.h"
 
 #define __TrackSelectTimeView_NormalColor UIColor.blackColor
 #define __TrackSelectTimeView_SelectedColor kAppMainColor
@@ -15,6 +16,8 @@
 
 @property (nonatomic, strong) NSArray *arrayTitle;
 @property (nonatomic, strong) NSMutableArray *btnArr;
+@property (nonatomic, strong) _CBTSTChooseTimeView *startView;
+@property (nonatomic, strong) _CBTSTChooseTimeView *endView;
 
 @property (nonatomic, assign) int selectedIndex;
 
@@ -67,14 +70,30 @@
         }
         lastBtn = btn;
     }
-
-    [lastBtn mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(@-15);
+    
+    self.startView = [[_CBTSTChooseTimeView alloc] initWithTitle:@"开始时间"];
+    [self addSubview:self.startView];
+    [self.startView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(@15);
+        make.right.equalTo(@-15);
+        make.top.equalTo(lastBtn.mas_bottom).mas_offset(15);
     }];
+    
+    self.endView = [[_CBTSTChooseTimeView alloc] initWithTitle:@"开始时间"];
+    [self addSubview:self.endView];
+    [self.endView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(@15);
+        make.right.equalTo(@-15);
+        make.top.equalTo(self.startView.mas_bottom).mas_offset(15);
+        make.bottom.equalTo(@-35);
+    }];
+    
 }
 
 - (void)selectTime:(UIButton *)sender {
     int index = sender.tag - 100;
+    [self.startView inactivate];
+    [self.endView inactivate];
     if (index == self.selectedIndex) {
         return;
     }
@@ -84,6 +103,10 @@
     self.selectedIndex = index;
     [sender setSelected:true];
 
+    if (self.selectedIndex == 4) {
+        [self.startView activate];
+        [self.endView activate];
+    }
 }
 
 - (void)readyToRequest {
@@ -127,10 +150,16 @@
             self.dateStrEnd = [formatter stringFromDate:nowDate];
 
         }
+            break;
         case 3:
         {
             self.dateStrStar = [formatter stringFromDate:[nowDate dateByAddingTimeInterval:-24*60*60*7]];
             self.dateStrEnd = [formatter stringFromDate:nowDate];
+        }
+            break;
+        case 4: {
+            self.dateStrStar = self.startView.timeStr;
+            self.dateStrEnd = self.endView.timeStr;
         }
             break;
         default:

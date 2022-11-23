@@ -672,6 +672,7 @@
 		B17F1D1A279463640040434F /* CBPetMultiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17F1D19279463640040434F /* CBPetMultiViewModel.swift */; };
 		B1D3565F292E5EF400E677F7 /* CBBasePopView.m in Sources */ = {isa = PBXBuildFile; fileRef = B1D3565E292E5EF400E677F7 /* CBBasePopView.m */; };
 		B1D35662292E65FD00E677F7 /* CBAlertBaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = B1D35661292E65FD00E677F7 /* CBAlertBaseView.m */; };
+		B1D35665292E7FC600E677F7 /* _CBTSTChooseTimeView.m in Sources */ = {isa = PBXBuildFile; fileRef = B1D35664292E7FC600E677F7 /* _CBTSTChooseTimeView.m */; };
 		B1E7040B2798727100060475 /* CBPetToolAssistanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1E7040A2798727100060475 /* CBPetToolAssistanceView.swift */; };
 		B1EF2F2B279C554D0050BF05 /* CBPetAvatarPaoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1EF2F2A279C554D0050BF05 /* CBPetAvatarPaoView.swift */; };
 		B1EF2F2D279EFB000050BF05 /* CBPetFuncUserManageOtherConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1EF2F2C279EFB000050BF05 /* CBPetFuncUserManageOtherConfigView.swift */; };
@@ -1857,6 +1858,8 @@
 		B1D3565E292E5EF400E677F7 /* CBBasePopView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBBasePopView.m; sourceTree = "<group>"; };
 		B1D35660292E65FD00E677F7 /* CBAlertBaseView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBAlertBaseView.h; sourceTree = "<group>"; };
 		B1D35661292E65FD00E677F7 /* CBAlertBaseView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBAlertBaseView.m; sourceTree = "<group>"; };
+		B1D35663292E7FC600E677F7 /* _CBTSTChooseTimeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBTSTChooseTimeView.h; sourceTree = "<group>"; };
+		B1D35664292E7FC600E677F7 /* _CBTSTChooseTimeView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _CBTSTChooseTimeView.m; sourceTree = "<group>"; };
 		B1E7040A2798727100060475 /* CBPetToolAssistanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetToolAssistanceView.swift; sourceTree = "<group>"; };
 		B1EF2F2A279C554D0050BF05 /* CBPetAvatarPaoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetAvatarPaoView.swift; sourceTree = "<group>"; };
 		B1EF2F2C279EFB000050BF05 /* CBPetFuncUserManageOtherConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetFuncUserManageOtherConfigView.swift; sourceTree = "<group>"; };
@@ -4260,6 +4263,8 @@
 			children = (
 				17CDAA8C24CEBE5500BB9F8B /* CBTrackSelectTimeView.h */,
 				17CDAA8D24CEBE5500BB9F8B /* CBTrackSelectTimeView.m */,
+				B1D35663292E7FC600E677F7 /* _CBTSTChooseTimeView.h */,
+				B1D35664292E7FC600E677F7 /* _CBTSTChooseTimeView.m */,
 			);
 			path = selectTimeView;
 			sourceTree = "<group>";
@@ -6198,6 +6203,7 @@
 				4344F14E276F60130004379E /* CBPetTimeReportPickTime.swift in Sources */,
 				A2F9C5032926135E00715AF9 /* CBLoginLayoutMarco.swift in Sources */,
 				435B2537247D661D006CC6A1 /* CBPetFunctionCollectionCell.swift in Sources */,
+				B1D35665292E7FC600E677F7 /* _CBTSTChooseTimeView.m in Sources */,
 				1782BF2424C0427E00544C36 /* UIButton+ImageAndTitle.m in Sources */,
 				435B2540247D8035006CC6A1 /* CBPetFunctionShoutView.swift in Sources */,
 				B1EF2F2B279C554D0050BF05 /* CBPetAvatarPaoView.swift in Sources */,
