@@ -950,6 +950,10 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         BMKCircleView* circleView = [[BMKCircleView alloc] initWithOverlay:overlay];
         circleView.fillColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
         circleView.strokeColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+        if ([self.deviceInfoModelSelect.warmed isEqualToString:@"1"]) {
+            circleView.fillColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
+            circleView.strokeColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
+        }
         return circleView;
     }else if ([overlay isKindOfClass:[BMKPolygon class]]){
         BMKPolygonView* polygonView = [[BMKPolygonView alloc] initWithOverlay:overlay];

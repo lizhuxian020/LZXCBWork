@@ -714,7 +714,7 @@
             }
         }
         NSString *warmTypeStr = [arrTemp componentsJoinedByString:@","];
-        _warmTypeLb.attributedText = [self getAttStr:Localized(@"报警类型:") content:warmTypeStr];
+        _warmTypeLb.attributedText = [self getAttStr:Localized(@"报警类型:") content:warmTypeStr contentColor:UIColor.redColor];
         
 //        _timeLb.text = [NSString stringWithFormat:@"%@%@",Localized(@"上报时间:"),createTimeStr];
         
@@ -789,10 +789,19 @@
         
     }
 }
-- (NSAttributedString *)getAttStr:(NSString *)title content:(NSString *)content {
+
+
+- (NSAttributedString *)getAttStr:(NSString *)title
+                          content:(NSString *)content {
+    return [self getAttStr:title content:content contentColor:nil];
+}
+
+- (NSAttributedString *)getAttStr:(NSString *)title
+                          content:(NSString *)content
+                     contentColor:(nullable UIColor *)contentColor{
     NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@%@", title, content]];
     [str setAttributes:@{
-        NSForegroundColorAttributeName: UIColor.blackColor,
+        NSForegroundColorAttributeName: contentColor ?: UIColor.blackColor,
         NSFontAttributeName: [UIFont systemFontOfSize:14 weight:UIFontWeightRegular]
     } range:NSMakeRange(0, str.length)];
     [str setAttributes:@{
