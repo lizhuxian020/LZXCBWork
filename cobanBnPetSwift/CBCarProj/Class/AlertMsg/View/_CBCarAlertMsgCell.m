@@ -111,6 +111,40 @@
         make.right.equalTo(self.stopBtn.mas_left).mas_offset(-10);
         make.width.equalTo(@80);
     }];
+    
+    kWeakSelf(self);
+    [self.stopBtn bk_whenTapped:^{
+        weakself.didClickStop();
+    }];
+    
+    [self.checkBtn bk_whenTapped:^{
+        weakself.didClickCheck();
+    }];
+}
+
+- (void)setModel:(_CBCarAlertMsgModel *)model {
+    _model = model;
+    self.nameLbl.text = model.name;
+    
+    NSDateFormatter* formatter = [[NSDateFormatter alloc]init];
+    NSTimeZone *timeZone = [NSTimeZone timeZoneForSecondsFromGMT:8*3600];
+    [formatter setTimeZone:timeZone];
+    formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+    
+    NSDate *date = [[NSDate alloc] initWithTimeIntervalSince1970:model.warnTime.doubleValue/1000];
+    self.timeLbl.text = [formatter stringFromDate:date];
+    
+    self.typeLbl.text = [self type:model.type];
+    
+}
+
+- (NSString *)type:(NSString *)type {
+    int typeI = type.intValue;
+    switch (typeI) {
+        case 12:
+            return @"震动";
+    }
+    return @"";
 }
 
 @end

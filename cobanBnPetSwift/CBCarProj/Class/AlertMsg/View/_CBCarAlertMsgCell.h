@@ -7,10 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "_CBCarAlertMsgModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface _CBCarAlertMsgCell : UITableViewCell
+
+@property (nonatomic, strong) _CBCarAlertMsgModel *model;
+
+@property (nonatomic, copy) void (^didClickCheck)(void);
+@property (nonatomic, copy) void (^didClickStop)(void);
 
 @end
 
