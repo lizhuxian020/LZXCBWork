@@ -670,6 +670,8 @@
 		B16C38C52793208D0058EAC4 /* CBPetMultiVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16C38C42793208D0058EAC4 /* CBPetMultiVC.swift */; };
 		B17F1D17279461430040434F /* CBPetMultiVCNaviBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17F1D16279461430040434F /* CBPetMultiVCNaviBar.swift */; };
 		B17F1D1A279463640040434F /* CBPetMultiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17F1D19279463640040434F /* CBPetMultiViewModel.swift */; };
+		B1D0D08E292FC80900ECA328 /* CBCarAlertMsgController.m in Sources */ = {isa = PBXBuildFile; fileRef = B1D0D08D292FC80900ECA328 /* CBCarAlertMsgController.m */; };
+		B1D0D092292FCAD300ECA328 /* _CBCarAlertMsgCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B1D0D091292FCAD300ECA328 /* _CBCarAlertMsgCell.m */; };
 		B1D3565F292E5EF400E677F7 /* CBBasePopView.m in Sources */ = {isa = PBXBuildFile; fileRef = B1D3565E292E5EF400E677F7 /* CBBasePopView.m */; };
 		B1D35662292E65FD00E677F7 /* CBAlertBaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = B1D35661292E65FD00E677F7 /* CBAlertBaseView.m */; };
 		B1D35665292E7FC600E677F7 /* _CBTSTChooseTimeView.m in Sources */ = {isa = PBXBuildFile; fileRef = B1D35664292E7FC600E677F7 /* _CBTSTChooseTimeView.m */; };
@@ -1854,6 +1856,10 @@
 		B17F1D16279461430040434F /* CBPetMultiVCNaviBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetMultiVCNaviBar.swift; sourceTree = "<group>"; };
 		B17F1D19279463640040434F /* CBPetMultiViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetMultiViewModel.swift; sourceTree = "<group>"; };
 		B19B58052929304B00AC1162 /* MainViewConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewConfig.h; sourceTree = "<group>"; };
+		B1D0D08C292FC80900ECA328 /* CBCarAlertMsgController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBCarAlertMsgController.h; sourceTree = "<group>"; };
+		B1D0D08D292FC80900ECA328 /* CBCarAlertMsgController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBCarAlertMsgController.m; sourceTree = "<group>"; };
+		B1D0D090292FCAD300ECA328 /* _CBCarAlertMsgCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBCarAlertMsgCell.h; sourceTree = "<group>"; };
+		B1D0D091292FCAD300ECA328 /* _CBCarAlertMsgCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _CBCarAlertMsgCell.m; sourceTree = "<group>"; };
 		B1D3565D292E5EF400E677F7 /* CBBasePopView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBBasePopView.h; sourceTree = "<group>"; };
 		B1D3565E292E5EF400E677F7 /* CBBasePopView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBBasePopView.m; sourceTree = "<group>"; };
 		B1D35660292E65FD00E677F7 /* CBAlertBaseView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBAlertBaseView.h; sourceTree = "<group>"; };
@@ -3882,6 +3888,7 @@
 		17CDA9DB24CEBE5400BB9F8B /* Class */ = {
 			isa = PBXGroup;
 			children = (
+				B1D0D08A292FC7E400ECA328 /* AlertMsg */,
 				B1D3565B292E5ED800E677F7 /* Base */,
 				17CDA9DC24CEBE5400BB9F8B /* Form */,
 				17CDAA1C24CEBE5400BB9F8B /* Mine */,
@@ -5446,6 +5453,33 @@
 			path = Marco;
 			sourceTree = "<group>";
 		};
+		B1D0D08A292FC7E400ECA328 /* AlertMsg */ = {
+			isa = PBXGroup;
+			children = (
+				B1D0D08F292FCAB500ECA328 /* View */,
+				B1D0D08B292FC7F400ECA328 /* Controller */,
+			);
+			path = AlertMsg;
+			sourceTree = "<group>";
+		};
+		B1D0D08B292FC7F400ECA328 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				B1D0D08C292FC80900ECA328 /* CBCarAlertMsgController.h */,
+				B1D0D08D292FC80900ECA328 /* CBCarAlertMsgController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		B1D0D08F292FCAB500ECA328 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				B1D0D090292FCAD300ECA328 /* _CBCarAlertMsgCell.h */,
+				B1D0D091292FCAD300ECA328 /* _CBCarAlertMsgCell.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		B1D3565B292E5ED800E677F7 /* Base */ = {
 			isa = PBXGroup;
 			children = (
@@ -6072,6 +6106,7 @@
 				17CDAB3424CEBE5500BB9F8B /* MINUtils.m in Sources */,
 				1782BF8D24C0427E00544C36 /* TimeRepeatTableViewCell.m in Sources */,
 				1782BF6E24C0427E00544C36 /* CBFriendViewController.m in Sources */,
+				B1D0D08E292FC80900ECA328 /* CBCarAlertMsgController.m in Sources */,
 				17CDAB6F24CEBE5500BB9F8B /* RadarIndicatorData.m in Sources */,
 				437B3E7B247F6715005365D9 /* UILabel+Extension.swift in Sources */,
 				17CDAB5A24CEBE5500BB9F8B /* CenterData.m in Sources */,
@@ -6265,6 +6300,7 @@
 				17686E1C248A4C7B00E8EFF2 /* CPetMsgCterListenRcdCell.swift in Sources */,
 				17CDAC3A24CEBE5600BB9F8B /* MultiplePhotoViewController.m in Sources */,
 				17CDAB3524CEBE5500BB9F8B /* CBNetworkBadView.m in Sources */,
+				B1D0D092292FCAD300ECA328 /* _CBCarAlertMsgCell.m in Sources */,
 				17CDAC5B24CEBE5600BB9F8B /* PhoneBookTableViewCell.m in Sources */,
 				17CDAB8424CEBE5500BB9F8B /* LineAnimationsManager.m in Sources */,
 				1782BF2824C0427E00544C36 /* NSString+StringToWords.m in Sources */,

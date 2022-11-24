@@ -49,6 +49,7 @@
 #import "cobanBnPetSwift-Swift.h"
 #import "UIView+Badge.h"
 #import "MainViewConfig.h"
+#import "CBCarAlertMsgController.h"
 
 @interface MainMapViewController ()
 <BMKMapViewDelegate, CLLocationManagerDelegate, GMSMapViewDelegate,
@@ -671,6 +672,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 
 - (void)didClickAlertBtn {
     NSLog(@"%s", __FUNCTION__);
+    [self.navigationController pushViewController:CBCarAlertMsgController.new animated:YES];
 }
 
 - (void)didClickPersonBtn {

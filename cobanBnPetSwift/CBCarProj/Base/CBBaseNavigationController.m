@@ -29,7 +29,8 @@
     // Do any additional setup after loading the view.
     self.delegate = self;
 
-    [AppDelegate setNavigationBGColor:UIColor.blueColor :nil];
+    //设置车场导航栏颜色
+    [AppDelegate setNavigationBGColor:kBackColor :nil];
 }
 - (void)dealloc {
     self.navigationController.delegate = nil;
