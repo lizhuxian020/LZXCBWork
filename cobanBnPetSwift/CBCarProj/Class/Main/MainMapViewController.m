@@ -205,6 +205,8 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [self requestListData];
     // 开启定时器，每20s刷新，各设备详情
     [self startTimer];
+    //请求闹钟数量
+    [self reqeustAlertNum];
     
     if ([[[UIApplication sharedApplication] keyWindow].rootViewController isKindOfClass:[UITabBarController class]]) {
         UITabBarController *tabViewController = (UITabBarController *)[[UIApplication sharedApplication] keyWindow].rootViewController;
@@ -629,7 +631,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         make.left.equalTo(self.qrScanBtn.mas_right).mas_offset(15);
     }];
     [self.alertBtn addTarget:self action:@selector(didClickAlertBtn) forControlEvents:UIControlEventTouchUpInside];
-    self.alertBtn.BadgeValue = @"99";
+//    self.alertBtn.BadgeValue = @"99";
     
     self.personBtn = [self createBtn:@"报表-选中"];
     [self.personBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -678,6 +680,26 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 - (void)didClickLocateBtn {
     NSLog(@"%s", __FUNCTION__);
     [self requestDeviceSingleLocation];
+}
+
+- (void)reqeustAlertNum {
+    kWeakSelf(self);
+    [[NetWorkingManager shared] getWithUrl:@"/alarmDealController/getMyWarnListCount" params:nil succeed:^(id response, BOOL isSucceed) {
+        kStrongSelf(self);
+        if (!isSucceed) {
+            return;
+        }
+        if (response && [response[@"data"] isKindOfClass:[NSDictionary class]]) {
+            NSNumber *num = response[@"data"][@"unReadCount"];
+            if (num && [num intValue]) {
+                self.alertBtn.BadgeValue = num.intValue >= 99 ? @"99" : num.description;
+            } else {
+                
+            }
+        }
+    } failed:^(NSError *error) {
+        
+    }];
 }
 
 #pragma mark - GoogleMaps
