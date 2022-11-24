@@ -23,14 +23,13 @@ typedef enum : NSInteger {
     CBCarPaopaoViewClickTypeNavigationClick = 104,
     /* 跟踪*/
     CBCarPaopaoViewClickTypeTrack = 105,
-    /* 位移*/
-    CBCarPaopaoViewClickTypeMove = 106,
 } CBCarPaopaoViewClickType;
 
 
 @interface CBCarPaopaoView : UIView
 
 @property (nonatomic,copy) void (^clickBlock)(CBCarPaopaoViewClickType type, id obj);
+@property (nonatomic, copy) void (^didClickMove)(NSString *moveStr);
 @property (nonatomic,strong) DeviceDetailModel *deviceInfoModel;
 @property (nonatomic, copy) NSString *dno;
 /* 弹出框时，YES地图中心点不动 NO设置中心点*/

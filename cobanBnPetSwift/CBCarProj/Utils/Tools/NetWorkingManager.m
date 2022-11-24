@@ -68,7 +68,7 @@ static AFHTTPSessionManager *afManager = nil;
     CBPetLoginModel *userInfoModel = [CBPetLoginModelTool getUser];
     [afManager.requestSerializer setValue:userInfoModel.token?:@"" forHTTPHeaderField:@"token"];
     [afManager.requestSerializer setValue:[NSString stringWithFormat:@"%@",userInfoModel.uid] forHTTPHeaderField:@"uid"];
-    NSString *newUrl = [BASE_URL_CarNet stringByAppendingString:[NSString stringWithFormat:@"/%@",[url hasStringInPrefix:@"/"]]];
+    NSString *newUrl = [BASE_URL_CarNet stringByAppendingString:[NSString stringWithFormat:@"%@",[url hasStringInPrefix:@"/"]]];
     NSLog(@"--------地址：%@",newUrl);
     NSLog(@"--------参数：%@",params);
     [afManager POST:newUrl parameters:params progress:^(NSProgress * _Nonnull uploadProgress) {

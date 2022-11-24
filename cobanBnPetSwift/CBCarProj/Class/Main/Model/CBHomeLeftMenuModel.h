@@ -43,6 +43,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL isCheck;
 @end
 
+
+@class CBHomeLeftMenuDeviceInfoModelFenceModel;
 @interface CBHomeLeftMenuDeviceInfoModel : NSObject
 /**  车牌号 */
 @property (nonatomic, copy) NSString *carNum;
@@ -93,7 +95,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**   */
 @property (nonatomic, assign) BOOL isCheck;
 /**   */
-@property (nonatomic, copy) NSArray *listFence;
+@property (nonatomic, copy) NSArray<CBHomeLeftMenuDeviceInfoModelFenceModel *> *listFence;
 
 @end
 
@@ -128,6 +130,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *updateTime;
 /**   */
 @property (nonatomic, copy) NSString *userid;
+/**   */
+@property(nonatomic, copy) NSString *warmType;
 
 @end
 NS_ASSUME_NONNULL_END

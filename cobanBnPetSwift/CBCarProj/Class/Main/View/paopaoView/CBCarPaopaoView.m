@@ -108,6 +108,8 @@
 @property (nonatomic, strong) NSMutableArray *arrayLb;
 /* */
 //@property (nonatomic, strong) NSMutableArray *arrayTitles;
+
+@property (nonatomic, strong) UIView *movePopView;
 @end
 
 @implementation CBCarPaopaoView
@@ -124,6 +126,40 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
 //    self.middleView.contentSize = CGSizeMake(0, (self.arrayLb.count/2 + 2)*20*KFitHeightRate);
+}
+- (UIView *)movePopView {
+    if (!_movePopView) {
+        _movePopView = [UIView new];
+        _movePopView.backgroundColor = UIColor.whiteColor;
+        UILabel *lbl200 = [MINUtils createLabelWithText:@"200m" size:14 alignment:NSTextAlignmentCenter textColor:UIColor.blackColor];
+        UILabel *lbl500 = [MINUtils createLabelWithText:@"500m" size:14 alignment:NSTextAlignmentCenter textColor:UIColor.blackColor];
+        UILabel *lbl1000 = [MINUtils createLabelWithText:@"1000m" size:14 alignment:NSTextAlignmentCenter textColor:UIColor.blackColor];
+        UILabel *lblCancel = [MINUtils createLabelWithText:Localized(@"取消") size:14 alignment:NSTextAlignmentCenter textColor:UIColor.blackColor];
+        UILabel *lastLbl = nil;
+        for (UILabel *lbl in @[lbl200, lbl500, lbl1000, lblCancel]) {
+            [_movePopView addSubview:lbl];
+            [lbl mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.right.equalTo(@0);
+                if (lastLbl) {
+                    make.top.equalTo(lastLbl.mas_bottom);
+                } else {
+                    make.top.equalTo(@0);
+                }
+                make.height.equalTo(@30);
+            }];
+            lbl.userInteractionEnabled = YES;
+            NSString *text = lbl.text;
+            kWeakSelf(self);
+            [lbl bk_whenTapped:^{
+                [weakself didClickMove:text];
+            }];
+            lastLbl = lbl;
+        }
+        [lastLbl mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.bottom.equalTo(@0);
+        }];
+    }
+    return _movePopView;
 }
 - (NSMutableArray *)arrayLb {
     if (!_arrayLb) {
@@ -179,7 +215,7 @@
             make.left.equalTo(self.bgmView).with.offset(13 * KFitWidthRate);
             make.right.equalTo(self.bgmView).with.offset(-12 * KFitWidthRate);
             make.top.equalTo(self.titleView.mas_bottom).offset(0);
-            make.height.mas_equalTo(245*KFitHeightRate);
+            make.height.mas_equalTo((245)*KFitHeightRate);
         }];
         _middleContentView = [UIView new];
         [_middleView addSubview:_middleContentView];
@@ -329,6 +365,35 @@
 //    }
 //    return _navigationBtn;
 //}
+- (void)setupMovePopView {
+    [self addSubview:self.movePopView];
+    [self.movePopView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.bgmView.mas_bottom).mas_offset(-100);
+//        make.right.equalTo(self.bgmView);
+        make.centerX.equalTo(self.moveBtn);
+        make.width.equalTo(self.moveBtn);
+    }];
+    self.movePopView.alpha = 0;
+}
+- (void)showMovePopView {
+    [self.movePopView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.bgmView.mas_bottom).mas_offset(0);
+    }];
+    
+    [UIView animateWithDuration:0.25 animations:^{
+        [self layoutIfNeeded];
+        self.movePopView.alpha = 1;
+    }];
+}
+- (void)hideMovePopView {
+    [self.movePopView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.bgmView.mas_bottom).mas_offset(-100);
+    }];
+    [UIView animateWithDuration:0.25 animations:^{
+        [self layoutIfNeeded];
+        self.movePopView.alpha = 0;
+    }];
+}
 - (void)setupBottom {
     self.followBtn = [self createBtn:__CarPaoTitle_Track img:@"单选-选中"];
     self.playBackBtn = [self createBtn:__CarPaoTitle_PlayBack img:@"单选-选中"];
@@ -365,6 +430,7 @@
     [self titleLabel];
     [self arrowView];
     [self setupBottom];
+    [self setupMovePopView];
 //    [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
 //        make.left.equalTo(_titleView).with.offset(15 * KFitWidthRate);
 //        make.top.bottom.equalTo(_titleView);
@@ -603,10 +669,29 @@
         }
     }
     if ([title isEqualToString:__CarPaoTitle_Move]) {
-        if (self.clickBlock) {
-            self.clickBlock(CBCarPaopaoViewClickTypeMove, self.dno);
+        if (self.movePopView.alpha == 0) {
+            [self showMovePopView];
         }
     }
+}
+- (void)didClickMove:(NSString *)title {
+    NSLog(@"%@", title);
+    if ([title containsString:@"200"]) {
+        if (self.didClickMove) {
+            self.didClickMove(@"200");
+        }
+    }
+    if ([title containsString:@"500"]) {
+        if (self.didClickMove) {
+            self.didClickMove(@"500");
+        }
+    }
+    if ([title containsString:@"1000"]) {
+        if (self.didClickMove) {
+            self.didClickMove(@"1000");
+        }
+    }
+    [self hideMovePopView];
 }
 - (void)btnClickType:(UIButton *)sender {
 //    if ([sender isEqual:self.playBackBtn]) {
@@ -664,6 +749,10 @@
     [[UIApplication sharedApplication].keyWindow addSubview:self];
 }
 - (void)dismiss {
+    if (self.movePopView.alpha == 1) {
+        [self hideMovePopView];
+        return;
+    }
     self.isAlertPaopaoView = NO;
     [self removeFromSuperview];
 }

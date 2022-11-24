@@ -693,6 +693,9 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     CLLocationCoordinate2D anchor = marker.position;
     [_googleMapView addSubview: self.paopaoView];
     kWeakSelf(self);
+    [self.paopaoView setDidClickMove:^(NSString * _Nonnull moveStr) {
+        [weakself sendMoveRequest:moveStr];
+    }];
     self.paopaoView.clickBlock = ^(CBCarPaopaoViewClickType type, id  _Nonnull obj) {
         kStrongSelf(self);
         switch (type) {
@@ -993,6 +996,9 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 - (void)clickPopAlertviewShowDeviceInfo:(BMKAnnotationView *)view {
     [self.paopaoView popView];
     kWeakSelf(self);
+    [self.paopaoView setDidClickMove:^(NSString * _Nonnull moveStr) {
+        [weakself sendMoveRequest:moveStr];
+    }];
     self.paopaoView.clickBlock = ^(CBCarPaopaoViewClickType type, id  _Nonnull obj) {
         kStrongSelf(self);
         switch (type) {
@@ -1087,6 +1093,22 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 }
 
 #pragma mark ------------paoViewActions------------
+#pragma mark --位移
+- (void)sendMoveRequest:(NSString *)moveStr {
+    NSDictionary *param = @{
+        @"dno": self.deviceInfoModelSelect.dno,
+        @"data": [NSString stringWithFormat:@"%@,%@,%@", self.deviceInfoModelSelect.lat,self.deviceInfoModelSelect.lng, moveStr],
+        @"shape": self.deviceInfoModelSelect.listFence.firstObject.shape?:@"",
+        @"warmType": self.deviceInfoModelSelect.listFence.firstObject.warmType?:@"",
+    };
+    [[NetWorkingManager shared] postWithUrl:@"/devControlController/saveFence" params:param succeed:^(id response, BOOL isSucceed) {
+        if (isSucceed) {
+            [HUD showHUDWithText:@"成功"];
+        }
+        } failed:^(NSError *error) {
+            
+        }];
+}
 #pragma mark --跟踪
 - (void)setCanStartTrack {
     self.isStartTrack = YES;
