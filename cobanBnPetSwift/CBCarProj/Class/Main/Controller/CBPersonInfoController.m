@@ -8,6 +8,7 @@
 
 #import "CBPersonInfoController.h"
 #import "cobanBnPetSwift-Swift.h"
+#import "CBCarAlertInputView.h"
 
 @interface CBPersonInfoController ()
 
@@ -28,11 +29,21 @@
     
     CBPetLoginModel *userModel = [CBPetLoginModelTool getUser];
     
-    self.imgV = [self viewWithTitle:Localized(@"头像") renderHead:YES content:nil canClick:YES];
-    self.accountV = [self viewWithTitle:Localized(@"账号") renderHead:NO content:userModel.account canClick:NO];
-    self.nameV = [self viewWithTitle:Localized(@"昵称") renderHead:NO content:userModel.name canClick:YES];
-    self.phoneV = [self viewWithTitle:Localized(@"手机号码") renderHead:NO content:userModel.phone canClick:YES];
-    self.emailV = [self viewWithTitle:Localized(@"邮箱") renderHead:NO content:userModel.email canClick:YES];
+    self.imgV = [self viewWithTitle:Localized(@"头像") renderHead:YES content:nil canClick:YES blk:^{
+        
+    }];
+    self.accountV = [self viewWithTitle:Localized(@"账号") renderHead:NO content:userModel.account canClick:NO blk:^{
+        
+    }];
+    self.nameV = [self viewWithTitle:Localized(@"昵称") renderHead:NO content:userModel.name canClick:YES blk:^{
+        
+    }];
+    self.phoneV = [self viewWithTitle:Localized(@"手机号码") renderHead:NO content:userModel.phone canClick:YES blk:^{
+        
+    }];
+    self.emailV = [self viewWithTitle:Localized(@"邮箱") renderHead:NO content:userModel.email canClick:YES blk:^{
+        
+    }];
     [self.view addSubview:self.imgV];
     [self.view addSubview:self.accountV];
     [self.view addSubview:self.nameV];
@@ -61,7 +72,12 @@
     }];
 }
 
-- (UIView *)viewWithTitle:(NSString *)title renderHead:(BOOL)renderHead content:(NSString *)content canClick:(BOOL)canClick {
+- (UIView *)viewWithTitle:(NSString *)title
+               renderHead:(BOOL)renderHead
+                  content:(NSString *)content
+                 canClick:(BOOL)canClick
+                      blk:(void(^)(void))blk
+{
     UIView *v = [UIView new];
     
     UILabel *lbl = [MINUtils createLabelWithText:title size:14 alignment:NSTextAlignmentCenter textColor:UIColor.blackColor];
@@ -71,6 +87,8 @@
         make.top.equalTo(@20);
         make.bottom.equalTo(@-20);
     }];
+    
+    UILabel *contentLbl = nil;
     
     if (renderHead) {
         CBPetLoginModel *userModel = [CBPetLoginModelTool getUser];
@@ -102,6 +120,7 @@
                 make.centerY.equalTo(@0);
                 make.right.equalTo(arrow.mas_left).mas_offset(-10);
             }];
+            contentLbl = cLbl;
         }
         arrow.hidden = !canClick;
     }
@@ -116,6 +135,15 @@
         make.right.equalTo(@-30);
         make.height.equalTo(@1);
         make.bottom.equalTo(@0);
+    }];
+    
+    
+    __weak UILabel *wLbl = contentLbl;
+    [v bk_whenTapped:^{
+        
+        [[CBCarAlertInputView viewWithPlaceholder:@"哈哈哈" title:title confrim:^(NSString * _Nonnull contentStr) {
+            wLbl.text = contentStr;
+                }] pop];
     }];
     return v;
 }
