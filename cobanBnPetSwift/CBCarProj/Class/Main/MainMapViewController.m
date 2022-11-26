@@ -50,6 +50,8 @@
 #import "UIView+Badge.h"
 #import "MainViewConfig.h"
 #import "CBCarAlertMsgController.h"
+#import "_CBMyInfoPopView.h"
+#import "CBModifyPwdViewController.h"
 
 @interface MainMapViewController ()
 <BMKMapViewDelegate, CLLocationManagerDelegate, GMSMapViewDelegate,
@@ -144,6 +146,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 
 //是否开始跟踪
 @property (nonatomic, assign) BOOL isStartTrack;
+@property (nonatomic, strong) _CBMyInfoPopView *infoPopView;
 @end
 
 @implementation MainMapViewController
@@ -608,6 +611,25 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [self googleMap];
 //    [self switchMapType];
     [self createBtns];
+    [self setupInfoPopView];
+}
+
+
+- (void)setupInfoPopView {
+    self.infoPopView = [_CBMyInfoPopView new];
+    kWeakSelf(self);
+    [self.infoPopView setDidClickPersonInfo:^{
+            
+    }];
+    [self.infoPopView setDidClickAbout:^{
+            
+    }];
+    [self.infoPopView setDidClickPwd:^{
+        [weakself modifyPwdClick];
+    }];
+    [self.infoPopView setDidClickLogout:^{
+        [weakself quitBtnClick];
+    }];
 }
 
 - (void)createBtns {
@@ -640,6 +662,15 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         make.right.equalTo(@-15);
     }];
     [self.personBtn addTarget:self action:@selector(didClickPersonBtn) forControlEvents:UIControlEventTouchUpInside];
+    CBPetLoginModel *userModel = [CBPetLoginModelTool getUser];
+    kWeakSelf(self);
+    [SDWebImageDownloader.sharedDownloader downloadImageWithURL:[NSURL URLWithString:userModel.photo] options:SDWebImageDownloaderUseNSURLCache progress:nil completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished) {
+        if (image) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakself.personBtn setImage:image forState:UIControlStateNormal];
+            });
+        }
+    }];
     
     self.locateBtn = [self createBtn:@"播放条-按钮"];
     [self.locateBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -655,8 +686,67 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     btn.backgroundColor = KWtCellBackColor;
 //    btn.layer.masksToBounds = YES;
     btn.layer.cornerRadius = 20;
+    [btn.layer setMasksToBounds:YES];
     [self.view addSubview:btn];
     return btn;
+}
+
+#pragma mark --InfoPopView
+- (void)modifyPwdClick {
+    CBPetUpdatePwdViewController *vc = [CBPetUpdatePwdViewController new];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+- (void)quitBtnClick
+{
+    // 退出登录提醒
+    UIAlertController *alertControl = [UIAlertController alertControllerWithTitle:nil message:Localized(@"是否退出登录") preferredStyle:UIAlertControllerStyleAlert];
+    [alertControl addAction:[UIAlertAction actionWithTitle:Localized(@"确定") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+//        [self logoutRequest];
+        [self logoutAction];
+    }]];
+    [alertControl addAction:[UIAlertAction actionWithTitle:Localized(@"取消") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    }]];
+    [self presentViewController:alertControl animated:YES completion:nil];
+}
+- (void)logoutRequest {
+    [MBProgressHUD showHUDIcon:self.view animated:YES];
+    kWeakSelf(self);
+    [[CBWtNetworkRequestManager sharedInstance] logoutSuccess:^(CBWtBaseNetworkModel * _Nonnull baseModel) {
+        kStrongSelf(self);
+        switch (baseModel.status) {
+            case CBWtNetworkingStatus0:
+            {
+                [self logoutAction];
+            }
+                break;
+            default:
+            {
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                [CBWtMINUtils showProgressHudToView:self.view withText:baseModel.resmsg];
+            }
+                break;
+        }
+    } failure:^(NSError * _Nonnull error) {
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    }];
+}
+- (void)logoutAction {
+    // 清除本地选中的设备token
+//    CBWtUserLoginModel *userModel = [CBWtUserLoginModel CBaccount];
+//    userModel.token = nil;
+//    [CBWtUserLoginModel saveCBAccount:userModel];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:KCBWt_SwitchCBWtLoginViewController object:nil];
+    // 信鸽推送 解绑
+    //[[XGPushTokenManager defaultTokenManager] unbindWithIdentifer:[NSString stringWithFormat:@"%@",@(userModel.uid)] type:XGPushTokenBindTypeAccount];
+    
+    CBPetLoginModel *userModel = [CBPetLoginModelTool getUser];
+    userModel.token = nil;
+    [CBPetLoginModelTool saveUser:userModel];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"K_SwitchLoginViewController" object:nil];
+    
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 #pragma mark - 按钮点击事件
@@ -677,6 +767,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 
 - (void)didClickPersonBtn {
     NSLog(@"%s", __FUNCTION__);
+    [self.infoPopView pop];
 }
 
 - (void)didClickLocateBtn {

@@ -22,6 +22,7 @@ import HandyJSON
     var phone:String?
     var token:String?
     var auth:String?
+    var photo:String?
     
     required override init() {
         //

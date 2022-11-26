@@ -671,6 +671,7 @@
 		B17F1D17279461430040434F /* CBPetMultiVCNaviBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17F1D16279461430040434F /* CBPetMultiVCNaviBar.swift */; };
 		B17F1D1A279463640040434F /* CBPetMultiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17F1D19279463640040434F /* CBPetMultiViewModel.swift */; };
 		B19D6A682932586A00D2420B /* _CBAlertMsgMenuPopView.m in Sources */ = {isa = PBXBuildFile; fileRef = B19D6A672932586A00D2420B /* _CBAlertMsgMenuPopView.m */; };
+		B19D6A6C29325F4A00D2420B /* _CBMyInfoPopView.m in Sources */ = {isa = PBXBuildFile; fileRef = B19D6A6B29325F4A00D2420B /* _CBMyInfoPopView.m */; };
 		B1D0D08E292FC80900ECA328 /* CBCarAlertMsgController.m in Sources */ = {isa = PBXBuildFile; fileRef = B1D0D08D292FC80900ECA328 /* CBCarAlertMsgController.m */; };
 		B1D0D092292FCAD300ECA328 /* _CBCarAlertMsgCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B1D0D091292FCAD300ECA328 /* _CBCarAlertMsgCell.m */; };
 		B1D0D096292FD2D900ECA328 /* _CBCarAlertMsgModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B1D0D095292FD2D900ECA328 /* _CBCarAlertMsgModel.m */; };
@@ -1860,6 +1861,8 @@
 		B19B58052929304B00AC1162 /* MainViewConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewConfig.h; sourceTree = "<group>"; };
 		B19D6A662932586A00D2420B /* _CBAlertMsgMenuPopView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBAlertMsgMenuPopView.h; sourceTree = "<group>"; };
 		B19D6A672932586A00D2420B /* _CBAlertMsgMenuPopView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _CBAlertMsgMenuPopView.m; sourceTree = "<group>"; };
+		B19D6A6A29325F4A00D2420B /* _CBMyInfoPopView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBMyInfoPopView.h; sourceTree = "<group>"; };
+		B19D6A6B29325F4A00D2420B /* _CBMyInfoPopView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _CBMyInfoPopView.m; sourceTree = "<group>"; };
 		B1D0D08C292FC80900ECA328 /* CBCarAlertMsgController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBCarAlertMsgController.h; sourceTree = "<group>"; };
 		B1D0D08D292FC80900ECA328 /* CBCarAlertMsgController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBCarAlertMsgController.m; sourceTree = "<group>"; };
 		B1D0D090292FCAD300ECA328 /* _CBCarAlertMsgCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBCarAlertMsgCell.h; sourceTree = "<group>"; };
@@ -4210,6 +4213,7 @@
 		17CDAA7624CEBE5500BB9F8B /* View */ = {
 			isa = PBXGroup;
 			children = (
+				B19D6A6929325F2900D2420B /* MyInfoPopView */,
 				17CDAA9224CEBE5500BB9F8B /* MINAnnotationView.h */,
 				17CDAA7724CEBE5500BB9F8B /* MINAnnotationView.m */,
 				17CDAA9124CEBE5500BB9F8B /* MINAlertAnnotationView.h */,
@@ -5459,6 +5463,15 @@
 			path = Marco;
 			sourceTree = "<group>";
 		};
+		B19D6A6929325F2900D2420B /* MyInfoPopView */ = {
+			isa = PBXGroup;
+			children = (
+				B19D6A6A29325F4A00D2420B /* _CBMyInfoPopView.h */,
+				B19D6A6B29325F4A00D2420B /* _CBMyInfoPopView.m */,
+			);
+			path = MyInfoPopView;
+			sourceTree = "<group>";
+		};
 		B1D0D08A292FC7E400ECA328 /* AlertMsg */ = {
 			isa = PBXGroup;
 			children = (
@@ -5899,6 +5912,7 @@
 				17CDAC4424CEBE5600BB9F8B /* CBNewFencePickPointView.m in Sources */,
 				1782BF7424C0427E00544C36 /* TimeRepeatViewController.m in Sources */,
 				1782BF2724C0427E00544C36 /* MBProgressHUD+BDT.m in Sources */,
+				B19D6A6C29325F4A00D2420B /* _CBMyInfoPopView.m in Sources */,
 				4391E797248B478500CF5BF2 /* CBPetSetFenceViewController.swift in Sources */,
 				17CDAC2424CEBE5600BB9F8B /* MINAlertAnnotationView.m in Sources */,
 				43A8B3412766299000D7969C /* CBPetTimeReportTableViewCell.swift in Sources */,
