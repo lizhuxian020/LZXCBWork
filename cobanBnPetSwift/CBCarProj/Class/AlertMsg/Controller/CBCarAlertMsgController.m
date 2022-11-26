@@ -9,19 +9,31 @@
 #import "CBCarAlertMsgController.h"
 #import "_CBCarAlertMsgCell.h"
 #import "_CBCarAlertMsgModel.h"
+#import "_CBAlertMsgMenuPopView.h"
 
 @interface CBCarAlertMsgController ()<UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) NSArray<_CBCarAlertMsgModel *> *dataArr;
 
+@property (nonatomic, strong) _CBAlertMsgMenuPopView *popView;
 @end
 
 @implementation CBCarAlertMsgController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self initBarWithTitle:Localized(@"报警消息") isBack:YES];
+    kWeakSelf(self);
     
+    [self initBarWithTitle:Localized(@"报警消息") isBack:YES];
+    [self initBarRightImageName:@"列表-1" target:self action:@selector(showPopView)];
+    self.popView = [_CBAlertMsgMenuPopView new];
+    [self.popView setDidClick:^{
+        NSLog(@"%s", __FUNCTION__);
+        [weakself requestAllRead];
+    }];
+    [self.popView setDidClickCheck:^{
+        [weakself switchTabBarThird];
+    }];
     [self.view addSubview:self.tableView];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -29,12 +41,40 @@
         make.edges.equalTo(@0);
     }];
     [self.tableView registerClass:_CBCarAlertMsgCell.class forCellReuseIdentifier:@"_CBCarAlertMsgCell"];
-    kWeakSelf(self);
+    
     self.tableView.mj_header = [MJRefreshHeader headerWithRefreshingBlock:^{
         [weakself requestData];
     }];
     
     [self requestData];
+}
+
+- (void)requestAllRead {
+    [MBProgressHUD showHUDIcon:self.view animated:YES];
+    kWeakSelf(self);
+    [[NetWorkingManager shared] getWithUrl:@"/alarmDealController/updateAlarmDeal" params:nil succeed:^(id response, BOOL isSucceed) {
+        
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        if (isSucceed) {
+            [HUD showHUDWithText:@"操作成功"];
+        }
+        } failed:^(NSError *error) {
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+        }];
+}
+
+- (void)switchTabBarThird {
+    UITabBarController *tabVC = UIApplication.sharedApplication.keyWindow.rootViewController;
+    if (!tabVC || ![tabVC isKindOfClass:UITabBarController.class]) {
+        return;;
+    }
+    [self.navigationController popToRootViewControllerAnimated:NO];
+    tabVC.selectedIndex = 2;
+}
+
+- (void)showPopView {
+    [self.popView pop];
 }
 
 - (void)requestData {
