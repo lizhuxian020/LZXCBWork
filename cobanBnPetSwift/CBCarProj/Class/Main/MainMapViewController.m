@@ -51,7 +51,8 @@
 #import "MainViewConfig.h"
 #import "CBCarAlertMsgController.h"
 #import "_CBMyInfoPopView.h"
-#import "CBModifyPwdViewController.h"
+#import "AboutUsViewController.h"
+#import "CBPersonInfoController.h"
 
 @interface MainMapViewController ()
 <BMKMapViewDelegate, CLLocationManagerDelegate, GMSMapViewDelegate,
@@ -619,10 +620,12 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     self.infoPopView = [_CBMyInfoPopView new];
     kWeakSelf(self);
     [self.infoPopView setDidClickPersonInfo:^{
-            
+        CBPersonInfoController *v = [CBPersonInfoController new];
+        [weakself.navigationController pushViewController:v animated: YES];
     }];
     [self.infoPopView setDidClickAbout:^{
-            
+        AboutUsViewController *aboutUsVC = [[AboutUsViewController alloc] init];
+        [weakself.navigationController pushViewController: aboutUsVC animated: YES];
     }];
     [self.infoPopView setDidClickPwd:^{
         [weakself modifyPwdClick];
