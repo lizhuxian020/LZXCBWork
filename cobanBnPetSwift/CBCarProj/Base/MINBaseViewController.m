@@ -127,6 +127,8 @@
     rightBtn.titleLabel.font = [UIFont boldSystemFontOfSize: 15];
     [rightBtn setTitle: title forState: UIControlStateNormal];
     [rightBtn setTitle: title forState: UIControlStateHighlighted];
+    [rightBtn setTitleColor:kAppMainColor forState:UIControlStateNormal];
+    [rightBtn setTitleColor:kAppMainColor forState:UIControlStateHighlighted];
     [rightBtn addTarget:self action:action forControlEvents: UIControlEventTouchUpInside];
     UIBarButtonItem *barItem = [[UIBarButtonItem alloc] initWithCustomView: rightBtn];
     UIBarButtonItem * spaceItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];

@@ -29,19 +29,19 @@
     
     CBPetLoginModel *userModel = [CBPetLoginModelTool getUser];
     
-    self.imgV = [self viewWithTitle:Localized(@"头像") renderHead:YES content:nil canClick:YES blk:^{
+    self.imgV = [self viewWithTitle:Localized(@"头像") renderHead:YES content:nil placeHolder:nil canClick:YES blk:^{
         
     }];
-    self.accountV = [self viewWithTitle:Localized(@"账号") renderHead:NO content:userModel.account canClick:NO blk:^{
+    self.accountV = [self viewWithTitle:Localized(@"账号") renderHead:NO content:userModel.account placeHolder:nil canClick:NO blk:^{
         
     }];
-    self.nameV = [self viewWithTitle:Localized(@"昵称") renderHead:NO content:userModel.name canClick:YES blk:^{
+    self.nameV = [self viewWithTitle:Localized(@"昵称") renderHead:NO content:userModel.name placeHolder:Localized(@"请输入昵称") canClick:YES blk:^{
         
     }];
-    self.phoneV = [self viewWithTitle:Localized(@"手机号码") renderHead:NO content:userModel.phone canClick:YES blk:^{
+    self.phoneV = [self viewWithTitle:Localized(@"手机号码") renderHead:NO content:userModel.phone placeHolder:Localized(@"请输入手机号码") canClick:YES blk:^{
         
     }];
-    self.emailV = [self viewWithTitle:Localized(@"邮箱") renderHead:NO content:userModel.email canClick:YES blk:^{
+    self.emailV = [self viewWithTitle:Localized(@"邮箱") renderHead:NO content:userModel.email placeHolder:Localized(@"请输入邮箱") canClick:YES blk:^{
         
     }];
     [self.view addSubview:self.imgV];
@@ -75,6 +75,7 @@
 - (UIView *)viewWithTitle:(NSString *)title
                renderHead:(BOOL)renderHead
                   content:(NSString *)content
+              placeHolder:(NSString *)placeHolder
                  canClick:(BOOL)canClick
                       blk:(void(^)(void))blk
 {
@@ -115,6 +116,7 @@
         
         if (content) {
             UILabel *cLbl = [MINUtils createLabelWithText:content size:15 alignment:NSTextAlignmentCenter textColor:UIColor.blackColor];
+            cLbl.tag = 101;
             [v addSubview:cLbl];
             [cLbl mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.centerY.equalTo(@0);
@@ -141,15 +143,140 @@
     __weak UILabel *wLbl = contentLbl;
     [v bk_whenTapped:^{
         
-        [[CBCarAlertInputView viewWithPlaceholder:@"哈哈哈" title:title confrim:^(NSString * _Nonnull contentStr) {
-            wLbl.text = contentStr;
-                }] pop];
+        if (renderHead) {
+            [self modifyAvatar];
+            return;
+        }
+        
+        if (canClick) {
+            [[CBCarAlertInputView viewWithPlaceholder:placeHolder title:title confrim:^(NSString * _Nonnull contentStr) {
+                wLbl.text = contentStr;
+            }] pop];
+        }
     }];
     return v;
 }
 
+#pragma mark -- 更改头像
+- (void)modifyAvatar {
+    /**
+     *  弹出提示框
+     */
+    //初始化提示框
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    //按钮：从相册选择，类型：UIAlertActionStyleDefault
+    [alert addAction:[UIAlertAction actionWithTitle:Localized(@"从相册选择") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        //初始化UIImagePickerController
+        UIImagePickerController *PickerImage = [[UIImagePickerController alloc]init];
+        //获取方式1：通过相册（呈现全部相册），UIImagePickerControllerSourceTypePhotoLibrary
+        //获取方式2，通过相机，UIImagePickerControllerSourceTypeCamera
+        //获取方法3，通过相册（呈现全部图片），UIImagePickerControllerSourceTypeSavedPhotosAlbum
+        PickerImage.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        //允许编辑，即放大裁剪
+        PickerImage.allowsEditing = YES;
+        //自代理
+        PickerImage.delegate = self;
+        //页面跳转
+        [self presentViewController:PickerImage animated:YES completion:nil];
+    }]];
+    //按钮：拍照，类型：UIAlertActionStyleDefault
+    [alert addAction:[UIAlertAction actionWithTitle:Localized(@"拍照") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action){
+        /**
+         其实和从相册选择一样，只是获取方式不同，前面是通过相册，而现在，我们要通过相机的方式
+         */
+        UIImagePickerController *PickerImage = [[UIImagePickerController alloc]init];
+        //获取方式:通过相机
+        PickerImage.sourceType = UIImagePickerControllerSourceTypeCamera;
+        PickerImage.allowsEditing = YES;
+        PickerImage.delegate = self;
+        [self presentViewController:PickerImage animated:YES completion:nil];
+    }]];
+    //按钮：取消，类型：UIAlertActionStyleCancel
+    [alert addAction:[UIAlertAction actionWithTitle:Localized(@"取消") style:UIAlertActionStyleCancel handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+#pragma mark - UINavigationControllerDelegate, UIImagePickerControllerDelegate
+//PickerImage完成后的代理方法
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info{
+    //定义一个newPhoto，用来存放我们选择的图片。
+    UIImage *newPhoto = [info objectForKey:@"UIImagePickerControllerEditedImage"];
+    // 压缩需要上传的图片
+    UIImage *uploadImage = [self imageWithImageSimple:newPhoto scaledToSize:CGSizeMake(83, 83)];
+    
+//    [self uploadHeader: uploadImage];
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+//压缩图片
+- (UIImage*)imageWithImageSimple:(UIImage*)image scaledToSize:(CGSize)newSize {
+    // Create a graphics image context
+    UIGraphicsBeginImageContext(newSize);
+    // Tell the old image to draw in this new context, with the desired
+    // new size
+    [image drawInRect:CGRectMake(0,0,newSize.width,newSize.height)];
+    // Get the new image from the context
+    UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
+    // End the context
+    UIGraphicsEndImageContext();
+    // Return the new image.
+    return newImage;
+}
+
+#pragma mark -- 上传图片
+- (void)uploadHeader:(UIImage*)image {
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    kWeakSelf(self);
+    [[CBWtNetworkRequestManager sharedInstance] uploadImageToQNFilePath:image token:@"self.qnyToken"?:@"" success:^(id  _Nonnull baseModel) {
+        kStrongSelf(self);
+        
+        NSString *imageUrl = [NSString stringWithFormat:@"%@",baseModel[@"key"]];
+        NSString *headImageUrlStr = [NSString stringWithFormat:@"%@%@",@"http://cdn.clw.gpstrackerxy.com/",imageUrl];
+        
+        NSLog(@"--------头像路径--------%@",headImageUrlStr);
+        //TODO: LZXTODO获取到头像路径后续操作
+//        [self requestUploadImageWithFileUrl:headImageUrlStr hud:nil];
+        
+    } failure:^(NSError * _Nonnull error) {
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    }];
+}
+
+- (NSString *)getContent:(UIView *)view {
+    for (UILabel *lbl in view.subviews) {
+        if (lbl.tag == 101 && [lbl isKindOfClass:UILabel.class]) {
+            return lbl.text;
+        }
+    }
+    return nil;
+}
+
 - (void)save {
     NSLog(@"%s", __FUNCTION__);
+    NSString *name = [self getContent:self.nameV];
+    NSString *phone = [self getContent:self.phoneV];
+    NSString *email = [self getContent:self.emailV];
+    NSDictionary *param = @{
+        @"userName": name ?: @"",
+        @"phone": phone ?: @"",
+        @"email": email ?: @"",
+    };
+    
+    [MBProgressHUD showHUDIcon:self.view animated:YES];
+    kWeakSelf(self);
+    [[NetWorkingManager shared] postWithUrl:@"/userController/updateUserInfo" params:param succeed:^(id response, BOOL isSucceed) {
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        if (isSucceed) {
+            [HUD showHUDWithText:@"操作成功"];
+        }
+        } failed:^(NSError *error) {
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+        }];
 }
 
 @end

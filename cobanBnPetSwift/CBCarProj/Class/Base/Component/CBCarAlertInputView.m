@@ -47,6 +47,9 @@
         confirmBlk(wtf.text);
         [wpopView dismiss];
     }];
+    [alertView setDidClickCancel:^{
+        [wpopView dismiss];
+    }];
     return popView;
 }
 @end
