@@ -29,6 +29,7 @@
 #import "CBControlPickPopView.h"
 #import "CBEnquiryFeeViewController.h"
 #import "CBOBDMsgViewController.h"
+#import "CBCarControlConfig.h"
 
 #define K_CBCarWakeUpByCallPhoneNotification @"K_CBCarWakeUpByCallPhoneNotification"  // 车联网唤醒
 
@@ -73,8 +74,32 @@
 - (NSMutableArray *)arrayData {
     if (!_arrayData) {
         _arrayData = [NSMutableArray array];
-        NSArray *arrayTitle = @[Localized(@"单次定位"), Localized(@"多次定位"),Localized(@"电话唤醒"), Localized(@"电话回拨"), Localized(@"断油断电"),Localized(@"停止报警"), Localized(@"布防/撤防"),Localized(@"电子围栏"),Localized(@"话费查询"),Localized(@"请求OBD消息"),Localized(@"报警设置"),Localized(@"终端设置")];
-        NSArray *arrayTitleImage = @[@"单位定位", @"单位定位",@"电话", @"电话", @"断油",@"重启", @"布防", @"电子围栏",@"信息下发",@"OBD",@"报警统计",@"配置设备"];
+        NSArray *arrayTitle = @[
+            _ControlConfigTitle_DCJW,
+            _ControlConfigTitle_XMJWCL,
+            _ControlConfigTitle_TT,
+            _ControlConfigTitle_DYD,
+            _ControlConfigTitle_HFYD,
+            _ControlConfigTitle_TZBJ,
+            _ControlConfigTitle_SDJ,
+            _ControlConfigTitle_YCKZ,
+            _ControlConfigTitle_BFCF,
+            _ControlConfigTitle_HFCX,
+            _ControlConfigTitle_CSBJ,
+        ];
+        NSArray *arrayTitleImage = @[
+            @"单位定位",
+            @"单位定位",
+            @"单位定位",
+            @"单位定位",
+            @"单位定位",
+            @"单位定位",
+            @"单位定位",
+            @"单位定位",
+            @"单位定位",
+            @"单位定位",
+            @"单位定位",
+        ];
         for (int i = 0 ; i < arrayTitle.count ; i ++ ) {
             CBControlModel *controlModel = [[CBControlModel alloc]init];
             controlModel.titleStr = arrayTitle[i];
@@ -225,23 +250,27 @@
     ControlTableViewCell *cell = [tableView cellForRowAtIndexPath: indexPath];
     if (self.arrayData.count > indexPath.row) {
         CBControlModel *model = self.arrayData[indexPath.row];
-        if ([model.titleStr isEqualToString:Localized(@"单次定位")]) {
-            self.tabBarController.selectedViewController = [self.tabBarController.viewControllers objectAtIndex:0];
+        if ([model.titleStr isEqualToString:_ControlConfigTitle_DCJW]) {
+//            self.tabBarController.selectedViewController = [self.tabBarController.viewControllers objectAtIndex:0];
             [[NSNotificationCenter defaultCenter] postNotificationName: @"SingleLocationNoti" object: nil];
-        } else if ([model.titleStr isEqualToString:Localized(@"多次定位")]) {
+        } else if ([model.titleStr isEqualToString:_ControlConfigTitle_XMJWCL]) {
             if (cell.switchView.isON == !self.listModel.dcdd) { // 取反是因为UI的结构导致的
                 MultiLocationViewController *locationVC = [[MultiLocationViewController alloc] init];
                 locationVC.hidesBottomBarWhenPushed = YES;
                 [self.navigationController pushViewController: locationVC animated: YES];
             }
+        } else if ([model.titleStr isEqualToString:_ControlConfigTitle_TT]) {
+            NSLog(@"%s", __FUNCTION__);
+        } else if ([model.titleStr isEqualToString:_ControlConfigTitle_DYD]) {
+            [self showAlertOBDViewWithTitle:Localized(@"断油断电模式设置") indexPath: indexPath];
+        } else if ([model.titleStr isEqualToString:_ControlConfigTitle_HFYD]) {
+            NSLog(@"%s", __FUNCTION__);
+        } else if ([model.titleStr isEqualToString:_ControlConfigTitle_TZBJ]) {
+            [self stopWarnClick];
         } else if ([model.titleStr isEqualToString:Localized(@"电子围栏")]) {
             ElectronicFenceViewController *electronicFenceVC = [[ElectronicFenceViewController alloc] init];
             electronicFenceVC.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController: electronicFenceVC animated: YES];
-        } else if ([model.titleStr isEqualToString:Localized(@"断油断电")]) {
-            [self showAlertOBDViewWithTitle:Localized(@"断油断电模式设置") indexPath: indexPath];
-        } else if ([model.titleStr isEqualToString:Localized(@"停止报警")]) {
-            [self stopWarnClick];
         } else if ([model.titleStr isEqualToString:Localized(@"布防/撤防")]) {
             [self arming_disarmingClick];
         } else if ([model.titleStr isEqualToString:Localized(@"振动报警")]) {
@@ -425,7 +454,7 @@
         CBControlModel *model = self.arrayData[indexPath.row];
         NSString *titleStr = model.titleStr;
         if ([titleStr isEqualToString:Localized(@"单次定位")]) {
-        } else if ([titleStr isEqualToString:Localized(@"多次定位")]) {
+        } else if ([titleStr isEqualToString:Localized(@"休眠定位策略")]) {
             dic[@"dcdd"] = data;
         } else if ([titleStr isEqualToString:Localized(@"电子围栏")]) {
         } else if ([titleStr isEqualToString:Localized(@"断油断电")]) {

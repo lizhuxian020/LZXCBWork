@@ -10,6 +10,7 @@
 #import "MINSwitchView.h"
 #import "MINControlListDataModel.h"
 #import "ConfigurationParameterModel.h"
+#import "CBCarControlConfig.h"
 
 @interface ControlTableViewCell() <MINSwtichViewDelegate>
 {
@@ -22,9 +23,9 @@
 {
     if (self = [super initWithStyle:style reuseIdentifier: reuseIdentifier]) {
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-//        self.backgroundColor = kBackColor;
-        self.backgroundColor = UIColor.redColor;
-        backView = [MINUtils createViewWithRadius: 0 * KFitWidthRate];
+        self.backgroundColor = kBackColor;
+//        backView = [MINUtils createViewWithRadius: 0 * KFitWidthRate];
+        backView = [UIView new];
         [self.contentView addSubview: backView];
         [backView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.equalTo(@0);
@@ -86,6 +87,16 @@
             make.right.mas_equalTo(self->_detailImageView.mas_left).offset(-10*KFitWidthRate);
             make.height.mas_equalTo(40*KFitHeightRate);
         }];
+        
+        UIView *line = [UIView new];
+        line.backgroundColor = UIColor.blackColor;
+        [backView addSubview:line];
+        [line mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.bottom.equalTo(@0);
+            make.height.equalTo(@1);
+            make.left.equalTo(_titleLabel);
+            make.right.equalTo(_detailImageView);
+        }];
 
     }
     return self;
@@ -104,32 +115,52 @@
         self.detailImageView.hidden = NO;
         self.switchView.hidden = NO;
         // 控制
-        if ([titleStr isEqualToString:Localized(@"单次定位")]) {
+        if ([titleStr isEqualToString:_ControlConfigTitle_DCJW]) {
             self.detailLabel.hidden = YES;
             self.switchView.hidden = YES;
-        } else if ([titleStr isEqualToString:Localized(@"多次定位")]) {
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_XMJWCL]) {
             self.detailLabel.hidden = YES;
+            self.switchView.hidden = YES;
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_TT]) {
+            self.detailLabel.hidden = YES;
+            self.switchView.hidden = YES;
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_DYD]) {
+            self.detailLabel.hidden = YES;
+            self.switchView.hidden = YES;
+//            [self.switchView updateSwitchImageView:@"断油断电"];
+//            [self.switchView.switchImageBtn setImage: [UIImage imageNamed: @"开关-断油"] forState: UIControlStateSelected]; // offImage
+//            [self.switchView.switchImageBtn setImage: [UIImage imageNamed: @"开关-加油"] forState: UIControlStateNormal]; // onImage
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_HFYD]) {
+            self.switchView.hidden = YES;
+            self.detailImageView.hidden = YES;
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_TZBJ]) {
+            self.switchView.hidden = YES;
+            self.detailImageView.hidden = YES;
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_SDJ]) {
+            self.switchView.hidden = YES;
+            self.detailImageView.hidden = YES;
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_YCKZ]) {
+            self.switchView.hidden = YES;
+            self.detailImageView.hidden = YES;
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_BFCF]) {
+            self.detailLabel.hidden = YES;
+            self.switchView.hidden = YES;
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_HFCX]) {
+            self.detailLabel.hidden = YES;
+            self.switchView.hidden = YES;
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_CSBJ]) {
+            self.detailLabel.hidden = YES;
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_CSBJ]) {
+//            self.switchView.isON = !controlListModel.warmSpeed;
+//            self.centerLabel.text = [NSString stringWithFormat: @"%@Km/h", controlListModel.overWarm?:@"0"];
+            self.centerLabel.text = [NSString stringWithFormat: @"30Km/h"];
         } else if ([titleStr isEqualToString:Localized(@"电话唤醒")]) {
             self.switchView.hidden = YES;
             self.detailImageView.hidden = YES;
         } else if ([titleStr isEqualToString:Localized(@"电话回拨")]) {
             self.switchView.hidden = YES;
             self.detailImageView.hidden = YES;
-        } else if ([titleStr isEqualToString:Localized(@"断油断电")]) {
-            self.detailLabel.hidden = YES;
-            [self.switchView updateSwitchImageView:@"断油断电"];
-            [self.switchView.switchImageBtn setImage: [UIImage imageNamed: @"开关-断油"] forState: UIControlStateSelected]; // offImage
-            [self.switchView.switchImageBtn setImage: [UIImage imageNamed: @"开关-加油"] forState: UIControlStateNormal]; // onImage
-        } else if ([titleStr isEqualToString:Localized(@"停止报警")]) {
-            self.detailLabel.hidden = YES;
-            self.switchView.hidden = YES;
-        } else if ([titleStr isEqualToString:Localized(@"布防/撤防")]) {
-            self.detailLabel.hidden = YES;
-            self.switchView.hidden = YES;
         } else if ([titleStr isEqualToString:Localized(@"电子围栏")]) {
-            self.detailLabel.hidden = YES;
-            self.switchView.hidden = YES;
-        } else if ([titleStr isEqualToString:Localized(@"话费查询")]) {
             self.detailLabel.hidden = YES;
             self.switchView.hidden = YES;
         } else if ([titleStr isEqualToString:Localized(@"请求OBD消息")]) {
