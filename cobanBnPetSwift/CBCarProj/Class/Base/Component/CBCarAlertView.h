@@ -17,6 +17,12 @@ NS_ASSUME_NONNULL_BEGIN
                                  title:(NSString *)title
                                confrim:(void(^)(NSString *contentStr))confirmBlk;
 
++ (CBBasePopView *)viewWithChooseData:(NSArray<NSString *> *)dataArr
+                        selectedIndex:(NSInteger)index
+                                title:(NSString *)title
+                         didClickData:(void(^)(NSString *contentStr, NSInteger index))didClickData
+                              confrim:(void(^)(NSString *contentStr, NSInteger index))confirmBlk;
+
 @end
 
 NS_ASSUME_NONNULL_END

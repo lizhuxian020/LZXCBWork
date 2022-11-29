@@ -7,6 +7,7 @@
 //
 
 #import "CBCarAlertView.h"
+#import "CBAlertSelectableView.h"
 
 @implementation CBCarAlertView
 
@@ -45,6 +46,27 @@
     __weak CBBasePopView *wpopView = popView;
     [alertView setDidClickConfirm:^{
         confirmBlk(wtf.text);
+        [wpopView dismiss];
+    }];
+    [alertView setDidClickCancel:^{
+        [wpopView dismiss];
+    }];
+    return popView;
+}
+
++ (CBBasePopView *)viewWithChooseData:(NSArray<NSString *> *)dataArr
+                        selectedIndex:(NSInteger)index
+                                title:(NSString *)title
+                         didClickData:(void(^)(NSString *contentStr, NSInteger index))didClickData
+                              confrim:(void(^)(NSString *contentStr, NSInteger index))confirmBlk {
+    CBAlertSelectableView *c = [[CBAlertSelectableView alloc] initWithData:dataArr];
+    CBAlertBaseView *alertView = [[CBAlertBaseView alloc] initWithContentView:c title:title];
+    
+    CBBasePopView *popView = [[CBBasePopView alloc] initWithContentView:alertView];
+    __weak CBBasePopView *wpopView = popView;
+    __weak CBAlertSelectableView *wc = c;
+    [alertView setDidClickConfirm:^{
+        confirmBlk(dataArr[wc.currentIndex], 0);
         [wpopView dismiss];
     }];
     [alertView setDidClickCancel:^{
