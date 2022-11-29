@@ -170,7 +170,7 @@
 
 #pragma mark - CreateUI
 - (void)createUI {
-    [self initBarWithTitle:Localized(@"控制") isBack: NO];
+    [self initBarWithTitle:Localized(@"控制") isBack: YES];
     self.view.backgroundColor = kRGB(247, 247, 247);
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -178,14 +178,15 @@
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.bottom.equalTo(self.view);
     }];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 #pragma mark - tableView delegate & dateSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.arrayData.count;
 }
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 62.5 * KFitHeightRate;
-}
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+//    return 62.5 * KFitHeightRate;
+//}
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *cellIndentify = @"ControlCellIndentify";
     ControlTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: cellIndentify];
@@ -210,15 +211,15 @@
     };
     return cell;
 }
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    return 12.5 * KFitHeightRate;
-}
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    return [[UIView alloc] initWithFrame: CGRectMake(0, 0, SCREEN_HEIGHT, 12.5 * KFitHeightRate)];
-}
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    cell.backgroundColor = [UIColor clearColor];
-}
+//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+//    return 12.5 * KFitHeightRate;
+//}
+//- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+//    return [[UIView alloc] initWithFrame: CGRectMake(0, 0, SCREEN_HEIGHT, 12.5 * KFitHeightRate)];
+//}
+//- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+//    cell.backgroundColor = [UIColor clearColor];
+//}
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     self.currentIndexPath = indexPath;
     ControlTableViewCell *cell = [tableView cellForRowAtIndexPath: indexPath];
@@ -525,7 +526,7 @@
             [[NSUserDefaults standardUserDefaults]setObject:inputStr forKey:K_CBCarWakeUpByCallPhoneNotification];
         }
     }
-    
+
 }
 #pragma mark -- 停止报警
 - (void)stopWarnClick {

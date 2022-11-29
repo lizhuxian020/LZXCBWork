@@ -53,6 +53,7 @@
 #import "_CBMyInfoPopView.h"
 #import "AboutUsViewController.h"
 #import "CBPersonInfoController.h"
+#import "CBControlMenuController.h"
 
 @interface MainMapViewController ()
 <BMKMapViewDelegate, CLLocationManagerDelegate, GMSMapViewDelegate,
@@ -148,6 +149,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 //是否开始跟踪
 @property (nonatomic, assign) BOOL isStartTrack;
 @property (nonatomic, strong) _CBMyInfoPopView *infoPopView;
+
 @end
 
 @implementation MainMapViewController
@@ -1151,8 +1153,16 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
                 } else {
                     [self setCanStartTrack];
                 }
-                break;
             }
+                break;
+            case CBCarPaopaoViewClickTypeTitle: {
+                [self.paopaoView dismiss];
+                CBControlMenuController *vc = CBControlMenuController.new;
+                vc.deviceInfoModelSelect = self.deviceInfoModelSelect;
+                [self.navigationController pushViewController:vc animated:YES];
+            }
+                break;
+                
             default:
                 break;
         }

@@ -666,6 +666,8 @@
 		B101D4DE2927CF32007EA942 /* UIView+Badge.m in Sources */ = {isa = PBXBuildFile; fileRef = B101D4DD2927CF32007EA942 /* UIView+Badge.m */; };
 		B11EBFDF29294F790000DA24 /* CBCBCarMineHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = B11EBFDE29294F790000DA24 /* CBCBCarMineHeaderView.m */; };
 		B1212C642795CE8B0044E7CC /* CBPetSwitchPetAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1212C632795CE8B0044E7CC /* CBPetSwitchPetAlertView.swift */; };
+		B13D8BD02935CB06005F3A61 /* CBControlMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = B13D8BCF2935CB06005F3A61 /* CBControlMenuController.m */; };
+		B13D8BD32935CD83005F3A61 /* _CBControlMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B13D8BD22935CD83005F3A61 /* _CBControlMenuCell.m */; };
 		B15F916F27A19F53000953B6 /* CBPetGMSMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15F916E27A19F53000953B6 /* CBPetGMSMarker.swift */; };
 		B16C38C52793208D0058EAC4 /* CBPetMultiVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16C38C42793208D0058EAC4 /* CBPetMultiVC.swift */; };
 		B17F1D17279461430040434F /* CBPetMultiVCNaviBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17F1D16279461430040434F /* CBPetMultiVCNaviBar.swift */; };
@@ -1856,6 +1858,10 @@
 		B11EBFDD29294F790000DA24 /* CBCBCarMineHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBCBCarMineHeaderView.h; sourceTree = "<group>"; };
 		B11EBFDE29294F790000DA24 /* CBCBCarMineHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBCBCarMineHeaderView.m; sourceTree = "<group>"; };
 		B1212C632795CE8B0044E7CC /* CBPetSwitchPetAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetSwitchPetAlertView.swift; sourceTree = "<group>"; };
+		B13D8BCE2935CB06005F3A61 /* CBControlMenuController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBControlMenuController.h; sourceTree = "<group>"; };
+		B13D8BCF2935CB06005F3A61 /* CBControlMenuController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBControlMenuController.m; sourceTree = "<group>"; };
+		B13D8BD12935CD83005F3A61 /* _CBControlMenuCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBControlMenuCell.h; sourceTree = "<group>"; };
+		B13D8BD22935CD83005F3A61 /* _CBControlMenuCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _CBControlMenuCell.m; sourceTree = "<group>"; };
 		B15F916E27A19F53000953B6 /* CBPetGMSMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetGMSMarker.swift; sourceTree = "<group>"; };
 		B16C38C42793208D0058EAC4 /* CBPetMultiVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetMultiVC.swift; sourceTree = "<group>"; };
 		B17F1D16279461430040434F /* CBPetMultiVCNaviBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetMultiVCNaviBar.swift; sourceTree = "<group>"; };
@@ -3903,6 +3909,7 @@
 		17CDA9DB24CEBE5400BB9F8B /* Class */ = {
 			isa = PBXGroup;
 			children = (
+				B13D8BCA2935CA90005F3A61 /* ControlMenu */,
 				B1D0D08A292FC7E400ECA328 /* AlertMsg */,
 				B1D3565B292E5ED800E677F7 /* Base */,
 				17CDA9DC24CEBE5400BB9F8B /* Form */,
@@ -5428,6 +5435,41 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		B13D8BCA2935CA90005F3A61 /* ControlMenu */ = {
+			isa = PBXGroup;
+			children = (
+				B13D8BCD2935CACB005F3A61 /* View */,
+				B13D8BCC2935CAC5005F3A61 /* Model */,
+				B13D8BCB2935CABF005F3A61 /* controller */,
+			);
+			path = ControlMenu;
+			sourceTree = "<group>";
+		};
+		B13D8BCB2935CABF005F3A61 /* controller */ = {
+			isa = PBXGroup;
+			children = (
+				B13D8BCE2935CB06005F3A61 /* CBControlMenuController.h */,
+				B13D8BCF2935CB06005F3A61 /* CBControlMenuController.m */,
+			);
+			path = controller;
+			sourceTree = "<group>";
+		};
+		B13D8BCC2935CAC5005F3A61 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		B13D8BCD2935CACB005F3A61 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				B13D8BD12935CD83005F3A61 /* _CBControlMenuCell.h */,
+				B13D8BD22935CD83005F3A61 /* _CBControlMenuCell.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		B16C38C227931F590058EAC4 /* MultiVC */ = {
 			isa = PBXGroup;
 			children = (
@@ -5773,6 +5815,7 @@
 				17CDAB8324CEBE5500BB9F8B /* PieAnimationManager.m in Sources */,
 				B1212C642795CE8B0044E7CC /* CBPetSwitchPetAlertView.swift in Sources */,
 				B11EBFDF29294F790000DA24 /* CBCBCarMineHeaderView.m in Sources */,
+				B13D8BD32935CD83005F3A61 /* _CBControlMenuCell.m in Sources */,
 				1782BF7524C0427E00544C36 /* GuardInSchoolViewController.m in Sources */,
 				17CDAB5F24CEBE5500BB9F8B /* BarData.m in Sources */,
 				17CDABBF24CEBE5600BB9F8B /* lstate.c in Sources */,
@@ -6318,6 +6361,7 @@
 				434602FF248165AA00BDDE5E /* CBPetHomeMapVC.swift in Sources */,
 				439E906F2475A497004ED9AD /* CBPetLoginModel.swift in Sources */,
 				175FF8AC2487A80600475849 /* CBPetPsnalInfoTableViewCell.swift in Sources */,
+				B13D8BD02935CB06005F3A61 /* CBControlMenuController.m in Sources */,
 				17AA1D5924D172BC0061445D /* CBPetAboutUsViewController.swift in Sources */,
 				17CDAB7524CEBE5500BB9F8B /* GGNumberRenderer.m in Sources */,
 				17CDAB6A24CEBE5500BB9F8B /* YAxis.m in Sources */,

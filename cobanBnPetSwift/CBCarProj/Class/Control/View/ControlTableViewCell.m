@@ -22,14 +22,13 @@
 {
     if (self = [super initWithStyle:style reuseIdentifier: reuseIdentifier]) {
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        self.backgroundColor = kBackColor;
-        backView = [MINUtils createViewWithRadius: 5 * KFitWidthRate];
+//        self.backgroundColor = kBackColor;
+        self.backgroundColor = UIColor.redColor;
+        backView = [MINUtils createViewWithRadius: 0 * KFitWidthRate];
         [self.contentView addSubview: backView];
         [backView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self).with.offset(12.5 * KFitWidthRate);
-            make.top.equalTo(self).with.offset(12.5 * KFitHeightRate);
-            make.right.equalTo(self).with.offset(-12.5 * KFitWidthRate);
-            make.height.mas_equalTo(50 * KFitHeightRate);
+            make.edges.equalTo(@0);
+            make.height.mas_equalTo(50);
         }];
         UIImage *controlImage = [UIImage imageNamed:@"超速"];
         _controlImageView = [[UIImageView alloc] initWithImage: controlImage];
@@ -43,6 +42,13 @@
         _titleLabel = [MINUtils createLabelWithText:@"单次定位" size: 14 * KFitHeightRate alignment: NSTextAlignmentLeft textColor: kRGB(73, 73, 73)];
         _titleLabel.numberOfLines = 0;
         [backView addSubview: _titleLabel];
+        
+        [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(backView).with.offset(45 * KFitWidthRate);
+            make.centerY.equalTo(backView);
+//            make.height.mas_equalTo(40*KFitHeightRate);
+//            make.width.mas_equalTo(180*KFitWidthRate);
+        }];
 
         
         UIImage *detailImage = [UIImage imageNamed: @"右边"];
@@ -81,12 +87,6 @@
             make.height.mas_equalTo(40*KFitHeightRate);
         }];
 
-        [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(backView).with.offset(45 * KFitWidthRate);
-            make.centerY.equalTo(backView);
-            make.height.mas_equalTo(40*KFitHeightRate);
-            make.width.mas_equalTo(180*KFitWidthRate);
-        }];
     }
     return self;
 }

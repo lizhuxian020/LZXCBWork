@@ -8,6 +8,7 @@
 
 #import "CBCarPaopaoView.h"
 
+#define __CarPaoTitle_Title @"标题"
 #define __CarPaoTitle_Track Localized(@"跟踪")
 #define __CarPaoTitle_PlayBack Localized(@"回放")
 #define __CarPaoTitle_Move Localized(@"位移")
@@ -201,7 +202,7 @@
         }];
         kWeakSelf(self);
         [_titleView bk_whenTapped:^{
-            [weakself didClickBtn:@"标题"];
+            [weakself didClickBtn:__CarPaoTitle_Title];
         }];
     }
     return _titleView;
@@ -658,6 +659,11 @@
 #pragma mark -- button点击事件
 - (void)didClickBtn:(NSString *)title {
     NSLog(@"%@", title);
+    if ([title isEqualToString:__CarPaoTitle_Title]) {
+        if (self.clickBlock) {
+            self.clickBlock(CBCarPaopaoViewClickTypeTitle, self.dno);
+        }
+    }
     if ([title isEqualToString:__CarPaoTitle_Track]) {
         if (self.clickBlock) {
             self.clickBlock(CBCarPaopaoViewClickTypeTrack, self.dno);
