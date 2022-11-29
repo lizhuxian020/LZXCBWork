@@ -6,9 +6,9 @@
 //  Copyright © 2022 coban. All rights reserved.
 //
 
-#import "CBCarAlertInputView.h"
+#import "CBCarAlertView.h"
 
-@implementation CBCarAlertInputView
+@implementation CBCarAlertView
 
 + (CBBasePopView *)viewWithPlaceholder:(NSString *)placeHolder
                                  title:(NSString *)title

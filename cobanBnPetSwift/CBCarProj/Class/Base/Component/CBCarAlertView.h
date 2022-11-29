@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CBCarAlertInputView : NSObject
+@interface CBCarAlertView : NSObject
 
 
 + (CBBasePopView *)viewWithPlaceholder:(NSString *)placeHolder

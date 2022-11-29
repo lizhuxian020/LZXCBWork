@@ -8,7 +8,7 @@
 
 #import "CBPersonInfoController.h"
 #import "cobanBnPetSwift-Swift.h"
-#import "CBCarAlertInputView.h"
+#import "CBCarAlertView.h"
 
 @interface CBPersonInfoController ()
 
@@ -149,7 +149,7 @@
         }
         
         if (canClick) {
-            [[CBCarAlertInputView viewWithPlaceholder:placeHolder title:title confrim:^(NSString * _Nonnull contentStr) {
+            [[CBCarAlertView viewWithPlaceholder:placeHolder title:title confrim:^(NSString * _Nonnull contentStr) {
                 wLbl.text = contentStr;
             }] pop];
         }
