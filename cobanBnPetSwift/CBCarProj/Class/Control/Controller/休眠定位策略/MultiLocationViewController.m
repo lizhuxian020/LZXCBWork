@@ -11,14 +11,19 @@
 #import "MultiLocationDetailView.h"
 #import "MINPickerView.h"
 #import "MultiLocationModel.h"
+#import "_CBXiuMianChooseView.h"
+#import "_CBLocateModeView.h"
 
 @interface MultiLocationViewController () <MINPickerViewDelegate>
+@property (nonatomic, strong) _CBXiuMianChooseView *xmChooseView;
+@property (nonatomic, strong) _CBLocateModeView *locationModeView;
 @property (nonatomic, strong) MultiLocationHeaderView *headerView;
 @property (nonatomic, strong) MultiLocationDetailView *topDetailView;
 @property (nonatomic, strong) MultiLocationDetailView *bottomDetailView;
 @property (nonatomic, copy) NSArray *dataArr;
 @property (nonatomic, weak) UIButton *selectBtn; // 选中的按钮
 @property (nonatomic, strong) NSMutableArray *selectArray; // 选中数据的内容
+@property (nonatomic, strong) NSArray *restArr;
 @end
 
 @implementation MultiLocationViewController
@@ -26,6 +31,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.restArr = @[Localized(@"长在线"), Localized(@"振动休眠"), Localized(@"时间休眠"), Localized(@"深度振动休眠"), Localized(@"定时报告"), Localized(@"定时报告+深度振动休眠")];
     [self createUI];
     self.dataArr = @[@[@"10", @"20", @"30", @"40", @"50", @"60", @"70", @"80", @"90"]];
 //    self.selectArray = [NSMutableArray arrayWithArray: @[@200, @200, @200, @200, @200, @200]];
@@ -149,13 +155,30 @@
 #pragma mark - createUI
 - (void)createUI
 {
-    [self initBarWithTitle:Localized(@"多次定位") isBack: YES];
+    [self initBarWithTitle:Localized(@"休眠定位策略") isBack: YES];
     [self showBackGround];
     [self initBarRighBtnTitle: Localized(@"确定") target: self action: @selector(rightBtnClick)];
+    
+    self.xmChooseView = [[_CBXiuMianChooseView alloc] initWithData:self.restArr];
+    [self.view addSubview:self.xmChooseView];
+    [self.xmChooseView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.view).with.offset(12.5 * KFitHeightRate + kNavAndStatusHeight);
+        make.left.equalTo(@15);
+        make.right.equalTo(@-15);
+    }];
+    
+    self.locationModeView = [_CBLocateModeView new];
+    [self.view addSubview:self.locationModeView];
+    [self.locationModeView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.xmChooseView.mas_bottom);
+        make.left.right.equalTo(self.view);
+    }];
+    
     _headerView = [[MultiLocationHeaderView alloc] init];
     [self.view addSubview: _headerView];
     [_headerView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view).with.offset(12.5 * KFitHeightRate + kNavAndStatusHeight);
+//        make.top.equalTo(self.view).with.offset(12.5 * KFitHeightRate + kNavAndStatusHeight);
+        make.top.equalTo(self.locationModeView.mas_bottom);
         make.left.right.equalTo(self.view);
         make.height.mas_equalTo(100 * KFitHeightRate);
     }];

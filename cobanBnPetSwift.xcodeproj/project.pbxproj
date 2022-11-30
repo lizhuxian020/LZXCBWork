@@ -686,6 +686,8 @@
 		B1E7040B2798727100060475 /* CBPetToolAssistanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1E7040A2798727100060475 /* CBPetToolAssistanceView.swift */; };
 		B1EF2F2B279C554D0050BF05 /* CBPetAvatarPaoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1EF2F2A279C554D0050BF05 /* CBPetAvatarPaoView.swift */; };
 		B1EF2F2D279EFB000050BF05 /* CBPetFuncUserManageOtherConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1EF2F2C279EFB000050BF05 /* CBPetFuncUserManageOtherConfigView.swift */; };
+		B1F85A3729379F3900A90871 /* _CBXiuMianChooseView.m in Sources */ = {isa = PBXBuildFile; fileRef = B1F85A3629379F3900A90871 /* _CBXiuMianChooseView.m */; };
+		B1F85A3A2937A57A00A90871 /* _CBLocateModeView.m in Sources */ = {isa = PBXBuildFile; fileRef = B1F85A392937A57A00A90871 /* _CBLocateModeView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1894,6 +1896,10 @@
 		B1E7040A2798727100060475 /* CBPetToolAssistanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetToolAssistanceView.swift; sourceTree = "<group>"; };
 		B1EF2F2A279C554D0050BF05 /* CBPetAvatarPaoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetAvatarPaoView.swift; sourceTree = "<group>"; };
 		B1EF2F2C279EFB000050BF05 /* CBPetFuncUserManageOtherConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetFuncUserManageOtherConfigView.swift; sourceTree = "<group>"; };
+		B1F85A3529379F3900A90871 /* _CBXiuMianChooseView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBXiuMianChooseView.h; sourceTree = "<group>"; };
+		B1F85A3629379F3900A90871 /* _CBXiuMianChooseView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _CBXiuMianChooseView.m; sourceTree = "<group>"; };
+		B1F85A382937A57A00A90871 /* _CBLocateModeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBLocateModeView.h; sourceTree = "<group>"; };
+		B1F85A392937A57A00A90871 /* _CBLocateModeView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _CBLocateModeView.m; sourceTree = "<group>"; };
 		B380E0223C51C9E84D9849DF /* Pods-cobanBnPetSwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cobanBnPetSwift.debug.xcconfig"; path = "Target Support Files/Pods-cobanBnPetSwift/Pods-cobanBnPetSwift.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -4322,7 +4328,7 @@
 				17CDAA9924CEBE5500BB9F8B /* ContorlViewController.m */,
 				17CDAA9A24CEBE5500BB9F8B /* 信息服务下发 */,
 				17CDAA9D24CEBE5500BB9F8B /* 配置设备参数 */,
-				17CDAAAF24CEBE5500BB9F8B /* 多次定位 */,
+				17CDAAAF24CEBE5500BB9F8B /* 休眠定位策略 */,
 				17CDAAB224CEBE5500BB9F8B /* 多次拍照 */,
 				17CDAAB524CEBE5500BB9F8B /* 终端设置 */,
 				17CDAABB24CEBE5500BB9F8B /* 报警设置 */,
@@ -4405,13 +4411,14 @@
 			path = "消息应答超时机制";
 			sourceTree = "<group>";
 		};
-		17CDAAAF24CEBE5500BB9F8B /* 多次定位 */ = {
+		17CDAAAF24CEBE5500BB9F8B /* 休眠定位策略 */ = {
 			isa = PBXGroup;
 			children = (
+				B1F85A3429379EF800A90871 /* Views */,
 				17CDAAB024CEBE5500BB9F8B /* MultiLocationViewController.h */,
 				17CDAAB124CEBE5500BB9F8B /* MultiLocationViewController.m */,
 			);
-			path = "多次定位";
+			path = "休眠定位策略";
 			sourceTree = "<group>";
 		};
 		17CDAAB224CEBE5500BB9F8B /* 多次拍照 */ = {
@@ -5621,6 +5628,17 @@
 			path = PopView;
 			sourceTree = "<group>";
 		};
+		B1F85A3429379EF800A90871 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				B1F85A3529379F3900A90871 /* _CBXiuMianChooseView.h */,
+				B1F85A3629379F3900A90871 /* _CBXiuMianChooseView.m */,
+				B1F85A382937A57A00A90871 /* _CBLocateModeView.h */,
+				B1F85A392937A57A00A90871 /* _CBLocateModeView.m */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		FCDD743A446F819B118ED245 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -6262,6 +6280,7 @@
 				1782BF3D24C0427E00544C36 /* PersonalViewController.m in Sources */,
 				1782BF4F24C0427E00544C36 /* CBHomeLocationBottomView.m in Sources */,
 				1782BF1A24C0427D00544C36 /* UITextField+YLYXTextLimit.m in Sources */,
+				B1F85A3A2937A57A00A90871 /* _CBLocateModeView.m in Sources */,
 				17F28DD42488D3B7003C4010 /* CBPetMsgCterListenRcdVC.swift in Sources */,
 				1782BF5724C0427E00544C36 /* CBInviteFamilyViewController.m in Sources */,
 				17CDAB8C24CEBE5500BB9F8B /* GridBackCanvas.m in Sources */,
@@ -6324,6 +6343,7 @@
 				17CDABC124CEBE5600BB9F8B /* lmathlib.c in Sources */,
 				43CA5C572483AE4100B1F53D /* CBPetFuncChatMoreApplyVC.swift in Sources */,
 				17CDAB9A24CEBE5500BB9F8B /* DLineScaler.m in Sources */,
+				B1F85A3729379F3900A90871 /* _CBXiuMianChooseView.m in Sources */,
 				17CDAC5D24CEBE5600BB9F8B /* NetWorkConfigView.m in Sources */,
 				1782BF1C24C0427D00544C36 /* UIButton+CountDown.m in Sources */,
 				B1EF2F2D279EFB000050BF05 /* CBPetFuncUserManageOtherConfigView.swift in Sources */,

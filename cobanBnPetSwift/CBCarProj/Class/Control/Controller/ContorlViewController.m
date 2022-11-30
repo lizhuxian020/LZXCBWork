@@ -255,11 +255,12 @@
 //            self.tabBarController.selectedViewController = [self.tabBarController.viewControllers objectAtIndex:0];
             [[NSNotificationCenter defaultCenter] postNotificationName: @"SingleLocationNoti" object: nil];
         } else if ([model.titleStr isEqualToString:_ControlConfigTitle_XMJWCL]) {
-            if (cell.switchView.isON == !self.listModel.dcdd) { // 取反是因为UI的结构导致的
-                MultiLocationViewController *locationVC = [[MultiLocationViewController alloc] init];
-                locationVC.hidesBottomBarWhenPushed = YES;
-                [self.navigationController pushViewController: locationVC animated: YES];
-            }
+//            if (cell.switchView.isON == !self.listModel.dcdd) { // 取反是因为UI的结构导致的
+            //休眠定位策略
+            MultiLocationViewController *locationVC = [[MultiLocationViewController alloc] init];
+            locationVC.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController: locationVC animated: YES];
+//            }
         } else if ([model.titleStr isEqualToString:_ControlConfigTitle_TT]) {
             NSLog(@"%s", __FUNCTION__);
         } else if ([model.titleStr isEqualToString:_ControlConfigTitle_DYD]) {
