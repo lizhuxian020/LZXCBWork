@@ -171,7 +171,8 @@
     [self.view addSubview:self.locationModeView];
     [self.locationModeView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.xmChooseView.mas_bottom);
-        make.left.right.equalTo(self.view);
+        make.left.equalTo(@10);
+        make.right.equalTo(@-10);
     }];
     
     _headerView = [[MultiLocationHeaderView alloc] init];

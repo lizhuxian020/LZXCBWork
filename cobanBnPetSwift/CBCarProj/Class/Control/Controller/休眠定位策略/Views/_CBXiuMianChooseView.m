@@ -78,9 +78,17 @@
         }];
         
     }
-    [lastView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(@0);
+    
+    UIView *line = [UIView new];
+    line.backgroundColor = KCarLineColor;
+    [self addSubview:line];
+    [line mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(lastView.mas_bottom).mas_offset(10);
+        make.bottom.equalTo(@-10);
+        make.height.equalTo(@1);
+        make.left.right.equalTo(lastView);
     }];
+    
 }
 
 

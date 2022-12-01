@@ -39,4 +39,7 @@
 
 #define k137Color [UIColor colorWithRed: 137 / 255.0 green: 137 / 255.0 blue: 137 / 255.0 alpha: 1.0]
 
+//线颜色
+#define KCarLineColor [UIColor colorWithRed: 210 /255.0 green: 210/255.0 blue: 210/255.0 alpha:1.0]
+
 #endif /* ColorDefine_h */

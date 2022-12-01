@@ -209,6 +209,9 @@
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
     [self.selectDic setObject: [NSNumber numberWithInteger: row] forKey: [NSString stringWithFormat:@"%ld", (long)component]];
+    if ([self.delegate respondsToSelector: @selector(minPickerView:didSelectRow:inComponent:)]) {
+        [self.delegate minPickerView:self didSelectRow:row inComponent:component];
+    }
 }
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component {
@@ -226,6 +229,11 @@
             [_selectDic setObject: @0 forKey: [NSString stringWithFormat:@"%d", i]];
         }
     }
+}
+
+- (void)updateData:(NSArray *)data {
+    _dataArr = [data copy];
+    [self.pickerView reloadComponent:0];
 }
 
 @end

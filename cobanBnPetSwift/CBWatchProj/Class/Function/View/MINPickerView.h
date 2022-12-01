@@ -15,6 +15,7 @@
 @optional
 - (void)minPickerView:(MINPickerView *)pickerView didSelectWithDic:(NSDictionary *)dic;
 - (void)minPickerViewdidSelectCancelBtn:(MINPickerView *)pickerView;
+- (void)minPickerView:(MINPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component;
 
 @end
 
@@ -32,4 +33,5 @@
 - (void)showView;
 - (void)hideView;
 
+- (void)updateData:(NSArray *)data;
 @end

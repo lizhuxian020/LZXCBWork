@@ -7,6 +7,7 @@
 //
 
 #import "_CBLocateModeView.h"
+#import "MINPickerView.h"
 
 @interface _CBLocateModeView ()
 
@@ -15,6 +16,13 @@
 @property (nonatomic, strong) UIView *contentAView;
 @property (nonatomic, strong) UIView *contentBView;
 
+@property (nonatomic, strong) NSArray *currentData;
+@property (nonatomic, strong) UILabel *currentEditLbl;
+@property (nonatomic, strong) UILabel *AALbl;
+@property (nonatomic, strong) UILabel *ABLbl;
+
+@property (nonatomic, strong) UILabel *BALbl;
+@property (nonatomic, strong) UILabel *BBLbl;
 @end
 
 @implementation _CBLocateModeView
@@ -107,11 +115,12 @@
     
     [view addSubview:cView];
     [cView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(lblA.mas_right);
-        make.right.equalTo(s.mas_left);
+        make.left.equalTo(lblA.mas_right).mas_offset(5);
+        make.right.equalTo(s.mas_left).mas_offset(-5);
         make.centerY.equalTo(lblA);
     }];
     cView.layer.borderWidth = 1;
+    cView.layer.borderColor = UIColor.grayColor.CGColor;
     
     UILabel *lblB = [MINUtils createLabelWithText:Localized(@"运动时的时间间隔") size:14];
     [view addSubview:lblB];
@@ -152,13 +161,26 @@
     
     [view addSubview:cBView];
     [cBView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(lblB.mas_right);
-        make.right.equalTo(sb.mas_left);
+        make.left.equalTo(lblB.mas_right).mas_offset(5);
+        make.right.equalTo(sb.mas_left).mas_offset(-5);
         make.centerY.equalTo(lblB);
     }];
     cBView.layer.borderWidth = 1;
+    cBView.layer.borderColor = UIColor.grayColor.CGColor;
     
     self.contentAView = view;
+    
+    self.AALbl = cLbl;
+    self.ABLbl = cBLbl;
+    kWeakSelf(self);
+    [cView bk_whenTapped:^{
+        weakself.currentEditLbl = cLbl;
+        [weakself showPickView];
+    }];
+    [cBView bk_whenTapped:^{
+        weakself.currentEditLbl = cBLbl;
+        [weakself showPickView];
+    }];
 }
 
 - (void)setupBView {
@@ -201,11 +223,12 @@
     
     [view addSubview:cView];
     [cView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(lblA.mas_right);
-        make.right.equalTo(s.mas_left);
+        make.left.equalTo(lblA.mas_right).mas_offset(5);
+        make.right.equalTo(s.mas_left).mas_offset(-5);
         make.centerY.equalTo(lblA);
     }];
     cView.layer.borderWidth = 1;
+    cView.layer.borderColor = UIColor.grayColor.CGColor;
     
     UILabel *lblB = [MINUtils createLabelWithText:Localized(@"运动时的距离间隔") size:14];
     [view addSubview:lblB];
@@ -232,36 +255,28 @@
         make.width.equalTo(@20);
     }];
     
-    UIView *cBView = [UIView new];
-    
-    UIImageView *cBImgV = [UIImageView new];
-    cBImgV.image = [UIImage imageNamed:@"下拉三角"];
-    [cBView addSubview:cBImgV];
-    [cBImgV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(@10);
-        make.bottom.equalTo(@-10);
-        make.right.equalTo(@-5);
-        make.width.height.equalTo(@15);
-    }];
-    
-    UILabel *cBLbl = [MINUtils createLabelWithText:@"10s" size:14];
-    cBLbl.textAlignment = NSTextAlignmentCenter;
-    [cBView addSubview:cBLbl];
-    [cBLbl mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(@0);
-        make.left.equalTo(@0);
-        make.right.equalTo(cBImgV.mas_left);
-    }];
+    UITextField *cBView = [UITextField new];
+    cBView.textAlignment = NSTextAlignmentCenter;
+    cBView.text = @"200";
     
     [view addSubview:cBView];
     [cBView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(lblB.mas_right);
-        make.right.equalTo(uniLbl.mas_left);
+        make.left.equalTo(lblB.mas_right).mas_offset(5);
+        make.right.equalTo(uniLbl.mas_left).mas_offset(-5);
         make.centerY.equalTo(lblB);
+        make.height.equalTo(cView);
     }];
     cBView.layer.borderWidth = 1;
+    cBView.layer.borderColor = UIColor.grayColor.CGColor;
     
     self.contentBView = view;
+    
+    self.BALbl = cLbl;
+    kWeakSelf(self);
+    [cView bk_whenTapped:^{
+        weakself.currentEditLbl = cLbl;
+        [weakself showPickView];
+    }];
 }
 
 - (void)addClick {
@@ -287,6 +302,70 @@
     //按钮：取消，类型：UIAlertActionStyleCancel
     [alert addAction:[UIAlertAction actionWithTitle:Localized(@"取消") style:UIAlertActionStyleCancel handler:nil]];
     [UIApplication.sharedApplication.keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)showPickView {
+    MINPickerView *pickerView = [[MINPickerView alloc] init];
+    pickerView.titleLabel.text = @"";
+    pickerView.dataArr = [self getDataWithUnit:0];
+    pickerView.delegate = self;
+    [UIApplication.sharedApplication.keyWindow addSubview: pickerView];
+    [pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.equalTo(@0);
+        make.height.mas_equalTo(SCREEN_HEIGHT);
+    }];
+    [pickerView showView];
+}
+- (void)minPickerView:(MINPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
+    NSLog(@"%s", __FUNCTION__);
+    if (component == 1) {
+        [pickerView updateData:[self getDataWithUnit:row]];
+    }
+}
+
+- (void)minPickerView:(MINPickerView *)pickerView didSelectWithDic:(NSDictionary *)dic {
+    NSLog(@"%s", __FUNCTION__);
+    int numIndex = [dic[@"0"] intValue];
+    int uniIndex = [dic[@"1"] intValue];
+    NSString *num = self.currentData[0][numIndex];
+    NSString *uni = self.currentData[1][uniIndex];
+    NSLog(@"asd");
+    self.currentEditLbl.text = [NSString stringWithFormat:@"%@%@", @(num.intValue),uni];
+    
+}
+- (void)minPickerViewdidSelectCancelBtn:(MINPickerView *)pickerView {
+    NSLog(@"%s", __FUNCTION__);
+}
+
+- (NSArray *)getDataWithUnit:(int)unitIdx {
+    NSArray *secData= @[@"s", @"min", @"h", @"d"];
+    NSMutableArray *firData = [NSMutableArray new];
+    if (unitIdx == 0) {
+        for (int i = 10; i < 60; i++) {
+            [firData addObject:[NSString stringWithFormat:@"%d", i]];
+        }
+    }
+    if (unitIdx == 1) {
+        for (int i = 1; i < 60; i++) {
+            [firData addObject:[NSString stringWithFormat:@"%02d", i]];
+        }
+    }
+    if (unitIdx == 2) {
+        for (int i = 1; i < 24; i++) {
+            [firData addObject:[NSString stringWithFormat:@"%02d", i]];
+        }
+    }
+    if (unitIdx == 3) {
+        for (int i = 1; i <= 30; i++) {
+            [firData addObject:[NSString stringWithFormat:@"%02d", i]];
+        }
+    }
+    
+    self.currentData = @[
+        firData,
+        secData
+    ];
+    return self.currentData;
 }
 
 @end
