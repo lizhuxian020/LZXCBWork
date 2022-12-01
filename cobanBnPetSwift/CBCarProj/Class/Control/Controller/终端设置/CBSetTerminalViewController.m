@@ -20,6 +20,7 @@
 #import "CBControlSetRestPopView.h"
 #import "NetWorkConfigurationViewController.h"
 #import "CBTimeZoneViewController.h"
+#import "CBCarControlConfig.h"
 
 @interface CBSetTerminalViewController ()<UITableViewDelegate, UITableViewDataSource,CBControlAlertPopViewDelegate,CBControlPickPopViewDelegate,CBControlInputPopViewDelegate,CBControlSetOilPopViewDelegate,CBControlSetRestPopViewDelegate>
 
@@ -66,8 +67,46 @@
 - (NSMutableArray *)arrayData {
     if (!_arrayData) {
         _arrayData = [NSMutableArray array];
-        NSArray *arrayTitle = @[Localized(@"时区设置"),Localized(@"设置短信密码"),Localized(@"设置授权号码") ,Localized(@"始终在线") ,Localized(@"休眠模式"), Localized(@"设置油箱容积(L)"), Localized(@"油量校准"),Localized(@"设置里程初始值(m)"),Localized(@"疲劳驾驶参数设置"),Localized(@"碰撞报警参数设置"),Localized(@"Acc工作通知"),Localized(@"漂移抑制"),Localized(@"设置转弯补报角度(<180°)"),Localized(@"设置报警短信发送次数"),Localized(@"设置心跳间隔"),Localized(@"设备重启"),Localized(@"振动灵敏度"),Localized(@"初始化设置")];//Localized(@"服务器转移")
-        NSArray *arrayTitleImage = @[@"怠速报表",@"短信-1",@"授权号码", @"休眠", @"休眠", @"油箱容量", @"校准",@"里程",@"GPS-疲劳驾驶",@"碰撞报警",@"速度报表",@"震动报警",@"转弯",@"短信",@"速度报表",@"重启",@"震动报警",@"恢复"];//@"网络-"
+        NSArray *arrayTitle = @[
+            _ControlConfigTitle_SQSZ,
+            Localized(@"设置短信密码"),
+            Localized(@"设置授权号码") ,
+            Localized(@"始终在线") ,
+            Localized(@"休眠模式"),
+            Localized(@"设置油箱容积(L)"),
+            Localized(@"油量校准"),
+            Localized(@"设置里程初始值(m)"),
+            Localized(@"疲劳驾驶参数设置"),
+            Localized(@"碰撞报警参数设置"),
+            Localized(@"Acc工作通知"),
+            Localized(@"漂移抑制"),
+            Localized(@"设置转弯补报角度(<180°)"),
+            Localized(@"设置报警短信发送次数"),
+            Localized(@"设置心跳间隔"),
+            Localized(@"设备重启"),
+            Localized(@"振动灵敏度"),
+            Localized(@"初始化设置")
+        ];//Localized(@"服务器转移")
+        NSArray *arrayTitleImage = @[
+            @"怠速报表",
+            @"短信-1",
+            @"授权号码",
+            @"休眠",
+            @"休眠",
+            @"油箱容量",
+            @"校准",
+            @"里程",
+            @"GPS-疲劳驾驶",
+            @"碰撞报警",
+            @"速度报表",
+            @"震动报警",
+            @"转弯",
+            @"短信",
+            @"速度报表",
+            @"重启",
+            @"震动报警",
+            @"恢复"
+        ];//@"网络-"
         for (int i = 0 ; i < arrayTitle.count ; i ++ ) {
             CBControlModel *controlModel = [[CBControlModel alloc]init];
             controlModel.titleStr = arrayTitle[i];
@@ -163,15 +202,15 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.arrayData.count;
 }
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 62.5*KFitHeightRate;
-}
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    return 12.5 * KFitHeightRate;
-}
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    return [[UIView alloc] initWithFrame: CGRectMake(0, 0, SCREEN_HEIGHT, 12.5 * KFitHeightRate)];
-}
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+//    return 62.5*KFitHeightRate;
+//}
+//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+//    return 12.5 * KFitHeightRate;
+//}
+//- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+//    return [[UIView alloc] initWithFrame: CGRectMake(0, 0, SCREEN_HEIGHT, 12.5 * KFitHeightRate)];
+//}
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *cellID = @"cellID";
     ControlTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
@@ -210,9 +249,10 @@
     }
 }
 - (void)cellClickTitle:(NSString *)title {
-    if ([title isEqualToString:Localized(@"时区设置")]) {
-        CBTimeZoneViewController *vc = [CBTimeZoneViewController new];
-        [self.navigationController pushViewController:vc animated: YES];
+    if ([title isEqualToString:_ControlConfigTitle_SQSZ]) {
+//        CBTimeZoneViewController *vc = [CBTimeZoneViewController new];
+//        [self.navigationController pushViewController:vc animated: YES];
+        [self showSQSZ];
     } else if ([title isEqualToString:Localized(@"设置短信密码")]) {
         [self.inputPopView updateTitle:Localized(@"设置短信密码") placehold:Localized(@"输入短信密码") isDigital:YES];
         [self.inputPopView popView];
@@ -276,6 +316,12 @@
         NetWorkConfigurationViewController *netWorkVC = [[NetWorkConfigurationViewController alloc] init];
         [self.navigationController pushViewController: netWorkVC animated: YES];
     }
+}
+#pragma mark -- 各种弹框
+- (void)showSQSZ {
+    [[CBCarAlertView viewWithSQSZTitle:_ControlConfigTitle_SQSZ initText:self.termialControlStatusModel.timeZone confrim:^(NSString * _Nonnull contentStr) {
+                
+    }] pop];
 }
 #pragma mark -- 开关点击
 - (void)terminalSwitchClick:(NSString *)titleStr status:(NSString *)status {

@@ -9,6 +9,7 @@
 #import "CBControlMenuController.h"
 #import "_CBControlMenuCell.h"
 #import "ContorlViewController.h"
+#import "CBSetTerminalViewController.h"
 
 @interface CBControlMenuController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -45,6 +46,7 @@
             @"title": Localized(@"终端设置"),
             @"blk": ^{
                 NSLog(@"%s", __FUNCTION__);
+                [weakself.navigationController pushViewController:CBSetTerminalViewController.new animated:YES];
             }
         },
         @{

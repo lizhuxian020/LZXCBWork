@@ -217,11 +217,9 @@
             self.switchView.hidden = YES;
         }
         // 终端设置
-        else if ([titleStr isEqualToString:Localized(@"时区设置")]) {
-            self.detailLabel.hidden = YES;
+        else if ([titleStr isEqualToString:_ControlConfigTitle_SQSZ]) {
             self.switchView.hidden = YES;
         } else if ([titleStr isEqualToString:Localized(@"设置短信密码")]) {
-            self.detailLabel.hidden = YES;
             self.switchView.hidden = YES;
         } else if ([titleStr isEqualToString:Localized(@"设置授权号码")]) {
             self.detailLabel.hidden = YES;
@@ -308,7 +306,9 @@
             }
         }
         // 终端设置
-        else if ([titleStr isEqualToString:Localized(@"休眠模式")]) {
+        else if ([titleStr isEqualToString:_ControlConfigTitle_SQSZ]) {
+            self.detailLabel.text = _controlListModel.timeZone;
+       } else if ([titleStr isEqualToString:Localized(@"休眠模式")]) {
             if (controlListModel.restMod < 6) {
                 self.detailLabel.text = [self restArr][0][controlListModel.restMod];
             } else {

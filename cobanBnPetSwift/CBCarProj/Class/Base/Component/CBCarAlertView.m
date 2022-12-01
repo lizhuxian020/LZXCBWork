@@ -8,7 +8,7 @@
 
 #import "CBCarAlertView.h"
 #import "CBAlertSelectableView.h"
-
+#import "MINPickerView.h"
 @implementation CBCarAlertView
 
 + (CBBasePopView *)viewWithPlaceholder:(NSString *)placeHolder
@@ -134,6 +134,87 @@
     CBBasePopView *popView = [[CBBasePopView alloc] initWithContentView:alertView];
     __weak CBBasePopView *wpopView = popView;
     [alertView setDidClickConfirm:^{
+        [wpopView dismiss];
+    }];
+    [alertView setDidClickCancel:^{
+        [wpopView dismiss];
+    }];
+    return popView;
+}
+
++ (CBBasePopView *)viewWithSQSZTitle:(NSString *)title
+                            initText:(NSString *)text
+                             confrim:(void(^)(NSString *contentStr))confirmBlk {
+    
+    NSArray *arrayData = @[
+        @"-12",
+        @"-11",
+        @"-10",
+        @"-9.5",
+        @"-9",
+        @"-8",
+        @"-7",
+        @"-6",
+        @"-5",
+        @"-4",
+        @"-3",
+        @"-2",
+        @"-1",
+        @"0",
+        @"+1",
+        @"+2",
+        @"+3",
+        @"+3.5",
+        @"+4",
+        @"+4.5",
+        @"+5",
+        @"+5.5",
+        @"+5.75",
+        @"+6",
+        @"+7",
+        @"+8",
+        @"+8.75",
+        @"+9",
+        @"+9.5",
+        @"+10",
+        @"+10.5",
+        @"+11",
+        @"+12",
+    ];
+    
+    NSString *targetText = @(text.intValue).description;
+    if (targetText.intValue > 0) {
+        targetText = [@"+" stringByAppendingString:targetText];
+    }
+    NSInteger index = [arrayData indexOfObject:targetText];
+    
+    UIView *v = [UIView new];
+    v.backgroundColor = [UIColor whiteColor];
+    UIPickerView *pickView = [UIPickerView new];
+    [v addSubview:pickView];
+    [pickView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(@0);
+        make.height.equalTo(@200);
+    }];
+    MINPickerView *delegate = [MINPickerView new];
+    delegate.dataArr = @[
+        arrayData,
+        @[Localized(@"时区")],
+    ];
+    pickView.delegate = delegate;
+    pickView.dataSource = delegate;
+    if (index != NSNotFound) {
+        [pickView selectRow:index inComponent:0 animated:NO];
+    }
+    
+    CBAlertBaseView *alertView = [[CBAlertBaseView alloc] initWithContentView:v title:title];
+    
+    CBBasePopView *popView = [[CBBasePopView alloc] initWithContentView:alertView];
+    __weak CBBasePopView *wpopView = popView;
+    [alertView setDidClickConfirm:^{
+        delegate;
+        NSInteger index = [pickView selectedRowInComponent:0];
+        NSLog(@"---seleted: %@", arrayData[index]);
         [wpopView dismiss];
     }];
     [alertView setDidClickCancel:^{

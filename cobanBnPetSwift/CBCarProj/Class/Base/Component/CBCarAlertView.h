@@ -27,10 +27,16 @@ NS_ASSUME_NONNULL_BEGIN
                          didClickData:(void(^)(NSString *contentStr, NSInteger index))didClickData
                               confrim:(void(^)(NSString *contentStr, NSInteger index))confirmBlk;
 
+/// 超速报警的设置弹框
 + (CBBasePopView *)viewWithCSBJTitle:(NSString *)title
                             initText:(NSString *)text
                                 open:(BOOL)open
                              confrim:(void(^)(NSString *contentStr))confirmBlk;
+/// 时区设置的弹框
++ (CBBasePopView *)viewWithSQSZTitle:(NSString *)title
+                            initText:(NSString *)text
+                             confrim:(void(^)(NSString *contentStr))confirmBlk;
+
 
 @end
 
