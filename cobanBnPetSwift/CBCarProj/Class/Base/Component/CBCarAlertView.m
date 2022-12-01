@@ -60,6 +60,7 @@
                          didClickData:(void(^)(NSString *contentStr, NSInteger index))didClickData
                               confrim:(void(^)(NSString *contentStr, NSInteger index))confirmBlk {
     CBAlertSelectableView *c = [[CBAlertSelectableView alloc] initWithData:dataArr];
+    c.currentIndex = index;
     CBAlertBaseView *alertView = [[CBAlertBaseView alloc] initWithContentView:c title:title];
     
     CBBasePopView *popView = [[CBBasePopView alloc] initWithContentView:alertView];

@@ -262,7 +262,7 @@
             [self.navigationController pushViewController: locationVC animated: YES];
 //            }
         } else if ([model.titleStr isEqualToString:_ControlConfigTitle_TT]) {
-            NSLog(@"%s", __FUNCTION__);
+            [self showTT];
         } else if ([model.titleStr isEqualToString:_ControlConfigTitle_DYD]) {
             [self showAlertOBDViewWithTitle:Localized(@"断油断电模式设置") indexPath: indexPath];
         } else if ([model.titleStr isEqualToString:_ControlConfigTitle_HFYD]) {
@@ -331,6 +331,13 @@
             [self.navigationController pushViewController: vc animated: YES];
         }
     }
+}
+- (void)showTT {
+    [[CBCarAlertView viewWithChooseData:@[Localized(@"听听模式"),Localized(@"定位模式")] selectedIndex:0 title:_ControlConfigTitle_TT didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
+        NSLog(@"%s: %@", __FUNCTION__, contentStr);
+    } confrim:^(NSString * _Nonnull contentStr, NSInteger index) {
+        NSLog(@"%s: %@", __FUNCTION__, contentStr);
+    }] pop];
 }
 - (void)showAlertOBDViewWithTitle:(NSString *)title indexPath:(NSIndexPath *)indexPath {
     NSMutableArray *titleArr = [NSMutableArray new];
