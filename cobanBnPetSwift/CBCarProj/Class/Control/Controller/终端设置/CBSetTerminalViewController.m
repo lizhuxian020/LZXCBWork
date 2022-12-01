@@ -69,11 +69,11 @@
         _arrayData = [NSMutableArray array];
         NSArray *arrayTitle = @[
             _ControlConfigTitle_SQSZ,
-            Localized(@"设置短信密码"),
-            Localized(@"设置授权号码") ,
-            Localized(@"始终在线") ,
-            Localized(@"休眠模式"),
-            Localized(@"设置油箱容积(L)"),
+            _ControlConfigTitle_SZDXMM,
+            _ControlConfigTitle_SZSQHM,
+//            Localized(@"始终在线") ,
+//            Localized(@"休眠模式"),
+            _ControlConfigTitle_SZYXRJ,
             Localized(@"油量校准"),
             Localized(@"设置里程初始值(m)"),
             Localized(@"疲劳驾驶参数设置"),
@@ -91,8 +91,8 @@
             @"怠速报表",
             @"短信-1",
             @"授权号码",
-            @"休眠",
-            @"休眠",
+//            @"休眠",
+//            @"休眠",
             @"油箱容量",
             @"校准",
             @"里程",
@@ -257,9 +257,13 @@
 //        [self.inputPopView updateTitle:Localized(@"设置短信密码") placehold:Localized(@"输入短信密码") isDigital:YES];
 //        [self.inputPopView popView];
         [self showSZDXMM];
-    } else if ([title isEqualToString:Localized(@"设置授权号码")]) {
+    } else if ([title isEqualToString:_ControlConfigTitle_SZSQHM]) {
         PhoneBookViewController *phoneBookVC = [[PhoneBookViewController alloc] init];
         [self.navigationController pushViewController: phoneBookVC animated: YES];
+    } else if ([title isEqualToString:_ControlConfigTitle_SZYXRJ]) {
+        //        [self.inputPopView updateTitle:Localized(@"设置油箱容积(L)") placehold:Localized(@"输入油箱容积(L)") isDigital:YES];
+        //        [self.inputPopView popView];
+        [self showSZYXRJ];
     } else if ([title isEqualToString:Localized(@"初始化设置")]) {
         [self.alertPopView updateTitle:Localized(@"初始化设置") msg:Localized(@"确定初始化?")];
         [self.alertPopView popView];
@@ -269,9 +273,6 @@
     } else if ([title isEqualToString:Localized(@"休眠模式")]) {
         [self.setRestPopView popView];
         [self.setRestPopView updateType:[NSString stringWithFormat:@"%ld",(long)self.termialControlStatusModel.restMod]];
-    } else if ([title isEqualToString:Localized(@"设置油箱容积(L)")]) {
-        [self.inputPopView updateTitle:Localized(@"设置油箱容积(L)") placehold:Localized(@"输入油箱容积(L)") isDigital:YES];
-        [self.inputPopView popView];
     } else if ([title isEqualToString:Localized(@"油量校准")]) {
         [self.setOilPopView popView];
     } else if ([title isEqualToString:Localized(@"设置里程初始值(m)")]) {
@@ -337,6 +338,13 @@
         NSLog(@"%@", contentStr);
     }] pop];
 }
+- (void)showSZYXRJ {
+    [[CBCarAlertView viewWithMultiInput:@[Localized(@"输入油箱容积(L)")] title:_ControlConfigTitle_SZYXRJ confirmCanDismiss:^BOOL(NSArray<NSString *> * _Nonnull contentStr) {
+        return NO;
+    } confrim:^(NSArray<NSString *> * _Nonnull contentStr) {
+        NSLog(@"%@", contentStr);
+    }] pop];
+}
 #pragma mark -- 开关点击
 - (void)terminalSwitchClick:(NSString *)titleStr status:(NSString *)status {
     NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
@@ -364,7 +372,7 @@
 - (void)updateTextFieldValue:(NSString *)inputStr returnTitle:(NSString *)title {
     NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
     [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
-    if ([title isEqualToString:Localized(@"设置短信密码")]) {
+    if ([title isEqualToString:_ControlConfigTitle_SZDXMM]) {
         if (inputStr.length != 6) {
             [HUD showHUDWithText:[Utils getSafeString:Localized(@"请输入6位数的密码")] withDelay:2.0];
             return;
