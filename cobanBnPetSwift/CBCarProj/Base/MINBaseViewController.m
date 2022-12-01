@@ -85,7 +85,7 @@
 - (void)initBarWithTitle:(NSString *)title isBack:(BOOL)isBack
 {
     self.navigationController.navigationBar.barTintColor = kNavBarBgColor;//kRGB(26, 151, 251);
-    self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;//UIBarStyleBlack;
+    self.navigationController.navigationBar.barStyle = UIBarStyleDefault;//UIBarStyleBlack;
     
     //self.title = title;
     self.navigationItem.title = title;
