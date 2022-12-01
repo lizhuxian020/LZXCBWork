@@ -17,7 +17,8 @@
 #define kViewVCBackgroundColor [UIColor whiteColor]
 //导航栏颜色
 //#define kNavBarBgColor [UIColor colorWithHexString:@"494949"]//RGB(26, 151, 251)//[UIColor whiteColor]
-#define kNavBarBgColor [UIColor colorWithHexString:@"2E2F41"]
+//#define kNavBarBgColor [UIColor colorWithHexString:@"2E2F41"]
+#define kNavBarBgColor [UIColor colorWithRed: 255 /255.0 green: 255/255.0 blue: 255/255.0 alpha:1.0]
 //主色调
 #define kAppMainColor RGB(26, 151, 251)//kRGB(28.0,150.0,242.0)
 //棕色
@@ -29,7 +30,8 @@
 //cell 文本颜色
 #define kCellTextColor [UIColor colorWithRed: 73 /255.0 green: 73/255.0 blue: 73/255.0 alpha:1.0]
 //背景颜色
-#define kBackColor [UIColor colorWithRed: 247 /255.0 green: 247/255.0 blue: 247/255.0 alpha:1.0]
+//#define kBackColor [UIColor colorWithRed: 247 /255.0 green: 247/255.0 blue: 247/255.0 alpha:1.0]
+#define kBackColor [UIColor colorWithRed: 255.0 /255.0 green: 255.0/255.0 blue: 255.0/255.0 alpha:1.0]
 //输入框内容颜色
 #define kTextFieldColor [UIColor colorWithRed: 176 /255.0 green: 176/255.0 blue: 176/255.0 alpha:1.0]
 //登录注册忘记密码的颜色

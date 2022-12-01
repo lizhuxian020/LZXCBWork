@@ -49,7 +49,7 @@
     
     // 状态栏字体颜色
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;//UIStatusBarStyleLightContent;
-    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor blackColor]}];
     
     if (@available(iOS 13.0, *)) {// iOS 13 不能直接获取到statusbar 手动添加个view到window上当做statusbar背景
          if (![AppDelegate shareInstance].customizedStatusBar) {
@@ -176,7 +176,8 @@
 
 - (void)showBackGround
 {
-    self.view.backgroundColor = kRGB(247, 247, 247);
+//    self.view.backgroundColor = kRGB(247, 247, 247);
+    self.view.backgroundColor = kRGB(255, 255, 255);
 }
 
 - (void)backBtnClick
