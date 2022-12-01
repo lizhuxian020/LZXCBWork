@@ -266,15 +266,25 @@
         } else if ([model.titleStr isEqualToString:_ControlConfigTitle_DYD]) {
             [self showAlertOBDViewWithTitle:Localized(@"断油断电模式设置") indexPath: indexPath];
         } else if ([model.titleStr isEqualToString:_ControlConfigTitle_HFYD]) {
-            NSLog(@"%s", __FUNCTION__);
+            [self showHFYD];
         } else if ([model.titleStr isEqualToString:_ControlConfigTitle_TZBJ]) {
             [self stopWarnClick];
+        } else if ([model.titleStr isEqualToString:_ControlConfigTitle_SDJ]) {
+            NSLog(@"%s", __FUNCTION__);
+        } else if ([model.titleStr isEqualToString:_ControlConfigTitle_YCKZ]) {
+            NSLog(@"%s", __FUNCTION__);
+        } else if ([model.titleStr isEqualToString:_ControlConfigTitle_BFCF]) {
+            [self arming_disarmingClick];
+        } else if ([model.titleStr isEqualToString:_ControlConfigTitle_HFCX]) {
+            CBEnquiryFeeViewController *vc = [[CBEnquiryFeeViewController alloc] init];
+            vc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController: vc animated: YES];
+        } else if ([model.titleStr isEqualToString:_ControlConfigTitle_CSBJ]) {
+            [self showCSBJ];
         } else if ([model.titleStr isEqualToString:Localized(@"电子围栏")]) {
             ElectronicFenceViewController *electronicFenceVC = [[ElectronicFenceViewController alloc] init];
             electronicFenceVC.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController: electronicFenceVC animated: YES];
-        } else if ([model.titleStr isEqualToString:Localized(@"布防/撤防")]) {
-            [self arming_disarmingClick];
         } else if ([model.titleStr isEqualToString:Localized(@"振动报警")]) {
         } else if ([model.titleStr isEqualToString:Localized(@"低电报警")]) {
         } else if ([model.titleStr isEqualToString:Localized(@"掉电报警")]) {
@@ -321,10 +331,6 @@
             CBSetTerminalViewController *terminalVC = [[CBSetTerminalViewController alloc] init];
             terminalVC.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController: terminalVC animated: YES];
-        } else if ([model.titleStr isEqualToString:Localized(@"话费查询")]) {
-            CBEnquiryFeeViewController *vc = [[CBEnquiryFeeViewController alloc] init];
-            vc.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController: vc animated: YES];
         } else if ([model.titleStr isEqualToString:Localized(@"请求OBD消息")]) {
             CBOBDMsgViewController *vc = [[CBOBDMsgViewController alloc] init];
             vc.hidesBottomBarWhenPushed = YES;
@@ -339,6 +345,7 @@
         NSLog(@"%s: %@", __FUNCTION__, contentStr);
     }] pop];
 }
+
 - (void)showAlertOBDViewWithTitle:(NSString *)title indexPath:(NSIndexPath *)indexPath {
     NSMutableArray *titleArr = [NSMutableArray new];
     CBControlModel *model = self.arrayData[indexPath.row];
@@ -459,6 +466,19 @@
 //    alertView.leftBtnClick = ^{
 //        [weakAlertView hideView];
 //    };
+}
+
+// 恢复油电
+- (void)showHFYD {
+    [[CBCarAlertView viewWithAlertTips:Localized(@"是否对设备确定恢复油电？") title:_ControlConfigTitle_HFYD confrim:^(NSString * _Nonnull contentStr) {
+                
+    }] pop];
+}
+- (void)showCSBJ {
+    [[CBCarAlertView viewWithCSBJTitle:_ControlConfigTitle_CSBJ initText:@"40" open:1 confrim:^(NSString * _Nonnull contentStr) {
+            
+    }] pop];
+   
 }
 //- (void)showAlertPickerViewWithTitle:(NSString *)title selectTitle:(NSString *)selectTitle indexPath:(NSIndexPath *)indexPath {
 //    ControlTableViewCell *cell = [self.tableView cellForRowAtIndexPath: indexPath];
@@ -609,36 +629,47 @@
 }
 #pragma mark -- 停止报警
 - (void)stopWarnClick {
-    [self.alertPopView updateTitle:Localized(@"停止报警") msg:Localized(@"确定停止报警?")];
-    [self.alertPopView popView];
+    kWeakSelf(self);
+    [[CBCarAlertView viewWithAlertTips:Localized(@"确定停止报警?") title:_ControlConfigTitle_TZBJ confrim:^(NSString * _Nonnull contentStr) {
+        [weakself clickType];
+    }] pop];
+//    [self.alertPopView updateTitle:Localized(@"停止报警") msg:Localized(@"确定停止报警?")];
+//    [self.alertPopView popView];
 }
 #pragma mark -- 停止报警 -- 代理
-- (void)clickType:(NSString *)title {
-    if ([title isEqualToString:Localized(@"停止报警")]) {
-        NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
-        [paramters setObject:@"0" forKey:@"warnStop"];
-        [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
-        [self editControlNewRequest:paramters];
-    }
+- (void)clickType {
+    NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
+    [paramters setObject:@"0" forKey:@"warnStop"];
+    [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
+    [self editControlNewRequest:paramters];
 }
 #pragma mark -- 布防/撤防
 - (void)arming_disarmingClick {
-    [self.armingAlertView popView];
-    NSArray *array = @[Localized(@"布防"),Localized(@"撤防"),Localized(@"静音布防")];
-    //silent_arm
-    NSString *selectTitle = @"";
-    if ([self.listModel.silentArm isEqualToString:@"1"]) {
-        // 静音布防
-        selectTitle = Localized(@"静音布防");
-    } else if (self.listModel.cfbf == 1) {
-        // 布防
-        selectTitle = Localized(@"布防");
-    } else {
-        // 撤防
-        selectTitle = Localized(@"撤防");
+    [[CBCarAlertView viewWithChooseData:@[Localized(@"布防"),Localized(@"撤防"),Localized(@"静音布防")]
+                          selectedIndex:1
+                                  title:_ControlConfigTitle_BFCF
+                           didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
+        
     }
-    [self.armingAlertView updateTitle:Localized(@"布防/撤防") menuArray:array seletedTitle:selectTitle];
-    //[self.armingAlertView popView];
+                                confrim:^(NSString * _Nonnull contentStr, NSInteger index) {
+        
+    }] pop];
+//    [self.armingAlertView popView];
+//    NSArray *array = @[Localized(@"布防"),Localized(@"撤防"),Localized(@"静音布防")];
+//    //silent_arm
+//    NSString *selectTitle = @"";
+//    if ([self.listModel.silentArm isEqualToString:@"1"]) {
+//        // 静音布防
+//        selectTitle = Localized(@"静音布防");
+//    } else if (self.listModel.cfbf == 1) {
+//        // 布防
+//        selectTitle = Localized(@"布防");
+//    } else {
+//        // 撤防
+//        selectTitle = Localized(@"撤防");
+//    }
+//    [self.armingAlertView updateTitle:Localized(@"布防/撤防") menuArray:array seletedTitle:selectTitle];
+//    //[self.armingAlertView popView];
 }
 #pragma mark -- 布防/撤防 点击代理
 - (void)pickerPopViewClickIndex:(NSInteger)index {
