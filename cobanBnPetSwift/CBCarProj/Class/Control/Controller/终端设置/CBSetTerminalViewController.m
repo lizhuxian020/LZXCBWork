@@ -253,9 +253,10 @@
 //        CBTimeZoneViewController *vc = [CBTimeZoneViewController new];
 //        [self.navigationController pushViewController:vc animated: YES];
         [self showSQSZ];
-    } else if ([title isEqualToString:Localized(@"设置短信密码")]) {
-        [self.inputPopView updateTitle:Localized(@"设置短信密码") placehold:Localized(@"输入短信密码") isDigital:YES];
-        [self.inputPopView popView];
+    } else if ([title isEqualToString:_ControlConfigTitle_SZDXMM]) {
+//        [self.inputPopView updateTitle:Localized(@"设置短信密码") placehold:Localized(@"输入短信密码") isDigital:YES];
+//        [self.inputPopView popView];
+        [self showSZDXMM];
     } else if ([title isEqualToString:Localized(@"设置授权号码")]) {
         PhoneBookViewController *phoneBookVC = [[PhoneBookViewController alloc] init];
         [self.navigationController pushViewController: phoneBookVC animated: YES];
@@ -321,6 +322,19 @@
 - (void)showSQSZ {
     [[CBCarAlertView viewWithSQSZTitle:_ControlConfigTitle_SQSZ initText:self.termialControlStatusModel.timeZone confrim:^(NSString * _Nonnull contentStr) {
                 
+    }] pop];
+}
+
+- (void)showSZDXMM {
+    [[CBCarAlertView viewWithMultiInput:@[Localized(@"输入6位短信密码"),Localized(@"请再次输入密码")] title:_ControlConfigTitle_SZDXMM confirmCanDismiss:^BOOL(NSArray<NSString *> * _Nonnull contentStr) {
+        if ([contentStr.firstObject isEqualToString:contentStr.lastObject]) {
+            return YES;
+        } else {
+            [HUD showHUDWithText:@"密码不一致"];
+            return NO;
+        }
+    } confrim:^(NSArray<NSString *> * _Nonnull contentStr) {
+        NSLog(@"%@", contentStr);
     }] pop];
 }
 #pragma mark -- 开关点击

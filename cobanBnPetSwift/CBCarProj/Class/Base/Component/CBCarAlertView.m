@@ -11,47 +11,74 @@
 #import "MINPickerView.h"
 @implementation CBCarAlertView
 
-+ (CBBasePopView *)viewWithPlaceholder:(NSString *)placeHolder
-                                 title:(NSString *)title
-                               confrim:(void(^)(NSString *contentStr))confirmBlk {
++ (CBBasePopView *)viewWithMultiInput:(NSArray<NSString *> *)placeHolderArr
+                                title:(NSString *)title
+                    confirmCanDismiss:(nullable BOOL(^)(NSArray<NSString *> *contentStr))confirmCanDismiss
+                              confrim:(void(^)(NSArray<NSString *> *contentStr))confirmBlk {
     UIView *c = [UIView new];
     
-    UIView *inputV = [UIView new];
-    UITextField *tf = [UITextField new];
-    tf.placeholder = placeHolder;
-    [inputV addSubview:tf];
-    [tf mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.edges.equalTo(@0);
-        make.top.bottom.equalTo(@0);
-        make.left.equalTo(@10);
-        make.right.equalTo(@-10);
-        make.height.equalTo(@30);
-    }];
-    inputV.layer.cornerRadius = 15;
-    [inputV.layer setMasksToBounds:YES];
-    inputV.layer.borderColor = UIColor.blackColor.CGColor;
-    inputV.layer.borderWidth = 1;
+    NSMutableArray *tfArr = [NSMutableArray array];
+    UIView *lastView = nil;
+    for (NSString *placeHolder in placeHolderArr) {
+        UIView *inputV = [UIView new];
+        UITextField *tf = [UITextField new];
+        [tfArr addObject:tf];
+        tf.placeholder = placeHolder;
+        [inputV addSubview:tf];
+        [tf mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.bottom.equalTo(@0);
+            make.left.equalTo(@10);
+            make.right.equalTo(@-10);
+            make.height.equalTo(@60);
+        }];
+        inputV.layer.cornerRadius = 15;
+        [inputV.layer setMasksToBounds:YES];
+        inputV.layer.borderColor = KCarLineColor.CGColor;
+        inputV.layer.borderWidth = 1;
+        
+        [c addSubview:inputV];
+        [inputV mas_makeConstraints:^(MASConstraintMaker *make) {
+            if (lastView) {
+                make.top.equalTo(lastView.mas_bottom).mas_offset(10);
+            } else {
+                make.top.equalTo(@10);
+            }
+            make.left.equalTo(@10);
+            make.right.equalTo(@-10);
+        }];
+        
+        lastView = inputV;
+    }
     
-    [c addSubview:inputV];
-    [inputV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.left.equalTo(@10);
-        make.bottom.right.equalTo(@-10);
+    [lastView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(@-10);
     }];
+    
+    
     c.backgroundColor = UIColor.whiteColor;
     
-    __weak UITextField *wtf = tf;
     CBAlertBaseView *alertView = [[CBAlertBaseView alloc] initWithContentView:c title:title];
     
     CBBasePopView *popView = [[CBBasePopView alloc] initWithContentView:alertView];
     __weak CBBasePopView *wpopView = popView;
     [alertView setDidClickConfirm:^{
-        confirmBlk(wtf.text);
-        [wpopView dismiss];
+        confirmBlk([tfArr valueForKey:@"text"]);
+        if (!confirmCanDismiss || confirmCanDismiss([tfArr valueForKey:@"text"])) {
+            [wpopView dismiss];
+        }
     }];
     [alertView setDidClickCancel:^{
         [wpopView dismiss];
     }];
     return popView;
+}
+
++ (CBBasePopView *)viewWithPlaceholder:(NSString *)placeHolder
+                                 title:(NSString *)title
+                               confrim:(void(^)(NSString *contentStr))confirmBlk {
+    return [self viewWithMultiInput:@[placeHolder] title:title confirmCanDismiss:nil confrim:^(NSArray<NSString *> * _Nonnull contentStr) {
+        confirmBlk(contentStr.firstObject);
+    }];
 }
 
 + (CBBasePopView *)viewWithAlertTips:(NSString *)tips

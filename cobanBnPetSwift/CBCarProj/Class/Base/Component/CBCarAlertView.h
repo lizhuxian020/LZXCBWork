@@ -12,6 +12,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CBCarAlertView : NSObject
 
++ (CBBasePopView *)viewWithMultiInput:(NSArray<NSString *> *)placeHolderArr
+                                title:(NSString *)title
+                    confirmCanDismiss:(nullable BOOL(^)(NSArray<NSString *> *contentStr))confirmCanDismiss
+                              confrim:(void(^)(NSArray<NSString *> *contentStr))confirmBlk;
 
 + (CBBasePopView *)viewWithPlaceholder:(NSString *)placeHolder
                                  title:(NSString *)title

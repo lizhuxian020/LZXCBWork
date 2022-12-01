@@ -33,13 +33,13 @@
 }
 
 - (void)createUI {
-    self.titleLbl = [MINUtils createLabelWithText:self.title size:14 alignment:NSTextAlignmentCenter textColor:UIColor.whiteColor];
+    self.titleLbl = [MINUtils createLabelWithText:self.title size:20 alignment:NSTextAlignmentCenter textColor:UIColor.whiteColor];
     UIView *titleC = [UIView new];
     [titleC addSubview:self.titleLbl];
     [self.titleLbl mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(@0);
-        make.top.equalTo(@5);
-        make.bottom.equalTo(@-5);
+        make.top.equalTo(@10);
+        make.bottom.equalTo(@-10);
     }];
     [self addSubview:titleC];
     [titleC mas_makeConstraints:^(MASConstraintMaker *make) {

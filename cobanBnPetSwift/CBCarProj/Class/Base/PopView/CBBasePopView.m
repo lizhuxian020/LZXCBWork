@@ -21,8 +21,29 @@
     if (self) {
         self.contentView = content;
         [self createUI];
+        //监听键盘出现和消失
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     }
     return  self;;
+}
+
+- (void)keyboardWillShow:(id)notify {
+    [self.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(@-100);
+    }];
+    [UIView animateWithDuration:0.25 animations:^{
+        [self layoutIfNeeded];
+    }];
+}
+
+- (void)keyboardWillHide:(id)notify {
+    [self.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(@0);
+    }];
+    [UIView animateWithDuration:0.25 animations:^{
+        [self layoutIfNeeded];
+    }];
 }
 
 - (void)createUI {
@@ -41,7 +62,7 @@
     [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(@(horMargin));
         make.right.equalTo(@(-horMargin));
-        make.centerY.equalTo(@-100);
+        make.centerY.equalTo(@-200);
     }];
     self.contentView.alpha = 0;
     
@@ -53,7 +74,7 @@
     [self.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(@0);
     }];
-    [UIView animateWithDuration:0.5 animations:^{
+    [UIView animateWithDuration:0.25 animations:^{
         self.contentView.alpha = 1;
         self.backgroundColor = [UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:0.5];
         [self layoutIfNeeded];
@@ -62,9 +83,9 @@
 
 -(void)dismiss {
     [self.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(@-100);
+        make.centerY.equalTo(@-200);
     }];
-    [UIView animateWithDuration:0.5 animations:^{
+    [UIView animateWithDuration:0.25 animations:^{
         self.contentView.alpha = 0;
         self.backgroundColor = [UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:0];
         [self layoutIfNeeded];
