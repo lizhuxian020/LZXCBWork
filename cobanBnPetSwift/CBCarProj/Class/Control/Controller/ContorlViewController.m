@@ -40,7 +40,7 @@
 @property (nonatomic, weak) UITextField *textField; // 警告框的输入框
 @property (nonatomic, weak) UILabel *btnLabel;
 @property (nonatomic, weak) UIButton *alertButton;
-@property (nonatomic, copy) NSArray *restArr; // 休眠模式的可选项
+//@property (nonatomic, copy) NSArray *restArr; // 休眠模式的可选项
 @property (nonatomic, weak) NSIndexPath *currentIndexPath;
 //@property (nonatomic, strong) UIButton *obdTopBtn;
 //@property (nonatomic, strong) UIButton *obdBttomBtn;
@@ -70,7 +70,7 @@
     // Do any additional setup after loading the view.
     
     [self createUI];
-    self.restArr = @[@[Localized(@"长在线"), Localized(@"时间休眠"), Localized(@"振动休眠"), Localized(@"深度振动休眠"), Localized(@"定时报告"), Localized(@"定时报告+深度振动休眠")]];
+//    self.restArr = @[@[Localized(@"长在线"), Localized(@"时间休眠"), Localized(@"振动休眠"), Localized(@"深度振动休眠"), Localized(@"定时报告"), Localized(@"定时报告+深度振动休眠")]];
 }
 - (NSMutableArray *)arrayData {
     if (!_arrayData) {
@@ -154,18 +154,18 @@
 }
 
 #pragma mark - Action
-- (void)alertButtonClick {
-    MINPickerView *pickerView = [[MINPickerView alloc] init];
-    pickerView.titleLabel.text = @"";
-    pickerView.dataArr = self.restArr;
-    pickerView.delegate = self;
-    [self.view addSubview: pickerView];
-    [pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.equalTo(self.view);
-        make.height.mas_equalTo(SCREEN_HEIGHT);
-    }];
-    [pickerView showView];
-}
+//- (void)alertButtonClick {
+//    MINPickerView *pickerView = [[MINPickerView alloc] init];
+//    pickerView.titleLabel.text = @"";
+//    pickerView.dataArr = self.restArr;
+//    pickerView.delegate = self;
+//    [self.view addSubview: pickerView];
+//    [pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.right.top.equalTo(self.view);
+//        make.height.mas_equalTo(SCREEN_HEIGHT);
+//    }];
+//    [pickerView showView];
+//}
 //- (void)obdButtonClick:(UIButton *)button {
 //    if (button == self.obdTopBtn) {
 //        if (self.isObdMessage == YES) {
@@ -304,10 +304,12 @@
             MultiplePhotoViewController *multiplePhoto = [[MultiplePhotoViewController alloc] init];
             multiplePhoto.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController: multiplePhoto animated: YES];
-        } else if ([model.titleStr isEqualToString:Localized(@"休眠模式")]) {
-            NSString *title = self.restArr[0][self.listModel.restMod];
-            [self showAlertPickerViewWithTitle:Localized(@"休眠模式") selectTitle: title indexPath: indexPath];
-        } else if ([model.titleStr isEqualToString:Localized(@"配置设备参数")]) {
+        }
+//        else if ([model.titleStr isEqualToString:Localized(@"休眠模式")]) {
+//            NSString *title = self.restArr[0][self.listModel.restMod];
+//            [self showAlertPickerViewWithTitle:Localized(@"休眠模式") selectTitle: title indexPath: indexPath];
+//        }
+        else if ([model.titleStr isEqualToString:Localized(@"配置设备参数")]) {
             ConfigurationParameterViewController *configVC = [[ConfigurationParameterViewController alloc] init];
             configVC.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController: configVC animated: YES];
@@ -451,43 +453,43 @@
 //        [weakAlertView hideView];
 //    };
 }
-- (void)showAlertPickerViewWithTitle:(NSString *)title selectTitle:(NSString *)selectTitle indexPath:(NSIndexPath *)indexPath {
-    ControlTableViewCell *cell = [self.tableView cellForRowAtIndexPath: indexPath];
-    __weak __typeof__(self) weakSelf = self;
-    MINAlertView *alertView = [[MINAlertView alloc] init];
-    __weak MINAlertView *weakAlertView = alertView;
-    alertView.titleLabel.text = title;
-    [weakSelf.view addSubview: alertView];
-    [alertView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.bottom.right.equalTo(weakSelf.view);
-        make.height.mas_equalTo(SCREEN_HEIGHT);
-    }];
-    weakSelf.alertButton = [MINUtils createBorderBtnWithArrowImage];
-    [alertView.contentView addSubview: weakSelf.alertButton];
-    [weakSelf.alertButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(alertView.contentView);
-        make.centerY.equalTo(alertView.contentView).with.offset(-5 * KFitHeightRate);
-        make.height.mas_equalTo(40 * KFitHeightRate);
-        make.width.mas_equalTo(250 * KFitWidthRate);
-    }];
-    [weakSelf.alertButton addTarget: self action: @selector(alertButtonClick) forControlEvents: UIControlEventTouchUpInside];
-    weakSelf.btnLabel = [MINUtils createLabelWithText: selectTitle size: 15 * KFitHeightRate alignment: NSTextAlignmentLeft textColor: kRGB(96, 96, 96)];
-    [weakSelf.alertButton addSubview: weakSelf.btnLabel];
-    [weakSelf.btnLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.bottom.equalTo(weakSelf.alertButton);
-        make.left.equalTo(weakSelf.alertButton).with.offset(12.5 * KFitWidthRate);
-        make.width.mas_equalTo(200 * KFitWidthRate);
-    }];
-    alertView.rightBtnClick = ^{
-        [weakAlertView hideView];
-            // 修改model的数据，不要忘记了
-        cell.detailLabel.text = weakSelf.btnLabel.text;
-        [weakSelf editRowDataWithIndexPath: indexPath data: [NSString stringWithFormat: @"%d" , weakSelf.listModel.restMod] switchStr:nil];
-    };
-    alertView.leftBtnClick = ^{
-        [weakAlertView hideView];
-    };
-}
+//- (void)showAlertPickerViewWithTitle:(NSString *)title selectTitle:(NSString *)selectTitle indexPath:(NSIndexPath *)indexPath {
+//    ControlTableViewCell *cell = [self.tableView cellForRowAtIndexPath: indexPath];
+//    __weak __typeof__(self) weakSelf = self;
+//    MINAlertView *alertView = [[MINAlertView alloc] init];
+//    __weak MINAlertView *weakAlertView = alertView;
+//    alertView.titleLabel.text = title;
+//    [weakSelf.view addSubview: alertView];
+//    [alertView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.bottom.right.equalTo(weakSelf.view);
+//        make.height.mas_equalTo(SCREEN_HEIGHT);
+//    }];
+//    weakSelf.alertButton = [MINUtils createBorderBtnWithArrowImage];
+//    [alertView.contentView addSubview: weakSelf.alertButton];
+//    [weakSelf.alertButton mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.centerX.equalTo(alertView.contentView);
+//        make.centerY.equalTo(alertView.contentView).with.offset(-5 * KFitHeightRate);
+//        make.height.mas_equalTo(40 * KFitHeightRate);
+//        make.width.mas_equalTo(250 * KFitWidthRate);
+//    }];
+//    [weakSelf.alertButton addTarget: self action: @selector(alertButtonClick) forControlEvents: UIControlEventTouchUpInside];
+//    weakSelf.btnLabel = [MINUtils createLabelWithText: selectTitle size: 15 * KFitHeightRate alignment: NSTextAlignmentLeft textColor: kRGB(96, 96, 96)];
+//    [weakSelf.alertButton addSubview: weakSelf.btnLabel];
+//    [weakSelf.btnLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.bottom.equalTo(weakSelf.alertButton);
+//        make.left.equalTo(weakSelf.alertButton).with.offset(12.5 * KFitWidthRate);
+//        make.width.mas_equalTo(200 * KFitWidthRate);
+//    }];
+//    alertView.rightBtnClick = ^{
+//        [weakAlertView hideView];
+//            // 修改model的数据，不要忘记了
+//        cell.detailLabel.text = weakSelf.btnLabel.text;
+//        [weakSelf editRowDataWithIndexPath: indexPath data: [NSString stringWithFormat: @"%d" , weakSelf.listModel.restMod] switchStr:nil];
+//    };
+//    alertView.leftBtnClick = ^{
+//        [weakAlertView hideView];
+//    };
+//}
 - (void)editRowDataWithIndexPath:(NSIndexPath *)indexPath data:(NSString *)data switchStr:(NSString *)switchStr {
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:3];
     dic[@"dno"] = [CBCommonTools CBdeviceInfo].dno?:@"";
@@ -561,12 +563,12 @@
         [self.tableView reloadData];
     }];
 }
-#pragma mark - PickerViewDelegate
-- (void)minPickerView:(MINPickerView *)pickerView didSelectWithDic:(NSDictionary *)dic {
-    NSNumber *number = dic[@"0"];
-    self.btnLabel.text = self.restArr[0][[number integerValue]];
-    self.listModel.restMod = [number intValue];
-}
+//#pragma mark - PickerViewDelegate
+//- (void)minPickerView:(MINPickerView *)pickerView didSelectWithDic:(NSDictionary *)dic {
+//    NSNumber *number = dic[@"0"];
+//    self.btnLabel.text = self.restArr[0][[number integerValue]];
+//    self.listModel.restMod = [number intValue];
+//}
 #pragma mark -- 电话回拨
 - (void)phoneCallBackClick {
     [self.inputPopView updateTitle:Localized(@"电话回拨") placehold:Localized(@"输入电话号码") isDigital:YES];
