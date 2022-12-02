@@ -74,11 +74,11 @@
 //            Localized(@"始终在线") ,
 //            Localized(@"休眠模式"),
             _ControlConfigTitle_SZYXRJ,
-            Localized(@"油量校准"),
-            Localized(@"设置里程初始值(m)"),
-            Localized(@"疲劳驾驶参数设置"),
-            Localized(@"碰撞报警参数设置"),
-            Localized(@"Acc工作通知"),
+            _ControlConfigTitle_SZYLJZ,
+            _ControlConfigTitle_SZLCCSZ,
+//            Localized(@"疲劳驾驶参数设置"),
+//            Localized(@"碰撞报警参数设置"),
+            _ControlConfigTitle_ACCGZTZ,
             Localized(@"漂移抑制"),
             Localized(@"设置转弯补报角度(<180°)"),
             Localized(@"设置报警短信发送次数"),
@@ -96,8 +96,8 @@
             @"油箱容量",
             @"校准",
             @"里程",
-            @"GPS-疲劳驾驶",
-            @"碰撞报警",
+//            @"GPS-疲劳驾驶",
+//            @"碰撞报警",
             @"速度报表",
             @"震动报警",
             @"转弯",
@@ -264,6 +264,13 @@
         //        [self.inputPopView updateTitle:Localized(@"设置油箱容积(L)") placehold:Localized(@"输入油箱容积(L)") isDigital:YES];
         //        [self.inputPopView popView];
         [self showSZYXRJ];
+    } else if ([title isEqualToString:_ControlConfigTitle_SZYLJZ]) {
+//        [self.setOilPopView popView];
+        [self showSZYLJZ];
+    } else if ([title isEqualToString:_ControlConfigTitle_SZLCCSZ]) {
+//        [self.inputPopView updateTitle:Localized(@"设置里程初始值(m)") placehold:Localized(@"输入里程初始值(m)") isDigital:YES];
+//        [self.inputPopView popView];
+        [self showSZLCCSZ];
     } else if ([title isEqualToString:Localized(@"初始化设置")]) {
         [self.alertPopView updateTitle:Localized(@"初始化设置") msg:Localized(@"确定初始化?")];
         [self.alertPopView popView];
@@ -273,11 +280,8 @@
     } else if ([title isEqualToString:Localized(@"休眠模式")]) {
         [self.setRestPopView popView];
         [self.setRestPopView updateType:[NSString stringWithFormat:@"%ld",(long)self.termialControlStatusModel.restMod]];
-    } else if ([title isEqualToString:Localized(@"油量校准")]) {
+    } else if ([title isEqualToString:_ControlConfigTitle_SZYLJZ]) {
         [self.setOilPopView popView];
-    } else if ([title isEqualToString:Localized(@"设置里程初始值(m)")]) {
-        [self.inputPopView updateTitle:Localized(@"设置里程初始值(m)") placehold:Localized(@"输入里程初始值(m)") isDigital:YES];
-        [self.inputPopView popView];
     } else if ([title isEqualToString:Localized(@"疲劳驾驶参数设置")]) {
         FatigueDrivingViewController *fatigueDrivingVC = [[FatigueDrivingViewController alloc] init];
         [self.navigationController pushViewController: fatigueDrivingVC animated: YES];
@@ -345,11 +349,26 @@
         NSLog(@"%@", contentStr);
     }] pop];
 }
+
+- (void)showSZYLJZ {
+    [[CBCarAlertView viewWithChooseData:@[Localized(@"零值校准"),Localized(@"满值校准")] selectedIndex:0 title:_ControlConfigTitle_SZYLJZ didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
+        
+    } confrim:^(NSString * _Nonnull contentStr, NSInteger index) {
+        
+    }] pop];
+}
+- (void)showSZLCCSZ {
+    [[CBCarAlertView viewWithMultiInput:@[Localized(@"输入里程初始值(m)")] title:_ControlConfigTitle_SZLCCSZ confirmCanDismiss:^BOOL(NSArray<NSString *> * _Nonnull contentStr) {
+        return NO;
+    } confrim:^(NSArray<NSString *> * _Nonnull contentStr) {
+        
+    }] pop];
+}
 #pragma mark -- 开关点击
 - (void)terminalSwitchClick:(NSString *)titleStr status:(NSString *)status {
     NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
     [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
-    if ([titleStr isEqualToString:Localized(@"Acc工作通知")]) {
+    if ([titleStr isEqualToString:_ControlConfigTitle_ACCGZTZ]) {
         [paramters setObject:status forKey:@"accNotice"];
         [self terminalEditControlNewRequest:paramters];
     } else if ([titleStr isEqualToString:Localized(@"漂移抑制")]) {

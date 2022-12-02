@@ -44,10 +44,10 @@
             }
             make.left.equalTo(@15);
             make.right.equalTo(@-15);
-            make.height.equalTo(@20);
+            make.height.equalTo(@50);
         }];
         lastLbl = lbl;
-        lbl.layer.cornerRadius = 10;
+        lbl.layer.cornerRadius = 25;
         [lbl.layer setMasksToBounds:YES];
         lbl.userInteractionEnabled = YES;
         [lbl bk_whenTapped:^{

@@ -16,7 +16,7 @@
 @property (nonatomic, strong) UIImageView *controlImageView;
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UILabel *centerLabel;
-@property (nonatomic, strong) MINSwitchView *switchView;
+@property (nonatomic, strong) UISwitch *switchView;
 @property (nonatomic, strong) UILabel *detailLabel;
 @property (nonatomic, strong) UIImageView *detailImageView;
 @property (nonatomic, strong) NSIndexPath *indexPath;

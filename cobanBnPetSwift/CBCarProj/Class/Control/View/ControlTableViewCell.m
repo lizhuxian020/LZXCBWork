@@ -61,8 +61,10 @@
             make.size.mas_equalTo(CGSizeMake(detailImage.size.width * KFitHeightRate, detailImage.size.height * KFitHeightRate));
         }];
         
-        _switchView = [[MINSwitchView alloc] initWithOnImage:[UIImage imageNamed: @"开关-关"] offImage:[UIImage imageNamed: @"开关-开"] switchImage:[UIImage imageNamed: @"开关-按钮"]];
-        _switchView.delegate = self;
+//        _switchView = [[MINSwitchView alloc] initWithOnImage:[UIImage imageNamed: @"开关-关"] offImage:[UIImage imageNamed: @"开关-开"] switchImage:[UIImage imageNamed: @"开关-按钮"]];
+        _switchView = [UISwitch new];
+//        _switchView.delegate = self;
+        [_switchView addTarget:self action:@selector(switchViewDidChange:) forControlEvents:UIControlEventValueChanged];
         [backView addSubview: _switchView];
         [_switchView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(backView);
@@ -219,6 +221,8 @@
         // 终端设置
         else if ([titleStr isEqualToString:_ControlConfigTitle_SQSZ]) {
             self.switchView.hidden = YES;
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_SZYLJZ]) {
+            self.switchView.hidden = YES;
         } else if ([titleStr isEqualToString:Localized(@"设置短信密码")]) {
             self.switchView.hidden = YES;
         } else if ([titleStr isEqualToString:Localized(@"设置授权号码")]) {
@@ -234,9 +238,6 @@
             self.switchView.hidden = YES;
         } else if ([titleStr isEqualToString:Localized(@"设置油箱容积(L)")]) {
             self.switchView.hidden = YES;
-        } else if ([titleStr isEqualToString:Localized(@"油量校准")]) {
-            self.detailLabel.hidden = YES;
-            self.switchView.hidden = YES;
         } else if ([titleStr isEqualToString:Localized(@"设置里程初始值(m)")]) {
             self.switchView.hidden = YES;
         } else if ([titleStr isEqualToString:Localized(@"疲劳驾驶参数设置")]) {
@@ -245,7 +246,7 @@
         } else if ([titleStr isEqualToString:Localized(@"碰撞报警参数设置")]) {
             self.detailLabel.hidden = YES;
             self.switchView.hidden = YES;
-        } else if ([titleStr isEqualToString:Localized(@"Acc工作通知")]) {
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_ACCGZTZ]) {
             self.detailLabel.hidden = YES;
             self.detailImageView.hidden = YES;
         } else if ([titleStr isEqualToString:Localized(@"漂移抑制")]) {
@@ -277,28 +278,28 @@
             self.detailLabel.hidden = NO;
             self.detailLabel.text = controlListModel.phone?:@"";
         } else if ([titleStr isEqualToString:Localized(@"多次定位")]) {
-            self.switchView.isON = !controlListModel.dcdd;
+            self.switchView.on = !controlListModel.dcdd;
         } else if ([titleStr isEqualToString:Localized(@"断油断电")]) {
-            self.switchView.isON = !controlListModel.dydd;
+            self.switchView.on = !controlListModel.dydd;
         }
         // 报警设置
         else if ([titleStr isEqualToString:Localized(@"掉电报警")]) {
-            self.switchView.isON = !controlListModel.warmDiaodan;
+            self.switchView.on = !controlListModel.warmDiaodan;
         }  else if ([titleStr isEqualToString:Localized(@"低电报警")]) {
-            self.switchView.isON = !controlListModel.warmDidian;
+            self.switchView.on = !controlListModel.warmDidian;
         } else if ([titleStr isEqualToString:Localized(@"盲区报警")]) {
-            self.switchView.isON = !controlListModel.warnBlind;
+            self.switchView.on = !controlListModel.warnBlind;
         } else if ([titleStr isEqualToString:Localized(@"紧急报警")]) {
-            self.switchView.isON = !controlListModel.urgentWarn;
+            self.switchView.on = !controlListModel.urgentWarn;
         } else if ([titleStr isEqualToString:Localized(@"超速报警")]) {
-            self.switchView.isON = !controlListModel.warmSpeed;
+            self.switchView.on = !controlListModel.warmSpeed;
             self.centerLabel.text = [NSString stringWithFormat: @"%@Km/h", controlListModel.overWarm?:@"0"];
         } else if ([titleStr isEqualToString:Localized(@"振动报警")]) {
-            self.switchView.isON = !controlListModel.warmZd;
+            self.switchView.on = !controlListModel.warmZd;
         } else if ([titleStr isEqualToString:Localized(@"油量检测报警")]) {
-            self.switchView.isON = !controlListModel.oilCheckWarn;
+            self.switchView.on = !controlListModel.oilCheckWarn;
         } else if ([titleStr isEqualToString:Localized(@"保养通知")]) {
-            self.switchView.isON = !controlListModel.serviceFlag;
+            self.switchView.on = !controlListModel.serviceFlag;
             if (kStringIsEmpty(controlListModel.serviceInterval)) {
                 self.centerLabel.text = [NSString stringWithFormat: @"%@",@"请设置保养间隔"];
             } else {
@@ -314,10 +315,10 @@
             } else {
                 self.detailLabel.text = Localized(@"始终在线");
             }
-        } else if ([titleStr isEqualToString:Localized(@"Acc工作通知")]) {
-            self.switchView.isON = !controlListModel.accNotice;
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_ACCGZTZ]) {
+            self.switchView.on = !controlListModel.accNotice;
         } else if ([titleStr isEqualToString:Localized(@"漂移抑制")]) {
-            self.switchView.isON = !controlListModel.gpsFloat;
+            self.switchView.on = !controlListModel.gpsFloat;
         } else if ([titleStr isEqualToString:Localized(@"振动灵敏度")]) {
             switch (controlListModel.sensitivity) {
                 case 1:
@@ -335,7 +336,7 @@
         }
     } else {
         // isNO = YES 关闭状态， = NO 打开状态
-        self.switchView.isON = YES;
+        self.switchView.on = YES;
     }
 }
 - (void)setConfigurationModel:(ConfigurationParameterModel *)configurationModel {
@@ -383,14 +384,14 @@
         self.switchView.hidden = YES;
     } else if ([titleStr isEqualToString:Localized(@"设置油箱容积(L)")]) {
         self.switchView.hidden = YES;
-    } else if ([titleStr isEqualToString:Localized(@"油量校准")]) {
+    } else if ([titleStr isEqualToString:_ControlConfigTitle_SZYLJZ]) {
         self.detailLabel.hidden = YES;
         self.switchView.hidden = YES;
     } else if ([titleStr isEqualToString:Localized(@"电气锁转换")]) {
         self.detailImageView.hidden = YES;
         self.detailLabel.hidden = YES;
-        [self.switchView.switchImageBtn setImage: [UIImage imageNamed: @"开关-布防-撤防"] forState: UIControlStateSelected]; // offImage  @"开关-布防-撤防-1"
-        [self.switchView.switchImageBtn setImage: [UIImage imageNamed: @"开关-布防-撤防-1"] forState: UIControlStateNormal]; // onImage
+//        [self.switchView.switchImageBtn setImage: [UIImage imageNamed: @"开关-布防-撤防"] forState: UIControlStateSelected]; // offImage  @"开关-布防-撤防-1"
+//        [self.switchView.switchImageBtn setImage: [UIImage imageNamed: @"开关-布防-撤防-1"] forState: UIControlStateNormal]; // onImage
     } else if ([titleStr isEqualToString:Localized(@"设置报警短信发送次数")]) {
         self.switchView.hidden = YES;
     } else if ([titleStr isEqualToString:Localized(@"设置心跳间隔")]) {
@@ -413,13 +414,18 @@
         self.detailLabel.hidden = YES;
         self.switchView.hidden = YES;
     } else {
-        [self.switchView.switchImageBtn setImage: [UIImage imageNamed: @"开关-关"] forState: UIControlStateSelected]; // offImage
-        [self.switchView.switchImageBtn setImage: [UIImage imageNamed: @"开关-开"] forState: UIControlStateNormal]; // onImage
+//        [self.switchView.switchImageBtn setImage: [UIImage imageNamed: @"开关-关"] forState: UIControlStateSelected]; // offImage
+//        [self.switchView.switchImageBtn setImage: [UIImage imageNamed: @"开关-开"] forState: UIControlStateNormal]; // onImage
     }
 }
 - (void)switchView:(MINSwitchView *)switchView stateChange:(BOOL)isON {
     if (self.switchStateChangeBlock) {
         self.switchStateChangeBlock(self.indexPath, !isON);
+    }
+}
+- (void)switchViewDidChange:(UISwitch *)switchView {
+    if (self.switchStateChangeBlock) {
+        self.switchStateChangeBlock(self.indexPath, !switchView.isOn);
     }
 }
 @end

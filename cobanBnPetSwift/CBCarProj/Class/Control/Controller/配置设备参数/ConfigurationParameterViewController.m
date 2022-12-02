@@ -478,7 +478,8 @@
         } else if ([titleStr isEqualToString:Localized(@"油量校准")]) {
         } else if ([titleStr isEqualToString:Localized(@"电气锁转换")]) {
             //电气锁转换；0-电锁，1-气锁
-            cell.switchView.isON = self.model.change;
+//            cell.switchView.isON = self.model.change;
+            cell.switchView.on = self.model.change;
             if (self.model.change == 0) {
                 cell.centerLabel.text = Localized(@"电锁");
             } else if (self.model.change == 1) {
