@@ -9,19 +9,59 @@
 #import "CBCarAlertView.h"
 #import "CBAlertSelectableView.h"
 #import "MINPickerView.h"
+
+@interface __AlertDelegate : NSObject<UITextFieldDelegate>
+
+@property (nonatomic, assign) BOOL isDigital;
+
+@end
+
+@implementation __AlertDelegate
+
+#pragma mark -- UITextField 代理
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    if (self.isDigital) {
+        BOOL isDigital = [string isOnlyNumber];
+        return isDigital;
+    }
+    return YES;
+}
+
+@end
+
 @implementation CBCarAlertView
 
 + (CBBasePopView *)viewWithMultiInput:(NSArray<NSString *> *)placeHolderArr
                                 title:(NSString *)title
                     confirmCanDismiss:(nullable BOOL(^)(NSArray<NSString *> *contentStr))confirmCanDismiss
                               confrim:(void(^)(NSArray<NSString *> *contentStr))confirmBlk {
+    return [self viewWithMultiInput:placeHolderArr title:title isDigital:NO confirmCanDismiss:confirmCanDismiss confrim:confirmBlk];
+}
+
++ (CBBasePopView *)viewWithMultiInput:(NSArray<NSString *> *)placeHolderArr
+                                title:(NSString *)title
+                            isDigital:(BOOL)isDigital
+                    confirmCanDismiss:(nullable BOOL(^)(NSArray<NSString *> *contentStr))confirmCanDismiss
+                              confrim:(void(^)(NSArray<NSString *> *contentStr))confirmBlk {
     UIView *c = [UIView new];
     
     NSMutableArray *tfArr = [NSMutableArray array];
     UIView *lastView = nil;
+    
+    __AlertDelegate *delegate = [__AlertDelegate new];
+    delegate.isDigital = isDigital;
+    
     for (NSString *placeHolder in placeHolderArr) {
         UIView *inputV = [UIView new];
         UITextField *tf = [UITextField new];
+        if (isDigital) {
+            tf.keyboardType = UIKeyboardTypeNumberPad;
+            [tf limitTextFieldTextLength:6];
+        } else {
+            tf.keyboardType = UIKeyboardTypeNamePhonePad;//UIKeyboardTypeASCIICapable;
+        }
+        tf.delegate = delegate;
+        
         [tfArr addObject:tf];
         tf.placeholder = placeHolder;
         [inputV addSubview:tf];
@@ -62,6 +102,7 @@
     CBBasePopView *popView = [[CBBasePopView alloc] initWithContentView:alertView];
     __weak CBBasePopView *wpopView = popView;
     [alertView setDidClickConfirm:^{
+        delegate;
         confirmBlk([tfArr valueForKey:@"text"]);
         if (!confirmCanDismiss || confirmCanDismiss([tfArr valueForKey:@"text"])) {
             [wpopView dismiss];

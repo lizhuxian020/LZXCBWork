@@ -69,7 +69,7 @@
         [_switchView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(backView);
             make.right.equalTo(backView).with.offset(-35*KFitWidthRate);
-            make.size.mas_equalTo(CGSizeMake(75 * KFitWidthRate, 27 * KFitHeightRate));
+//            make.size.mas_equalTo(CGSizeMake(75 * KFitWidthRate, 27 * KFitHeightRate));
         }];
         _centerLabel = [MINUtils createLabelWithText:@"" size:12 * KFitHeightRate alignment: NSTextAlignmentRight textColor: k137Color];
         _centerLabel.numberOfLines = 0;
@@ -91,7 +91,7 @@
         }];
         
         UIView *line = [UIView new];
-        line.backgroundColor = UIColor.blackColor;
+        line.backgroundColor = KCarLineColor;
         [backView addSubview:line];
         [line mas_makeConstraints:^(MASConstraintMaker *make) {
             make.bottom.equalTo(@0);

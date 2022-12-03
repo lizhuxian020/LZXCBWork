@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface CBAlertSelectableView : UIView
 
 @property (nonatomic, copy) void (^didSelected)(NSString *content, NSInteger index);
-@property (nonatomic, assign) BOOL currentIndex;
+@property (nonatomic, assign) NSInteger currentIndex;
 
 - (instancetype)initWithData:(NSArray<NSString *> *)datas;
 

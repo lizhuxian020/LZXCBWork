@@ -59,7 +59,7 @@
     }];
 }
 
-- (void)setCurrentIndex:(BOOL)currentIndex {
+- (void)setCurrentIndex:(NSInteger)currentIndex {
     _currentIndex = currentIndex;
     for (int i = 0; i < self.lblArr.count; i++) {
         UILabel *lbl = self.lblArr[i];

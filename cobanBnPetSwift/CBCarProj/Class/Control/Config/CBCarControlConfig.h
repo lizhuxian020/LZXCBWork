@@ -33,7 +33,7 @@
 #define _ControlConfigTitle_SZBJDXFSCS Localized(@"设置报警短信发送次数")
 #define _ControlConfigTitle_SZXTJG Localized(@"设置心跳间隔")
 #define _ControlConfigTitle_ZDLMD Localized(@"振动灵敏度")
-#define _ControlConfigTitle_ZSHSZ Localized(@"初始化设置")
+#define _ControlConfigTitle_CSHSZ Localized(@"初始化设置")
 #define _ControlConfigTitle_SBCQ Localized(@"设备重启")
 
 

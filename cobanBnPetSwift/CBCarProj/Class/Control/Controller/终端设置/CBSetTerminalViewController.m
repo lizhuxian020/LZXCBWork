@@ -79,13 +79,13 @@
 //            Localized(@"疲劳驾驶参数设置"),
 //            Localized(@"碰撞报警参数设置"),
             _ControlConfigTitle_ACCGZTZ,
-            Localized(@"漂移抑制"),
-            Localized(@"设置转弯补报角度(<180°)"),
-            Localized(@"设置报警短信发送次数"),
-            Localized(@"设置心跳间隔"),
-            Localized(@"设备重启"),
-            Localized(@"振动灵敏度"),
-            Localized(@"初始化设置")
+            _ControlConfigTitle_PYYZ,
+            _ControlConfigTitle_SZZWBBJD,
+            _ControlConfigTitle_SZBJDXFSCS,
+            _ControlConfigTitle_SZXTJG,
+            _ControlConfigTitle_ZDLMD,
+            _ControlConfigTitle_CSHSZ,
+            _ControlConfigTitle_SBCQ,
         ];//Localized(@"服务器转移")
         NSArray *arrayTitleImage = @[
             @"怠速报表",
@@ -249,32 +249,72 @@
     }
 }
 - (void)cellClickTitle:(NSString *)title {
-    if ([title isEqualToString:_ControlConfigTitle_SQSZ]) {
+    if ([title isEqualToString:_ControlConfigTitle_SQSZ]) {//时区设置
 //        CBTimeZoneViewController *vc = [CBTimeZoneViewController new];
 //        [self.navigationController pushViewController:vc animated: YES];
         [self showSQSZ];
-    } else if ([title isEqualToString:_ControlConfigTitle_SZDXMM]) {
+    } else if ([title isEqualToString:_ControlConfigTitle_SZDXMM]) {//设置短信密码
 //        [self.inputPopView updateTitle:Localized(@"设置短信密码") placehold:Localized(@"输入短信密码") isDigital:YES];
 //        [self.inputPopView popView];
         [self showSZDXMM];
-    } else if ([title isEqualToString:_ControlConfigTitle_SZSQHM]) {
+    } else if ([title isEqualToString:_ControlConfigTitle_SZSQHM]) {//设置授权号码
         PhoneBookViewController *phoneBookVC = [[PhoneBookViewController alloc] init];
         [self.navigationController pushViewController: phoneBookVC animated: YES];
-    } else if ([title isEqualToString:_ControlConfigTitle_SZYXRJ]) {
+    } else if ([title isEqualToString:_ControlConfigTitle_SZYXRJ]) {//设置油箱容积(L)
         //        [self.inputPopView updateTitle:Localized(@"设置油箱容积(L)") placehold:Localized(@"输入油箱容积(L)") isDigital:YES];
         //        [self.inputPopView popView];
         [self showSZYXRJ];
-    } else if ([title isEqualToString:_ControlConfigTitle_SZYLJZ]) {
+    } else if ([title isEqualToString:_ControlConfigTitle_SZYLJZ]) {//设置油量校准
 //        [self.setOilPopView popView];
         [self showSZYLJZ];
-    } else if ([title isEqualToString:_ControlConfigTitle_SZLCCSZ]) {
-//        [self.inputPopView updateTitle:Localized(@"设置里程初始值(m)") placehold:Localized(@"输入里程初始值(m)") isDigital:YES];
-//        [self.inputPopView popView];
+    } else if ([title isEqualToString:_ControlConfigTitle_SZLCCSZ]) {//设置里程初始值(m)
+        //        [self.inputPopView updateTitle:Localized(@"设置里程初始值(m)") placehold:Localized(@"输入里程初始值(m)") isDigital:YES];
+        //        [self.inputPopView popView];
         [self showSZLCCSZ];
-    } else if ([title isEqualToString:Localized(@"初始化设置")]) {
-        [self.alertPopView updateTitle:Localized(@"初始化设置") msg:Localized(@"确定初始化?")];
-        [self.alertPopView popView];
-    } else if ([title isEqualToString:Localized(@"始终在线")]) {
+    } else if ([title isEqualToString:_ControlConfigTitle_ACCGZTZ]) {//ACC
+    } else if ([title isEqualToString:_ControlConfigTitle_PYYZ]) {//ACC
+    } else if ([title isEqualToString:_ControlConfigTitle_SZZWBBJD]) {
+//        [self.inputPopView updateTitle:Localized(@"设置转弯补报角度(<180°)") placehold:Localized(@"输入转弯补报角度°") isDigital:YES];
+//        [self.inputPopView popView];
+        [self showSZZWBBJD];
+    } else if ([title isEqualToString:_ControlConfigTitle_SZBJDXFSCS]) {
+//        [self.inputPopView updateTitle:Localized(@"设置报警短信发送次数") placehold:Localized(@"输入发送次数") isDigital:YES];
+//        [self.inputPopView popView];
+        [self showSZBJDXFSCS];
+    } else if ([title isEqualToString:_ControlConfigTitle_SZXTJG]) {
+//        [self.inputPopView updateTitle:Localized(@"设置心跳间隔") placehold:Localized(@"输入心跳间隔") isDigital:YES];
+//        [self.inputPopView popView];
+        [self showSZXTJG];
+    } else if ([title isEqualToString:_ControlConfigTitle_ZDLMD]) {
+//        [self.pickerPopView popView];
+//        NSArray *array = @[Localized(@"高"),Localized(@"中"),Localized(@"低")];
+//        NSString *seletStr = @"";
+//        switch (self.termialControlStatusModel.sensitivity) {
+//            case 1:
+//                seletStr = Localized(@"高");
+//                break;
+//            case 2:
+//                seletStr = Localized(@"中");
+//                break;
+//            case 3:
+//                seletStr = Localized(@"低");
+//                break;
+//            default:
+//                break;
+//        }
+//        [self.pickerPopView updateTitle:Localized(@"振动灵敏度") menuArray:array seletedTitle:seletStr];
+        [self showZDLMD];
+    } else if ([title isEqualToString:_ControlConfigTitle_CSHSZ]) {
+//        [self.alertPopView updateTitle:Localized(@"初始化设置") msg:Localized(@"确定初始化?")];
+//        [self.alertPopView popView];
+        [self showCSHSZ];
+    } else if ([title isEqualToString:_ControlConfigTitle_SBCQ]) {
+//        [self.alertPopView updateTitle:Localized(@"设备重启") msg:Localized(@"确定重启?")];
+//        [self.alertPopView popView];
+        [self showSBCQ];
+    }
+    /*--------------------------以下暂时无用--------------------------*/
+    else if ([title isEqualToString:Localized(@"始终在线")]) {
         [self.alertPopView updateTitle:Localized(@"始终在线") msg:Localized(@"确定切换?")];
         [self.alertPopView popView];
     } else if ([title isEqualToString:Localized(@"休眠模式")]) {
@@ -288,36 +328,6 @@
     } else if ([title isEqualToString:Localized(@"碰撞报警参数设置")]) {
         CollosionAlarmViewController *collosionVC = [[CollosionAlarmViewController alloc] init];
         [self.navigationController pushViewController: collosionVC animated: YES];
-    } else if ([title isEqualToString:Localized(@"设置转弯补报角度(<180°)")]) {
-        [self.inputPopView updateTitle:Localized(@"设置转弯补报角度(<180°)") placehold:Localized(@"输入转弯补报角度°") isDigital:YES];
-        [self.inputPopView popView];
-    } else if ([title isEqualToString:Localized(@"设置报警短信发送次数")]) {
-        [self.inputPopView updateTitle:Localized(@"设置报警短信发送次数") placehold:Localized(@"输入发送次数") isDigital:YES];
-        [self.inputPopView popView];
-    }  else if ([title isEqualToString:Localized(@"设置心跳间隔")]) {
-       [self.inputPopView updateTitle:Localized(@"设置心跳间隔") placehold:Localized(@"输入心跳间隔") isDigital:YES];
-       [self.inputPopView popView];
-    } else if ([title isEqualToString:Localized(@"设备重启")]) {
-        [self.alertPopView updateTitle:Localized(@"设备重启") msg:Localized(@"确定重启?")];
-        [self.alertPopView popView];
-    } else if ([title isEqualToString:Localized(@"振动灵敏度")]) {
-        [self.pickerPopView popView];
-        NSArray *array = @[Localized(@"高"),Localized(@"中"),Localized(@"低")];
-        NSString *seletStr = @"";
-        switch (self.termialControlStatusModel.sensitivity) {
-            case 1:
-                seletStr = Localized(@"高");
-                break;
-            case 2:
-                seletStr = Localized(@"中");
-                break;
-            case 3:
-                seletStr = Localized(@"低");
-                break;
-            default:
-                break;
-        }
-        [self.pickerPopView updateTitle:Localized(@"振动灵敏度") menuArray:array seletedTitle:seletStr];
     } else if ([title isEqualToString:Localized(@"服务器转移")]) {
         NetWorkConfigurationViewController *netWorkVC = [[NetWorkConfigurationViewController alloc] init];
         [self.navigationController pushViewController: netWorkVC animated: YES];
@@ -331,7 +341,7 @@
 }
 
 - (void)showSZDXMM {
-    [[CBCarAlertView viewWithMultiInput:@[Localized(@"输入6位短信密码"),Localized(@"请再次输入密码")] title:_ControlConfigTitle_SZDXMM confirmCanDismiss:^BOOL(NSArray<NSString *> * _Nonnull contentStr) {
+    [[CBCarAlertView viewWithMultiInput:@[Localized(@"输入6位短信密码"),Localized(@"请再次输入密码")] title:_ControlConfigTitle_SZDXMM  isDigital:YES confirmCanDismiss:^BOOL(NSArray<NSString *> * _Nonnull contentStr) {
         if ([contentStr.firstObject isEqualToString:contentStr.lastObject]) {
             return YES;
         } else {
@@ -343,7 +353,7 @@
     }] pop];
 }
 - (void)showSZYXRJ {
-    [[CBCarAlertView viewWithMultiInput:@[Localized(@"输入油箱容积(L)")] title:_ControlConfigTitle_SZYXRJ confirmCanDismiss:^BOOL(NSArray<NSString *> * _Nonnull contentStr) {
+    [[CBCarAlertView viewWithMultiInput:@[Localized(@"输入油箱容积(L)")] title:_ControlConfigTitle_SZYXRJ isDigital:YES confirmCanDismiss:^BOOL(NSArray<NSString *> * _Nonnull contentStr) {
         return NO;
     } confrim:^(NSArray<NSString *> * _Nonnull contentStr) {
         NSLog(@"%@", contentStr);
@@ -358,10 +368,48 @@
     }] pop];
 }
 - (void)showSZLCCSZ {
-    [[CBCarAlertView viewWithMultiInput:@[Localized(@"输入里程初始值(m)")] title:_ControlConfigTitle_SZLCCSZ confirmCanDismiss:^BOOL(NSArray<NSString *> * _Nonnull contentStr) {
+    [[CBCarAlertView viewWithMultiInput:@[Localized(@"输入里程初始值(m)")] title:_ControlConfigTitle_SZLCCSZ isDigital:YES confirmCanDismiss:^BOOL(NSArray<NSString *> * _Nonnull contentStr) {
         return NO;
     } confrim:^(NSArray<NSString *> * _Nonnull contentStr) {
         
+    }] pop];
+}
+- (void)showSZZWBBJD {
+    [[CBCarAlertView viewWithMultiInput:@[Localized(@"输入转弯补报角度°")] title:_ControlConfigTitle_SZZWBBJD isDigital:YES confirmCanDismiss:^BOOL(NSArray<NSString *> * _Nonnull contentStr) {
+        return NO;
+    } confrim:^(NSArray<NSString *> * _Nonnull contentStr) {
+        
+    }] pop];
+}
+- (void)showSZBJDXFSCS {
+    [[CBCarAlertView viewWithMultiInput:@[Localized(@"输入发送次数")] title:_ControlConfigTitle_SZBJDXFSCS isDigital:YES  confirmCanDismiss:^BOOL(NSArray<NSString *> * _Nonnull contentStr) {
+        return NO;
+    } confrim:^(NSArray<NSString *> * _Nonnull contentStr) {
+        
+    }] pop];
+}
+- (void)showSZXTJG {
+    [[CBCarAlertView viewWithMultiInput:@[Localized(@"输入心跳间隔")] title:_ControlConfigTitle_SZXTJG isDigital:YES  confirmCanDismiss:^BOOL(NSArray<NSString *> * _Nonnull contentStr) {
+        return NO;
+    } confrim:^(NSArray<NSString *> * _Nonnull contentStr) {
+        
+    }] pop];
+}
+- (void)showZDLMD {
+    [[CBCarAlertView viewWithChooseData:@[Localized(@"高"), Localized(@"中"), Localized(@"低")] selectedIndex:0 title:_ControlConfigTitle_ZDLMD didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
+            
+    } confrim:^(NSString * _Nonnull contentStr, NSInteger index) {
+        
+    }] pop];
+}
+- (void)showCSHSZ {
+    [[CBCarAlertView viewWithAlertTips:Localized(@"确定初始化?") title:_ControlConfigTitle_CSHSZ confrim:^(NSString * _Nonnull contentStr) {
+                
+    }] pop];
+}
+- (void)showSBCQ {
+    [[CBCarAlertView viewWithAlertTips:Localized(@"确定重启?") title:_ControlConfigTitle_SBCQ confrim:^(NSString * _Nonnull contentStr) {
+                
     }] pop];
 }
 #pragma mark -- 开关点击
@@ -371,7 +419,7 @@
     if ([titleStr isEqualToString:_ControlConfigTitle_ACCGZTZ]) {
         [paramters setObject:status forKey:@"accNotice"];
         [self terminalEditControlNewRequest:paramters];
-    } else if ([titleStr isEqualToString:Localized(@"漂移抑制")]) {
+    } else if ([titleStr isEqualToString:_ControlConfigTitle_PYYZ]) {
         [paramters setObject:status forKey:@"gpsFloat"];
         [self terminalEditControlNewRequest:paramters];
     }

@@ -149,8 +149,8 @@
         }
         
         if (canClick) {
-            [[CBCarAlertView viewWithPlaceholder:placeHolder title:title confrim:^(NSString * _Nonnull contentStr) {
-                wLbl.text = contentStr;
+            [[CBCarAlertView viewWithMultiInput:@[placeHolder] title:title isDigital:NO confirmCanDismiss:nil confrim:^(NSArray<NSString *> * _Nonnull contentStr) {
+                wLbl.text = contentStr.firstObject;
             }] pop];
         }
     }];

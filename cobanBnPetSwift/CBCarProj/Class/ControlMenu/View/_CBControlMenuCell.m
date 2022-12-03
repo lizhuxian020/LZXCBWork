@@ -58,7 +58,7 @@
     
     UIView *line = [UIView new];
     [self.contentView addSubview:line];
-    line.backgroundColor = [UIColor blackColor];
+    line.backgroundColor = KCarLineColor;
     [line mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(@0);
         make.left.equalTo(@40);
