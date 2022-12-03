@@ -18,9 +18,21 @@
 
 @implementation MINDatePickerView
 
+- (instancetype)initWithLimitDate:(BOOL)limitDate {
+    self = [super init];
+    if (self) {
+        self.limitDate = limitDate;
+        self.backgroundColor = [UIColor clearColor];
+        [self createUI];
+        [self addAction];
+    }
+    return self;
+}
+
 - (instancetype)init
 {
     if (self = [super init]) {
+        _limitDate = YES;
         self.backgroundColor = [UIColor clearColor];
         [self createUI];
         [self addAction];
@@ -54,6 +66,9 @@
         } completion:^(BOOL finished) {
             //[self removeFromSuperview];
             self.hidden = YES;
+            if (_didHide) {
+                _didHide();
+            }
         }];
     }
 }
@@ -70,11 +85,13 @@
 {
     _datePicker = [[UIDatePicker alloc] init];
     _datePicker.datePickerMode = UIDatePickerModeDate;
-    NSDate* minDate = [NSDate dateWithTimeIntervalSince1970: 24 * 60 * 60 * 365 * 70];
-    NSDate* maxDate = [NSDate dateWithTimeIntervalSinceNow: 0];
-    [_datePicker setDate: maxDate];
-    [_datePicker setMinimumDate: minDate];
-    [_datePicker setMaximumDate: maxDate];
+    if (_limitDate) {
+        NSDate* minDate = [NSDate dateWithTimeIntervalSince1970: 24 * 60 * 60 * 365 * 70.0];
+        NSDate* maxDate = [NSDate dateWithTimeIntervalSinceNow: 0];
+        [_datePicker setDate: maxDate];
+        [_datePicker setMinimumDate: minDate];
+        [_datePicker setMaximumDate: maxDate];
+    }
     [contentView addSubview: _datePicker];
     [_datePicker mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.equalTo(contentView);

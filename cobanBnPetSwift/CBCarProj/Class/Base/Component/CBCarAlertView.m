@@ -43,6 +43,15 @@
                             isDigital:(BOOL)isDigital
                     confirmCanDismiss:(nullable BOOL(^)(NSArray<NSString *> *contentStr))confirmCanDismiss
                               confrim:(void(^)(NSArray<NSString *> *contentStr))confirmBlk {
+    return [self viewWithMultiInput:placeHolderArr title:title isDigital:isDigital maxLength:6 confirmCanDismiss:confirmCanDismiss confrim:confirmBlk];
+}
+
++ (CBBasePopView *)viewWithMultiInput:(NSArray<NSString *> *)placeHolderArr
+                                title:(NSString *)title
+                            isDigital:(BOOL)isDigital
+                            maxLength:(int)maxLength
+                    confirmCanDismiss:(nullable BOOL(^)(NSArray<NSString *> *contentStr))confirmCanDismiss
+                              confrim:(void(^)(NSArray<NSString *> *contentStr))confirmBlk {
     UIView *c = [UIView new];
     
     NSMutableArray *tfArr = [NSMutableArray array];
@@ -56,9 +65,7 @@
         UITextField *tf = [UITextField new];
         if (isDigital) {
             tf.keyboardType = UIKeyboardTypeNumberPad;
-            [tf limitTextFieldTextLength:6];
-        } else {
-            tf.keyboardType = UIKeyboardTypeNamePhonePad;//UIKeyboardTypeASCIICapable;
+            [tf limitTextFieldTextLength:maxLength];
         }
         tf.delegate = delegate;
         

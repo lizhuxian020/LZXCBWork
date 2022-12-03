@@ -52,8 +52,24 @@
 - (NSMutableArray *)arrayData {
     if (!_arrayData) {
         _arrayData = [NSMutableArray array];
-        NSArray *arrayTitle = @[Localized(@"掉电报警"),Localized(@"低电报警"),Localized(@"盲区报警") ,Localized(@"紧急报警") ,Localized(@"超速报警") ,Localized(@"振动报警"), Localized(@"油量检测报警")];//Localized(@"保养通知")
-        NSArray *arrayTitleImage = @[@"掉电",@"低电",@"里程统计", @"报警统计", @"超速", @"震动报警", @"油量统计"];//@"点火报表"
+        NSArray *arrayTitle = @[
+            Localized(@"掉电报警"),
+            Localized(@"低电报警"),
+            Localized(@"盲区报警") ,
+//            Localized(@"紧急报警") ,
+//            Localized(@"超速报警") ,
+            Localized(@"振动报警"),
+            Localized(@"油量检测报警")
+        ];//Localized(@"保养通知")
+        NSArray *arrayTitleImage = @[
+            @"掉电",
+            @"低电",
+            @"里程统计",
+//            @"报警统计",
+//            @"超速",
+            @"震动报警",
+            @"油量统计"
+        ];//@"点火报表"
         for (int i = 0 ; i < arrayTitle.count ; i ++ ) {
             CBControlModel *controlModel = [[CBControlModel alloc]init];
             controlModel.titleStr = arrayTitle[i];
@@ -107,9 +123,9 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.arrayData.count;
 }
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 62.5*KFitHeightRate;
-}
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+//    return 62.5*KFitHeightRate;
+//}
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *cellID = @"cellID";
     ControlTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];

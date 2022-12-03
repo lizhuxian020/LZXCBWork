@@ -690,6 +690,9 @@
 		B1F3765D293B054D0034D4D8 /* CBCommandRecordController.m in Sources */ = {isa = PBXBuildFile; fileRef = B1F3765C293B054D0034D4D8 /* CBCommandRecordController.m */; };
 		B1F37661293B06BA0034D4D8 /* _CBCommandRecordCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B1F37660293B06BA0034D4D8 /* _CBCommandRecordCell.m */; };
 		B1F37665293B06EA0034D4D8 /* _CBCommandRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = B1F37664293B06EA0034D4D8 /* _CBCommandRecord.m */; };
+		B1F3766B293B2EB90034D4D8 /* CBInstallInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = B1F3766A293B2EB90034D4D8 /* CBInstallInfoController.m */; };
+		B1F3766F293B2F620034D4D8 /* _CBInstallInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = B1F3766E293B2F620034D4D8 /* _CBInstallInfoView.m */; };
+		B1F37673293B2F710034D4D8 /* _CBInstallInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = B1F37672293B2F710034D4D8 /* _CBInstallInfo.m */; };
 		B1F85A3729379F3900A90871 /* _CBXiuMianChooseView.m in Sources */ = {isa = PBXBuildFile; fileRef = B1F85A3629379F3900A90871 /* _CBXiuMianChooseView.m */; };
 		B1F85A3A2937A57A00A90871 /* _CBLocateModeView.m in Sources */ = {isa = PBXBuildFile; fileRef = B1F85A392937A57A00A90871 /* _CBLocateModeView.m */; };
 /* End PBXBuildFile section */
@@ -1908,6 +1911,12 @@
 		B1F37660293B06BA0034D4D8 /* _CBCommandRecordCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _CBCommandRecordCell.m; sourceTree = "<group>"; };
 		B1F37663293B06EA0034D4D8 /* _CBCommandRecord.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBCommandRecord.h; sourceTree = "<group>"; };
 		B1F37664293B06EA0034D4D8 /* _CBCommandRecord.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _CBCommandRecord.m; sourceTree = "<group>"; };
+		B1F37669293B2EB90034D4D8 /* CBInstallInfoController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBInstallInfoController.h; sourceTree = "<group>"; };
+		B1F3766A293B2EB90034D4D8 /* CBInstallInfoController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBInstallInfoController.m; sourceTree = "<group>"; };
+		B1F3766D293B2F620034D4D8 /* _CBInstallInfoView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBInstallInfoView.h; sourceTree = "<group>"; };
+		B1F3766E293B2F620034D4D8 /* _CBInstallInfoView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _CBInstallInfoView.m; sourceTree = "<group>"; };
+		B1F37671293B2F710034D4D8 /* _CBInstallInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBInstallInfo.h; sourceTree = "<group>"; };
+		B1F37672293B2F710034D4D8 /* _CBInstallInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _CBInstallInfo.m; sourceTree = "<group>"; };
 		B1F85A3529379F3900A90871 /* _CBXiuMianChooseView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBXiuMianChooseView.h; sourceTree = "<group>"; };
 		B1F85A3629379F3900A90871 /* _CBXiuMianChooseView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _CBXiuMianChooseView.m; sourceTree = "<group>"; };
 		B1F85A382937A57A00A90871 /* _CBLocateModeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBLocateModeView.h; sourceTree = "<group>"; };
@@ -5463,9 +5472,8 @@
 		B13D8BCA2935CA90005F3A61 /* ControlMenu */ = {
 			isa = PBXGroup;
 			children = (
-				B13D8BCD2935CACB005F3A61 /* View */,
-				B13D8BCC2935CAC5005F3A61 /* Model */,
-				B13D8BCB2935CABF005F3A61 /* controller */,
+				B1F37667293B2DF70034D4D8 /* 控制主页 */,
+				B1F37666293B2DEB0034D4D8 /* 安装信息 */,
 			);
 			path = ControlMenu;
 			sourceTree = "<group>";
@@ -5684,6 +5692,53 @@
 			children = (
 				B1F37663293B06EA0034D4D8 /* _CBCommandRecord.h */,
 				B1F37664293B06EA0034D4D8 /* _CBCommandRecord.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		B1F37666293B2DEB0034D4D8 /* 安装信息 */ = {
+			isa = PBXGroup;
+			children = (
+				B1F37670293B2F670034D4D8 /* Model */,
+				B1F3766C293B2F530034D4D8 /* view */,
+				B1F37668293B2E9B0034D4D8 /* controller */,
+			);
+			path = "安装信息";
+			sourceTree = "<group>";
+		};
+		B1F37667293B2DF70034D4D8 /* 控制主页 */ = {
+			isa = PBXGroup;
+			children = (
+				B13D8BCD2935CACB005F3A61 /* View */,
+				B13D8BCC2935CAC5005F3A61 /* Model */,
+				B13D8BCB2935CABF005F3A61 /* controller */,
+			);
+			path = "控制主页";
+			sourceTree = "<group>";
+		};
+		B1F37668293B2E9B0034D4D8 /* controller */ = {
+			isa = PBXGroup;
+			children = (
+				B1F37669293B2EB90034D4D8 /* CBInstallInfoController.h */,
+				B1F3766A293B2EB90034D4D8 /* CBInstallInfoController.m */,
+			);
+			path = controller;
+			sourceTree = "<group>";
+		};
+		B1F3766C293B2F530034D4D8 /* view */ = {
+			isa = PBXGroup;
+			children = (
+				B1F3766D293B2F620034D4D8 /* _CBInstallInfoView.h */,
+				B1F3766E293B2F620034D4D8 /* _CBInstallInfoView.m */,
+			);
+			path = view;
+			sourceTree = "<group>";
+		};
+		B1F37670293B2F670034D4D8 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				B1F37671293B2F710034D4D8 /* _CBInstallInfo.h */,
+				B1F37672293B2F710034D4D8 /* _CBInstallInfo.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -6145,6 +6200,7 @@
 				17CDABC724CEBE5600BB9F8B /* lstring.c in Sources */,
 				17CDAB7924CEBE5500BB9F8B /* GGCircle.m in Sources */,
 				17CDAB6924CEBE5500BB9F8B /* LineBarGird.m in Sources */,
+				B1F3766F293B2F620034D4D8 /* _CBInstallInfoView.m in Sources */,
 				17CDAC2024CEBE5600BB9F8B /* CBHomeLeftMenuModel.m in Sources */,
 				1782BFA424C0427E00544C36 /* AutoReceiveViewController.m in Sources */,
 				17CDAC5F24CEBE5600BB9F8B /* MultiLocationHeaderView.m in Sources */,
@@ -6334,6 +6390,7 @@
 				17CDAB6524CEBE5500BB9F8B /* PieData.m in Sources */,
 				17CDAB5024CEBE5500BB9F8B /* ZCChinaLocation.m in Sources */,
 				17CDAB4924CEBE5500BB9F8B /* UUBar.m in Sources */,
+				B1F3766B293B2EB90034D4D8 /* CBInstallInfoController.m in Sources */,
 				17CDAC3224CEBE5600BB9F8B /* MessageServerViewController.m in Sources */,
 				17CDAB7A24CEBE5500BB9F8B /* GGArcLine.m in Sources */,
 				17CDAC1D24CEBE5600BB9F8B /* MINNormalInfoAnnotation.m in Sources */,
@@ -6462,6 +6519,7 @@
 				1782BF8F24C0427E00544C36 /* MINSwitchView.m in Sources */,
 				17CDAC6B24CEBE5600BB9F8B /* MainTabBarViewController.m in Sources */,
 				439E90692475A497004ED9AD /* CBFuncHeaderCollectionReusableView.swift in Sources */,
+				B1F37673293B2F710034D4D8 /* _CBInstallInfo.m in Sources */,
 				1782BF8624C0427E00544C36 /* CBAddressBKDetailViewController.m in Sources */,
 				4380C283247C1E7E0012D7B7 /* CBPetBindSuccessVC.swift in Sources */,
 				4389AA452482B30A00C4BDC3 /* CBPetChatPetMessageCell.swift in Sources */,

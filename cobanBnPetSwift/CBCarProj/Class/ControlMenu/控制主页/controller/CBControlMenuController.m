@@ -11,6 +11,8 @@
 #import "ContorlViewController.h"
 #import "CBSetTerminalViewController.h"
 #import "CBCommandRecordController.h"
+#import "CBSetAlarmViewController.h"
+#import "CBInstallInfoController.h"
 
 @interface CBControlMenuController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -63,6 +65,7 @@
             @"title": Localized(@"报警设置"),
             @"blk": ^{
                 NSLog(@"%s", __FUNCTION__);
+                [weakself.navigationController pushViewController:CBSetAlarmViewController.new animated:YES];
             }
         },
         @{
@@ -70,6 +73,7 @@
             @"title": Localized(@"安装信息"),
             @"blk": ^{
                 NSLog(@"%s", __FUNCTION__);
+                [weakself.navigationController pushViewController:CBInstallInfoController.new animated:YES];
             }
         }
     ];

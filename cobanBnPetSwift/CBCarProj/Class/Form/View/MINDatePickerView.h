@@ -22,7 +22,9 @@
 @property (nonatomic, strong) UIButton *confirmBtn;
 @property (nonatomic, strong) UIDatePicker *datePicker;
 @property (nonatomic, weak) id<MINDatePickerViewDelegare> delegate;
-
+@property (nonatomic, copy) void (^didHide)(void);
+@property (nonatomic, assign) BOOL limitDate;
+- (instancetype)initWithLimitDate:(BOOL)limitDate;
 - (void)showView;
 - (void)hideView;
 @end
