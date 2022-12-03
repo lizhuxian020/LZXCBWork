@@ -686,6 +686,7 @@
 		B1E7040B2798727100060475 /* CBPetToolAssistanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1E7040A2798727100060475 /* CBPetToolAssistanceView.swift */; };
 		B1EF2F2B279C554D0050BF05 /* CBPetAvatarPaoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1EF2F2A279C554D0050BF05 /* CBPetAvatarPaoView.swift */; };
 		B1EF2F2D279EFB000050BF05 /* CBPetFuncUserManageOtherConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1EF2F2C279EFB000050BF05 /* CBPetFuncUserManageOtherConfigView.swift */; };
+		B1F37658293AF7A50034D4D8 /* CBTopAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = B1F37657293AF7A50034D4D8 /* CBTopAlertView.m */; };
 		B1F85A3729379F3900A90871 /* _CBXiuMianChooseView.m in Sources */ = {isa = PBXBuildFile; fileRef = B1F85A3629379F3900A90871 /* _CBXiuMianChooseView.m */; };
 		B1F85A3A2937A57A00A90871 /* _CBLocateModeView.m in Sources */ = {isa = PBXBuildFile; fileRef = B1F85A392937A57A00A90871 /* _CBLocateModeView.m */; };
 /* End PBXBuildFile section */
@@ -1896,6 +1897,8 @@
 		B1E7040A2798727100060475 /* CBPetToolAssistanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetToolAssistanceView.swift; sourceTree = "<group>"; };
 		B1EF2F2A279C554D0050BF05 /* CBPetAvatarPaoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetAvatarPaoView.swift; sourceTree = "<group>"; };
 		B1EF2F2C279EFB000050BF05 /* CBPetFuncUserManageOtherConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetFuncUserManageOtherConfigView.swift; sourceTree = "<group>"; };
+		B1F37656293AF7A50034D4D8 /* CBTopAlertView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBTopAlertView.h; sourceTree = "<group>"; };
+		B1F37657293AF7A50034D4D8 /* CBTopAlertView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBTopAlertView.m; sourceTree = "<group>"; };
 		B1F85A3529379F3900A90871 /* _CBXiuMianChooseView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBXiuMianChooseView.h; sourceTree = "<group>"; };
 		B1F85A3629379F3900A90871 /* _CBXiuMianChooseView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _CBXiuMianChooseView.m; sourceTree = "<group>"; };
 		B1F85A382937A57A00A90871 /* _CBLocateModeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBLocateModeView.h; sourceTree = "<group>"; };
@@ -5610,6 +5613,7 @@
 		B1D3565B292E5ED800E677F7 /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				B1F37655293AF78F0034D4D8 /* TopAlert */,
 				B1A4093029366D92004B22E1 /* AlertContentView */,
 				B19D6A71293276A200D2420B /* Component */,
 				B1D3565C292E5EE000E677F7 /* PopView */,
@@ -5626,6 +5630,15 @@
 				B1D35661292E65FD00E677F7 /* CBAlertBaseView.m */,
 			);
 			path = PopView;
+			sourceTree = "<group>";
+		};
+		B1F37655293AF78F0034D4D8 /* TopAlert */ = {
+			isa = PBXGroup;
+			children = (
+				B1F37656293AF7A50034D4D8 /* CBTopAlertView.h */,
+				B1F37657293AF7A50034D4D8 /* CBTopAlertView.m */,
+			);
+			path = TopAlert;
 			sourceTree = "<group>";
 		};
 		B1F85A3429379EF800A90871 /* Views */ = {
@@ -5944,6 +5957,7 @@
 				17CDAC6224CEBE5600BB9F8B /* CBControlInputPopView.m in Sources */,
 				4360DB3A2480FB9900D2A03C /* NSDate+Extension.swift in Sources */,
 				B1D35662292E65FD00E677F7 /* CBAlertBaseView.m in Sources */,
+				B1F37658293AF7A50034D4D8 /* CBTopAlertView.m in Sources */,
 				17CDABD824CEBE5600BB9F8B /* ldebug.c in Sources */,
 				17CDAC6D24CEBE5600BB9F8B /* CBBaseNavigationController.m in Sources */,
 				17CDABDE24CEBE5600BB9F8B /* LuaExportMetaData.m in Sources */,
