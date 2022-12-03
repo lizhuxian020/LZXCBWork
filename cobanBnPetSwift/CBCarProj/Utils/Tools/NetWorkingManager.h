@@ -41,6 +41,7 @@ typedef void(^Failed)(NSError *error);
  */
 - (void)postWithUrl:(NSString *)url params:(NSDictionary*)params succeed:(Succeed)succeed failed:(Failed)failed;
 
+- (void)postJSONWithUrl:(NSString *)url params:(NSDictionary *)params succeed:(Succeed)succeed failed:(Failed)failed;
 /**
  get请求
 

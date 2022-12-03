@@ -10,6 +10,7 @@
 #import "_CBControlMenuCell.h"
 #import "ContorlViewController.h"
 #import "CBSetTerminalViewController.h"
+#import "CBCommandRecordController.h"
 
 @interface CBControlMenuController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -51,9 +52,10 @@
         },
         @{
             @"icon": @"报表-选中",
-            @"title": Localized(@"指定记录"),
+            @"title": Localized(@"指令记录"),
             @"blk": ^{
                 NSLog(@"%s", __FUNCTION__);
+                [weakself.navigationController pushViewController:CBCommandRecordController.new animated:YES];
             }
         },
         @{

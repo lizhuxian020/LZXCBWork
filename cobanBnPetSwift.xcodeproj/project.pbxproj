@@ -687,6 +687,9 @@
 		B1EF2F2B279C554D0050BF05 /* CBPetAvatarPaoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1EF2F2A279C554D0050BF05 /* CBPetAvatarPaoView.swift */; };
 		B1EF2F2D279EFB000050BF05 /* CBPetFuncUserManageOtherConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1EF2F2C279EFB000050BF05 /* CBPetFuncUserManageOtherConfigView.swift */; };
 		B1F37658293AF7A50034D4D8 /* CBTopAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = B1F37657293AF7A50034D4D8 /* CBTopAlertView.m */; };
+		B1F3765D293B054D0034D4D8 /* CBCommandRecordController.m in Sources */ = {isa = PBXBuildFile; fileRef = B1F3765C293B054D0034D4D8 /* CBCommandRecordController.m */; };
+		B1F37661293B06BA0034D4D8 /* _CBCommandRecordCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B1F37660293B06BA0034D4D8 /* _CBCommandRecordCell.m */; };
+		B1F37665293B06EA0034D4D8 /* _CBCommandRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = B1F37664293B06EA0034D4D8 /* _CBCommandRecord.m */; };
 		B1F85A3729379F3900A90871 /* _CBXiuMianChooseView.m in Sources */ = {isa = PBXBuildFile; fileRef = B1F85A3629379F3900A90871 /* _CBXiuMianChooseView.m */; };
 		B1F85A3A2937A57A00A90871 /* _CBLocateModeView.m in Sources */ = {isa = PBXBuildFile; fileRef = B1F85A392937A57A00A90871 /* _CBLocateModeView.m */; };
 /* End PBXBuildFile section */
@@ -1899,6 +1902,12 @@
 		B1EF2F2C279EFB000050BF05 /* CBPetFuncUserManageOtherConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetFuncUserManageOtherConfigView.swift; sourceTree = "<group>"; };
 		B1F37656293AF7A50034D4D8 /* CBTopAlertView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBTopAlertView.h; sourceTree = "<group>"; };
 		B1F37657293AF7A50034D4D8 /* CBTopAlertView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBTopAlertView.m; sourceTree = "<group>"; };
+		B1F3765B293B054D0034D4D8 /* CBCommandRecordController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBCommandRecordController.h; sourceTree = "<group>"; };
+		B1F3765C293B054D0034D4D8 /* CBCommandRecordController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBCommandRecordController.m; sourceTree = "<group>"; };
+		B1F3765F293B06BA0034D4D8 /* _CBCommandRecordCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBCommandRecordCell.h; sourceTree = "<group>"; };
+		B1F37660293B06BA0034D4D8 /* _CBCommandRecordCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _CBCommandRecordCell.m; sourceTree = "<group>"; };
+		B1F37663293B06EA0034D4D8 /* _CBCommandRecord.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBCommandRecord.h; sourceTree = "<group>"; };
+		B1F37664293B06EA0034D4D8 /* _CBCommandRecord.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _CBCommandRecord.m; sourceTree = "<group>"; };
 		B1F85A3529379F3900A90871 /* _CBXiuMianChooseView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBXiuMianChooseView.h; sourceTree = "<group>"; };
 		B1F85A3629379F3900A90871 /* _CBXiuMianChooseView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _CBXiuMianChooseView.m; sourceTree = "<group>"; };
 		B1F85A382937A57A00A90871 /* _CBLocateModeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBLocateModeView.h; sourceTree = "<group>"; };
@@ -4327,6 +4336,7 @@
 		17CDAA9824CEBE5500BB9F8B /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				B1F37659293B050C0034D4D8 /* 指定记录 */,
 				17CDAAC124CEBE5500BB9F8B /* ContorlViewController.h */,
 				17CDAA9924CEBE5500BB9F8B /* ContorlViewController.m */,
 				17CDAA9A24CEBE5500BB9F8B /* 信息服务下发 */,
@@ -5641,6 +5651,43 @@
 			path = TopAlert;
 			sourceTree = "<group>";
 		};
+		B1F37659293B050C0034D4D8 /* 指定记录 */ = {
+			isa = PBXGroup;
+			children = (
+				B1F37662293B06D70034D4D8 /* Model */,
+				B1F3765E293B069E0034D4D8 /* View */,
+				B1F3765A293B05160034D4D8 /* controller */,
+			);
+			path = "指定记录";
+			sourceTree = "<group>";
+		};
+		B1F3765A293B05160034D4D8 /* controller */ = {
+			isa = PBXGroup;
+			children = (
+				B1F3765B293B054D0034D4D8 /* CBCommandRecordController.h */,
+				B1F3765C293B054D0034D4D8 /* CBCommandRecordController.m */,
+			);
+			path = controller;
+			sourceTree = "<group>";
+		};
+		B1F3765E293B069E0034D4D8 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				B1F3765F293B06BA0034D4D8 /* _CBCommandRecordCell.h */,
+				B1F37660293B06BA0034D4D8 /* _CBCommandRecordCell.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		B1F37662293B06D70034D4D8 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				B1F37663293B06EA0034D4D8 /* _CBCommandRecord.h */,
+				B1F37664293B06EA0034D4D8 /* _CBCommandRecord.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		B1F85A3429379EF800A90871 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -6122,6 +6169,7 @@
 				1782BF2924C0427E00544C36 /* UIColor+BGHexColor.m in Sources */,
 				17CDAC1A24CEBE5600BB9F8B /* AlarmTypeTableViewCell.m in Sources */,
 				17CDAC2C24CEBE5600BB9F8B /* MINMapPaopaoDetailView.m in Sources */,
+				B1F37665293B06EA0034D4D8 /* _CBCommandRecord.m in Sources */,
 				1782BF5A24C0427E00544C36 /* CBTalkMemberViewController.m in Sources */,
 				17CDAB7824CEBE5500BB9F8B /* GGRect.m in Sources */,
 				437E1648248C03980086DBB4 /* CBPetFenceAlarmMapVC.swift in Sources */,
@@ -6270,6 +6318,7 @@
 				B1D0D08E292FC80900ECA328 /* CBCarAlertMsgController.m in Sources */,
 				17CDAB6F24CEBE5500BB9F8B /* RadarIndicatorData.m in Sources */,
 				437B3E7B247F6715005365D9 /* UILabel+Extension.swift in Sources */,
+				B1F3765D293B054D0034D4D8 /* CBCommandRecordController.m in Sources */,
 				17CDAB5A24CEBE5500BB9F8B /* CenterData.m in Sources */,
 				43C87C0E248A7A29008C84A7 /* CBPetCtrlPanelView.swift in Sources */,
 				176AD8FA243D701D001B5FC3 /* CBPetNotificationMacro.swift in Sources */,
@@ -6465,6 +6514,7 @@
 				17CDAC3A24CEBE5600BB9F8B /* MultiplePhotoViewController.m in Sources */,
 				17CDAB3524CEBE5500BB9F8B /* CBNetworkBadView.m in Sources */,
 				B1D0D092292FCAD300ECA328 /* _CBCarAlertMsgCell.m in Sources */,
+				B1F37661293B06BA0034D4D8 /* _CBCommandRecordCell.m in Sources */,
 				17CDAC5B24CEBE5600BB9F8B /* PhoneBookTableViewCell.m in Sources */,
 				17CDAB8424CEBE5500BB9F8B /* LineAnimationsManager.m in Sources */,
 				1782BF2824C0427E00544C36 /* NSString+StringToWords.m in Sources */,

@@ -30,7 +30,7 @@
 //cell 文本颜色
 #define kCellTextColor [UIColor colorWithRed: 73 /255.0 green: 73/255.0 blue: 73/255.0 alpha:1.0]
 //背景颜色
-//#define kBackColor [UIColor colorWithRed: 247 /255.0 green: 247/255.0 blue: 247/255.0 alpha:1.0]
+#define kGreyColor [UIColor colorWithRed: 247 /255.0 green: 247/255.0 blue: 247/255.0 alpha:1.0]
 #define kBackColor [UIColor colorWithRed: 255.0 /255.0 green: 255.0/255.0 blue: 255.0/255.0 alpha:1.0]
 //输入框内容颜色
 #define kTextFieldColor [UIColor colorWithRed: 176 /255.0 green: 176/255.0 blue: 176/255.0 alpha:1.0]

@@ -64,6 +64,16 @@ static AFHTTPSessionManager *afManager = nil;
  602		：系统异常
  */
 - (void)postWithUrl:(NSString *)url params:(NSDictionary *)params succeed:(Succeed)succeed failed:(Failed)failed {
+    afManager.requestSerializer = [AFHTTPRequestSerializer serializer];
+    [self __postWithUrl:url params:params succeed:succeed failed:failed];
+}
+
+- (void)postJSONWithUrl:(NSString *)url params:(NSDictionary *)params succeed:(Succeed)succeed failed:(Failed)failed {
+    afManager.requestSerializer = [AFJSONRequestSerializer serializer];
+    [self __postWithUrl:url params:params succeed:succeed failed:failed];
+}
+
+- (void)__postWithUrl:(NSString *)url params:(NSDictionary *)params succeed:(Succeed)succeed failed:(Failed)failed {
     //NSLog(@"----uid:%d -----",[UserLoginModelManager shareManager].userInfoModel.uid);
     CBPetLoginModel *userInfoModel = [CBPetLoginModelTool getUser];
     [afManager.requestSerializer setValue:userInfoModel.token?:@"" forHTTPHeaderField:@"token"];
