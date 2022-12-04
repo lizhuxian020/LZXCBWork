@@ -192,6 +192,7 @@
 
 - (void)createTableView
 {
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.view addSubview: self.tableView];
@@ -397,12 +398,12 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 50 * KFitHeightRate;
+    return 50;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 62.5 * KFitHeightRate;
+    return 50;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -413,7 +414,7 @@
 -  (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     FormDateHeaderView *view = [[FormDateHeaderView alloc] init];
-    view.frame = CGRectMake(0, 0, SCREEN_HEIGHT, 50 * KFitHeightRate);
+    view.frame = CGRectMake(0, 0, SCREEN_HEIGHT, 50);
     view.leftLabel.text = self.leftHeaderText;
     view.middleLabel.text = self.middleHeaderText;
     view.rightLabel.text = self.rightHeaderText;
@@ -425,34 +426,34 @@
     return [[UIView alloc] initWithFrame: CGRectMake(0, 0, SCREEN_HEIGHT, 1)];
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-    FormDateChooseTableViewCell *deviceCell = (FormDateChooseTableViewCell *)cell;
-    if (deviceCell.isCreate == NO) {
-        CGFloat cornerRadius = 5.f * KFitHeightRate;
-        //        cell.backgroundColor = UIColor.clearColor;
-        CAShapeLayer *layer = [[CAShapeLayer alloc] init];
-        CGMutablePathRef pathRef = CGPathCreateMutable();
-        CGRect bounds = CGRectMake(0, 0, SCREEN_HEIGHT - 12.5 * KFitWidthRate - 12.5 * KFitWidthRate, 50 * KFitHeightRate);
-        if (indexPath.row == [tableView numberOfRowsInSection:indexPath.section] - 1) {
-            CGPathMoveToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMinY(bounds));
-            CGPathAddArcToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMaxY(bounds), CGRectGetMidX(bounds), CGRectGetMaxY(bounds), cornerRadius);
-            CGPathAddArcToPoint(pathRef, nil, CGRectGetMaxX(bounds) - 1, CGRectGetMaxY(bounds), CGRectGetMaxX(bounds) -1, CGRectGetMidY(bounds), cornerRadius);
-            CGPathAddLineToPoint(pathRef, nil, CGRectGetMaxX(bounds) -1, CGRectGetMinY(bounds));
-        }else { // 中间的view
-            CGPathMoveToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMaxY(bounds));
-            CGPathAddLineToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMinY(bounds));
-            CGPathMoveToPoint(pathRef, nil, CGRectGetMaxX(bounds)-1, CGRectGetMinY(bounds));
-            CGPathAddLineToPoint(pathRef, nil, CGRectGetMaxX(bounds)-1, CGRectGetMaxY(bounds));
-        }
-        layer.path = pathRef;
-        //颜色修改
-        layer.fillColor = kCellBackColor.CGColor;
-        layer.strokeColor = kRGB(210, 210, 210).CGColor;
-        CFRelease(pathRef);
-        [deviceCell.backView.layer insertSublayer: layer atIndex: 0];
-        deviceCell.isCreate = YES;
-    }
-}
+//- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+//    FormDateChooseTableViewCell *deviceCell = (FormDateChooseTableViewCell *)cell;
+//    if (deviceCell.isCreate == NO) {
+//        CGFloat cornerRadius = 5.f * KFitHeightRate;
+//        //        cell.backgroundColor = UIColor.clearColor;
+//        CAShapeLayer *layer = [[CAShapeLayer alloc] init];
+//        CGMutablePathRef pathRef = CGPathCreateMutable();
+//        CGRect bounds = CGRectMake(0, 0, SCREEN_HEIGHT - 12.5 * KFitWidthRate - 12.5 * KFitWidthRate, 50 * KFitHeightRate);
+//        if (indexPath.row == [tableView numberOfRowsInSection:indexPath.section] - 1) {
+//            CGPathMoveToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMinY(bounds));
+//            CGPathAddArcToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMaxY(bounds), CGRectGetMidX(bounds), CGRectGetMaxY(bounds), cornerRadius);
+//            CGPathAddArcToPoint(pathRef, nil, CGRectGetMaxX(bounds) - 1, CGRectGetMaxY(bounds), CGRectGetMaxX(bounds) -1, CGRectGetMidY(bounds), cornerRadius);
+//            CGPathAddLineToPoint(pathRef, nil, CGRectGetMaxX(bounds) -1, CGRectGetMinY(bounds));
+//        }else { // 中间的view
+//            CGPathMoveToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMaxY(bounds));
+//            CGPathAddLineToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMinY(bounds));
+//            CGPathMoveToPoint(pathRef, nil, CGRectGetMaxX(bounds)-1, CGRectGetMinY(bounds));
+//            CGPathAddLineToPoint(pathRef, nil, CGRectGetMaxX(bounds)-1, CGRectGetMaxY(bounds));
+//        }
+//        layer.path = pathRef;
+//        //颜色修改
+//        layer.fillColor = kCellBackColor.CGColor;
+//        layer.strokeColor = kRGB(210, 210, 210).CGColor;
+//        CFRelease(pathRef);
+//        [deviceCell.backView.layer insertSublayer: layer atIndex: 0];
+//        deviceCell.isCreate = YES;
+//    }
+//}
 
 #pragma mark - MINDatePickerViewDelegare
 - (void)datePicker:(MINDatePickerView *)pickerView didSelectordate:(NSString *)dateString date:(NSDate *)date {

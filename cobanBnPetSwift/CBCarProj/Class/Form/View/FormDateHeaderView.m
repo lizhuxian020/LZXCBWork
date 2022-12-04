@@ -25,30 +25,32 @@
 
 - (void)createUI
 {
-    self.backgroundColor = kBackColor;
+    self.backgroundColor = kGreyColor;
     backView = [[UIView alloc] init];
     backView.backgroundColor = [UIColor clearColor];
-    backView.layer.cornerRadius = 5 * KFitHeightRate;
+//    backView.layer.cornerRadius = 5 * KFitHeightRate;
     [self addSubview: backView];
     [backView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self);
-        make.top.left.equalTo(self).with.offset(12.5 * KFitHeightRate);
+        make.left.equalTo(self).with.offset(12.5 * KFitHeightRate);
         make.right.equalTo(self).with.offset(-12.5 * KFitHeightRate);
+        make.centerY.equalTo(@0);
     }];
-    CGFloat cornerRadius = 5.f * KFitHeightRate;
-    CAShapeLayer *layer = [[CAShapeLayer alloc] init];
-    CGMutablePathRef pathRef = CGPathCreateMutable();
-    CGRect bounds = CGRectMake(0, 0, SCREEN_HEIGHT - 12.5 * KFitWidthRate - 12.5 * KFitWidthRate, 50 * KFitHeightRate);
-    CGPathMoveToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMaxY(bounds));
-    CGPathAddArcToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMinY(bounds), CGRectGetMidX(bounds), CGRectGetMinY(bounds), cornerRadius);
-    CGPathAddArcToPoint(pathRef, nil, CGRectGetMaxX(bounds) - 1, CGRectGetMinY(bounds), CGRectGetMaxX(bounds) -1, CGRectGetMidY(bounds), cornerRadius);
-    CGPathAddLineToPoint(pathRef, nil, CGRectGetMaxX(bounds) - 1, CGRectGetMaxY(bounds));
-    CGPathAddLineToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMaxY(bounds));
-    layer.path = pathRef;
-    CFRelease(pathRef);
-    [backView.layer insertSublayer: layer atIndex: 0];
-    layer.strokeColor = kRGB(210, 210, 210).CGColor;
-    layer.fillColor = kRGB(244, 244, 244).CGColor;
+    
+//    CGFloat cornerRadius = 5.f * KFitHeightRate;
+//    CAShapeLayer *layer = [[CAShapeLayer alloc] init];
+//    CGMutablePathRef pathRef = CGPathCreateMutable();
+//    CGRect bounds = CGRectMake(0, 0, SCREEN_HEIGHT - 12.5 * KFitWidthRate - 12.5 * KFitWidthRate, 50 * KFitHeightRate);
+//    CGPathMoveToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMaxY(bounds));
+//    CGPathAddArcToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMinY(bounds), CGRectGetMidX(bounds), CGRectGetMinY(bounds), cornerRadius);
+//    CGPathAddArcToPoint(pathRef, nil, CGRectGetMaxX(bounds) - 1, CGRectGetMinY(bounds), CGRectGetMaxX(bounds) -1, CGRectGetMidY(bounds), cornerRadius);
+//    CGPathAddLineToPoint(pathRef, nil, CGRectGetMaxX(bounds) - 1, CGRectGetMaxY(bounds));
+//    CGPathAddLineToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMaxY(bounds));
+//    layer.path = pathRef;
+//    CFRelease(pathRef);
+//    [backView.layer insertSublayer: layer atIndex: 0];
+//    layer.strokeColor = kRGB(210, 210, 210).CGColor;
+//    layer.fillColor = kRGB(244, 244, 244).CGColor;
+    
     _leftLabel = [MINUtils createLabelWithText: @"编号" size: 15 * KFitHeightRate alignment: NSTextAlignmentCenter textColor: kRGB(33, 33, 33)];
     [backView addSubview: _leftLabel];
     //_leftLabel.backgroundColor = [UIColor redColor];
@@ -74,11 +76,11 @@
         make.width.mas_equalTo(125 * KFitWidthRate);
     }];
     UIView *lineView = [MINUtils createLineView];
-    [backView addSubview: lineView];
+    [self addSubview: lineView];
     [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(backView).with.offset(0.5);
+        make.bottom.equalTo(@0);
         make.height.mas_equalTo(0.5);
-        make.left.right.equalTo(backView);
+        make.left.right.equalTo(@0);
     }];
 }
 
