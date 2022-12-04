@@ -11,8 +11,9 @@
 @interface FormTableViewCell : UITableViewCell
 @property (nonatomic, strong) UILabel *nameLabel;
 @property (nonatomic, strong) UIView *backView;
+@property (nonatomic, strong) UIImageView *imgView;
 @property (nonatomic, assign) BOOL isCreate;
-- (void)addTopLineView;
+//- (void)addTopLineView;
 - (void)addBottomLineView;
 - (void)hideRightImage;
 @end

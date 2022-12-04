@@ -14,7 +14,11 @@
 @property (nonatomic, strong) UIButton *arrowImageBtn;
 @property (nonatomic, assign) NSInteger section;
 @property (nonatomic, copy) void (^headerBtnClick)(NSInteger section);
+@property (nonatomic, strong) UILabel *exTitleLabel;
+@property (nonatomic, strong) UIButton *exArrowImageBtn;
 - (void)setDownforwardImage;
-- (void)setCornerWithSection:(NSInteger)section;
+//- (void)setCornerWithSection:(NSInteger)section;
 - (void)addBottomLineView;
+- (void)showExpandableView;
+- (void)hideExpandableView;
 @end

@@ -14,7 +14,10 @@
 #import "BarChartViewController.h"
 #import "FormDateChooseViewController.h"
 #import "MultimediaViewController.h"
-
+#import "_CBMyInfoPopView.h"
+#import "CBPersonInfoController.h"
+#import "AboutUsViewController.h"
+#import "cobanBnPetSwift-Swift.h"
 @interface FormViewController () <UITableViewDelegate, UITableViewDataSource>
 {
     NSMutableArray *sectionStatusArr;
@@ -29,6 +32,7 @@
 @property (nonatomic, copy) NSArray *electronicTitleArr;
 @property (nonatomic, assign) NSInteger lastAlarm;
 //@property (nonatomic, strong) NSMutableArray *showArr; // 显示项
+@property (nonatomic, strong) _CBMyInfoPopView *infoPopView;
 @end
 
 @implementation FormViewController
@@ -67,7 +71,7 @@
     [super viewWillAppear:animated];
     
     CBHomeLeftMenuDeviceInfoModel *model = [CBCommonTools CBdeviceInfo];
-    [self initBarRighBtnTitle: model.name?:@"" target: nil action: nil];
+    [self initBarRighBtnTitle: model.name?:@"" target: self action: @selector(didRightBtn)];
 }
 #pragma mark -- 根据协议展示控制功能
 - (void)requestData
@@ -110,21 +114,73 @@
 {
     [self initBarWithTitle: Localized(@"统计报表") isBack: NO];
     CBHomeLeftMenuDeviceInfoModel *model = [CBCommonTools CBdeviceInfo];
-    [self initBarRighBtnTitle: model.name?:@"" target: nil action: nil];
+    [self initBarRighBtnTitle: model.name?:@"" target: self action: @selector(didRightBtn)];
     [self createTableView];
+    [self setupInfoPopView];
 }
 
 - (void)createTableView
 {
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.backgroundColor = kRGB(236, 236, 236);
+    self.tableView.backgroundColor = kBackColor;
     [self.view addSubview: self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.top.equalTo(self.view);
     }];
 }
-
+- (void)didRightBtn {
+    [self.infoPopView pop];
+}
+- (void)setupInfoPopView {
+    self.infoPopView = [_CBMyInfoPopView new];
+    kWeakSelf(self);
+    [self.infoPopView setDidClickPersonInfo:^{
+        CBPersonInfoController *v = [CBPersonInfoController new];
+        [weakself.navigationController pushViewController:v animated: YES];
+    }];
+    [self.infoPopView setDidClickAbout:^{
+        AboutUsViewController *aboutUsVC = [[AboutUsViewController alloc] init];
+        [weakself.navigationController pushViewController: aboutUsVC animated: YES];
+    }];
+    [self.infoPopView setDidClickPwd:^{
+        CBPetUpdatePwdViewController *vc = [CBPetUpdatePwdViewController new];
+        [weakself.navigationController pushViewController:vc animated:YES];
+    }];
+    [self.infoPopView setDidClickLogout:^{
+        [weakself quitBtnClick];
+    }];
+}
+- (void)quitBtnClick
+{
+    // 退出登录提醒
+    UIAlertController *alertControl = [UIAlertController alertControllerWithTitle:nil message:Localized(@"是否退出登录") preferredStyle:UIAlertControllerStyleAlert];
+    [alertControl addAction:[UIAlertAction actionWithTitle:Localized(@"确定") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+//        [self logoutRequest];
+        [self logoutAction];
+    }]];
+    [alertControl addAction:[UIAlertAction actionWithTitle:Localized(@"取消") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    }]];
+    [self presentViewController:alertControl animated:YES completion:nil];
+}
+- (void)logoutAction {
+    // 清除本地选中的设备token
+//    CBWtUserLoginModel *userModel = [CBWtUserLoginModel CBaccount];
+//    userModel.token = nil;
+//    [CBWtUserLoginModel saveCBAccount:userModel];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:KCBWt_SwitchCBWtLoginViewController object:nil];
+    // 信鸽推送 解绑
+    //[[XGPushTokenManager defaultTokenManager] unbindWithIdentifer:[NSString stringWithFormat:@"%@",@(userModel.uid)] type:XGPushTokenBindTypeAccount];
+    
+    CBPetLoginModel *userModel = [CBPetLoginModelTool getUser];
+    userModel.token = nil;
+    [CBPetLoginModelTool saveUser:userModel];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"K_SwitchLoginViewController" object:nil];
+    
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
 #pragma mark - tableView delegate & dataSource
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -246,20 +302,26 @@
         return nil;
     }
     FormHeaderView *view = [[FormHeaderView alloc] init];
-    view.frame = CGRectMake(0, 0, SCREEN_HEIGHT, 50 * KFitHeightRate);
+//    view.frame = CGRectMake(0, 0, SCREEN_HEIGHT, 50 * KFitHeightRate);
     view.titleLabel.text = self.sectionTitleArr[section];
+    view.exTitleLabel.text = self.sectionTitleArr[section];
     view.titleImageView.image = [UIImage imageNamed: self.sectionImageTitleArr[section]];
     view.section = section;
-    [view setCornerWithSection: section];
+    [view addBottomLineView];
+//    [view setCornerWithSection: section];
     int flag = [sectionStatusArr[section] intValue];
     if (flag == 0) {
         view.arrowImageBtn.selected = NO;//YES;
+        view.exArrowImageBtn.selected = NO;//YES;
     }else {
         view.arrowImageBtn.selected = YES;//NO;
+        view.exArrowImageBtn.selected = YES;//NO;
     }
     if (section == 5 || section == 6 || section == 8) { // 5油量统计 6报警统计 8电子围栏报表
         [view setDownforwardImage];
-        [view addBottomLineView];
+        [view showExpandableView];
+    } else {
+        [view hideExpandableView];
     }
     __weak __typeof__(self) weakSelf = self;
     //__block FormHeaderView *weakHeadView = view;
@@ -279,6 +341,7 @@
             [self.navigationController pushViewController: singleBarChartVC animated: YES];
         }else if (section == 5 || section == 6 || section == 8){ // 这里是展开还是收缩
             weakHeadView.arrowImageBtn.selected = !weakHeadView.arrowImageBtn.selected;
+            weakHeadView.exArrowImageBtn.selected = !weakHeadView.exArrowImageBtn.selected;
             [weakSelf reloadTableSectionAtIndex: section];
         }else if (section == 9) { // 多媒体记录报表
             MultimediaViewController *multimedieVC = [[MultimediaViewController alloc] init];
@@ -323,7 +386,7 @@
     if (indexPath.section == 6 && [self.alarmArr[indexPath.row] integerValue] == 0) {
         return 0;
     }
-    return 50 * KFitHeightRate;
+    return 50;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -331,56 +394,50 @@
     if ([self.sectionArr[section] intValue] == 0) {
         return 0;
     }
-    return 62.5 * KFitHeightRate;
+    return 50;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    if (self.sectionArr.count - 1 == section) {
-        return [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, 12.5 * KFitHeightRate)];
-    }
-    return nil;
+    return UIView.new;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    if (self.sectionArr.count - 1 == section) {
-        return 12.5 * KFitHeightRate;
-    }
-    return 0;
+    return 0.01;
 }
-
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.section == 6 && [self.alarmArr[indexPath.row] integerValue] == 0) {
-        return ;
-    }
-    FormTableViewCell *deviceCell = (FormTableViewCell *)cell;
-    if (deviceCell.isCreate == NO) {
-        CGFloat cornerRadius = 5.f * KFitHeightRate;
-//        cell.backgroundColor = UIColor.clearColor;
-        CAShapeLayer *layer = [[CAShapeLayer alloc] init];
-        CGMutablePathRef pathRef = CGPathCreateMutable();
-        CGRect bounds = CGRectMake(0, 0, SCREEN_HEIGHT - 12.5 * KFitWidthRate - 12.5 * KFitWidthRate, 50 * KFitHeightRate);
-        if ((self.lastAlarm == indexPath.row && indexPath.section == 6) || indexPath.row == [tableView numberOfRowsInSection:indexPath.section] - 1) {
-            CGPathMoveToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMinY(bounds));
-            CGPathAddArcToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMaxY(bounds), CGRectGetMidX(bounds), CGRectGetMaxY(bounds), cornerRadius);
-            CGPathAddArcToPoint(pathRef, nil, CGRectGetMaxX(bounds) - 1, CGRectGetMaxY(bounds), CGRectGetMaxX(bounds) -1, CGRectGetMidY(bounds), cornerRadius);
-            CGPathAddLineToPoint(pathRef, nil, CGRectGetMaxX(bounds) -1, CGRectGetMinY(bounds));
-        }else { // 中间的view
-            CGPathMoveToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMaxY(bounds));
-            CGPathAddLineToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMinY(bounds));
-            CGPathAddLineToPoint(pathRef, nil, CGRectGetMaxX(bounds)-1, CGRectGetMinY(bounds));
-            CGPathAddLineToPoint(pathRef, nil, CGRectGetMaxX(bounds)-1, CGRectGetMaxY(bounds));
-        }
-        layer.path = pathRef;
-        //颜色修改
-        layer.fillColor = kCellBackColor.CGColor;
-        layer.strokeColor = kCellBackColor.CGColor;
-        CFRelease(pathRef);
-        [deviceCell.backView.layer insertSublayer: layer atIndex: 0];
-        deviceCell.isCreate = YES;
-    }
-}
+//
+//- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+//    if (indexPath.section == 6 && [self.alarmArr[indexPath.row] integerValue] == 0) {
+//        return ;
+//    }
+//    FormTableViewCell *deviceCell = (FormTableViewCell *)cell;
+//    if (deviceCell.isCreate == NO) {
+//        CGFloat cornerRadius = 5.f * KFitHeightRate;
+////        cell.backgroundColor = UIColor.clearColor;
+//        CAShapeLayer *layer = [[CAShapeLayer alloc] init];
+//        CGMutablePathRef pathRef = CGPathCreateMutable();
+//        CGRect bounds = CGRectMake(0, 0, SCREEN_HEIGHT - 12.5 * KFitWidthRate - 12.5 * KFitWidthRate, 50 * KFitHeightRate);
+//        if ((self.lastAlarm == indexPath.row && indexPath.section == 6) || indexPath.row == [tableView numberOfRowsInSection:indexPath.section] - 1) {
+//            CGPathMoveToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMinY(bounds));
+//            CGPathAddArcToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMaxY(bounds), CGRectGetMidX(bounds), CGRectGetMaxY(bounds), cornerRadius);
+//            CGPathAddArcToPoint(pathRef, nil, CGRectGetMaxX(bounds) - 1, CGRectGetMaxY(bounds), CGRectGetMaxX(bounds) -1, CGRectGetMidY(bounds), cornerRadius);
+//            CGPathAddLineToPoint(pathRef, nil, CGRectGetMaxX(bounds) -1, CGRectGetMinY(bounds));
+//        }else { // 中间的view
+//            CGPathMoveToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMaxY(bounds));
+//            CGPathAddLineToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMinY(bounds));
+//            CGPathAddLineToPoint(pathRef, nil, CGRectGetMaxX(bounds)-1, CGRectGetMinY(bounds));
+//            CGPathAddLineToPoint(pathRef, nil, CGRectGetMaxX(bounds)-1, CGRectGetMaxY(bounds));
+//        }
+//        layer.path = pathRef;
+//        //颜色修改
+//        layer.fillColor = kCellBackColor.CGColor;
+//        layer.strokeColor = kCellBackColor.CGColor;
+//        CFRelease(pathRef);
+//        [deviceCell.backView.layer insertSublayer: layer atIndex: 0];
+//        deviceCell.isCreate = YES;
+//    }
+//}
 
 #pragma mark - Other Method
 - (void)didReceiveMemoryWarning {
