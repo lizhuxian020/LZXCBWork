@@ -396,9 +396,9 @@
     }];
 }
 - (void)setupBottom {
-    self.followBtn = [self createBtn:__CarPaoTitle_Track img:@"单选-选中"];
-    self.playBackBtn = [self createBtn:__CarPaoTitle_PlayBack img:@"单选-选中"];
-    self.moveBtn = [self createBtn:__CarPaoTitle_Move img:@"单选-选中"];
+    self.followBtn = [self createBtn:__CarPaoTitle_Track img:@"单次定位"];
+    self.playBackBtn = [self createBtn:__CarPaoTitle_PlayBack img:@"回放"];
+    self.moveBtn = [self createBtn:__CarPaoTitle_Move img:@"电子围栏-未点击"];
     [self.bottomView addSubview:self.followBtn];
     [self.bottomView addSubview:self.playBackBtn];
     [self.bottomView addSubview:self.moveBtn];

@@ -10,6 +10,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "MyDeviceDetailViewController.h"
 #import "MyDeviceModel.h"
+#import "cobanBnPetSwift-Swift.h"
 
 @interface AddDeviceViewController ()<AVCaptureMetadataOutputObjectsDelegate, UITextFieldDelegate>
 /** 设备 */
@@ -28,6 +29,7 @@
 // 输入框
 @property (nonatomic,strong) UIView *deviceInputView;
 @property (nonatomic, strong) UITextField *deviceTextField;
+@property (nonatomic, copy) NSString *scanContentStr ;
 @end
 
 @implementation AddDeviceViewController
@@ -54,6 +56,8 @@
      selector:@selector(keyboardWillHide:)
      name:UIKeyboardWillHideNotification
      object:nil];
+    
+    [AppDelegate setNavigationBGColor:nil :self.navigationController.navigationBar];
 }
 
 //键盘弹起后处理scrollView的高度使得textfield可见
@@ -97,7 +101,7 @@
  */
 - (void)initFontView {
     [self initBarWithTitle:Localized(@"添加设备") isBack: YES];
-    [self initBarRighBtnTitle:Localized(@"完成") target: self action: @selector(rightBtnClick)];
+    [self initBarRighBtnTitle:Localized(@"手动添加") target: self action: @selector(rightBtnClick)];
     // 设置中间的二维码框
     UIImage *qrImage = [UIImage imageNamed:@"扫一扫框"];
     UIImageView *qrImageView = [[UIImageView alloc] initWithImage: qrImage];
@@ -150,8 +154,8 @@
     [qrImageView addSubview:self.line];
     
     _deviceInputView = [[UIView alloc] init];
-    _deviceInputView.layer.cornerRadius = 5 * KFitWidthRate;
-    _deviceInputView.backgroundColor = kBackColor;
+//    _deviceInputView.layer.cornerRadius = 5 * KFitWidthRate;
+    _deviceInputView.backgroundColor = UIColor.clearColor;
     [self.view addSubview:_deviceInputView];
     [_deviceInputView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.view);
@@ -165,17 +169,20 @@
         make.centerX.centerY.equalTo(_deviceInputView);
         make.size.mas_equalTo(CGSizeMake(200 * KFitWidthRate,  30 * KFitHeightRate));
     }];
+    _deviceTextField.text = Localized(@"请对准设备的二维码");
+    _deviceTextField.userInteractionEnabled = NO;
+    _deviceTextField.textColor = KCarLineColor;
 }
 
 #pragma mark - action
 - (void)rightBtnClick
 {
-    if (self.deviceTextField.text.length <= 0) {
-        [MINUtils showProgressHudToView: self.view withText:Localized(@"请输入设备编号")];
-        return;
-    }
-    [self.deviceTextField resignFirstResponder];
-    [self checkDeviceReqeust:self.deviceTextField.text];
+//    if (self.deviceTextField.text.length <= 0) {
+//        [MINUtils showProgressHudToView: self.view withText:Localized(@"请输入设备编号")];
+//        return;
+//    }
+//    [self.deviceTextField resignFirstResponder];
+//    [self checkDeviceReqeust:self.deviceTextField.text];
 }
 #pragma mark -- 校验设备编号合法性
 - (void)checkDeviceReqeust:(NSString *)dno {
@@ -187,7 +194,7 @@
     [[NetWorkingManager shared] postWithUrl:@"personController/imeiValidation" params:paramters succeed:^(id response, BOOL isSucceed) {
         kStrongSelf(self);
         if (isSucceed) {
-            [self requestDeviceMessageWithDno:self.deviceTextField.text];
+            [self requestDeviceMessageWithDno:dno];
         } else {
             [HUD showHUDWithText:Localized(@"设备号错误") withDelay:1.5];
         }
@@ -210,7 +217,7 @@
                 model = [[MyDeviceModel alloc]init];
             }
             MyDeviceDetailViewController *MyDeviceDetailVC = [[MyDeviceDetailViewController alloc] init];
-            model.dno = self.deviceTextField.text?:@"";
+            model.dno = dno?:@"";
             MyDeviceDetailVC.model = model;
             MyDeviceDetailVC.groupNameArray = self.groupNameArray;
             MyDeviceDetailVC.groupIdArray = self.groupIdArray;
@@ -276,7 +283,7 @@
         [self.session addOutput:metadataOutput];
     }
     self.previewLayer = [AVCaptureVideoPreviewLayer layerWithSession:self.session];
-    self.previewLayer.frame = CGRectMake(0, 44 + kStautsRectHeight, SCREEN_HEIGHT, SCREEN_HEIGHT - 64);
+    self.previewLayer.frame = CGRectMake(0, PPNavigationBarHeight, SCREEN_HEIGHT, SCREEN_HEIGHT - PPNavigationBarHeight);
     self.previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
     [self.view.layer addSublayer:self.previewLayer];
     
@@ -284,13 +291,13 @@
     metadataOutput.metadataObjectTypes = self.metadataObjectTypes;
     //优化扫描区域
     //设置扫描范围区域 CGRectMake（y的起点/屏幕的高，x的起点/屏幕的宽，扫描的区域的高/屏幕的高，扫描的区域的宽/屏幕的宽）
-    CGFloat x,y,width,height;
-    x = (100*KFitHeightRate + kStautsRectHeight + 44)/SCREEN_HEIGHT;
-    y = ((SCREEN_WIDTH - 235*KFitHeightRate)/2)/SCREEN_WIDTH;
-    width = 235*KFitHeightRate/SCREEN_HEIGHT;
-    height = 235*KFitHeightRate/SCREEN_WIDTH;
-    CGRect rect = CGRectMake(x, y, width, height);
-    metadataOutput.rectOfInterest = rect;// 扫描框居中的话，不用设置rectOfInterest，rectOfInterest默认局中
+//    CGFloat x,y,width,height;
+//    x = (100*KFitHeightRate + kStautsRectHeight + 44)/SCREEN_HEIGHT;
+//    y = ((SCREEN_WIDTH - 235*KFitHeightRate)/2)/SCREEN_WIDTH;
+//    width = 235*KFitHeightRate/SCREEN_HEIGHT;
+//    height = 235*KFitHeightRate/SCREEN_WIDTH;
+//    CGRect rect = CGRectMake(x, y, width, height);
+//    metadataOutput.rectOfInterest = rect;// 扫描框居中的话，不用设置rectOfInterest，rectOfInterest默认局中
 }
 
 #pragma mark - AVCaptureMetadataOutputObjectsDelegate
@@ -300,7 +307,7 @@
         [self.session stopRunning];
         AVMetadataMachineReadableCodeObject * metadataObject = metadataObjects.firstObject;
         NSLog(@"%@", metadataObject.stringValue);
-        self.deviceTextField.text = metadataObject.stringValue;
+        self.scanContentStr = metadataObject.stringValue;
         [self checkDeviceReqeust:metadataObject.stringValue];
     }
 }
@@ -309,7 +316,8 @@
 - (NSMutableArray *)metadataObjectTypes {
     if (!_metadataObjectTypes) {
         ////设置扫码支持的编码格式(如下设置条形码和二维码兼容)
-        _metadataObjectTypes = [NSMutableArray arrayWithObjects://AVMetadataObjectTypeQRCode,
+        _metadataObjectTypes = [NSMutableArray arrayWithObjects:
+                                AVMetadataObjectTypeQRCode,
                                 AVMetadataObjectTypeAztecCode,
                                 AVMetadataObjectTypeCode128Code,
                                 AVMetadataObjectTypeCode39Code,

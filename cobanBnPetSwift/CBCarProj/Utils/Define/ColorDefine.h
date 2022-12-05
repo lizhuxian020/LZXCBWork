@@ -20,7 +20,8 @@
 //#define kNavBarBgColor [UIColor colorWithHexString:@"2E2F41"]
 #define kNavBarBgColor [UIColor colorWithRed: 255 /255.0 green: 255/255.0 blue: 255/255.0 alpha:1.0]
 //主色调
-#define kAppMainColor RGB(26, 151, 251)//kRGB(28.0,150.0,242.0)
+//#define kAppMainColor RGB(26, 151, 251)//kRGB(28.0,150.0,242.0)
+#define kAppMainColor [UIColor colorWithHexString:@"2DDFAF"]
 //棕色
 #define kBrownColor [UIColor colorWithHexString:@"808080"]
 //蓝色
