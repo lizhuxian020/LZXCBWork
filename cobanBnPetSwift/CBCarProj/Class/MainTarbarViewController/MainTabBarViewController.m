@@ -15,6 +15,7 @@
 #import "CBBaseNavigationController.h"
 #import "cobanBnPetSwift-Swift.h"
 #import "NotificationKey.h"
+#import "ElectronicFenceViewController.h"
 
 @interface MainTabBarViewController () <UIGestureRecognizerDelegate>
 
@@ -29,55 +30,55 @@
     [self createUI];
     [self addLongPressed];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textColorChangeNotification) name:K_TabBarColorChangeNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textColorChangeNotification) name:K_TabBarColorChangeNotification object:nil];
 }
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
-- (void)textColorChangeNotification {
-    NSString *imageNorlStr_control;
-    UIColor *normalColor_control;
-    NSString *imageNorlStr_form;
-    UIColor *normalColor_form;
-    //UserLoginModel *userLogin = [UserLoginModel CBaccount];
-    CBPetLoginModel *userModel = [CBPetLoginModelTool getUser];
-    CBHomeLeftMenuDeviceInfoModel *deviceModelInfo = [CBCommonTools CBdeviceInfo];
-    // 没有选中
-    if (deviceModelInfo == nil) {
-        imageNorlStr_control = @"控制";
-        normalColor_control = RGB(210, 210, 210);
-        imageNorlStr_form = @"报表";
-        normalColor_form = RGB(210, 210, 210);
-    } else {
-        // 0为查看权限
-        if ([userModel.auth isEqualToString:@"0"]) { //|| kStringIsEmpty(userLogin.auth)
-            imageNorlStr_control = @"控制";
-            normalColor_control = RGB(210, 210, 210);
-            imageNorlStr_form = @"报表";
-            normalColor_form = RGB(210, 210, 210);
-        } else {
-            imageNorlStr_control = @"控制";
-            normalColor_control = kRGB(137, 137, 137);
-            imageNorlStr_form = @"报表";
-            normalColor_form = kRGB(137, 137, 137);
-        }
-    }
-    ContorlViewController *ControlVC = self.viewControllers[1];
-    FormViewController *formVC = self.viewControllers[2];
-    ControlVC.tabBarItem = [self controller:ControlVC
-                                      title:Localized(@"控制")
-                                       size:12
-                              selectedImage:@"控制-选中状态"
-                                normalImage:imageNorlStr_control];
-    formVC.tabBarItem = [self controller:formVC
-                                   title:Localized(@"报表")
-                                    size:12
-                           selectedImage:@"报表-选中"
-                             normalImage:imageNorlStr_form];
-    
-    [self setUpTabBarItem:ControlVC selectedColor:kRGB(26, 151, 251) normalColor:normalColor_control];
-    [self setUpTabBarItem:formVC selectedColor:kRGB(26, 151, 251) normalColor:normalColor_form];
-}
+//- (void)textColorChangeNotification {
+//    NSString *imageNorlStr_control;
+//    UIColor *normalColor_control;
+//    NSString *imageNorlStr_form;
+//    UIColor *normalColor_form;
+//    //UserLoginModel *userLogin = [UserLoginModel CBaccount];
+//    CBPetLoginModel *userModel = [CBPetLoginModelTool getUser];
+//    CBHomeLeftMenuDeviceInfoModel *deviceModelInfo = [CBCommonTools CBdeviceInfo];
+//    // 没有选中
+//    if (deviceModelInfo == nil) {
+//        imageNorlStr_control = @"控制";
+//        normalColor_control = RGB(210, 210, 210);
+//        imageNorlStr_form = @"报表";
+//        normalColor_form = RGB(210, 210, 210);
+//    } else {
+//        // 0为查看权限
+//        if ([userModel.auth isEqualToString:@"0"]) { //|| kStringIsEmpty(userLogin.auth)
+//            imageNorlStr_control = @"控制";
+//            normalColor_control = RGB(210, 210, 210);
+//            imageNorlStr_form = @"报表";
+//            normalColor_form = RGB(210, 210, 210);
+//        } else {
+//            imageNorlStr_control = @"控制";
+//            normalColor_control = kRGB(137, 137, 137);
+//            imageNorlStr_form = @"报表";
+//            normalColor_form = kRGB(137, 137, 137);
+//        }
+//    }
+//    ContorlViewController *ControlVC = self.viewControllers[1];
+//    FormViewController *formVC = self.viewControllers[2];
+//    ControlVC.tabBarItem = [self controller:ControlVC
+//                                      title:Localized(@"控制")
+//                                       size:12
+//                              selectedImage:@"控制-选中状态"
+//                                normalImage:imageNorlStr_control];
+//    formVC.tabBarItem = [self controller:formVC
+//                                   title:Localized(@"报表")
+//                                    size:12
+//                           selectedImage:@"报表-选中"
+//                             normalImage:imageNorlStr_form];
+//
+//    [self setUpTabBarItem:ControlVC selectedColor:kRGB(26, 151, 251) normalColor:normalColor_control];
+//    [self setUpTabBarItem:formVC selectedColor:kRGB(26, 151, 251) normalColor:normalColor_form];
+//}
 - (void)addLongPressed {
     UILongPressGestureRecognizer *longRecog = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longPressed:)];
     longRecog.delegate = self;
@@ -117,7 +118,7 @@
     
     MainMapViewController *locationVC = [[MainMapViewController alloc] init];
     CBBaseNavigationController *locationNavControl = [[CBBaseNavigationController alloc] initWithRootViewController: locationVC];
-    locationVC.tabBarItem = [self controller:locationVC title:Localized(@"首页") size:12 selectedImage:@"定位-选中状态" normalImage:@"定位"];
+    locationVC.tabBarItem = [self controller:locationVC title:Localized(@"首页") size:12 selectedImage:@"首页-已点击" normalImage:@"首页-未点击"];
 //    CBPetLoginModel *userLogin = [CBPetLoginModelTool getUser];
 //    CBHomeLeftMenuDeviceInfoModel *deviceModelInfo = [CBCommonTools CBdeviceInfo];
 //    // 没有选中
@@ -140,29 +141,29 @@
 //            normalColor_form = kRGB(137, 137, 137);
 //        }
 //    }
-    ContorlViewController *ControlVC = [[ContorlViewController alloc] init];
+    ElectronicFenceViewController *ControlVC = [[ElectronicFenceViewController alloc] init];
     CBBaseNavigationController *ControlNavControl = [[CBBaseNavigationController alloc] initWithRootViewController: ControlVC];
     ControlVC.tabBarItem = [self controller:ControlVC
                                       title:Localized(@"电子围栏")
                                        size:12
-                              selectedImage:@"控制-选中状态"
-                                normalImage:@"控制"];
+                              selectedImage:@"电子围栏-已点击"
+                                normalImage:@"电子围栏-未点击"];
     
     FormViewController *formVC = [[FormViewController alloc] init];
     CBBaseNavigationController *formNavControl = [[CBBaseNavigationController alloc] initWithRootViewController: formVC];
     formVC.tabBarItem = [self controller:formVC
                                    title:Localized(@"报表")
                                     size:12
-                           selectedImage:@"报表-选中"
-                            normalImage:@"报表"];
+                           selectedImage:@"报表-已点击"
+                            normalImage:@"报表-未点击"];
     
     MineViewController *mineVC = [[MineViewController alloc] init];
     CBBaseNavigationController *mineNavControl = [[CBBaseNavigationController alloc] initWithRootViewController: mineVC];
     mineVC.tabBarItem = [self controller:mineVC
                                    title:Localized(@"我的")
                                     size:12
-                           selectedImage:@"我的-选中"
-                             normalImage:@"我的"];
+                           selectedImage:@"设备管理-已点击"
+                             normalImage:@"设备管理-未点击"];
     
     NSArray *controllersArrs = @[locationNavControl, ControlNavControl, formNavControl, mineNavControl];
     self.viewControllers = controllersArrs;
