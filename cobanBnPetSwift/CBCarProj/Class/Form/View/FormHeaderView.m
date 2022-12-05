@@ -54,15 +54,14 @@
         make.centerY.equalTo(backView);
         make.size.mas_equalTo(CGSizeMake(250 * KFitWidthRate, 20 * KFitHeightRate));
     }];
-    UIImage *arrowImage = [UIImage imageNamed: @"右边"];
+    UIImage *arrowImage = [UIImage imageNamed: @"查看"];
     _arrowImageBtn = [[UIButton alloc] init];
     [_arrowImageBtn setImage: arrowImage forState: UIControlStateNormal];
-    [_arrowImageBtn setImage: [UIImage imageNamed:@"下边"] forState: UIControlStateSelected];
+//    [_arrowImageBtn setImage: [UIImage imageNamed:@"下边"] forState: UIControlStateSelected];
     [backView addSubview: _arrowImageBtn];
     [_arrowImageBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(backView);
         make.right.equalTo(backView).with.offset(-12.5 * KFitHeightRate);
-        make.size.mas_equalTo(CGSizeMake(16 * KFitHeightRate, 16 * KFitHeightRate));
     }];
     _headBtn = [[UIButton alloc] init];
     [_headBtn addTarget: self action: @selector(headBtnClick) forControlEvents: UIControlEventTouchUpInside];
@@ -86,8 +85,8 @@
         make.size.mas_equalTo(CGSizeMake(250 * KFitWidthRate, 20 * KFitHeightRate));
     }];
     _exArrowImageBtn = [[UIButton alloc] init];
-    [_exArrowImageBtn setImage: arrowImage forState: UIControlStateNormal];
-    [_exArrowImageBtn setImage: [UIImage imageNamed:@"下边"] forState: UIControlStateSelected];
+    [_exArrowImageBtn setImage: [UIImage imageNamed:@"点击更多"] forState: UIControlStateNormal];
+    [_exArrowImageBtn setImage: [UIImage imageNamed:@"下拉"] forState: UIControlStateSelected];
     [self.expandableView addSubview: _exArrowImageBtn];
     [_exArrowImageBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(@0);
@@ -109,8 +108,8 @@
 {
     [_arrowImageBtn setImage: [UIImage imageNamed:@"右边"] forState: UIControlStateNormal];
     [_arrowImageBtn setImage: [UIImage imageNamed:@"下边"] forState: UIControlStateSelected];
-    [_exArrowImageBtn setImage: [UIImage imageNamed:@"右边"] forState: UIControlStateNormal];
-    [_exArrowImageBtn setImage: [UIImage imageNamed:@"下边"] forState: UIControlStateSelected];
+    [_exArrowImageBtn setImage: [UIImage imageNamed:@"点击更多"] forState: UIControlStateNormal];
+    [_exArrowImageBtn setImage: [UIImage imageNamed:@"下拉"] forState: UIControlStateSelected];
 }
 
 //// 暂时不用

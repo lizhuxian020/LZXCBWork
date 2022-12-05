@@ -153,7 +153,7 @@
         UIImageView *imageView = [[UIImageView alloc] initWithImage: image];
         [leftView addSubview: imageView];
         [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.edges.equalTo(@0);
+            make.centerX.centerY.equalTo(@0);
         }];
         [_textFieldView addSubview:leftView];
         [leftView mas_makeConstraints:^(MASConstraintMaker *make) {

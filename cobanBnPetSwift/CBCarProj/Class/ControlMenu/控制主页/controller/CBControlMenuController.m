@@ -30,14 +30,14 @@
     kWeakSelf(self);
     self.dataSource = @[
         @{
-            @"icon": @"报表-选中",
+            @"icon": @"设备信息",
             @"title": Localized(@"设备信息"),
             @"blk": ^{
                 NSLog(@"%s", __FUNCTION__);
             }
         },
         @{
-            @"icon": @"报表-选中",
+            @"icon": @"控制指令",
             @"title": Localized(@"控制指令"),
             @"blk": ^{
                 NSLog(@"%s", __FUNCTION__);
@@ -45,7 +45,7 @@
             }
         },
         @{
-            @"icon": @"报表-选中",
+            @"icon": @"终端设置",
             @"title": Localized(@"终端设置"),
             @"blk": ^{
                 NSLog(@"%s", __FUNCTION__);
@@ -53,7 +53,7 @@
             }
         },
         @{
-            @"icon": @"报表-选中",
+            @"icon": @"指令记录",
             @"title": Localized(@"指令记录"),
             @"blk": ^{
                 NSLog(@"%s", __FUNCTION__);
@@ -61,7 +61,7 @@
             }
         },
         @{
-            @"icon": @"报表-选中",
+            @"icon": @"报警设置",
             @"title": Localized(@"报警设置"),
             @"blk": ^{
                 NSLog(@"%s", __FUNCTION__);
@@ -69,7 +69,7 @@
             }
         },
         @{
-            @"icon": @"报表-选中",
+            @"icon": @"安装信息",
             @"title": Localized(@"安装信息"),
             @"blk": ^{
                 NSLog(@"%s", __FUNCTION__);
@@ -82,12 +82,12 @@
     UILabel *lbl = [MINUtils createLabelWithText:@"解绑设备" size:14];
     lbl.layer.cornerRadius = 20;
     [lbl.layer setMasksToBounds:YES];
-    lbl.layer.borderColor = UIColor.blackColor.CGColor;
+    lbl.layer.borderColor = KCarLineColor.CGColor;
     lbl.layer.borderWidth = 1;
     [self.view addSubview:lbl];
     [lbl mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(@(-TabPaddingBARHEIGHT-10));
-        make.height.equalTo(@40);
+        make.height.equalTo(@50);
         make.left.equalTo(@20);
         make.right.equalTo(@-20);
     }];

@@ -73,11 +73,19 @@
     
     
     UIView *line = [UIView new];
-    line.backgroundColor = UIColor.blackColor;
+    line.backgroundColor = KCarLineColor;
     [self.cancelLbl addSubview:line];
     [line mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.right.bottom.equalTo(@0);
         make.width.equalTo(@1);
+    }];
+    
+    UIView *lineTop = [MINUtils createLineView];
+    [self addSubview:lineTop];
+    [lineTop mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(line.mas_top);
+        make.left.right.equalTo(@0);
+        make.height.equalTo(@1);
     }];
     
     [self.cancelLbl mas_makeConstraints:^(MASConstraintMaker *make) {

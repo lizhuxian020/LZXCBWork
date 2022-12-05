@@ -48,10 +48,9 @@
     }];
     
     self.arrowV = [UIImageView new];
-    self.arrowV.image = [UIImage imageNamed:@"detail"];
+    self.arrowV.image = [UIImage imageNamed:@"查看"];
     [self.contentView addSubview:self.arrowV];
     [self.arrowV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.height.equalTo(@20);
         make.centerY.equalTo(@0);
         make.right.equalTo(@-15);
     }];

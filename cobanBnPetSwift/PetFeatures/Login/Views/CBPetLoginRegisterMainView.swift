@@ -12,7 +12,7 @@ class CBPetLoginRegisterMainView: CBPetBaseView {
     
     private lazy var imageViewBgm:UIImageView = {
         let bgmImgV = UIImageView()
-        bgmImgV.image = UIImage.init(named: "pet_login_bgm")
+        bgmImgV.image = UIImage.init(named: "登录背景")
         self.addSubview(bgmImgV)
         return bgmImgV
     }()

@@ -232,7 +232,7 @@
 + (UIView *)createLineView
 {
     UIView *view = [[UIView alloc] init];
-    [view setBackgroundColor: kRGB(210, 210, 210)];
+    [view setBackgroundColor: KCarLineColor];
     return view;
 }
 

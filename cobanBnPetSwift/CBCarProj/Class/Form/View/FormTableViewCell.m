@@ -44,14 +44,12 @@
             make.top.bottom.equalTo(_backView);
             make.left.equalTo(_imgView.mas_right).with.offset(15 * KFitWidthRate);
         }];
-        UIImage *rightImage = [UIImage imageNamed:@"左边-三角"];
+        UIImage *rightImage = [UIImage imageNamed:@"查看"];
         rightBtnImageView = [[UIImageView alloc] initWithImage: rightImage];
         [_backView addSubview: rightBtnImageView];
         [rightBtnImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(_backView);
             make.right.equalTo(_backView).with.offset(-10 * KFitWidthRate);
-            make.height.mas_equalTo(rightImage.size.height * KFitHeightRate);
-            make.width.mas_equalTo(rightImage.size.width * KFitHeightRate);
         }];
         
     }

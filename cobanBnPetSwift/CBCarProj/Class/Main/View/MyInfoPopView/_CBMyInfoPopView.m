@@ -50,7 +50,7 @@
     }];
     self.contentView.alpha = 0;
     
-    UIButton *closeBtn = [MINUtils createBtnWithNormalImage:[UIImage imageNamed:@"报表-选中"] selectedImage:[UIImage imageNamed:@""]];
+    UIButton *closeBtn = [MINUtils createBtnWithNormalImage:[UIImage imageNamed:@"关闭"] selectedImage:[UIImage imageNamed:@"关闭"]];
     [self.contentView addSubview:closeBtn];
     [closeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.equalTo(@10);
@@ -60,7 +60,7 @@
     CBPetLoginModel *userModel = [CBPetLoginModelTool getUser];
     
     UIImageView *arrowV = [UIImageView new];
-    [arrowV sd_setImageWithURL:[NSURL URLWithString:userModel.photo ?: @""] placeholderImage:[UIImage imageNamed:@"摩托车-定位-正常"]];
+    [arrowV sd_setImageWithURL:[NSURL URLWithString:userModel.photo ?: @""] placeholderImage:[UIImage imageNamed:@"个人资料"]];
     [self.contentView addSubview:arrowV];
     [arrowV mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(@10);
@@ -78,9 +78,9 @@
         make.centerX.equalTo(@0);
     }];
     
-    UIView *infoV = [self viewWithImg:@"报表-选中" title:Localized(@"个人信息")];
-    UIView *aboutV = [self viewWithImg:@"报表-选中" title:Localized(@"关于我们")];
-    UIView *pwdV = [self viewWithImg:@"报表-选中" title:Localized(@"修改密码")];
+    UIView *infoV = [self viewWithImg:@"个人资料" title:Localized(@"个人信息")];
+    UIView *aboutV = [self viewWithImg:@"关于我们" title:Localized(@"关于我们")];
+    UIView *pwdV = [self viewWithImg:@"修改密码" title:Localized(@"修改密码")];
     [self.contentView addSubview:infoV];
     [self.contentView addSubview:aboutV];
     [self.contentView addSubview:pwdV];

@@ -638,7 +638,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 }
 
 - (void)createBtns {
-    self.deviceListBtn = [self createBtn:@"停留统计"];
+    self.deviceListBtn = [self createBtn:@"设备列表"];
     [self.deviceListBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(@(kStatusBarHeight + 20));
         make.left.equalTo(@15);
@@ -646,14 +646,14 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     }];
     [self.deviceListBtn addTarget:self action:@selector(didClickDeviceListBtn) forControlEvents:UIControlEventTouchUpInside];
     
-    self.qrScanBtn = [self createBtn:@"停留时长"];
+    self.qrScanBtn = [self createBtn:@"扫码"];
     [self.qrScanBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.deviceListBtn.mas_right).offset(15);
         make.top.width.height.equalTo(self.deviceListBtn);
     }];
     [self.qrScanBtn addTarget:self action:@selector(didClickScanBtn) forControlEvents:UIControlEventTouchUpInside];
     
-    self.alertBtn = [self createBtn:@"已下载视频"];
+    self.alertBtn = [self createBtn:@"报警信息"];
     [self.alertBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.width.height.equalTo(self.deviceListBtn);
         make.left.equalTo(self.qrScanBtn.mas_right).mas_offset(15);
@@ -661,7 +661,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [self.alertBtn addTarget:self action:@selector(didClickAlertBtn) forControlEvents:UIControlEventTouchUpInside];
 //    self.alertBtn.BadgeValue = @"99";
     
-    self.personBtn = [self createBtn:@"报表-选中"];
+    self.personBtn = [self createBtn:@"个人资料"];
     [self.personBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.width.height.equalTo(self.deviceListBtn);
         make.right.equalTo(@-15);
@@ -677,7 +677,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         }
     }];
     
-    self.locateBtn = [self createBtn:@"播放条-按钮"];
+    self.locateBtn = [self createBtn:@"单次定位"];
     [self.locateBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.width.height.equalTo(self.personBtn);
         make.bottom.equalTo(@(-20));
