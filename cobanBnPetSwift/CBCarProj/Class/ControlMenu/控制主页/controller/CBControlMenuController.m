@@ -13,11 +13,18 @@
 #import "CBCommandRecordController.h"
 #import "CBSetAlarmViewController.h"
 #import "CBInstallInfoController.h"
+#import "MyDeviceViewController.h"
+#import "MyDeviceDetailViewController.h"
+#import "MyDeviceModel.h"
 
 @interface CBControlMenuController ()<UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) NSArray *dataSource;
 
+@property (nonatomic, strong) MyDeviceModel *model;
+
+@property (nonatomic, strong) NSMutableArray *groupNameArr;
+@property (nonatomic, strong) NSMutableArray *groupIDArr;
 @end
 
 @implementation CBControlMenuController
@@ -26,6 +33,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self initBarWithTitle:self.deviceInfoModelSelect.name?:@"" isBack:YES];
+    self.groupNameArr = [NSMutableArray new];
+    self.groupIDArr = [NSMutableArray new];
     
     kWeakSelf(self);
     self.dataSource = @[
@@ -34,6 +43,7 @@
             @"title": Localized(@"设备信息"),
             @"blk": ^{
                 NSLog(@"%s", __FUNCTION__);
+                [weakself jumpToDeviceInfo];
             }
         },
         @{
@@ -106,6 +116,73 @@
     self.tableView.dataSource = self;
     [self.tableView registerClass:_CBControlMenuCell.class forCellReuseIdentifier:@"_CBControlMenuCell"];
    
+}
+
+- (void)jumpToDeviceInfo {
+    
+    MyDeviceDetailViewController *detailVC = [[MyDeviceDetailViewController alloc] init];
+    detailVC.model = self.model;
+    detailVC.groupName = self.model.groupNameStr;
+    detailVC.groupNameArray = self.groupNameArr;
+    detailVC.groupIdArray = self.groupIDArr;
+    [self.navigationController pushViewController: detailVC animated: YES];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self requestDeviceList];
+}
+
+- (void)requestDeviceList {
+    __weak __typeof__(self) weakSelf = self;
+    NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:1];
+    [MBProgressHUD showHUDIcon:self.view animated:YES];
+    kWeakSelf(self);
+    [[NetWorkingManager shared]getWithUrl:@"personController/getMyDeviceList" params: dic succeed:^(id response,BOOL isSucceed) {
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        NSLog(@"设备列表:%@",response);
+        if (isSucceed) {
+            NSMutableArray *dataArr = [NSMutableArray array];
+            if (response && [response[@"data"] isKindOfClass:[NSArray class]]) {
+                [weakSelf.groupNameArr removeAllObjects];
+                [weakSelf.groupIDArr removeAllObjects];
+                NSArray *responseArr = response[@"data"];
+                for (int i = 0; i < responseArr.count - 2; i++) {
+                    NSDictionary *dataDic = responseArr[i];
+                    for (NSDictionary *deviceDic in dataDic[@"device"]) {
+                        MyDeviceModel *model = [MyDeviceModel yy_modelWithDictionary: deviceDic];
+                        model.groupNameStr = dataDic[@"groupName"];
+                        model.groupId = dataDic[@"groupId"];
+                        [dataArr addObject: model];
+                    }
+                    [weakSelf.groupNameArr addObject: dataDic[@"groupName"]];
+                    [weakSelf.groupIDArr addObject: dataDic[@"groupId"]];
+                }
+                NSDictionary *noGroupDic = responseArr[responseArr.count - 2];
+                for (NSDictionary *deviceDic in noGroupDic[@"noGroup"]) {
+                    MyDeviceModel *model = [MyDeviceModel yy_modelWithDictionary: deviceDic];
+                    model.groupNameStr = Localized(@"默认分组");
+                    model.groupId = @"0";
+                    [dataArr addObject: model];
+                }
+                [weakSelf.groupNameArr insertObject:Localized(@"默认分组") atIndex: 0];
+                [weakSelf.groupIDArr insertObject: @0 atIndex: 0];
+            }
+            
+            for (MyDeviceModel *model in dataArr) {
+                if ([model.dno isEqualToString:self.deviceInfoModelSelect.dno]) {
+                    self.model = model;
+                }
+            }
+            
+        }else {
+            
+        }
+    } failed:^(NSError *error) {
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    }];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

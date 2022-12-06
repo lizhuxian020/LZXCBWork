@@ -13,6 +13,7 @@
 #import "MyDeviceModel.h"
 #import "MyDeviceViewController.h"
 #import "CBControlInputPopView.h"
+#import "_CBMyDeviceInfoView.h"
 
 @interface MyDeviceDetailViewController () <UITableViewDelegate, UITableViewDataSource, MINPickerViewDelegate,CBControlInputPopViewDelegate>
 @property (nonatomic, weak) UITextField *textField; // 警告框的输入框
@@ -22,6 +23,8 @@
 @property (nonatomic,strong) CBControlInputPopView *inputPopView;
 @property (nonatomic, strong) NSMutableArray *arrayData;
 @property (nonatomic, strong) UIButton *rightBtn;
+
+@property (nonatomic, strong) _CBMyDeviceInfoView *infoView;
 @end
 
 @implementation MyDeviceDetailViewController
@@ -108,7 +111,7 @@
 #pragma mark - CreateUI
 - (void)createUI
 {
-    [self initBarWithTitle: Localized(@"我的设备") isBack: YES];
+    [self initBarWithTitle: self.model.name ?: Localized(@"我的设备") isBack: YES];
     if (self.isAddDevice == NO) {
         [self initBarRighBtnTitle: Localized(@"编辑") target: self action: @selector(rightBtnClick:)];
     }else {
@@ -125,6 +128,14 @@
     [self.view addSubview: self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.right.bottom.left.equalTo(self.view);
+    }];
+    
+    self.infoView = [_CBMyDeviceInfoView new];
+    self.infoView.model = self.model;
+    [self.view addSubview:self.infoView];
+    [self.infoView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(@(PPNavigationBarHeight));
+        make.left.right.bottom.equalTo(@0);
     }];
 }
 #pragma mark - gesture
@@ -299,11 +310,14 @@
 {
     UIButton *rightBtn = sender;
     if (self.isAddDevice == NO) { // 编辑设备的情况下
+        
         if (self.isEdit == NO) {
             self.isEdit = YES;
+            self.infoView.hidden = YES;
             [rightBtn setTitle: Localized(@"完成") forState: UIControlStateNormal];
             [rightBtn setTitle: Localized(@"完成") forState: UIControlStateHighlighted];
         } else {
+            self.infoView.hidden = NO;
             self.rightBtn = sender;
             [self editDeviceRequest];
         }

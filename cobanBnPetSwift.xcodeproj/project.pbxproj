@@ -670,6 +670,7 @@
 		B13D8BD32935CD83005F3A61 /* _CBControlMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B13D8BD22935CD83005F3A61 /* _CBControlMenuCell.m */; };
 		B15F916F27A19F53000953B6 /* CBPetGMSMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15F916E27A19F53000953B6 /* CBPetGMSMarker.swift */; };
 		B16C38C52793208D0058EAC4 /* CBPetMultiVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16C38C42793208D0058EAC4 /* CBPetMultiVC.swift */; };
+		B17A9E8F293F954E0069120D /* _CBMyDeviceInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = B17A9E8E293F954E0069120D /* _CBMyDeviceInfoView.m */; };
 		B17F1D17279461430040434F /* CBPetMultiVCNaviBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17F1D16279461430040434F /* CBPetMultiVCNaviBar.swift */; };
 		B17F1D1A279463640040434F /* CBPetMultiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17F1D19279463640040434F /* CBPetMultiViewModel.swift */; };
 		B19D6A682932586A00D2420B /* _CBAlertMsgMenuPopView.m in Sources */ = {isa = PBXBuildFile; fileRef = B19D6A672932586A00D2420B /* _CBAlertMsgMenuPopView.m */; };
@@ -1874,6 +1875,8 @@
 		B13D8BD22935CD83005F3A61 /* _CBControlMenuCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _CBControlMenuCell.m; sourceTree = "<group>"; };
 		B15F916E27A19F53000953B6 /* CBPetGMSMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetGMSMarker.swift; sourceTree = "<group>"; };
 		B16C38C42793208D0058EAC4 /* CBPetMultiVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetMultiVC.swift; sourceTree = "<group>"; };
+		B17A9E8D293F954E0069120D /* _CBMyDeviceInfoView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBMyDeviceInfoView.h; sourceTree = "<group>"; };
+		B17A9E8E293F954E0069120D /* _CBMyDeviceInfoView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _CBMyDeviceInfoView.m; sourceTree = "<group>"; };
 		B17F1D16279461430040434F /* CBPetMultiVCNaviBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetMultiVCNaviBar.swift; sourceTree = "<group>"; };
 		B17F1D19279463640040434F /* CBPetMultiViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetMultiViewModel.swift; sourceTree = "<group>"; };
 		B19B58052929304B00AC1162 /* MainViewConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewConfig.h; sourceTree = "<group>"; };
@@ -4090,6 +4093,7 @@
 		17CDAA2724CEBE5400BB9F8B /* DeviceManager */ = {
 			isa = PBXGroup;
 			children = (
+				B17A9E8C293F953C0069120D /* View */,
 				17CDAA2824CEBE5400BB9F8B /* MyDeviceDetailViewController.h */,
 				17CDAA2B24CEBE5400BB9F8B /* MyDeviceDetailViewController.m */,
 				17CDAA2924CEBE5400BB9F8B /* MyDeviceViewController.h */,
@@ -5521,6 +5525,15 @@
 			path = Controller;
 			sourceTree = "<group>";
 		};
+		B17A9E8C293F953C0069120D /* View */ = {
+			isa = PBXGroup;
+			children = (
+				B17A9E8D293F954E0069120D /* _CBMyDeviceInfoView.h */,
+				B17A9E8E293F954E0069120D /* _CBMyDeviceInfoView.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		B17F1D15279461270040434F /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -6546,6 +6559,7 @@
 				17CDAC0B24CEBE5600BB9F8B /* AboutUsViewController.m in Sources */,
 				437B3E77247F5C67005365D9 /* CBPetNoRecordingView.swift in Sources */,
 				437E164A248C03B60086DBB4 /* CBPetFenceAlarmViewController.swift in Sources */,
+				B17A9E8F293F954E0069120D /* _CBMyDeviceInfoView.m in Sources */,
 				1782BF1D24C0427E00544C36 /* UIImage+Category.m in Sources */,
 				4389AA4B2482B6B100C4BDC3 /* CBPetFuncUserManageView.swift in Sources */,
 				435A3A6A247EC047005ABF5B /* CBPetFuncGohomeView.swift in Sources */,

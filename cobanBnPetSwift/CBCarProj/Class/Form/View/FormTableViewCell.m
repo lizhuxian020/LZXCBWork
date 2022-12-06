@@ -25,18 +25,19 @@
 //        _backView.backgroundColor = kCellBackColor;
         [self.contentView addSubview: _backView];
         [_backView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.bottom.equalTo(@0);
-            make.left.equalTo(@(12.5 * KFitHeightRate));
-            make.right.equalTo(@(-12.5 * KFitHeightRate));
+//            make.top.bottom.equalTo(@0);
+//            make.left.equalTo(@(12.5 * KFitHeightRate));
+//            make.right.equalTo(@(-12.5 * KFitHeightRate));
+            make.edges.equalTo(@0);
         }];
         _imgView = [UIImageView new];
-        _imgView.image = [UIImage imageNamed:@"选项-选中"];
         [_backView addSubview:_imgView];
         [_imgView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.width.height.equalTo(@15);
             make.left.equalTo(@(12.5 * KFitHeightRate));
             make.centerY.equalTo(@0);
         }];
+        [_imgView setContentHuggingPriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
+        
         _nameLabel = [MINUtils createLabelWithText:@"日里程耗油报表" size:12 * KFitHeightRate alignment: NSTextAlignmentLeft textColor: k137Color];
         [_backView addSubview: _nameLabel];
         [_nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {

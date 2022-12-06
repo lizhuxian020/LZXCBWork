@@ -28,8 +28,11 @@
 @property (nonatomic, copy) NSArray *sectionTitleArr;
 @property (nonatomic, copy) NSArray *sectionImageTitleArr;
 @property (nonatomic, copy) NSArray *oilTitleArr;
+@property (nonatomic, copy) NSArray *oilImageArr;
 @property (nonatomic, copy) NSArray *warnTitleArr;
+@property (nonatomic, copy) NSArray *warnImageArr;
 @property (nonatomic, copy) NSArray *electronicTitleArr;
+@property (nonatomic, copy) NSArray *electronicImageArr;
 @property (nonatomic, assign) NSInteger lastAlarm;
 //@property (nonatomic, strong) NSMutableArray *showArr; // 显示项
 @property (nonatomic, strong) _CBMyInfoPopView *infoPopView;
@@ -50,8 +53,11 @@
 //    self.sectionImageTitleArr = @[@"速度报表", @"怠速报表", @"停留统计", @"点火报表", @"里程统计", @"油量统计", @"报警统计", @"OBD报表", @"电子围栏报表", @"多媒体记录报表", @"调度记录报表"];
     self.sectionImageTitleArr = @[@"速度报表", @"怠速报表", @"停留统计", @"点火报表", @"里程统计", @"油量统计", @"报警统计", @"OBD报表", @"电子围栏报表"];
     self.oilTitleArr = @[Localized(@"日里程耗油报表"), Localized(@"油量里程速度表"), Localized(@"加油报表"), Localized(@"漏油报表")];
+    self.oilImageArr = @[@"日里程耗油报表",@"油量里程速度表",@"加油报表",@"漏油报表"];
     self.warnTitleArr = @[Localized(@"所有报警统计报表"), Localized(@"SOS报警统计报表"), Localized(@"超速报警统计报表"), Localized(@"疲劳驾驶统计报表"), Localized(@"欠压报警统计报表"), Localized(@"掉电报警统计报表"), Localized(@"振动报警统计报表"), Localized(@"开门报警统计报表"), Localized(@"点火报警统计报表"), Localized(@"位移报警统计报表"), Localized(@"偷油漏油报警统计报表"), Localized(@"碰撞报警报表")];
+    self.warnImageArr = @[@"所有报警统计报表", @"SOS报警统计报表", @"超速报警统计报表", @"疲劳驾驶统计报表", @"欠压报警统计报表", @"掉电报警统计报表", @"振动报警统计报表", @"开门报警统计报表", @"点火报警统计报表", @"位移报警统计报表", @"偷油漏油报警统计报表", @"碰撞报警报表"];
     self.electronicTitleArr = @[Localized(@"入围栏报警报表"), Localized(@"出围栏报警报表"), Localized(@"出入围栏报警报表")];
+    self.electronicImageArr = @[@"入围栏报警报表", @"出围栏报警报表", @"出入围栏报警报表"];
     sectionStatusArr = [NSMutableArray arrayWithObjects: @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, nil];
     // 设置需要显示报警的cell的最后一个index
     for (int i = 0; i < self.alarmArr.count; i++) {
@@ -288,10 +294,13 @@
     }
     if (indexPath.section == 5) { // 油量统计
         cell.nameLabel.text = self.oilTitleArr[indexPath.row];
+        cell.imgView.image = [UIImage imageNamed:self.oilImageArr[indexPath.row]];
     }else if (indexPath.section == 6) { // 报警统计
         cell.nameLabel.text = self.warnTitleArr[indexPath.row];
+        cell.imgView.image = [UIImage imageNamed:self.warnImageArr[indexPath.row]];
     }else if (indexPath.section == 8) { // 电子围栏报表
         cell.nameLabel.text = self.electronicTitleArr[indexPath.row];
+        cell.imgView.image = [UIImage imageNamed:self.electronicImageArr[indexPath.row]];
     }
     return cell;
 }
