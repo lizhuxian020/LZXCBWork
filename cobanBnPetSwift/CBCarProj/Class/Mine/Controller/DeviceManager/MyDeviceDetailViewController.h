@@ -11,6 +11,8 @@
 @class MyDeviceModel;
 @interface MyDeviceDetailViewController : MINBaseViewController
 @property (nonatomic, copy) NSArray *deviceInfoTitleArr;
+@property (nonatomic, copy) NSArray *deviceInfoContentArr;
+@property (nonatomic, copy) NSArray *deviceInfoPlaceholderArr;
 @property (nonatomic, copy) NSArray *carColorArr;
 @property (nonatomic, copy) NSArray *purposeArr;
 @property (nonatomic, strong) MyDeviceModel *model;

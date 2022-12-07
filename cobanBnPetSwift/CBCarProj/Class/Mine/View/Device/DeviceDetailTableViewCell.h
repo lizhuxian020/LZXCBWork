@@ -11,12 +11,14 @@
 
 @interface DeviceDetailTableViewCell : UITableViewCell
 @property (nonatomic, strong) UILabel *nameLabel;
-@property (nonatomic, strong) UILabel *editLabel;
+//@property (nonatomic, strong) UILabel *editLabel;
+@property (nonatomic, strong) UITextField *textField;
 @property (nonatomic, strong) UILabel *selectLabel;
 @property (nonatomic, strong) UIImageView *arrowImageView;
 
-@property (nonatomic, strong) MyDeviceModel *editDeviceModel;
+@property (nonatomic, strong) UIView *iconSelectView;
 
-- (void)setEditLabelText:(NSString *)text;
-- (void)setSelectLabelText:(NSString *)text;
+- (void)showTextView;
+- (void)showSelectView;
+- (void)showIcon;
 @end
