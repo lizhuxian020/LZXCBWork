@@ -154,13 +154,13 @@
 //    [self.tableView reloadData];
 //}
 #pragma mark - tableView delegate & datasource
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if ([self.deviceInfoTitleArr[indexPath.row] isEqualToString:Localized(@"图标")]) {
-        return 80;
-    }
-    return 50;
-}
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    if ([self.deviceInfoTitleArr[indexPath.row] isEqualToString:Localized(@"图标")]) {
+//        return 80;
+//    }
+//    return 50;
+//}
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return self.deviceInfoTitleArr.count;
@@ -182,7 +182,7 @@
         [cell showSelectView];
     }
     if ([self.deviceInfoTitleArr[indexPath.row] isEqualToString:Localized(@"图标")]) {
-        [cell showIcon];
+        [cell showIcon:self.model.icon];
     }
     return cell;
 }

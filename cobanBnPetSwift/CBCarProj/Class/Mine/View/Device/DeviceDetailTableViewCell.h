@@ -15,10 +15,13 @@
 @property (nonatomic, strong) UITextField *textField;
 @property (nonatomic, strong) UILabel *selectLabel;
 @property (nonatomic, strong) UIImageView *arrowImageView;
+@property (nonatomic, strong) UIView *backView;
 
 @property (nonatomic, strong) UIView *iconSelectView;
-
+@property (nonatomic, strong) NSMutableArray *iconViewArr;
+/// 图标索引
+@property (nonatomic, assign) NSInteger iconIndex;
 - (void)showTextView;
 - (void)showSelectView;
-- (void)showIcon;
+- (void)showIcon:(NSInteger)selectedIndex;
 @end

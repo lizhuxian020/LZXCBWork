@@ -14,39 +14,37 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+        self.iconViewArr = [NSMutableArray new];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.backgroundColor = kBackColor;
-        UIView *backView = [UIView new];
-        [self addSubview: backView];
-        [backView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.edges.equalTo(@0);
-        }];
+        self.backView = [UIView new];
         _nameLabel = [MINUtils createLabelWithText: @"设备管理"];
-        [backView addSubview: _nameLabel];
+        [self.backView addSubview: _nameLabel];
         [_nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerY.equalTo(backView);
-            make.left.equalTo(backView).with.offset(12.5 * KFitHeightRate);
+            make.top.equalTo(@15);
+            make.left.equalTo(self.backView).with.offset(12.5 * KFitHeightRate);
+            make.bottom.equalTo(@-15);
         }];
         
         UIImageView *arrView = [[UIImageView alloc] initWithImage:[UIImage imageNamed: @"查看"]];
-        [backView addSubview:arrView];
+        [self.backView addSubview:arrView];
         [arrView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.right.equalTo(backView).with.offset(-12.5 * KFitWidthRate);
+            make.right.equalTo(self.backView).with.offset(-12.5 * KFitWidthRate);
             make.centerY.equalTo(@0);
             make.width.height.equalTo(@10);
         }];
-        
+
         UIView *line = [MINUtils createLineView];
-        [backView addSubview:line];
+        [self.backView addSubview:line];
         [line mas_makeConstraints:^(MASConstraintMaker *make) {
             make.bottom.equalTo(@0);
             make.height.equalTo(@1);
             make.left.equalTo(_nameLabel);
             make.right.equalTo(arrView);
         }];
-        
+
         UITextField *tf = [UITextField new];
-        [backView addSubview:tf];
+        [self.backView addSubview:tf];
         [tf mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.equalTo(arrView.mas_left).mas_offset(-15);
             make.centerY.equalTo(@0);
@@ -57,23 +55,23 @@
         tf.placeholder = @"请输入";
         self.textField = tf;
         [_nameLabel setContentHuggingPriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
-        
+
         _selectLabel = [MINUtils createLabelWithText: @"选择车辆颜色" size: 12 * KFitHeightRate alignment: NSTextAlignmentCenter textColor: kRGB(137, 137, 137)];
         _selectLabel.layer.borderWidth = 0.5;
         _selectLabel.layer.borderColor = kRGB(210, 210, 210).CGColor;
         _selectLabel.layer.cornerRadius = 2.5 * KFitWidthRate;
-        [backView addSubview: _selectLabel];
+        [self.backView addSubview: _selectLabel];
         [_selectLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.equalTo(arrView.mas_left).mas_offset(-12.5 * KFitWidthRate);
-            make.centerY.equalTo(backView);
+            make.centerY.equalTo(self.backView);
             make.width.mas_equalTo(168 * KFitWidthRate);
             make.height.mas_equalTo(30 * KFitHeightRate);
         }];
         UIImage *arrowImage = [UIImage imageNamed: @"下拉三角"];
         _arrowImageView = [[UIImageView alloc] initWithImage: arrowImage];
-        [backView addSubview: _arrowImageView];
+        [self.backView addSubview: _arrowImageView];
         [_arrowImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerY.equalTo(backView);
+            make.centerY.equalTo(self.backView);
             make.right.equalTo(_selectLabel).with.offset(- 12.5 * KFitWidthRate);
             make.height.mas_equalTo(arrowImage.size.height * KFitWidthRate);
             make.width.mas_equalTo(arrowImage.size.width * KFitWidthRate);
@@ -81,11 +79,7 @@
         
         _iconSelectView = [UIView new];
         _iconSelectView.backgroundColor = kBackColor;
-        [backView addSubview:_iconSelectView];
-        [_iconSelectView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.edges.equalTo(@0);
-        }];
-        
+
         UILabel *iconTitleLbl = [MINUtils createLabelWithText: Localized(@"图标")];
         [_iconSelectView addSubview:iconTitleLbl];
         [iconTitleLbl mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -94,6 +88,7 @@
         }];
         
         UIView *iconContainer = [UIView new];
+        iconContainer.backgroundColor = UIColor.redColor;
         [_iconSelectView addSubview:iconContainer];
         [iconContainer mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(iconTitleLbl.mas_bottom).mas_offset(10);
@@ -104,28 +99,49 @@
         
         
         UIView *lastView = nil;
+        int col = 7;
+        kWeakSelf(self);
         for(int i = 0; i < self.carIcon.count; i++) {
             UIView *iconC = [UIView new];
+            [self.iconViewArr addObject:iconC];
             UIImageView *iconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:self.carIcon[i]]];
-            [iconContainer addSubview:iconC];
             [iconC addSubview:iconView];
             [iconView mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.width.height.equalTo(iconC.mas_height);
                 make.centerY.centerX.equalTo(@0);
-            }];
-            [iconC mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.top.bottom.equalTo(@0);
-                make.width.equalTo(iconContainer).dividedBy(self.carIcon.count);
-                if (lastView) {
-                    make.left.equalTo(lastView.mas_right);
+            }];
+            
+            [iconContainer addSubview:iconC];
+            [iconC mas_makeConstraints:^(MASConstraintMaker *make) {
+                if (i % col == 0) {
+                    if (lastView) {
+                        make.top.equalTo(lastView.mas_bottom);
+                    } else {
+                        make.top.equalTo(@0);
+                    }
                 } else {
+                    make.top.equalTo(lastView);
+                }
+                if (i % col == 0) {
                     make.left.equalTo(@0);
+                } else {
+                    make.left.equalTo(lastView.mas_right);
+                }
+                if (lastView) {
+                    make.width.equalTo(lastView);
+                }
+                if ((i+1) % col == 0) {
+                    make.right.equalTo(@0);
                 }
             }];
             lastView = iconC;
+            [iconC bk_whenTapped:^{
+                weakself.iconIndex = i;
+            }];
         }
         [lastView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.right.equalTo(@0);
+            make.bottom.equalTo(@0);
         }];
     }
     return self;
@@ -136,18 +152,53 @@
     self.selectLabel.hidden = YES;
     self.arrowImageView.hidden = YES;
     self.iconSelectView.hidden = YES;
+    [self.backView removeFromSuperview];
+    [self.iconSelectView removeFromSuperview];
+    
+    [self.contentView addSubview:self.backView];
+    [self.backView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(@0);
+    }];
 }
 - (void)showSelectView {
     self.textField.hidden = YES;
     self.selectLabel.hidden = NO;
     self.arrowImageView.hidden = NO;
     self.iconSelectView.hidden = YES;
+    [self.backView removeFromSuperview];
+    [self.iconSelectView removeFromSuperview];
+    
+    [self.contentView addSubview:self.backView];
+    [self.backView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(@0);
+    }];
 }
-- (void)showIcon {
+- (void)showIcon:(NSInteger)selectedIndex {
+    self.iconIndex = selectedIndex;
     self.textField.hidden = YES;
     self.selectLabel.hidden = YES;
     self.arrowImageView.hidden = YES;
     self.iconSelectView.hidden = NO;
+    [self.backView removeFromSuperview];
+    [self.iconSelectView removeFromSuperview];
+    
+    [self.contentView addSubview:self.iconSelectView];
+    [self.iconSelectView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(@0);
+    }];
+}
+
+- (void)setIconIndex:(NSInteger)iconIndex {
+    _iconIndex = iconIndex;
+    
+    for (int i = 0; i < self.iconViewArr.count; i++) {
+        UIView *iconV = self.iconViewArr[i];
+        if (i == iconIndex) {
+            iconV.layer.borderWidth = 1;
+        } else {
+            iconV.layer.borderWidth = 0;
+        }
+    }
 }
 
 //- (NSArray *)carColor {
