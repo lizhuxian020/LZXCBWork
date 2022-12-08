@@ -21,6 +21,7 @@
 @property (nonatomic, strong) NSMutableArray *iconViewArr;
 /// 图标索引
 @property (nonatomic, assign) NSInteger iconIndex;
+@property (nonatomic, copy) void (^didSelectedIconIndex)(NSInteger iconIndex);
 - (void)showTextView;
 - (void)showSelectView;
 - (void)showIcon:(NSInteger)selectedIndex;

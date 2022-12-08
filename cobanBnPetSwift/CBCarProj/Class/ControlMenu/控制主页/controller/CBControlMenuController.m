@@ -25,6 +25,7 @@
 
 @property (nonatomic, strong) NSMutableArray *groupNameArr;
 @property (nonatomic, strong) NSMutableArray *groupIDArr;
+@property (nonatomic, strong) NSMutableArray *devModelArr;
 @end
 
 @implementation CBControlMenuController
@@ -35,6 +36,7 @@
     [self initBarWithTitle:self.deviceInfoModelSelect.name?:@"" isBack:YES];
     self.groupNameArr = [NSMutableArray new];
     self.groupIDArr = [NSMutableArray new];
+    self.devModelArr = [NSMutableArray new];
     
     kWeakSelf(self);
     self.dataSource = @[
@@ -125,6 +127,8 @@
     detailVC.groupName = self.model.groupNameStr;
     detailVC.groupNameArray = self.groupNameArr;
     detailVC.groupIdArray = self.groupIDArr;
+    detailVC.devModel = self.model.devModel;
+    detailVC.devModelArray = self.devModelArr;
     [self.navigationController pushViewController: detailVC animated: YES];
 }
 
@@ -147,6 +151,7 @@
             if (response && [response[@"data"] isKindOfClass:[NSArray class]]) {
                 [weakSelf.groupNameArr removeAllObjects];
                 [weakSelf.groupIDArr removeAllObjects];
+                [weakself.devModelArr removeAllObjects];
                 NSArray *responseArr = response[@"data"];
                 for (int i = 0; i < responseArr.count - 2; i++) {
                     NSDictionary *dataDic = responseArr[i];
@@ -155,9 +160,11 @@
                         model.groupNameStr = dataDic[@"groupName"];
                         model.groupId = dataDic[@"groupId"];
                         [dataArr addObject: model];
+                        [weakself.devModelArr addObject:model.devModel ?: @"---"];
                     }
                     [weakSelf.groupNameArr addObject: dataDic[@"groupName"]];
                     [weakSelf.groupIDArr addObject: dataDic[@"groupId"]];
+                    
                 }
                 NSDictionary *noGroupDic = responseArr[responseArr.count - 2];
                 for (NSDictionary *deviceDic in noGroupDic[@"noGroup"]) {
@@ -168,6 +175,7 @@
                 }
                 [weakSelf.groupNameArr insertObject:Localized(@"默认分组") atIndex: 0];
                 [weakSelf.groupIDArr insertObject: @0 atIndex: 0];
+                [weakself.devModelArr insertObject: @"0" atIndex: 0];
             }
             
             for (MyDeviceModel *model in dataArr) {

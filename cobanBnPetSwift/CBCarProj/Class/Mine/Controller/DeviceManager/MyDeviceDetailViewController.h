@@ -19,6 +19,8 @@
 @property (nonatomic, copy) NSString *groupName;
 @property (nonatomic, copy) NSArray *groupNameArray;
 @property (nonatomic, copy) NSArray *groupIdArray;
+@property (nonatomic, copy) NSString *devModel;
+@property (nonatomic, copy) NSArray *devModelArray;
 @property (nonatomic, assign) BOOL isAddDevice;
 @property (nonatomic, assign) BOOL isBind;
 @end

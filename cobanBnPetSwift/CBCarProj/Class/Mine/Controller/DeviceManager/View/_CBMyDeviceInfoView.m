@@ -54,7 +54,19 @@
         Localized(@"有效期")];
    
     self.carColorArr = @[Localized(@"蓝色"), Localized(@"黄色"), Localized(@"黑色"), Localized(@"白色"), Localized(@"其他")];
-    self.purposeArr = @[Localized(@"定位图"), Localized(@"人物"), Localized(@"宠物"), Localized(@"单车"), Localized(@"摩托车"), Localized(@"小车"), Localized(@"货车"), Localized(@"行李箱")];
+    self.purposeArr = @[
+        Localized(@"定位-默认"),
+        Localized(@"人-默认"),
+        Localized(@"宠物-默认"),
+        Localized(@"自行车-默认"),
+        Localized(@"摩托车-默认"),
+        Localized(@"小车-默认"),
+        Localized(@"货车-默认"),
+        Localized(@"行李箱-默认"),
+        Localized(@"船-默认"),
+        Localized(@"电动车-默认"),
+        Localized(@"公交车-默认")
+    ];
     self.deviceInfoContentArr = @[
         @"",
         _model.dno?:@"",

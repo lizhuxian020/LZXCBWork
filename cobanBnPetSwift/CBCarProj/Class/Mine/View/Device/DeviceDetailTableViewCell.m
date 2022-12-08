@@ -88,7 +88,6 @@
         }];
         
         UIView *iconContainer = [UIView new];
-        iconContainer.backgroundColor = UIColor.redColor;
         [_iconSelectView addSubview:iconContainer];
         [iconContainer mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(iconTitleLbl.mas_bottom).mas_offset(10);
@@ -107,16 +106,17 @@
             UIImageView *iconView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:self.carIcon[i]]];
             [iconC addSubview:iconView];
             [iconView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.width.height.equalTo(iconC.mas_height);
+                make.width.equalTo(iconView.mas_height);
                 make.centerY.centerX.equalTo(@0);
-                make.top.bottom.equalTo(@0);
+                make.top.equalTo(@5);
+                make.bottom.equalTo(@-5);
             }];
             
             [iconContainer addSubview:iconC];
             [iconC mas_makeConstraints:^(MASConstraintMaker *make) {
                 if (i % col == 0) {
                     if (lastView) {
-                        make.top.equalTo(lastView.mas_bottom);
+                        make.top.equalTo(lastView.mas_bottom).mas_offset(5);
                     } else {
                         make.top.equalTo(@0);
                     }
@@ -126,7 +126,7 @@
                 if (i % col == 0) {
                     make.left.equalTo(@0);
                 } else {
-                    make.left.equalTo(lastView.mas_right);
+                    make.left.equalTo(lastView.mas_right).mas_offset(5);
                 }
                 if (lastView) {
                     make.width.equalTo(lastView);
@@ -143,6 +143,8 @@
         [lastView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.bottom.equalTo(@0);
         }];
+        
+        self.backView.userInteractionEnabled = NO;
     }
     return self;
 }
@@ -193,19 +195,34 @@
     
     for (int i = 0; i < self.iconViewArr.count; i++) {
         UIView *iconV = self.iconViewArr[i];
+        iconV.layer.borderColor = kAppMainColor.CGColor;
+        iconV.layer.cornerRadius = 3;
         if (i == iconIndex) {
             iconV.layer.borderWidth = 1;
         } else {
             iconV.layer.borderWidth = 0;
         }
     }
+    _didSelectedIconIndex(_iconIndex);
 }
 
 //- (NSArray *)carColor {
 //    return @[Localized(@"蓝色"), Localized(@"黄色"), Localized(@"黑色"), Localized(@"白色"), Localized(@"其他")];
 //}
 - (NSArray *)carIcon {
-    return @[Localized(@"定位图"), Localized(@"人物"), Localized(@"宠物"), Localized(@"单车"), Localized(@"摩托车"), Localized(@"小车"), Localized(@"货车"), Localized(@"行李箱")];
+    return @[
+        Localized(@"定位-默认"),
+        Localized(@"人-默认"),
+        Localized(@"宠物-默认"),
+        Localized(@"自行车-默认"),
+        Localized(@"摩托车-默认"),
+        Localized(@"小车-默认"),
+        Localized(@"货车-默认"),
+        Localized(@"行李箱-默认"),
+        Localized(@"船-默认"),
+        Localized(@"电动车-默认"),
+        Localized(@"公交车-默认")
+    ];
 }
 //- (void)setEditDeviceModel:(MyDeviceModel *)editDeviceModel {
 //
