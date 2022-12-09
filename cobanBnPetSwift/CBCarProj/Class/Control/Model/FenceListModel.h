@@ -22,4 +22,6 @@
 @property (nonatomic, copy) NSString *areaId;   // 区域iD
 @property (nonatomic, copy) NSString *sn;   // 区域iD
 @property (nonatomic, copy) NSString *deviceName; //设备名
+@property(nonatomic, copy) NSString *useTimes;  //报警时区1
+@property(nonatomic, copy) NSString *useTimes2; //报警时区2
 @end

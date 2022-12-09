@@ -107,6 +107,7 @@
     self.overTF = tf;
     UIView *overView = [self viewWithTitle:Localized(@"超速报警") subView:overSubView switchView:&switchView];
     self.overSwitch = switchView;
+    [self.overSwitch addTarget:self action:@selector(overOnChange:) forControlEvents:UIControlEventValueChanged];
     [self addSubview:overView];
     [overView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(alarm2View.mas_bottom);
@@ -129,6 +130,10 @@
     }];
     
     self.timePickerDelegate = [CBDoubleTimePicker new];
+}
+
+- (void)overOnChange:(UISwitch *)sender {
+    self.overTF.text = sender.isOn ? @"60": @"";
 }
 
 - (UIView *)speedView:(UITextField **)targetTF {
@@ -209,6 +214,7 @@
         make.centerY.equalTo(@0);
         make.right.equalTo(@-15);
     }];
+    *switchView = s;
     
     if (subView) {
         [view addSubview:subView];
@@ -321,4 +327,45 @@
     self.deviceNameLbl.textColor = kCellTextColor;
 }
 
+- (void)setModel:(FenceListModel *)model {
+    _model = model;
+    self.fenceNameLbl.text = model.name;
+    self.fenceNameLbl.textColor  = kCellTextColor;
+    self.deviceNameLbl.text = model.deviceName;
+    self.deviceNameLbl.textColor  = kCellTextColor;
+    
+    if ([model.useTimes componentsSeparatedByString:@","].count == 2) {
+        self.alarm1TimeLbl.text = [model.useTimes stringByReplacingOccurrencesOfString:@"," withString:@" - "];
+    }
+    if ([model.useTimes2 componentsSeparatedByString:@","].count == 2) {
+        self.alarm2TimeLbl.text = [model.useTimes2 stringByReplacingOccurrencesOfString:@"," withString:@" - "];
+    }
+    
+    self.alarm1Switch.on = YES;
+    self.alarm2Switch.on = YES;
+    
+    self.inSwitch.on = model.warmType == 1 || model.warmType == 2;
+    self.outSwitch.on = model.warmType == 0 || model.warmType == 2;
+}
+
+- (NSString *)getDeviceArr {
+    NSDictionary *param = @{
+        @"dno": self.model.dno ?: @"",
+        @"speed": @(self.overTF.text.intValue).description,
+        @"userTimes": [self.alarm1TimeLbl.text stringByReplacingOccurrencesOfString:@" - " withString:@","],
+        @"userTimes2": [self.alarm2TimeLbl.text stringByReplacingOccurrencesOfString:@" - " withString:@","],
+        @"warmType": (self.inSwitch.isOn && self.outSwitch.isOn) ? @"2" : self.inSwitch.on ? @"1": @"0",
+    };
+    
+    NSData *data = [NSJSONSerialization dataWithJSONObject:@[param] options:NSJSONWritingPrettyPrinted error:nil];
+    NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    return string;
+}
+
+- (NSString *)getDeviceName {
+    return self.deviceNameLbl.text;
+}
+- (NSString *)getFenceName {
+    return self.fenceNameLbl.text;
+}
 @end

@@ -7,11 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FenceListModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CBFencyMenuView : UIView
 
+@property (nonatomic, strong) FenceListModel *model;
+
+- (NSString *)getDeviceArr;
+- (NSString *)getDeviceName;
+- (NSString *)getFenceName;
 @end
 
 NS_ASSUME_NONNULL_END

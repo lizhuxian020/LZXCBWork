@@ -134,12 +134,13 @@
                              confrim:(void(^)(NSString *contentStr))confirmBlk {
     UIView *c = [UIView new];
     c.backgroundColor = UIColor.whiteColor;
-    UILabel *lbl = [MINUtils createLabelWithText:tips size:14 alignment:NSTextAlignmentCenter textColor:kCellTextColor];
+    UILabel *lbl = [MINUtils createLabelWithText:tips size:17 alignment:NSTextAlignmentCenter textColor:kCellTextColor];
+    lbl.numberOfLines = 0;
     [c addSubview:lbl];
     [lbl mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(@0);
-        make.top.equalTo(@15);
-        make.bottom.equalTo(@-15);
+        make.top.equalTo(@20);
+        make.bottom.equalTo(@-20);
     }];
     
     CBAlertBaseView *alertView = [[CBAlertBaseView alloc] initWithContentView:c title:title];

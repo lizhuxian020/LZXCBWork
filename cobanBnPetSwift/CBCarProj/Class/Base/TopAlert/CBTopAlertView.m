@@ -66,7 +66,8 @@
     [view pop];
 }
 + (void)alertFail:(NSString *)title {
-    
+    CBTopAlertView *view = [[CBTopAlertView alloc] initWithTitle:title isSuccess:NO];
+    [view pop];
 }
 
 @end

@@ -106,7 +106,7 @@ static AFHTTPSessionManager *afManager = nil;
                 
             } else if ([responseObject[@"status"]integerValue] == 602) {
                 succeed(responseObject,NO);
-                [HUD showHUDWithText:[Utils getSafeString:Localized(@"设备不在线")] withDelay:2.0];
+                [CBTopAlertView alertFail:Localized(@"设备不在线")];
             } else if ([responseObject[@"status"]integerValue] == 1) {
                 succeed(responseObject,NO);
                 [HUD showHUDWithText:[Utils getSafeString:Localized(@"授权号码已存在")] withDelay:2.0];
@@ -132,7 +132,7 @@ static AFHTTPSessionManager *afManager = nil;
                     //[HUD showHUDWithText:[Utils getSafeString: responseObject[@"resmsg"]] withDelay:1.2];
 //                }
                 
-                [HUD showHUDWithText:[Utils getSafeString: responseObject[@"resmsg"]] withDelay:2.0];
+                [CBTopAlertView alertFail:[Utils getSafeString: responseObject[@"resmsg"]]];
             }
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {

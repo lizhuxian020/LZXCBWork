@@ -53,6 +53,7 @@
 @property (nonatomic, strong) UIButton *deleteBtn;
 
 @property (nonatomic, strong) CBFencyMenuView *menuView;
+@property (nonatomic, strong) BMKCircle *currentCircle;
 @end
 
 @implementation FenceDetailViewController
@@ -82,7 +83,10 @@
 }
 #pragma mark -- 删除设备围栏
 - (void)deleteDevicePop {
-    [self showAlertViewWithTitle:Localized(@"提示") datailText:Localized(@"删除后无法恢复 \n 确认删除?") indexPath:nil];
+    kWeakSelf(self);
+    [[CBCarAlertView viewWithAlertTips:Localized(@"删除后无法恢复 \n 确认删除?") title:Localized(@"提示") confrim:^(NSString * _Nonnull contentStr) {
+        [weakself deleteBtnClick];
+    }] pop];
 }
 - (void)deleteBtnClick
 {
@@ -107,24 +111,94 @@
     }];
 }
 
+- (void)saveBtnClick {
+    //TODO: lzxTODO: 目前写死是圆形,timeZone
+    NSDictionary *param = @{
+        @"centerPoint": [NSString stringWithFormat:@"%lf,%lf", self.currentCircle.coordinate.latitude, self.currentCircle.coordinate.longitude],
+        @"data":[NSString stringWithFormat:@"%lf,%lf,%lf", self.currentCircle.coordinate.latitude, self.currentCircle.coordinate.longitude, self.currentCircle.radius],
+        @"deviceArr": [self.menuView getDeviceArr],
+        @"deviceName": [self.menuView getDeviceName],
+        @"fenId": self.model.fid ?: @"",
+        @"name": [self.menuView getFenceName],
+        @"radius": [NSString stringWithFormat:@"%lf", self.currentCircle.radius],
+        @"shape": @"1",
+        @"sn": self.model.sn ?: @"",
+        @"timeZone": @"8.0"
+    };
+    [MBProgressHUD showHUDIcon:self.view animated:YES];
+    kWeakSelf(self);
+    [[NetWorkingManager shared]postWithUrl:@"/devControlController/saveBatchFence" params:param succeed:^(id response, BOOL isSucceed) {
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        if (isSucceed) {
+            [weakself.navigationController popViewControllerAnimated: YES];
+        } else {
+        }
+    } failed:^(NSError *error) {
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    }];
+}
+
 #pragma mark - CreateUI
 - (void)createUI
 {
     [self initBarWithTitle: self.model.name isBack: YES];
+    [self addDeleteAndSave];
     [self setupMenuView];
     [self baiduMap];
     [self googleMap];
-    [self createBottomView];
+//    [self createBottomView];
     [self createFence];
+}
+
+- (void)addDeleteAndSave {
+    NSString *title = Localized(@"保存");
+    CGFloat width = [NSString getWidthWithText:title font:[UIFont boldSystemFontOfSize: 15] height:30*KFitHeightRate];
+    UIButton *rightBtn = [[UIButton alloc] initWithFrame: CGRectMake(0, 0,  width,  30 * KFitHeightRate)];
+    rightBtn.titleLabel.font = [UIFont boldSystemFontOfSize: 15];
+    [rightBtn setTitle: title forState: UIControlStateNormal];
+    [rightBtn setTitle: title forState: UIControlStateHighlighted];
+    [rightBtn setTitleColor:kAppMainColor forState:UIControlStateNormal];
+    [rightBtn setTitleColor:kAppMainColor forState:UIControlStateHighlighted];
+    [rightBtn addTarget:self action:@selector(save) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *barItem = [[UIBarButtonItem alloc] initWithCustomView: rightBtn];
+    UIBarButtonItem * spaceItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    //将宽度设为负值
+    spaceItem.width = - 15 * KFitWidthRate;
+    
+    NSString *title1 = Localized(@"删除");
+    CGFloat width1 = [NSString getWidthWithText:title1 font:[UIFont boldSystemFontOfSize: 15] height:30*KFitHeightRate];
+    UIButton *rightBtn1 = [[UIButton alloc] initWithFrame: CGRectMake(0, 0,  width1,  30 * KFitHeightRate)];
+    rightBtn1.titleLabel.font = [UIFont boldSystemFontOfSize: 15];
+    [rightBtn1 setTitle: title1 forState: UIControlStateNormal];
+    [rightBtn1 setTitle: title1 forState: UIControlStateHighlighted];
+    [rightBtn1 setTitleColor:UIColor.redColor forState:UIControlStateNormal];
+    [rightBtn1 setTitleColor:UIColor.redColor forState:UIControlStateHighlighted];
+    [rightBtn1 addTarget:self action:@selector(delete) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *barItem1 = [[UIBarButtonItem alloc] initWithCustomView: rightBtn1];
+    
+    self.navigationItem.rightBarButtonItems = @[spaceItem, barItem, barItem1];
+    
+    
 }
 
 - (void)setupMenuView {
     self.menuView = [CBFencyMenuView new];
+    self.menuView.model = self.model;
     [self.view addSubview:self.menuView];
     [self.menuView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(@(PPNavigationBarHeight));
         make.left.right.equalTo(@0);
     }];
+}
+
+- (void)save {
+    [self saveBtnClick];
+}
+
+- (void)delete {
+    [self deleteDevicePop];
 }
 
 - (void)createFence
@@ -147,13 +221,14 @@
             circleModel.coordinate = coordinate;
             self.circleCoordinate = coordinate;
             if (self.baiduView.hidden == NO) {
-                //[self addAnnotation_baidu:coordinate];
+//                [self addAnnotation_baidu:coordinate];
                 [self addBaiduCircleMarkerWithRadius: dataArr.lastObject];
                 [self baiduMapFitCircleFence: circleModel radius: [dataArr[2] doubleValue]];
             }else {
                 [self addGoogleCircleMarkerWithRadius: dataArr.lastObject];
                 [self googleMapFitCircleFence: circleModel radius: [dataArr[2] doubleValue]];
             }
+//            [self updateMapCenter:coordinate];
         }
     }else if (self.model.shape == 2) { // 矩形
         self.rectangleCoordinateArr = [self getModelArr: dataString];
@@ -173,6 +248,17 @@
             [self addGooglePath];
             [self googleMapFitFence: self.pathleCoordinateArr];
         }
+    }
+}
+- (void)updateMapCenter:(CLLocationCoordinate2D)coordinate {
+    if (self.baiduView.hidden == NO) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.baiduMapView setCenterCoordinate:coordinate animated: YES];
+        });
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.googleMapView.camera = [GMSCameraPosition cameraWithLatitude:coordinate.latitude longitude:coordinate.longitude zoom:self.googleMapView.camera.zoom];
+        });
     }
 }
 - (NSMutableArray *)getModelArr:(NSString *)dataString {
@@ -195,7 +281,7 @@
 //    normalAnnotation.icon = [UIImage imageNamed:@"-定位"];
 //    normalAnnotation.coordinate = coor;
 //    [_baiduMapView addAnnotation: normalAnnotation];
-//    
+//
 //    // 围栏定位上方名字
 //    MINNormalInfoAnnotation *normalInfoAnnotation = [[MINNormalInfoAnnotation alloc] init];
 ////    normalInfoAnnotation.deviceName = deviceInfoModel.name?:@"";
@@ -382,6 +468,7 @@
     CGFloat radiusNum = [radius floatValue];
     BMKCircle *circle = [BMKCircle circleWithCenterCoordinate: self.circleCoordinate radius: radiusNum];
     [_baiduMapView addOverlay: circle];
+    self.currentCircle = circle;
 }
 
 - (void)addGooglePath
@@ -448,43 +535,43 @@
     }
 }
 
-- (void)createBottomView
-{
-    UIView *bottomView = [[UIView alloc] init];
-    [self.view addSubview: bottomView];
-    [bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.left.right.equalTo(self.view);
-        make.height.mas_equalTo(50 * KFitHeightRate);
-    }];
-    UIView *topLineView = [MINUtils createLineView];
-    [bottomView addSubview: topLineView];
-    [topLineView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.mas_equalTo(0.5);
-        make.top.left.right.equalTo(bottomView);
-    }];
-    self.shareBtn = [self createBtnWithImage:@"分享" title:Localized(@"分享")];
-    self.deleteBtn = [self createBtnWithImage:@"删-除" title:Localized(@"删除")];
-    UIButton *lastBtn = nil;
-    NSArray *arr = @[self.shareBtn, self.deleteBtn];
-    for (int i = 0; i < arr.count; i++) {
-        UIButton *button = arr[i];
-        [bottomView addSubview: button];
-        if (lastBtn == nil) {
-            [button mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.top.bottom.equalTo(bottomView);
-                make.left.equalTo(bottomView);
-                make.width.mas_equalTo(SCREEN_WIDTH/2);
-            }];
-        }else {
-            [button mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.top.bottom.equalTo(bottomView);
-                make.left.equalTo(lastBtn.mas_right);
-                make.width.mas_equalTo(SCREEN_WIDTH/2);
-            }];
-        }
-        lastBtn = button;
-    }
-}
+//- (void)createBottomView
+//{
+//    UIView *bottomView = [[UIView alloc] init];
+//    [self.view addSubview: bottomView];
+//    [bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.bottom.left.right.equalTo(self.view);
+//        make.height.mas_equalTo(50 * KFitHeightRate);
+//    }];
+//    UIView *topLineView = [MINUtils createLineView];
+//    [bottomView addSubview: topLineView];
+//    [topLineView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.height.mas_equalTo(0.5);
+//        make.top.left.right.equalTo(bottomView);
+//    }];
+//    self.shareBtn = [self createBtnWithImage:@"分享" title:Localized(@"分享")];
+//    self.deleteBtn = [self createBtnWithImage:@"删-除" title:Localized(@"删除")];
+//    UIButton *lastBtn = nil;
+//    NSArray *arr = @[self.shareBtn, self.deleteBtn];
+//    for (int i = 0; i < arr.count; i++) {
+//        UIButton *button = arr[i];
+//        [bottomView addSubview: button];
+//        if (lastBtn == nil) {
+//            [button mas_makeConstraints:^(MASConstraintMaker *make) {
+//                make.top.bottom.equalTo(bottomView);
+//                make.left.equalTo(bottomView);
+//                make.width.mas_equalTo(SCREEN_WIDTH/2);
+//            }];
+//        }else {
+//            [button mas_makeConstraints:^(MASConstraintMaker *make) {
+//                make.top.bottom.equalTo(bottomView);
+//                make.left.equalTo(lastBtn.mas_right);
+//                make.width.mas_equalTo(SCREEN_WIDTH/2);
+//            }];
+//        }
+//        lastBtn = button;
+//    }
+//}
 
 - (UIButton *)createBtnWithImage:(NSString *)image title:(NSString *)title
 {
@@ -521,6 +608,9 @@
     _baiduLocationService = [[BMKLocationManager alloc] init];
     _baiduMapView.userTrackingMode = BMKUserTrackingModeNone;
     [_baiduView addSubview: _baiduMapView];
+    [_baiduMapView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(@0);
+    }];
 }
 
 - (void)googleMap
@@ -539,6 +629,9 @@
     //    _googleMapView.myLocationEnabled = YES;
     _googleMapView.delegate = self;
     [_googleView addSubview: _googleMapView];
+    [_googleMapView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(@0);
+    }];
 }
 #pragma mark - BMKMapViewDelegate
 /* 添加标注 会调此方法 */
@@ -601,6 +694,13 @@
         return polylineView;
     }
     return nil;
+}
+- (void)mapView:(BMKMapView *)mapView onClickedMapBlank:(CLLocationCoordinate2D)coordinate {
+    if (self.currentCircle) {
+        [self clearMap];
+        self.currentCircle.coordinate = coordinate;
+        [mapView addOverlay:self.currentCircle];
+    }
 }
 - (void)showAlertViewWithTitle:(NSString *)title datailText:(NSString *)text indexPath:(NSIndexPath *)indexPath
 {
