@@ -143,7 +143,7 @@
 #pragma mark - CreateUI
 - (void)createUI
 {
-    [self initBarWithTitle: self.model.name isBack: YES];
+    [self initBarWithTitle:Localized(@"电子围栏") isBack: YES];
     [self addDeleteAndSave];
     [self setupMenuView];
     [self baiduMap];

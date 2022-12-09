@@ -149,6 +149,9 @@
     __weak CBBasePopView *wpopView = popView;
     [alertView setDidClickConfirm:^{
         [wpopView dismiss];
+        if (confirmBlk) {
+            confirmBlk(@"");
+        }
     }];
     [alertView setDidClickCancel:^{
         [wpopView dismiss];
