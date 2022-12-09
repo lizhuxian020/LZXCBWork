@@ -75,7 +75,11 @@
 
 - (void)confirmBtnClick
 {
-    [self.delegate minPickerView: self didSelectWithDic: self.selectDic];
+    if (_didClickConfirm) {
+        _didClickConfirm(_pickerView);
+    } else {
+        [self.delegate minPickerView: self didSelectWithDic: self.selectDic];
+    }
     [self hideView];
 }
 
@@ -95,7 +99,7 @@
     [contentView addSubview: _pickerView];
     [_pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(contentView);
-        make.bottom.equalTo(contentView).with.offset(-50);
+        make.bottom.equalTo(contentView).with.offset(-TabPaddingBARHEIGHT);
         make.top.equalTo(titleView.mas_bottom);
     }];
 }

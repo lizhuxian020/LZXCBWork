@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CBDoubleTimePicker : UIView
+@interface CBDoubleTimePicker : NSObject<UIPickerViewDelegate, UIPickerViewDataSource>
 
 @end
 

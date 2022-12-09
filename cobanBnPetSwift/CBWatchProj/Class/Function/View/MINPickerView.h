@@ -30,6 +30,7 @@
 @property (nonatomic, weak) id<MINPickerViewDelegate> delegate;
 @property (nonatomic, assign) BOOL isPicturePickerView;
 
+@property (nonatomic, copy) void(^didClickConfirm)(UIPickerView *pickerView);
 - (void)showView;
 - (void)hideView;
 

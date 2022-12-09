@@ -8,6 +8,7 @@
 
 #import "CBFencyMenuView.h"
 #import "MINPickerView.h"
+#import "CBDoubleTimePicker.h"
 
 @interface CBFencyMenuView ()
 
@@ -33,6 +34,8 @@
 @property (nonatomic, strong) UISwitch *overSwitch;
 
 @property (nonatomic, strong) NSArray *deviceArr;
+
+@property (nonatomic, strong) CBDoubleTimePicker *timePickerDelegate;
 @end
 
 @implementation CBFencyMenuView
@@ -79,9 +82,9 @@
         make.left.right.equalTo(@0);
     }];
     
-    UIView *subView = [self timeView:&lbl];
+    UIView *alarm1SubView = [self timeView:&lbl];
     self.alarm1TimeLbl = lbl;
-    UIView *alarm1View = [self viewWithTitle:Localized(@"时段1报警") subView:subView switchView:&switchView];
+    UIView *alarm1View = [self viewWithTitle:Localized(@"时段1报警") subView:alarm1SubView switchView:&switchView];
     self.alarm1Switch = switchView;
     [self addSubview:alarm1View];
     [alarm1View mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -89,9 +92,9 @@
         make.left.right.equalTo(@0);
     }];
     
-    subView = [self timeView:&lbl];
+    UIView *alarm2SubView = [self timeView:&lbl];
     self.alarm2TimeLbl = lbl;
-    UIView *alarm2View = [self viewWithTitle:Localized(@"时段2报警") subView:subView switchView:&switchView];
+    UIView *alarm2View = [self viewWithTitle:Localized(@"时段2报警") subView:alarm2SubView switchView:&switchView];
     self.alarm2Switch = switchView;
     [self addSubview:alarm2View];
     [alarm2View mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -100,9 +103,9 @@
     }];
     
     UITextField *tf = nil;
-    subView = [self speedView:&tf];
+    UIView *overSubView = [self speedView:&tf];
     self.overTF = tf;
-    UIView *overView = [self viewWithTitle:Localized(@"超速报警") subView:subView switchView:&switchView];
+    UIView *overView = [self viewWithTitle:Localized(@"超速报警") subView:overSubView switchView:&switchView];
     self.overSwitch = switchView;
     [self addSubview:overView];
     [overView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -118,6 +121,14 @@
     [deviceView bk_whenTapped:^{
         [weakself showSelectDevice];
     }];
+    [alarm1SubView bk_whenTapped:^{
+        [weakself showChooseTime:weakself.alarm1TimeLbl];
+    }];
+    [alarm2SubView bk_whenTapped:^{
+        [weakself showChooseTime:weakself.alarm2TimeLbl];
+    }];
+    
+    self.timePickerDelegate = [CBDoubleTimePicker new];
 }
 
 - (UIView *)speedView:(UITextField **)targetTF {
@@ -265,6 +276,40 @@
     [pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.equalTo(@0);
         make.height.mas_equalTo(SCREEN_HEIGHT);
+    }];
+    [pickerView showView];
+}
+
+- (void)showChooseTime:(UILabel *)lbl {
+    MINPickerView *pickerView = [[MINPickerView alloc] init];
+    pickerView.titleLabel.text = @"";
+    pickerView.pickerView.delegate = _timePickerDelegate;
+    pickerView.pickerView.dataSource = _timePickerDelegate;
+    [UIApplication.sharedApplication.keyWindow addSubview: pickerView];
+    [pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.equalTo(@0);
+        make.height.mas_equalTo(SCREEN_HEIGHT);
+    }];
+    NSCalendar *c = [NSCalendar currentCalendar];
+    NSUInteger unitF = NSCalendarUnitHour | NSCalendarUnitMinute;
+    NSDateComponents *component = [c components:unitF fromDate:[NSDate date]];
+    NSInteger min = [component minute];
+    NSInteger hour = [component hour];
+    NSInteger nMin = min + 1 >= 60 ? 0 : min;
+    NSInteger nHour = hour + 1 >= 24 ? 0 : hour + 1;
+    
+    [pickerView.pickerView selectRow:hour inComponent:0 animated:NO];
+    [pickerView.pickerView selectRow:min inComponent:2 animated:NO];
+    [pickerView.pickerView selectRow:nHour inComponent:3 animated:NO];
+    [pickerView.pickerView selectRow:nMin inComponent:5 animated:NO];
+    kWeakSelf(self);
+    [pickerView setDidClickConfirm:^(UIPickerView *pickerView) {
+        int hour1 = [pickerView selectedRowInComponent:0];
+        int min1 = [pickerView selectedRowInComponent:2];
+        int hour2 = [pickerView selectedRowInComponent:3];
+        int min2 = [pickerView selectedRowInComponent:5];
+        NSString *text = [NSString stringWithFormat:@"%02d:%02d - %02d:%02d", hour1, min1, hour2, min2];
+        lbl.text = text;
     }];
     [pickerView showView];
 }
