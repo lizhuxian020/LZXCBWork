@@ -37,7 +37,7 @@
     [self createUI];
     [self addGesture];
     self.alramTypeArr = @[@[Localized(@"出围栏报警"),Localized(@"入围栏报警"), Localized(@"出入围栏报警"),Localized(@"位移报警")]];
-    self.fenceShapeTypeImageStrArr = @[@"多边形-1", @"椭圆-1", @"矩形-1", @"路线"];
+    self.fenceShapeTypeImageStrArr = @[@"电子围栏-多边形", @"电子围栏-圆形", @"电子围栏-正方形", @"路线"];
 }
 #pragma mark - CreateUI
 - (void)createUI
@@ -70,7 +70,7 @@
     dic[@"dno"] = [CBCommonTools CBdeviceInfo].dno?:@"";
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     kWeakSelf(self);
-    [[NetWorkingManager shared]getWithUrl:@"devControlController/getFenceList" params: dic succeed:^(id response,BOOL isSucceed) {
+    [[NetWorkingManager shared]getWithUrl:@"devControlController/getFenceListByName" params: dic succeed:^(id response,BOOL isSucceed) {
         kStrongSelf(self);
         [self.tableView.mj_header endRefreshing];
         [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -208,8 +208,10 @@
     cell.fenceNameLabel.text = [NSString stringWithFormat:@"%@",model.name?:@""];
     [cell.fenceTypeImageBtn setImage: [UIImage imageNamed: self.fenceShapeTypeImageStrArr[model.shape]] forState: UIControlStateNormal];
     [cell.fenceTypeImageBtn setImage: [UIImage imageNamed: self.fenceShapeTypeImageStrArr[model.shape]] forState: UIControlStateHighlighted];
+    cell.deviceLbl.text = model.deviceName;
     cell.speedLabel.text = [NSString stringWithFormat: @"%@KM/h", model.speed];
     cell.alarmTypeLabel.text = self.alramTypeArr[0][model.warmType];
+    cell.isOver = YES;
     return cell;
 }
 
@@ -222,11 +224,6 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return self.modelArr.count;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 50 * KFitHeightRate;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section

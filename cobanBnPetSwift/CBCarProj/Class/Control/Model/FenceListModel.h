@@ -21,4 +21,5 @@
 @property (nonatomic, assign) int warmType;     // 0-出围栏报警 1-入围栏报警 2-出入围栏报警 3-位移报警
 @property (nonatomic, copy) NSString *areaId;   // 区域iD
 @property (nonatomic, copy) NSString *sn;   // 区域iD
+@property (nonatomic, copy) NSString *deviceName; //设备名
 @end
