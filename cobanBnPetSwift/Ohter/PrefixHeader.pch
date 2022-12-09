@@ -78,6 +78,7 @@
 #import "CBAlertBaseView.h"
 #import "CBCarAlertView.h"
 #import "CBTopAlertView.h"
+#import "CBDeviceTool.h"
 
 ///* oc 调用 swift*/
 //#import "cobanBnPetSwift-Swift.h"

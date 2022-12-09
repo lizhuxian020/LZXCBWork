@@ -26,6 +26,7 @@
 #import "MINAnnotationView.h"
 #import "MINNormalInfoAnnotation.h"
 #import "cobanBnPetSwift-Swift.h"
+#import "CBFencyMenuView.h"
 
 //@interface MINCoordinateObject : NSObject
 //@property (nonatomic, assign) CLLocationCoordinate2D coordinate;
@@ -50,6 +51,8 @@
 @property (nonatomic, strong) NSMutableArray *pathleCoordinateArr;
 @property (nonatomic, strong) UIButton *shareBtn;
 @property (nonatomic, strong) UIButton *deleteBtn;
+
+@property (nonatomic, strong) CBFencyMenuView *menuView;
 @end
 
 @implementation FenceDetailViewController
@@ -108,10 +111,20 @@
 - (void)createUI
 {
     [self initBarWithTitle: self.model.name isBack: YES];
+    [self setupMenuView];
     [self baiduMap];
     [self googleMap];
     [self createBottomView];
     [self createFence];
+}
+
+- (void)setupMenuView {
+    self.menuView = [CBFencyMenuView new];
+    [self.view addSubview:self.menuView];
+    [self.menuView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(@(PPNavigationBarHeight));
+        make.left.right.equalTo(@0);
+    }];
 }
 
 - (void)createFence
@@ -491,7 +504,8 @@
     _baiduView = [[UIView alloc] init];
     [self.view addSubview: _baiduView];
     [_baiduView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.bottom.top.equalTo(self.view);
+        make.top.equalTo(self.menuView.mas_bottom);
+        make.left.right.bottom.equalTo(@0);
     }];
     _baiduView.hidden = [AppDelegate shareInstance].IsShowGoogleMap;
     _baiduMapView = [[BMKMapView alloc]initWithFrame:self.view.bounds];
@@ -515,7 +529,8 @@
     _googleView.hidden = ![AppDelegate shareInstance].IsShowGoogleMap;
     [self.view addSubview: _googleView];
     [_googleView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.bottom.top.equalTo(self.view);
+        make.top.equalTo(self.menuView.mas_bottom);
+        make.left.right.bottom.equalTo(@0);
     }];
     GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:40.056898
                                                             longitude:116.307626

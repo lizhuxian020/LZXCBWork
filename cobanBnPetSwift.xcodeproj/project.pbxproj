@@ -659,6 +659,9 @@
 		43F4FDED248672CD0072B233 /* CBPetFuncChatPetInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F4FDEC248672CD0072B233 /* CBPetFuncChatPetInfoView.swift */; };
 		43F4FDEF248672EB0072B233 /* CBPetFuncChatPetInfoTabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F4FDEE248672EB0072B233 /* CBPetFuncChatPetInfoTabCell.swift */; };
 		6D032D9B1335E2208C8FB6B3 /* libPods-cobanBnPetSwift.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A1F41BDFD0FBDF918826F4E /* libPods-cobanBnPetSwift.a */; };
+		A2BCA2D8294311F700CD4B08 /* CBFencyMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BCA2D7294311F700CD4B08 /* CBFencyMenuView.m */; };
+		A2BCA2DF2943242300CD4B08 /* CBDeviceTool.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BCA2DE2943242300CD4B08 /* CBDeviceTool.m */; };
+		A2BCA2E32943358A00CD4B08 /* CBDoubleTimePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BCA2E22943358A00CD4B08 /* CBDoubleTimePicker.m */; };
 		A2F9C5002925D1C400715AF9 /* CBPetLoginInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F9C4FF2925D1C400715AF9 /* CBPetLoginInputView.swift */; };
 		A2F9C5032926135E00715AF9 /* CBLoginLayoutMarco.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F9C5022926135E00715AF9 /* CBLoginLayoutMarco.swift */; };
 		A2F9C508292B76A700715AF9 /* UIView+BlocksKit.m in Sources */ = {isa = PBXBuildFile; fileRef = A2F9C505292B76A600715AF9 /* UIView+BlocksKit.m */; };
@@ -1858,6 +1861,12 @@
 		43F4FDEA2486727B0072B233 /* CBPetFuncChatPetInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetFuncChatPetInfoVC.swift; sourceTree = "<group>"; };
 		43F4FDEC248672CD0072B233 /* CBPetFuncChatPetInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetFuncChatPetInfoView.swift; sourceTree = "<group>"; };
 		43F4FDEE248672EB0072B233 /* CBPetFuncChatPetInfoTabCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetFuncChatPetInfoTabCell.swift; sourceTree = "<group>"; };
+		A2BCA2D6294311F700CD4B08 /* CBFencyMenuView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBFencyMenuView.h; sourceTree = "<group>"; };
+		A2BCA2D7294311F700CD4B08 /* CBFencyMenuView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBFencyMenuView.m; sourceTree = "<group>"; };
+		A2BCA2DD2943242300CD4B08 /* CBDeviceTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBDeviceTool.h; sourceTree = "<group>"; };
+		A2BCA2DE2943242300CD4B08 /* CBDeviceTool.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBDeviceTool.m; sourceTree = "<group>"; };
+		A2BCA2E12943358A00CD4B08 /* CBDoubleTimePicker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBDoubleTimePicker.h; sourceTree = "<group>"; };
+		A2BCA2E22943358A00CD4B08 /* CBDoubleTimePicker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBDoubleTimePicker.m; sourceTree = "<group>"; };
 		A2F9C4FF2925D1C400715AF9 /* CBPetLoginInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetLoginInputView.swift; sourceTree = "<group>"; };
 		A2F9C5022926135E00715AF9 /* CBLoginLayoutMarco.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBLoginLayoutMarco.swift; sourceTree = "<group>"; };
 		A2F9C504292B76A500715AF9 /* UIGestureRecognizer+BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIGestureRecognizer+BlocksKit.h"; sourceTree = "<group>"; };
@@ -4338,6 +4347,7 @@
 		17CDAA9724CEBE5500BB9F8B /* Control */ = {
 			isa = PBXGroup;
 			children = (
+				A2BCA2D9294323ED00CD4B08 /* Tools */,
 				B1A4092E2936618A004B22E1 /* Config */,
 				17CDAA9824CEBE5500BB9F8B /* Controller */,
 				17CDAAE224CEBE5500BB9F8B /* Model */,
@@ -4525,6 +4535,8 @@
 				17CDAACF24CEBE5500BB9F8B /* CBNewFencePickPointView.m */,
 				17CDAAD024CEBE5500BB9F8B /* CBNewFenceMenuView.m */,
 				17CDAAD124CEBE5500BB9F8B /* CBNewFencePickPointView.h */,
+				A2BCA2D6294311F700CD4B08 /* CBFencyMenuView.h */,
+				A2BCA2D7294311F700CD4B08 /* CBFencyMenuView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -5425,6 +5437,24 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		A2BCA2D9294323ED00CD4B08 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				A2BCA2DD2943242300CD4B08 /* CBDeviceTool.h */,
+				A2BCA2DE2943242300CD4B08 /* CBDeviceTool.m */,
+			);
+			path = Tools;
+			sourceTree = "<group>";
+		};
+		A2BCA2E02943357300CD4B08 /* TimePicker */ = {
+			isa = PBXGroup;
+			children = (
+				A2BCA2E12943358A00CD4B08 /* CBDoubleTimePicker.h */,
+				A2BCA2E22943358A00CD4B08 /* CBDoubleTimePicker.m */,
+			);
+			path = TimePicker;
+			sourceTree = "<group>";
+		};
 		A2F9C5012926134600715AF9 /* LoginLayoutMarco */ = {
 			isa = PBXGroup;
 			children = (
@@ -5644,6 +5674,7 @@
 		B1D3565B292E5ED800E677F7 /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				A2BCA2E02943357300CD4B08 /* TimePicker */,
 				B1F37655293AF78F0034D4D8 /* TopAlert */,
 				B1A4093029366D92004B22E1 /* AlertContentView */,
 				B19D6A71293276A200D2420B /* Component */,
@@ -6012,6 +6043,7 @@
 				17CDAB7324CEBE5500BB9F8B /* GGPolygonRenderder.m in Sources */,
 				B19D6A742932776F00D2420B /* CBCarAlertView.m in Sources */,
 				17CDAB5B24CEBE5500BB9F8B /* LineBarDataSet.m in Sources */,
+				A2BCA2D8294311F700CD4B08 /* CBFencyMenuView.m in Sources */,
 				1782BF2624C0427E00544C36 /* NSString+Category.m in Sources */,
 				B19D6A7029326FB100D2420B /* CBPersonInfoController.m in Sources */,
 				17F28DBD2488A358003C4010 /* CBPetMsgCterViewController.swift in Sources */,
@@ -6553,6 +6585,7 @@
 				43F3D85B275A517F007F605E /* CBPetWakeUpPopView.m in Sources */,
 				179F136E24865FE6004DB559 /* CBPetPersonalPageVC.swift in Sources */,
 				17CDAB9D24CEBE5500BB9F8B /* DPieScaler.m in Sources */,
+				A2BCA2DF2943242300CD4B08 /* CBDeviceTool.m in Sources */,
 				17CDAC1224CEBE5600BB9F8B /* MINLabel.m in Sources */,
 				A2F9C5002925D1C400715AF9 /* CBPetLoginInputView.swift in Sources */,
 				1782BFA524C0427E00544C36 /* CBWtBaseNetworkModel.m in Sources */,
@@ -6624,6 +6657,7 @@
 				17CDAB6B24CEBE5500BB9F8B /* LineBarQuery.m in Sources */,
 				43F4FDEF248672EB0072B233 /* CBPetFuncChatPetInfoTabCell.swift in Sources */,
 				17D337B724BC4ED700A86267 /* CBPetSwitchSystemVC.swift in Sources */,
+				A2BCA2E32943358A00CD4B08 /* CBDoubleTimePicker.m in Sources */,
 				17CDAC2824CEBE5600BB9F8B /* CBHomeLeftMenuHeadView.m in Sources */,
 				17CDABDF24CEBE5600BB9F8B /* CBNetworkingServers.m in Sources */,
 			);
