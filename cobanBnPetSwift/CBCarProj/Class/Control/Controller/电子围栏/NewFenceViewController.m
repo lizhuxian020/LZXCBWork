@@ -81,6 +81,10 @@
 @property (nonatomic,strong) CBSportAnnotation *selectPointAnnotation;
 @property (nonatomic,strong) CBNewFencePickPointView *selectPointAnnotationView;
 
+@property (nonatomic, strong) UIButton *barCircleBtn;
+@property (nonatomic, strong) UIButton *barRectBtn;
+@property (nonatomic, strong) UIButton *barPolygonBtn;
+@property (nonatomic, strong) UIView *bottomView;
 @end
 
 @implementation NewFenceViewController
@@ -110,17 +114,59 @@
 #pragma mark - CreateUI
 - (void)createUI
 {
-    if (self.isCreateFence) {
-        [self initBarWithTitle:Localized(@"新增围栏") isBack: YES];
-    } else {
-        [self initBarWithTitle:Localized(@"编辑") isBack: YES];
-    }
-    [self initBarRightImageName:@"gengduo" target:self action:@selector(showMenuViewClick)];
+    [self initBarWithTitle:Localized(@"新增围栏") isBack: YES];
+//    [self initBarRightImageName:@"gengduo" target:self action:@selector(showMenuViewClick)];
+    [self addRightBtns];
+    [self createBottomView];
     
     [self baiduMap];
     [self googleMap];
-    [self createBottomView];
-    [self commitBtn];
+    
+//    [self commitBtn];
+}
+- (void)addRightBtns {
+    
+    UIButton *rightBtn = [[UIButton alloc] init];
+    [rightBtn setImage:[UIImage imageNamed:@"电子围栏-圆形"] forState:UIControlStateNormal];
+    [rightBtn addTarget:self action:@selector(clickCircle) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *barItem = [[UIBarButtonItem alloc] initWithCustomView: rightBtn];
+    self.barCircleBtn = rightBtn;
+    UIBarButtonItem * spaceItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    //将宽度设为负值
+    spaceItem.width = 30 * KFitWidthRate;
+    UIBarButtonItem * spaceItem1 = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    //将宽度设为负值
+    spaceItem1.width = 30 * KFitWidthRate;
+    
+    
+    UIButton *rightBtn1 = [[UIButton alloc] init];
+    [rightBtn1 setImage:[UIImage imageNamed:@"电子围栏-正方形-默认"] forState:UIControlStateNormal];
+    [rightBtn1 addTarget:self action:@selector(clickRectangle) forControlEvents:UIControlEventTouchUpInside];
+    self.barRectBtn = rightBtn1;
+    UIBarButtonItem *barItem1 = [[UIBarButtonItem alloc] initWithCustomView: rightBtn1];
+    
+    UIButton *rightBtn2 = [[UIButton alloc] init];
+    [rightBtn2 setImage:[UIImage imageNamed:@"电子围栏-多边形-默认"] forState:UIControlStateNormal];
+    [rightBtn2 addTarget:self action:@selector(clickPolygon) forControlEvents:UIControlEventTouchUpInside];
+    self.barPolygonBtn = rightBtn2;
+    UIBarButtonItem *barItem2 = [[UIBarButtonItem alloc] initWithCustomView: rightBtn2];
+    
+    self.navigationItem.rightBarButtonItems = @[barItem2, spaceItem, barItem1, spaceItem1, barItem];
+}
+- (void)clickCircle {
+    [self.barCircleBtn setImage:[UIImage imageNamed:@"电子围栏-圆形"] forState:UIControlStateNormal];
+    [self.barRectBtn setImage:[UIImage imageNamed:@"电子围栏-正方形-默认"] forState:UIControlStateNormal];
+    [self.barPolygonBtn setImage:[UIImage imageNamed:@"电子围栏-多边形-默认"] forState:UIControlStateNormal];
+}
+- (void)clickRectangle {
+    [self.barCircleBtn setImage:[UIImage imageNamed:@"电子围栏-圆形-默认"] forState:UIControlStateNormal];
+    [self.barRectBtn setImage:[UIImage imageNamed:@"电子围栏-正方形"] forState:UIControlStateNormal];
+    [self.barPolygonBtn setImage:[UIImage imageNamed:@"电子围栏-多边形-默认"] forState:UIControlStateNormal];
+}
+- (void)clickPolygon {
+    [self.barCircleBtn setImage:[UIImage imageNamed:@"电子围栏-圆形-默认"] forState:UIControlStateNormal];
+    [self.barRectBtn setImage:[UIImage imageNamed:@"电子围栏-正方形-默认"] forState:UIControlStateNormal];
+    [self.barPolygonBtn setImage:[UIImage imageNamed:@"电子围栏-多边形"] forState:UIControlStateNormal];
 }
 - (NSMutableArray *)roundCoordinateArr {
     if (!_roundCoordinateArr) {
@@ -159,64 +205,108 @@
     }
     return _menuView;
 }
-- (UIButton *)commitBtn {
-    if (!_commitBtn) {
-        _commitBtn = [MINUtils createBtnWithRadius:4 title:Localized(@"提交")];
-        _commitBtn.backgroundColor = kBlueColor;
-        [_commitBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        _commitBtn.titleLabel.font = [UIFont systemFontOfSize:15];
-        _commitBtn.hidden = YES;
-        [_commitBtn addTarget:self action:@selector(createFenceCommitClick) forControlEvents:UIControlEventTouchUpInside];
-        [self.view addSubview:_commitBtn];
-        [_commitBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.bottom.mas_equalTo(self.circleBtn.mas_top).offset(-10);
-            make.left.mas_equalTo(10);
-            make.right.mas_equalTo(-10);
-            make.height.mas_equalTo(44);
-        }];
-    }
-    return _commitBtn;
-}
+//- (UIButton *)commitBtn {
+//    if (!_commitBtn) {
+//        _commitBtn = [MINUtils createBtnWithRadius:4 title:Localized(@"提交")];
+//        _commitBtn.backgroundColor = kBlueColor;
+//        [_commitBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//        _commitBtn.titleLabel.font = [UIFont systemFontOfSize:15];
+//        _commitBtn.hidden = YES;
+//        [_commitBtn addTarget:self action:@selector(createFenceCommitClick) forControlEvents:UIControlEventTouchUpInside];
+//        [self.view addSubview:_commitBtn];
+//        [_commitBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.bottom.mas_equalTo(self.circleBtn.mas_top).offset(-10);
+//            make.left.mas_equalTo(10);
+//            make.right.mas_equalTo(-10);
+//            make.height.mas_equalTo(44);
+//        }];
+//    }
+//    return _commitBtn;
+//}
 - (void)createBottomView {
     UIView *bottomView = [[UIView alloc] init];
+    bottomView.backgroundColor = UIColor.whiteColor;
     [self.view addSubview: bottomView];
     [bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.left.right.equalTo(self.view);
-        make.height.mas_equalTo(50 * KFitHeightRate);
     }];
-    UIView *topLineView = [MINUtils createLineView];
-    [bottomView addSubview: topLineView];
-    [topLineView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.mas_equalTo(0.5);
-        make.top.left.right.equalTo(bottomView);
+    self.bottomView = bottomView;
+    UIView *contentView = [UIView new];
+    [bottomView addSubview:contentView];
+    [contentView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.right.equalTo(@0);
+        make.bottom.equalTo(@(-TabPaddingBARHEIGHT));
     }];
-    self.circleBtn = [self createBtnWithImage: @"椭圆-1" selectedImage: @"椭圆1-2" title:Localized(@"圆形")];
-    self.circleBtn.selected = YES;
-    self.circleBtn.backgroundColor = kBlueColor;
-    self.rectangleBtn = [self createBtnWithImage: @"矩形-1" selectedImage: @"矩形-2" title:Localized(@"矩形")];
-    self.polygonBtn = [self createBtnWithImage: @"多边形-1" selectedImage: @"多边形-2" title:Localized(@"多边形")];
-    self.pathBtn = [self createBtnWithImage: @"路线" selectedImage: @"形状-2" title:Localized(@"路线")];
-    UIButton *lastBtn = nil;
-    NSArray *arr = @[self.circleBtn, self.rectangleBtn, self.polygonBtn, self.pathBtn];
-    for (int i = 0; i < arr.count; i++) {
-        UIButton *button = arr[i];
-        [bottomView addSubview: button];
-        [self.arrayBtn addObject:button];
-        if (lastBtn == nil) {
-            [button mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.top.bottom.equalTo(bottomView);
-                make.left.equalTo(bottomView);
-                make.width.mas_equalTo(SCREEN_WIDTH/4);
-            }];
-        }else {
-            [button mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.top.bottom.equalTo(bottomView);
-                make.left.equalTo(lastBtn.mas_right);
-                make.width.mas_equalTo(SCREEN_WIDTH/4);
-            }];
-        }
-        lastBtn = button;
-    }
+    
+    UILabel *tipsLbl = [MINUtils createLabelWithText:Localized(@"圆形围栏: 点击地图选择圆心, 长按拖动小方块缩放改变半径") size:14 alignment:NSTextAlignmentLeft textColor:kCellTextColor];
+    [contentView addSubview:tipsLbl];
+    tipsLbl.numberOfLines = 0;
+    [tipsLbl mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.equalTo(@10);
+        make.right.equalTo(@-10);
+    }];
+    
+    UIButton *resetBtn = [UIButton new];
+    resetBtn.backgroundColor = UIColor.whiteColor;
+    resetBtn.layer.borderColor = kCellTextColor.CGColor;
+    resetBtn.layer.borderWidth = 1;
+    resetBtn.layer.cornerRadius = 20;
+    [resetBtn setTitle:Localized(@"重置") forState:UIControlStateNormal];
+    [resetBtn setTitleColor:kCellTextColor forState:UIControlStateNormal];
+    [contentView addSubview:resetBtn];
+    [resetBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(tipsLbl.mas_bottom).mas_offset(5);
+        make.left.equalTo(@15);
+        make.bottom.equalTo(@-10);
+        make.height.equalTo(@40);
+    }];
+    
+    UIButton *nextBtn = [UIButton new];
+    nextBtn.backgroundColor = kCellTextColor;
+    nextBtn.layer.cornerRadius = 20;
+    [nextBtn setTitle:Localized(@"下一步") forState:UIControlStateNormal];
+    [nextBtn setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
+    [contentView addSubview:nextBtn];
+    [nextBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(resetBtn);
+        make.left.equalTo(resetBtn.mas_right).mas_offset(20);
+        make.height.width.equalTo(resetBtn);
+        make.right.equalTo(@-15);
+    }];
+    
+//    UIView *topLineView = [MINUtils createLineView];
+//    [bottomView addSubview: topLineView];
+//    [topLineView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.height.mas_equalTo(0.5);
+//        make.top.left.right.equalTo(bottomView);
+//    }];
+//    self.circleBtn = [self createBtnWithImage: @"椭圆-1" selectedImage: @"椭圆1-2" title:Localized(@"圆形")];
+//    self.circleBtn.selected = YES;
+//    self.circleBtn.backgroundColor = kBlueColor;
+//    self.rectangleBtn = [self createBtnWithImage: @"矩形-1" selectedImage: @"矩形-2" title:Localized(@"矩形")];
+//    self.polygonBtn = [self createBtnWithImage: @"多边形-1" selectedImage: @"多边形-2" title:Localized(@"多边形")];
+//    self.pathBtn = [self createBtnWithImage: @"路线" selectedImage: @"形状-2" title:Localized(@"路线")];
+//    UIButton *lastBtn = nil;
+//    NSArray *arr = @[self.circleBtn, self.rectangleBtn, self.polygonBtn, self.pathBtn];
+//    for (int i = 0; i < arr.count; i++) {
+//        UIButton *button = arr[i];
+//        [bottomView addSubview: button];
+//        [self.arrayBtn addObject:button];
+//        if (lastBtn == nil) {
+//            [button mas_makeConstraints:^(MASConstraintMaker *make) {
+//                make.top.bottom.equalTo(bottomView);
+//                make.left.equalTo(bottomView);
+//                make.width.mas_equalTo(SCREEN_WIDTH/4);
+//            }];
+//        }else {
+//            [button mas_makeConstraints:^(MASConstraintMaker *make) {
+//                make.top.bottom.equalTo(bottomView);
+//                make.left.equalTo(lastBtn.mas_right);
+//                make.width.mas_equalTo(SCREEN_WIDTH/4);
+//            }];
+//        }
+//        lastBtn = button;
+//    }
 }
 - (UIButton *)createBtnWithImage:(NSString *)image selectedImage:(NSString *)selectedImage title:(NSString *)title {
     UIButton *button = [[UIButton alloc] init];
@@ -237,7 +327,8 @@
     _baiduView = [[UIView alloc] init];
     [self.view addSubview: _baiduView];
     [_baiduView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.bottom.top.equalTo(self.view);
+        make.top.left.right.equalTo(@0);
+        make.bottom.equalTo(self.bottomView.mas_top);
     }];
     _baiduView.hidden = [AppDelegate shareInstance].IsShowGoogleMap;
     _baiduMapView = [[BMKMapView alloc]initWithFrame:self.view.bounds];
@@ -254,6 +345,9 @@
     [_baiduLocationService startUpdatingLocation];
     _baiduMapView.userTrackingMode = BMKUserTrackingModeNone;
     [_baiduView addSubview: _baiduMapView];
+    [_baiduMapView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(@0);
+    }];
 }
 
 - (void)googleMap {
@@ -261,7 +355,8 @@
     _googleView.hidden = ![AppDelegate shareInstance].IsShowGoogleMap;
     [self.view addSubview: _googleView];
     [_googleView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.bottom.top.equalTo(self.view);
+        make.top.left.right.equalTo(@0);
+        make.bottom.equalTo(self.bottomView.mas_top);
     }];
     GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:40.056898
                                                             longitude:116.307626
@@ -270,6 +365,9 @@
     //    _googleMapView.myLocationEnabled = YES;
     _googleMapView.delegate = self;
     [_googleView addSubview: _googleMapView];
+    [_googleMapView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(@0);
+    }];
     //定位管理器
     _locationManager = [[CLLocationManager alloc]init];
     //如果没有授权则请求用户授权
@@ -749,7 +847,7 @@
     }
     NSLog(@"latitude = %f, longitude = %f", curCoordinate2D.latitude, curCoordinate2D.longitude);
     self.myGoogleLocation = curCoordinate2D;
-    [self showMyLocation];
+//    [self showMyLocation];
 }
 
 - (void)showMyLocation {
@@ -759,6 +857,11 @@
         _googleMapView.camera = [GMSCameraPosition cameraWithLatitude:self.myGoogleLocation.latitude longitude:self.myGoogleLocation.longitude zoom: 16];
         [_baiduMapView setCenterCoordinate:CLLocationCoordinate2DMake(self.myGoogleLocation.latitude,self.myGoogleLocation.longitude) animated:YES];
     });
+}
+
+- (void)showCurrentSelectedDeviceLocation {
+    CBHomeLeftMenuDeviceInfoModel *currentModel = [CBCommonTools CBdeviceInfo];
+    
 }
 
 #pragma mark - BMKLocationServiceDelegate

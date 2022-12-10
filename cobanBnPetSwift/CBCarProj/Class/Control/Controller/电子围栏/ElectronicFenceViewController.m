@@ -115,65 +115,65 @@
 #pragma mark - Action
 - (void)rightBtnClick
 {
-    __weak __typeof__(self) weakSelf = self;
-    MINAlertView *alertView = [[MINAlertView alloc] init];
-    __weak MINAlertView *weakAlertView = alertView;
-    alertView.titleLabel.text = Localized(@"新增围栏");
-    [weakSelf.view addSubview: alertView];
-    [alertView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.bottom.right.equalTo(weakSelf.view);
-        make.height.mas_equalTo(SCREEN_HEIGHT);
-    }];
-    // 重置高度
-    [alertView setContentViewHeight: 160];
-    NewElectronicFenceView *newView = [[NewElectronicFenceView alloc] init];
-    weakSelf.eletronicView = newView;
-    weakSelf.eletronicView.speedTextField.keyboardType = UIKeyboardTypeNumberPad;
-    newView.alramTypeBtnClickBlock = ^{
-        MINPickerView *pickerView = [[MINPickerView alloc] init];
-        pickerView.titleLabel.text = @"";
-        pickerView.dataArr = weakSelf.alramTypeArr;
-        pickerView.delegate = self;
-        [weakSelf.view addSubview: pickerView];
-        [pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.right.top.equalTo(self.view);
-            make.height.mas_equalTo(SCREEN_HEIGHT);
-        }];
-        [pickerView showView];
-    };
-    [weakAlertView.contentView addSubview: newView];
-    [newView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.bottom.equalTo(weakAlertView.contentView);
-    }];
-    alertView.rightBtnClick = ^{
-        [weakAlertView hideView];
-        // 修改model的数据，不要忘记了
-        NSLog(@"%@ %@ %@", weakSelf.eletronicView.fenceNameTextField.text, weakSelf.eletronicView.speedTextField.text, weakSelf.eletronicView.alramTypeBtn.titleLabel.text);
-        FenceListModel *model = [[FenceListModel alloc] init];
-        model.name = weakSelf.eletronicView.fenceNameTextField.text;
-        model.speed = weakSelf.eletronicView.speedTextField.text;
-        if (weakSelf.eletronicView.fenceNameTextField.text.length < 1) {
-            [MINUtils showProgressHudToView: weakSelf.view withText: @"请输入围栏名称"];
-            return ;
-        }
-        if (weakSelf.eletronicView.speedTextField.text.length < 1) {
-            [MINUtils showProgressHudToView: weakSelf.view withText: @"请输入限速"];
-            return ;
-        }
-        NSArray *arr = weakSelf.alramTypeArr[0];
-        for (int i = 0; i < arr.count;  i++) {
-            if ([arr[i] isEqualToString: weakSelf.eletronicView.alramTypeBtn.titleLabel.text]) {
-                model.warmType = i;
-            }
-        }
+//    __weak __typeof__(self) weakSelf = self;
+//    MINAlertView *alertView = [[MINAlertView alloc] init];
+//    __weak MINAlertView *weakAlertView = alertView;
+//    alertView.titleLabel.text = Localized(@"新增围栏");
+//    [weakSelf.view addSubview: alertView];
+//    [alertView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.bottom.right.equalTo(weakSelf.view);
+//        make.height.mas_equalTo(SCREEN_HEIGHT);
+//    }];
+//    // 重置高度
+//    [alertView setContentViewHeight: 160];
+//    NewElectronicFenceView *newView = [[NewElectronicFenceView alloc] init];
+//    weakSelf.eletronicView = newView;
+//    weakSelf.eletronicView.speedTextField.keyboardType = UIKeyboardTypeNumberPad;
+//    newView.alramTypeBtnClickBlock = ^{
+//        MINPickerView *pickerView = [[MINPickerView alloc] init];
+//        pickerView.titleLabel.text = @"";
+//        pickerView.dataArr = weakSelf.alramTypeArr;
+//        pickerView.delegate = self;
+//        [weakSelf.view addSubview: pickerView];
+//        [pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.left.right.top.equalTo(self.view);
+//            make.height.mas_equalTo(SCREEN_HEIGHT);
+//        }];
+//        [pickerView showView];
+//    };
+//    [weakAlertView.contentView addSubview: newView];
+//    [newView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.right.top.bottom.equalTo(weakAlertView.contentView);
+//    }];
+//    alertView.rightBtnClick = ^{
+//        [weakAlertView hideView];
+//        // 修改model的数据，不要忘记了
+//        NSLog(@"%@ %@ %@", weakSelf.eletronicView.fenceNameTextField.text, weakSelf.eletronicView.speedTextField.text, weakSelf.eletronicView.alramTypeBtn.titleLabel.text);
+//        FenceListModel *model = [[FenceListModel alloc] init];
+//        model.name = weakSelf.eletronicView.fenceNameTextField.text;
+//        model.speed = weakSelf.eletronicView.speedTextField.text;
+//        if (weakSelf.eletronicView.fenceNameTextField.text.length < 1) {
+//            [MINUtils showProgressHudToView: weakSelf.view withText: @"请输入围栏名称"];
+//            return ;
+//        }
+//        if (weakSelf.eletronicView.speedTextField.text.length < 1) {
+//            [MINUtils showProgressHudToView: weakSelf.view withText: @"请输入限速"];
+//            return ;
+//        }
+//        NSArray *arr = weakSelf.alramTypeArr[0];
+//        for (int i = 0; i < arr.count;  i++) {
+//            if ([arr[i] isEqualToString: weakSelf.eletronicView.alramTypeBtn.titleLabel.text]) {
+//                model.warmType = i;
+//            }
+//        }
         NewFenceViewController *fenceVC = [[NewFenceViewController alloc] init];
-        fenceVC.isCreateFence = YES;
-        fenceVC.model = model;
-        [weakSelf.navigationController pushViewController: fenceVC animated: YES];
-    };
-    alertView.leftBtnClick = ^{
-        [weakAlertView hideView];
-    };
+//        fenceVC.isCreateFence = YES;
+//        fenceVC.model = model;
+        [self.navigationController pushViewController: fenceVC animated: YES];
+//    };
+//    alertView.leftBtnClick = ^{
+//        [weakAlertView hideView];
+//    };
 }
 #pragma mark - tableview delegate & datasource
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
