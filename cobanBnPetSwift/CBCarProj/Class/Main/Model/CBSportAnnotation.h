@@ -11,6 +11,16 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@interface CBRadiusAnnotation : BMKPointAnnotation
+
+@property (nonatomic, assign) CGFloat radius;
+
+@end
+
+@interface CBRectAnnotation : BMKPointAnnotation
+
+@end
+
 @interface CBSportAnnotation : BMKPointAnnotation
 // 是否隐藏
 @property (nonatomic, assign) BOOL isHiddenCar;

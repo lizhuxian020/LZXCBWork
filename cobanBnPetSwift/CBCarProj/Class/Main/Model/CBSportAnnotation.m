@@ -8,6 +8,14 @@
 
 #import "CBSportAnnotation.h"
 
+@implementation CBRadiusAnnotation
+
+@end
+
+@implementation CBRectAnnotation
+
+@end
+
 @implementation CBSportAnnotation
 
 @end

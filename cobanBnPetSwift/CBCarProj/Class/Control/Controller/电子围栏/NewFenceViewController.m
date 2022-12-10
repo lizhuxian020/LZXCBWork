@@ -87,9 +87,16 @@
 @property (nonatomic, strong) UIButton *barCircleBtn;
 @property (nonatomic, strong) UIButton *barRectBtn;
 @property (nonatomic, strong) UIButton *barPolygonBtn;
+@property (nonatomic, assign) BOOL isCircle;
+@property (nonatomic, assign) BOOL isRect;
+@property (nonatomic, assign) BOOL isPolygon;
+
 @property (nonatomic, strong) UIView *bottomView;
 
 @property (nonatomic, strong) CBHomeLeftMenuDeviceInfoModel *currentModel;
+@property (nonatomic, strong) BMKCircle *baiduCircleView;
+@property (nonatomic, strong) MINAlertAnnotationView *baiduRadiusView;
+@property (nonatomic, assign) CLLocationDistance radius;
 @end
 
 @implementation NewFenceViewController
@@ -112,6 +119,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    self.radius = 1000;
     self.currentModel = [CBCommonTools CBdeviceInfo];
     [self createUI];
     // 显示mark在地图上，百度地图 http://www.cocoachina.com/bbs/read.php?tid=1719280
@@ -160,18 +168,30 @@
     UIBarButtonItem *barItem2 = [[UIBarButtonItem alloc] initWithCustomView: rightBtn2];
     
     self.navigationItem.rightBarButtonItems = @[barItem2, spaceItem, barItem1, spaceItem1, barItem];
+    self.isCircle = YES;
+    self.isRect = NO;
+    self.isPolygon = NO;
 }
 - (void)clickCircle {
+    self.isCircle = YES;
+    self.isRect = NO;
+    self.isPolygon = NO;
     [self.barCircleBtn setImage:[UIImage imageNamed:@"电子围栏-圆形"] forState:UIControlStateNormal];
     [self.barRectBtn setImage:[UIImage imageNamed:@"电子围栏-正方形-默认"] forState:UIControlStateNormal];
     [self.barPolygonBtn setImage:[UIImage imageNamed:@"电子围栏-多边形-默认"] forState:UIControlStateNormal];
 }
 - (void)clickRectangle {
+    self.isCircle = NO;
+    self.isRect = YES;
+    self.isPolygon = NO;
     [self.barCircleBtn setImage:[UIImage imageNamed:@"电子围栏-圆形-默认"] forState:UIControlStateNormal];
     [self.barRectBtn setImage:[UIImage imageNamed:@"电子围栏-正方形"] forState:UIControlStateNormal];
     [self.barPolygonBtn setImage:[UIImage imageNamed:@"电子围栏-多边形-默认"] forState:UIControlStateNormal];
 }
 - (void)clickPolygon {
+    self.isCircle = NO;
+    self.isRect = NO;
+    self.isPolygon = YES;
     [self.barCircleBtn setImage:[UIImage imageNamed:@"电子围栏-圆形-默认"] forState:UIControlStateNormal];
     [self.barRectBtn setImage:[UIImage imageNamed:@"电子围栏-正方形-默认"] forState:UIControlStateNormal];
     [self.barPolygonBtn setImage:[UIImage imageNamed:@"电子围栏-多边形"] forState:UIControlStateNormal];
@@ -405,6 +425,7 @@
     } else {
         [self.googleMapView clear];
     }
+    [self showCurrentSelectedDeviceLocation];
 }
 - (void)showAlertViewWithTitle:(NSString *)title placeHold:(NSString *)placeHold {
     [self clearMap];
@@ -432,7 +453,7 @@
             [weakAlertView hideView];
             // 修改model的数据，不要忘记了
             if (weakSelf.baiduView.hidden == NO) {
-                [weakSelf addBaiduCircleMarkerWithRadius:weakSelf.textField.text];
+//                [weakSelf addBaiduCircleMarkerWithRadius:weakSelf.textField.text];
             }else {
                 [weakSelf addGoogleCircleMarkerWithRadius:weakSelf.textField.text];
             }
@@ -453,10 +474,16 @@
     circ.map = _googleMapView;
 }
 
-- (void)addBaiduCircleMarkerWithRadius:(NSString *)radius {
-    CGFloat radiusNum = [radius floatValue];
-    BMKCircle *circle = [BMKCircle circleWithCenterCoordinate: self.circleCoordinate radius: radiusNum];
+- (void)addBaiduCircle:(CLLocationCoordinate2D)coor radius:(CGFloat)radius {
+    CGFloat radiusNum = radius;
+    BMKCircle *circle = [BMKCircle circleWithCenterCoordinate:coor radius: radiusNum];
     [_baiduMapView addOverlay: circle];
+    self.baiduCircleView = circle;
+    
+    CBRadiusAnnotation *a = [CBRadiusAnnotation new];
+    a.coordinate = coor;
+    a.radius = radiusNum;
+    [self.baiduMapView addAnnotation:a];
 }
 - (void)addGooglePolygon {
     GMSMutablePath *path = [GMSMutablePath path];
@@ -912,17 +939,55 @@
     [self.baiduLocationService stopUpdatingLocation];
 }
 
+- (void)mapView:(BMKMapView *)mapView annotationView:(BMKAnnotationView *)view didChangeDragState:(BMKAnnotationViewDragState)newState fromOldState:(BMKAnnotationViewDragState)oldState {
+    MINCoordinateObject *coorObj = self.roundCoordinateArr.firstObject;
+    CLLocationCoordinate2D center = coorObj.coordinate;
+    switch (newState) {
+        case 1:
+            NSLog(@"---lzx: 开始拖拽");
+            break;
+        case 2: {
+            NSLog(@"---lzx: 拖拽中");
+            CLLocationCoordinate2D viewCoor = [self.baiduMapView convertPoint:view.center toCoordinateFromView:self.baiduMapView];
+            CLLocationDistance distance = BMKMetersBetweenMapPoints(BMKMapPointForCoordinate(center), BMKMapPointForCoordinate(viewCoor));
+            self.radius = distance;
+            self.baiduCircleView.radius = distance;
+            self.baiduRadiusView.textLbl.text = [NSString stringWithFormat:@"%.0lf", distance];
+            break;
+        }
+        case 4: {
+            NSLog(@"---lzx: 拖拽结束");
+            CLLocationCoordinate2D viewCoor = [self.baiduMapView convertPoint:view.center toCoordinateFromView:self.baiduMapView];
+            CLLocationDistance distance = BMKMetersBetweenMapPoints(BMKMapPointForCoordinate(center), BMKMapPointForCoordinate(viewCoor));
+            self.radius = distance;
+            self.baiduCircleView.radius = distance;
+            self.baiduRadiusView.textLbl.text = [NSString stringWithFormat:@"%.0lf", distance];
+            break;
+        }
+    }
+}
+
 - (void)mapView:(BMKMapView *)mapView onClickedMapBlank:(CLLocationCoordinate2D)coordinate {
     NSLog(@"---- 点击的坐标 ----%.f   %.f",coordinate.latitude,coordinate.longitude);
-    if (self.circleBtn.selected == YES) {
+    
+    if (self.isCircle == YES) {
+        [self clearMap];
+        [self.roundCoordinateArr removeAllObjects];
         self.circleCoordinate = coordinate;
         
-        if (self.roundCoordinateArr.count > 0) {
-            [MINUtils showProgressHudToView:self.view withText:Localized(@"不能超过一个点")];
-            return;
-        }
         [self.roundCoordinateArr addObject:[self getCoorObj:coordinate]];
-        [self addPoint_BMK:coordinate];
+        
+        //添加可移动小方块
+        BMKCircle *circle = [BMKCircle circleWithCenterCoordinate:coordinate radius: self.radius];
+        BMKMapRect mapRect = circle.boundingMapRect;
+        CLLocationCoordinate2D rectCoor = BMKCoordinateForMapPoint(BMKMapPointMake(BMKMapRectGetMaxX(mapRect), mapRect.origin.y+mapRect.size.height/2.0));
+        [self addRectAnnotation:rectCoor];
+        
+        //添加公里数
+        [self addRadiusPoint_BMK:coordinate radius:self.radius];
+        
+        //添加圆形
+        [self addBaiduCircle:coordinate radius:self.radius];
         
     }else if (self.rectangleBtn.selected == YES) {
 
@@ -949,6 +1014,17 @@
     self.selectPointAnnotation.coordinate = coordinate;
     [self.baiduMapView addAnnotation:self.selectPointAnnotation];
 }
+- (void)addRectAnnotation:(CLLocationCoordinate2D)coor {
+    CBRectAnnotation *a = [CBRectAnnotation new];
+    a.coordinate = coor;
+    [self.baiduMapView addAnnotation:a];
+}
+- (void)addRadiusPoint_BMK:(CLLocationCoordinate2D)coordinate radius:(CGFloat)radius {
+    CBRadiusAnnotation *a = [CBRadiusAnnotation new];
+    a.coordinate = coordinate;
+    a.radius = radius;
+    [self.baiduMapView addAnnotation:a];
+}
 - (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id <BMKAnnotation>)annotation
 {
     if (annotation == self.selectPointAnnotation) {
@@ -963,6 +1039,33 @@
         selectPointAnnotationView.pointView.hidden = YES;
         selectPointAnnotationView.pointView_realTime.hidden = NO;
         return selectPointAnnotationView;
+    }
+    if ([annotation isKindOfClass: [CBRectAnnotation class]]) {
+        CBRectAnnotation *model = (CBRectAnnotation *)annotation;
+        static NSString *AnnotationViewID = @"BMKRectAnnotationView";
+        
+        BMKAnnotationView *annotationView = (BMKAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:AnnotationViewID];
+        if (!annotationView) {
+            annotationView = [[BMKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
+        }
+        annotationView.draggable = YES;
+        annotationView.image = [UIImage imageNamed:@"电子围栏-正方形-默认"];
+        return annotationView;
+    }
+    if ([annotation isKindOfClass: [CBRadiusAnnotation class]]) {
+        CBRadiusAnnotation *model = (CBRadiusAnnotation *)annotation;
+        static NSString *AnnotationViewID = @"NormalInfoAnnotationView";
+        MINAlertAnnotationView *annotationView = (MINAlertAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:AnnotationViewID];
+        if (!annotationView) {
+            annotationView = [[MINAlertAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
+        }
+        annotationView.userInteractionEnabled = YES;
+        annotationView.centerOffset = CGPointMake(0, -20*KFitHeightRate);
+        annotationView.textLbl.text = [NSString stringWithFormat:@"%.0lf", model.radius];
+        annotationView.frame = CGRectMake(0, 0, 70 * KFitWidthRate,  30 * KFitWidthRate);
+        annotationView.displayPriority = BMKFeatureDisplayPriorityDefaultHigh;
+        self.baiduRadiusView = annotationView;
+         return annotationView;
     }
     if ([annotation isKindOfClass: [MINNormalAnnotation class]]) {
      // 定位图标 设备图标标注
