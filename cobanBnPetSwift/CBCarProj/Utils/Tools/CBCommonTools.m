@@ -324,7 +324,9 @@
 }
 
 // 返回定位设备的icon
-+ (UIImage *)returnDeveceLocationImageStr:(NSString *)iconStr isOnline:(NSString *)onlineStr isWarmed:(NSString *)warmedStr {
++ (UIImage *)returnDeveceLocationImageStr:(NSString *)iconStr
+                                 isOnline:(NSString *)onlineStr
+                                 isWarmed:(NSString *)warmedStr {
     UIImage *image = nil;
     if ([onlineStr isEqualToString:@"1"]) {
         // 1 在线
@@ -346,6 +348,12 @@
                 image = [UIImage imageNamed: @"货车-定位-报警"];
             } else if ([iconStr isEqualToString:@"7"]) {
                 image = [UIImage imageNamed: @"行李箱-定位-报警"];
+            } else if ([iconStr isEqualToString:@"8"]) {
+                image = [UIImage imageNamed: @"船-定位-报警"];
+            } else if ([iconStr isEqualToString:@"9"]) {
+                image = [UIImage imageNamed: @"电动车-定位-报警"];
+            } else if ([iconStr isEqualToString:@"10"]) {
+                image = [UIImage imageNamed: @"公交车-定位-报警"];
             } else {
                 image = [UIImage imageNamed: @"定位图-报警"];
             }
@@ -367,6 +375,12 @@
                 image = [UIImage imageNamed: @"货车-定位-正常"];
             } else if ([iconStr isEqualToString:@"7"]) {
                 image = [UIImage imageNamed: @"行李箱-定位-正常"];
+            } else if ([iconStr isEqualToString:@"8"]) {
+                image = [UIImage imageNamed: @"船-定位-正常"];
+            } else if ([iconStr isEqualToString:@"9"]) {
+                image = [UIImage imageNamed: @"电动车-定位-正常"];
+            } else if ([iconStr isEqualToString:@"10"]) {
+                image = [UIImage imageNamed: @"公交车-定位-正常"];
             } else {
                 image = [UIImage imageNamed: @"定位图"];
             }
@@ -390,6 +404,12 @@
                 image = [UIImage imageNamed: @"货车-定位-报警"];
             } else if ([iconStr isEqualToString:@"7"]) {
                 image = [UIImage imageNamed: @"行李箱-定位-报警"];
+            } else if ([iconStr isEqualToString:@"8"]) {
+                image = [UIImage imageNamed: @"船-定位-报警"];
+            } else if ([iconStr isEqualToString:@"9"]) {
+                image = [UIImage imageNamed: @"电动车-定位-报警"];
+            } else if ([iconStr isEqualToString:@"10"]) {
+                image = [UIImage imageNamed: @"公交车-定位-报警"];
             } else {
                 image = [UIImage imageNamed: @"定位图-报警"];
             }
@@ -411,6 +431,12 @@
                 image = [UIImage imageNamed: @"货车-定位-离线"];
             } else if ([iconStr isEqualToString:@"7"]) {
                 image = [UIImage imageNamed: @"行李箱-定位-离线"];
+            } else if ([iconStr isEqualToString:@"8"]) {
+                image = [UIImage imageNamed: @"船-定位-离线"];
+            } else if ([iconStr isEqualToString:@"9"]) {
+                image = [UIImage imageNamed: @"电动车-定位-离线"];
+            } else if ([iconStr isEqualToString:@"10"]) {
+                image = [UIImage imageNamed: @"公交车-定位-离线"];
             } else {
                 image = [UIImage imageNamed: @"定位图-离线"];
             }

@@ -988,23 +988,24 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
        if (!annotationView) {
            annotationView = [[MINAlertAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
        }
-        MINMapPaoPaoView *imageView = [[MINMapPaoPaoView alloc] initWithFrame: CGRectMake(0, 0, 147 * KFitWidthRate * 4, 53.5 * KFitWidthRate * 4)];//53.5 * KFitWidthRate * 4
-        imageView.titleLabel.text = model.deviceName?:@"";
-        imageView.speedAndStayLabel.text = [NSString stringWithFormat:@"%@:%@Km/h",Localized(@"速度"),model.speed?:@""];
-        if ([model.warmed isEqualToString:@"1"]) {
-            imageView.backView.backgroundColor = [UIColor redColor];
-            imageView.titleLabel.textColor = [UIColor whiteColor];
-            imageView.speedAndStayLabel.textColor = [UIColor whiteColor];
-        } else {
-            imageView.backView.backgroundColor = [UIColor clearColor];
-            imageView.titleLabel.textColor = kBlueColor;
-            imageView.speedAndStayLabel.textColor = [UIColor blackColor];
-        }
-       UIImage *annotationImage = [self getImageFromView:imageView];
+//        MINMapPaoPaoView *imageView = [[MINMapPaoPaoView alloc] initWithFrame: CGRectMake(0, 0, 100 * KFitWidthRate, 30 * KFitWidthRate)];//53.5 * KFitWidthRate * 4
+//        imageView.titleLabel.text = model.deviceName?:@"";
+//        imageView.speedAndStayLabel.text = [NSString stringWithFormat:@"%@:%@Km/h",Localized(@"速度"),model.speed?:@""];
+//        if ([model.warmed isEqualToString:@"1"]) {
+//            imageView.backView.backgroundColor = [UIColor redColor];
+//            imageView.titleLabel.textColor = [UIColor whiteColor];
+//            imageView.speedAndStayLabel.textColor = [UIColor whiteColor];
+//        } else {
+//            imageView.backView.backgroundColor = [UIColor clearColor];
+//            imageView.titleLabel.textColor = kBlueColor;
+//            imageView.speedAndStayLabel.textColor = [UIColor blackColor];
+//        }
+//       UIImage *annotationImage = [self getImageFromView:imageView];
        annotationView.userInteractionEnabled = YES;
-       annotationView.image = annotationImage;
-       annotationView.centerOffset = CGPointMake(0, -40*KFitHeightRate);//CGPointMake(0, -70 * KFitHeightRate); -40 * KFitHeightRate
-       annotationView.frame = CGRectMake(0, 0, 147 * KFitWidthRate,  53.5 * KFitWidthRate);
+//       annotationView.image = annotationImage;
+       annotationView.centerOffset = CGPointMake(0, -20*KFitHeightRate);//CGPointMake(0, -70 * KFitHeightRate); -40 * KFitHeightRate
+       annotationView.textLbl.text = model.deviceName?:@"";
+       annotationView.frame = CGRectMake(0, 0, 70 * KFitWidthRate,  30 * KFitWidthRate);
        if (model.isSelect) {
            annotationView.displayPriority = BMKFeatureDisplayPriorityDefaultHigh;
        }
@@ -1198,7 +1199,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     
     // 更新选中设备在地图中居中位置
     // 目标点到屏幕顶部距离
-    CGFloat targetPt_y = (SCREEN_HEIGHT - PPNavigationBarHeight -377.5*KFitWidthRate)/2 + 377.5*KFitWidthRate;
+    CGFloat targetPt_y = (SCREEN_HEIGHT -377.5*KFitWidthRate)/2 + 377.5*KFitWidthRate;
     
     CGPoint ppt = [self.baiduMapView convertCoordinate:CLLocationCoordinate2DMake(deviceInfoModelPublic.lat.doubleValue, deviceInfoModelPublic.lng.doubleValue) toPointToView:self.baiduView];
     
@@ -1206,7 +1207,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     if ([AppDelegate shareInstance].IsShowGoogleMap == NO) {
         ppt = [self.baiduMapView convertCoordinate:coorData toPointToView:self.baiduView];
     }
-    CLLocationCoordinate2D coor = [self.baiduMapView convertPoint:CGPointMake(ppt.x, ppt.y + (SCREEN_HEIGHT - PPNavigationBarHeight )/2 - targetPt_y) toCoordinateFromView:self.baiduView];
+    CLLocationCoordinate2D coor = [self.baiduMapView convertPoint:CGPointMake(ppt.x, (SCREEN_HEIGHT)/2 - (targetPt_y - ppt.y) - TabBARHEIGHT/2) toCoordinateFromView:self.baiduView];
     [self.baiduMapView setCenterCoordinate:coor animated:YES];
     
     // 地理位置反编码
@@ -2139,21 +2140,21 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     normalInfoMarker.groundAnchor = CGPointMake(0.5f, 1.5f);
     MINMapPaoPaoView *iconView = [[MINMapPaoPaoView alloc] initWithNormalFrame: CGRectMake(0, 0, 147 * KFitWidthRate, 53.5 * KFitWidthRate)];
     iconView.titleLabel.text = deviceInfoModel.name?:@"";
-    iconView.speedAndStayLabel.text = [NSString stringWithFormat:@"%@:%@Km/h",Localized(@"速度"),deviceInfoModel.speed?:@"0"];
+//    iconView.speedAndStayLabel.text = [NSString stringWithFormat:@"%@:%@Km/h",Localized(@"速度"),deviceInfoModel.speed?:@"0"];
     normalInfoMarker.iconView = iconView;
-    if ([deviceInfoModel.warmed isEqualToString:@"1"]) {
-        iconView.backView.backgroundColor = [UIColor redColor];
-        iconView.titleLabel.textColor = [UIColor whiteColor];;
-        iconView.speedAndStayLabel.textColor = [UIColor whiteColor];
-    } else if ([deviceInfoModel.warmed isEqualToString:@"0"]) {
-        iconView.backView.backgroundColor = [UIColor clearColor];
-        iconView.titleLabel.textColor = kBlueColor;
-        iconView.speedAndStayLabel.textColor = [UIColor blackColor];
-    } else {
-        iconView.backgroundColor = [UIColor clearColor];
-        iconView.titleLabel.textColor = kBlueColor;
-        iconView.speedAndStayLabel.textColor = [UIColor blackColor];
-    }
+//    if ([deviceInfoModel.warmed isEqualToString:@"1"]) {
+//        iconView.backView.backgroundColor = [UIColor redColor];
+//        iconView.titleLabel.textColor = [UIColor whiteColor];;
+//        iconView.speedAndStayLabel.textColor = [UIColor whiteColor];
+//    } else if ([deviceInfoModel.warmed isEqualToString:@"0"]) {
+//        iconView.backView.backgroundColor = [UIColor clearColor];
+//        iconView.titleLabel.textColor = kBlueColor;
+//        iconView.speedAndStayLabel.textColor = [UIColor blackColor];
+//    } else {
+//        iconView.backgroundColor = [UIColor clearColor];
+//        iconView.titleLabel.textColor = kBlueColor;
+//        iconView.speedAndStayLabel.textColor = [UIColor blackColor];
+//    }
     normalInfoMarker.map = self.googleMapView;
     if ([deviceInfoModel.dno isEqualToString:self.deviceInfoModelSelect.dno]) {
         // 选中设备显示最前

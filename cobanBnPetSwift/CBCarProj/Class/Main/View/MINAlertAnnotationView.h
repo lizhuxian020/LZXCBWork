@@ -9,5 +9,5 @@
 #import <BaiduMapAPI_Map/BMKMapComponent.h>
 
 @interface MINAlertAnnotationView :BMKAnnotationView
-@property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, strong) UILabel *textLbl;
 @end

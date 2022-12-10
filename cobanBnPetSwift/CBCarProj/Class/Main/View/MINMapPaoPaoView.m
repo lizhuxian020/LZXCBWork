@@ -23,17 +23,24 @@
         _imageView.image = [UIImage imageNamed:@"话框"];
         [self addSubview: _imageView];
 
-        _backView = [[UIView alloc] initWithFrame:CGRectMake(22*KFitWidthRate, 18* KFitWidthRate, width - 22*KFitWidthRate*2, height - 18*KFitWidthRate*2 - 35*KFitWidthRate)];
+        _backView = [[UIView alloc] init];
         [self addSubview: _backView];
+        [_backView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.edges.equalTo(@0);
+        }];
 
         
-        _titleLabel = [MINUtils createLabelWithText:@"XXX设备名称" size: 10 * KFitWidthRate * 4 alignment: NSTextAlignmentLeft textColor: kBlueColor];
-        _titleLabel.frame = CGRectMake(10 * KFitWidthRate * 4, 5 * KFitWidthRate * 4, _backView.frame.size.width-20 * KFitWidthRate * 4, 11 * KFitHeightRate * 4);
+        _titleLabel = [MINUtils createLabelWithText:@"XXX设备名称" size:10 alignment: NSTextAlignmentLeft textColor: kCellTextColor];
         [_backView addSubview: _titleLabel];
+        [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.centerX.equalTo(@0);
+        }];
+        
+        [self layoutIfNeeded];
 
-        _speedAndStayLabel = [MINUtils createLabelWithText:@"速度: 20 / 停留 1 分钟" size: 10 * KFitWidthRate * 4 alignment: NSTextAlignmentLeft textColor: [UIColor blackColor]];
-        _speedAndStayLabel.frame = CGRectMake(_titleLabel.left, _titleLabel.bottom + 5 * KFitWidthRate * 4, _titleLabel.width, _titleLabel.height);
-        [_backView addSubview: _speedAndStayLabel];
+//        _speedAndStayLabel = [MINUtils createLabelWithText:@"速度: 20 / 停留 1 分钟" size: 10 * KFitWidthRate * 4 alignment: NSTextAlignmentLeft textColor: [UIColor blackColor]];
+//        _speedAndStayLabel.frame = CGRectMake(_titleLabel.left, _titleLabel.bottom + 5 * KFitWidthRate * 4, _titleLabel.width, _titleLabel.height);
+//        [_backView addSubview: _speedAndStayLabel];
         
 //        _wholeBtn = [[UIButton alloc]initWithFrame:CGRectMake(22*KFitWidthRate, 18* KFitWidthRate, width - 22*KFitWidthRate*2, height - 18*KFitWidthRate*2 - 35*KFitWidthRate)];
 //        _wholeBtn.backgroundColor = UIColor.orangeColor;
