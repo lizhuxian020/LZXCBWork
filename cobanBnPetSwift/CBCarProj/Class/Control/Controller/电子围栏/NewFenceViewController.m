@@ -27,7 +27,10 @@
 #import "CBSportAnnotation.h"
 #import "CBNewFencePickPointView.h"
 #import "cobanBnPetSwift-Swift.h"
-
+#import "MINNormalAnnotation.h"
+#import "MINNormalInfoAnnotation.h"
+#import "MINAnnotationView.h"
+#import "MINAlertAnnotationView.h"
 //@interface MINCoordinateObject : NSObject
 //@property (nonatomic, assign) CLLocationCoordinate2D coordinate;
 //@end
@@ -85,6 +88,8 @@
 @property (nonatomic, strong) UIButton *barRectBtn;
 @property (nonatomic, strong) UIButton *barPolygonBtn;
 @property (nonatomic, strong) UIView *bottomView;
+
+@property (nonatomic, strong) CBHomeLeftMenuDeviceInfoModel *currentModel;
 @end
 
 @implementation NewFenceViewController
@@ -106,6 +111,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    self.currentModel = [CBCommonTools CBdeviceInfo];
     [self createUI];
     // 显示mark在地图上，百度地图 http://www.cocoachina.com/bbs/read.php?tid=1719280
     // 谷歌地图显示所有标记 https://stackoverflow.com/questions/21615811/ios-how-to-use-gmscoordinatebounds-to-show-all-the-markers-of-the-map
@@ -123,6 +130,7 @@
     [self googleMap];
     
 //    [self commitBtn];
+    [self showCurrentSelectedDeviceLocation];
 }
 - (void)addRightBtns {
     
@@ -860,8 +868,32 @@
 }
 
 - (void)showCurrentSelectedDeviceLocation {
-    CBHomeLeftMenuDeviceInfoModel *currentModel = [CBCommonTools CBdeviceInfo];
-    
+    if ([self showBaidu]) {
+        CBHomeLeftMenuDeviceInfoModel *deviceInfoModel = self.currentModel;
+        CLLocationCoordinate2D coor = CLLocationCoordinate2DMake(deviceInfoModel.lat.doubleValue,  deviceInfoModel.lng.doubleValue);
+        // 小车定位图标
+        MINNormalAnnotation *normalAnnotation = [[MINNormalAnnotation alloc] init];
+        normalAnnotation.icon = [CBCommonTools returnDeveceLocationImageStr:deviceInfoModel.icon isOnline:deviceInfoModel.online isWarmed:deviceInfoModel.warmed];
+        normalAnnotation.warmed = deviceInfoModel.warmed;
+        normalAnnotation.coordinate = coor;
+        normalAnnotation.isSelect = YES;// 选中设备显示最前
+        [self.baiduMapView addAnnotation: normalAnnotation];
+        
+        // 小车定位上方信息
+        MINNormalInfoAnnotation *normalInfoAnnotation = [[MINNormalInfoAnnotation alloc] init];
+        normalInfoAnnotation.deviceName = deviceInfoModel.name?:@"";
+        normalInfoAnnotation.speed = deviceInfoModel.speed?:@"";
+        normalInfoAnnotation.warmed = deviceInfoModel.warmed;
+        normalInfoAnnotation.coordinate = coor;
+        normalInfoAnnotation.isSelect = YES;// 选中设备显示最前
+        [self.baiduMapView addAnnotation: normalInfoAnnotation];
+        
+        [self.baiduMapView setCenterCoordinate:coor animated:YES];
+    }
+}
+
+- (BOOL)showBaidu {
+    return YES;
 }
 
 #pragma mark - BMKLocationServiceDelegate
@@ -932,6 +964,38 @@
         selectPointAnnotationView.pointView_realTime.hidden = NO;
         return selectPointAnnotationView;
     }
+    if ([annotation isKindOfClass: [MINNormalAnnotation class]]) {
+     // 定位图标 设备图标标注
+         MINNormalAnnotation *model = (MINNormalAnnotation *)annotation;
+         static NSString *AnnotationViewID = @"NormalAnnationView";
+         MINAnnotationView *annotationView = (MINAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:AnnotationViewID];
+         if (!annotationView) {
+             annotationView = [[MINAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
+         }
+        annotationView.image = nil;
+        annotationView.model = model;
+        if (model.isSelect) {
+            annotationView.displayPriority = BMKFeatureDisplayPriorityDefaultHigh;
+        }
+        return annotationView;
+    }
+    if ([annotation isKindOfClass: [MINNormalInfoAnnotation class]]) {
+     // 定位图标上方信息  设备信息标注
+        MINNormalInfoAnnotation *model = (MINNormalInfoAnnotation *)annotation;
+        static NSString *AnnotationViewID = @"NormalInfoAnnotationView";
+        MINAlertAnnotationView *annotationView = (MINAlertAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:AnnotationViewID];
+        if (!annotationView) {
+            annotationView = [[MINAlertAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
+        }
+        annotationView.userInteractionEnabled = YES;
+        annotationView.centerOffset = CGPointMake(0, -20*KFitHeightRate);
+        annotationView.textLbl.text = model.deviceName?:@"";
+        annotationView.frame = CGRectMake(0, 0, 70 * KFitWidthRate,  30 * KFitWidthRate);
+        if (model.isSelect) {
+            annotationView.displayPriority = BMKFeatureDisplayPriorityDefaultHigh;
+        }
+         return annotationView;
+     }
     return nil;
 }
 
