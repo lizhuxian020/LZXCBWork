@@ -113,18 +113,31 @@
 
 - (void)saveBtnClick {
     //TODO: lzxTODO: 目前写死是圆形,timeZone
-    NSDictionary *param = @{
-        @"centerPoint": [NSString stringWithFormat:@"%lf,%lf", self.currentCircle.coordinate.latitude, self.currentCircle.coordinate.longitude],
-        @"data":[NSString stringWithFormat:@"%lf,%lf,%lf", self.currentCircle.coordinate.latitude, self.currentCircle.coordinate.longitude, self.currentCircle.radius],
-        @"deviceArr": [self.menuView getDeviceArr],
-        @"deviceName": [self.menuView getDeviceName],
-        @"fenId": self.model.fid ?: @"",
-        @"name": [self.menuView getFenceName],
-        @"radius": [NSString stringWithFormat:@"%lf", self.currentCircle.radius],
-        @"shape": @"1",
-        @"sn": self.model.sn ?: @"",
-        @"timeZone": @"8.0"
-    };
+    NSDictionary *param;
+    if (_model.shape == 1) {
+        CGFloat lat, lon;
+        NSArray *arr = [_model.data componentsSeparatedByString:@","];
+        if (arr.count != 3) {
+            return;
+        }
+        lat = [arr.firstObject doubleValue];
+        lon = [arr[1] doubleValue];
+        
+        param = @{
+//            @"centerPoint": [NSString stringWithFormat:@"%lf,%lf", self.currentCircle.coordinate.latitude, self.currentCircle.coordinate.longitude],
+            @"centerPoint": [NSString stringWithFormat:@"%lf,%lf", lat, lon],
+//            @"data":[NSString stringWithFormat:@"%lf,%lf,%lf", self.currentCircle.coordinate.latitude, self.currentCircle.coordinate.longitude, self.currentCircle.radius],
+            @"data": _model.data ?: @"",
+            @"deviceArr": [self.menuView getDeviceArr],
+            @"deviceName": [self.menuView getDeviceName],
+            @"fenId": self.model.fid ?: @"",
+            @"name": [self.menuView getFenceName],
+            @"radius": [NSString stringWithFormat:@"%lf", self.currentCircle.radius],
+            @"shape": @"1",
+            @"sn": self.model.sn ?: @"",
+            @"timeZone": @"8.0"
+        };
+    }
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     kWeakSelf(self);
     [[NetWorkingManager shared]postWithUrl:@"/devControlController/saveBatchFence" params:param succeed:^(id response, BOOL isSucceed) {
@@ -146,10 +159,12 @@
     [self initBarWithTitle:Localized(@"电子围栏") isBack: YES];
     [self addDeleteAndSave];
     [self setupMenuView];
-    [self baiduMap];
-    [self googleMap];
+    if (!self.isNewFence) {
+        [self baiduMap];
+        [self googleMap];
+        [self createFence];
+    }
 //    [self createBottomView];
-    [self createFence];
 }
 
 - (void)addDeleteAndSave {
@@ -178,7 +193,7 @@
     [rightBtn1 addTarget:self action:@selector(delete) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *barItem1 = [[UIBarButtonItem alloc] initWithCustomView: rightBtn1];
     
-    self.navigationItem.rightBarButtonItems = @[spaceItem, barItem, barItem1];
+    self.navigationItem.rightBarButtonItems = _isNewFence ? @[spaceItem, barItem] : @[spaceItem, barItem, barItem1];
     
     
 }

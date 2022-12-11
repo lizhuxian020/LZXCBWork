@@ -329,8 +329,10 @@
 
 - (void)setModel:(FenceListModel *)model {
     _model = model;
-    self.fenceNameLbl.text = model.name;
-    self.fenceNameLbl.textColor  = kCellTextColor;
+    if (model.name) {
+        self.fenceNameLbl.text = model.name;
+        self.fenceNameLbl.textColor  = kCellTextColor;
+    }
     self.deviceNameLbl.text = model.deviceName;
     self.deviceNameLbl.textColor  = kCellTextColor;
     
@@ -359,7 +361,7 @@
     
     NSData *data = [NSJSONSerialization dataWithJSONObject:@[param] options:NSJSONWritingPrettyPrinted error:nil];
     NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    return string;
+    return [string stringByReplacingOccurrencesOfString:@" " withString:@""];
 }
 
 - (NSString *)getDeviceName {

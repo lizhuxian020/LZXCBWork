@@ -31,6 +31,8 @@
 #import "MINNormalInfoAnnotation.h"
 #import "MINAnnotationView.h"
 #import "MINAlertAnnotationView.h"
+#import "FenceDetailViewController.h"
+
 //@interface MINCoordinateObject : NSObject
 //@property (nonatomic, assign) CLLocationCoordinate2D coordinate;
 //@end
@@ -288,6 +290,7 @@
         make.bottom.equalTo(@-10);
         make.height.equalTo(@40);
     }];
+    [resetBtn addTarget:self action:@selector(clickReset) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton *nextBtn = [UIButton new];
     nextBtn.backgroundColor = kCellTextColor;
@@ -301,6 +304,7 @@
         make.height.width.equalTo(resetBtn);
         make.right.equalTo(@-15);
     }];
+    [nextBtn addTarget:self action:@selector(clickNext) forControlEvents:UIControlEventTouchUpInside];
     
 //    UIView *topLineView = [MINUtils createLineView];
 //    [bottomView addSubview: topLineView];
@@ -335,6 +339,22 @@
 //        }
 //        lastBtn = button;
 //    }
+}
+- (void)clickReset {
+    [self clearMap];
+}
+- (void)clickNext {
+    FenceDetailViewController *vc = [FenceDetailViewController new];
+    FenceListModel *model = [FenceListModel new];
+    model.shape = self.isCircle ? 1 : self.isRect ? 2 : 0;
+    model.data = self.isCircle ? [NSString stringWithFormat:@"%lf,%lf,%lf", self.circleCoordinate.latitude, self.circleCoordinate.longitude, self.radius] :
+    self.isRect ? [NSString stringWithFormat:@""] :
+    self.isPolygon ? [NSString stringWithFormat:@""] : @"";
+    model.deviceName = self.currentModel.name;
+    model.dno = self.currentModel.dno;
+    vc.model = model;
+    vc.isNewFence = YES;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 - (UIButton *)createBtnWithImage:(NSString *)image selectedImage:(NSString *)selectedImage title:(NSString *)title {
     UIButton *button = [[UIButton alloc] init];

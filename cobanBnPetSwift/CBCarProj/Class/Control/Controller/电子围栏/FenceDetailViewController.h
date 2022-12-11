@@ -10,4 +10,5 @@
 @class FenceListModel;
 @interface FenceDetailViewController : MINBaseViewController
 @property (nonatomic, strong) FenceListModel *model;;
+@property (nonatomic, assign) BOOL isNewFence;
 @end
