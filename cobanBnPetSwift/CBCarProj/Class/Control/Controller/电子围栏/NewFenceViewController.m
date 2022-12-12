@@ -57,12 +57,14 @@
 @property (nonatomic, strong) UIButton *polygonBtn;
 @property (nonatomic, strong) UIButton *pathBtn;
 
+@property (nonatomic, strong) UILabel *tipsLbl;
+
 @property (nonatomic, strong) UITextField *textField;
 @property (nonatomic, assign) CLLocationCoordinate2D circleCoordinate;
 @property (nonatomic, copy) NSString *circleRadius;
 
 /** 圆形坐标数组容器 */
-@property (nonatomic, strong) NSMutableArray *roundCoordinateArr;
+@property (nonatomic, strong) NSMutableArray<MINCoordinateObject *> *roundCoordinateArr;
 /** 矩形坐标数组容器 */
 @property (nonatomic, strong) NSMutableArray<MINCoordinateObject *> *rectangleCoordinateArr;
 /** 多边形坐标数组容器 */
@@ -101,6 +103,8 @@
 @property (nonatomic, assign) CLLocationDistance radius;
 
 @property (nonatomic, strong) BMKPolygon *baiduRectPolygon;
+
+@property (nonatomic, strong) BMKPolygon *baiduPolygon;
 @end
 
 @implementation NewFenceViewController
@@ -180,6 +184,7 @@
     self.isCircle = YES;
     self.isRect = NO;
     self.isPolygon = NO;
+    _tipsLbl.text = Localized(@"圆形围栏: 点击地图选择圆心, 长按拖动小方块缩放改变半径");
     [self.barCircleBtn setImage:[UIImage imageNamed:@"电子围栏-圆形"] forState:UIControlStateNormal];
     [self.barRectBtn setImage:[UIImage imageNamed:@"电子围栏-正方形-默认"] forState:UIControlStateNormal];
     [self.barPolygonBtn setImage:[UIImage imageNamed:@"电子围栏-多边形-默认"] forState:UIControlStateNormal];
@@ -189,6 +194,7 @@
     self.isCircle = NO;
     self.isRect = YES;
     self.isPolygon = NO;
+    _tipsLbl.text = Localized(@"矩形围栏: 点击地图选择两点, 自动形成矩形围栏");
     [self.barCircleBtn setImage:[UIImage imageNamed:@"电子围栏-圆形-默认"] forState:UIControlStateNormal];
     [self.barRectBtn setImage:[UIImage imageNamed:@"电子围栏-正方形"] forState:UIControlStateNormal];
     [self.barPolygonBtn setImage:[UIImage imageNamed:@"电子围栏-多边形-默认"] forState:UIControlStateNormal];
@@ -198,6 +204,7 @@
     self.isCircle = NO;
     self.isRect = NO;
     self.isPolygon = YES;
+    _tipsLbl.text = Localized(@"多边形围栏: 点击地图至少选取三点, 自动形成多边形围栏");
     [self.barCircleBtn setImage:[UIImage imageNamed:@"电子围栏-圆形-默认"] forState:UIControlStateNormal];
     [self.barRectBtn setImage:[UIImage imageNamed:@"电子围栏-正方形-默认"] forState:UIControlStateNormal];
     [self.barPolygonBtn setImage:[UIImage imageNamed:@"电子围栏-多边形"] forState:UIControlStateNormal];
@@ -280,6 +287,7 @@
         make.top.left.equalTo(@10);
         make.right.equalTo(@-10);
     }];
+    _tipsLbl = tipsLbl;
     
     UIButton *resetBtn = [UIButton new];
     resetBtn.backgroundColor = UIColor.whiteColor;
@@ -349,17 +357,47 @@
     [self clearMap];
 }
 - (void)clickNext {
+    if ((self.isCircle && !self.baiduCircleView)) {
+        [MINUtils showProgressHudToView: self.view withText:Localized(@"至少需要指定1个点")];
+        return;
+    }
+    if ((self.isRect && !self.baiduRectPolygon)) {
+        [MINUtils showProgressHudToView: self.view withText:Localized(@"至少需要指定2个点")];
+        return;
+    }
+    if ((self.isPolygon && !self.baiduPolygon)) {
+        [MINUtils showProgressHudToView: self.view withText:Localized(@"至少需要指定3个点")];
+        return;
+    }
     FenceDetailViewController *vc = [FenceDetailViewController new];
     FenceListModel *model = [FenceListModel new];
-    model.shape = self.isCircle ? 1 : self.isRect ? 2 : 0;
-    model.data = self.isCircle ? [NSString stringWithFormat:@"%lf,%lf,%lf", self.circleCoordinate.latitude, self.circleCoordinate.longitude, self.radius] :
-    self.isRect ? [NSString stringWithFormat:@""] :
-    self.isPolygon ? [NSString stringWithFormat:@""] : @"";
+    if (self.isCircle) {
+        model.shape = 1;
+        model.data = [NSString stringWithFormat:@"%lf,%lf,%lf", self.circleCoordinate.latitude, self.circleCoordinate.longitude, self.radius];
+    }
+    if (self.isRect) {
+        model.shape = 2;
+        model.data = [self getDataString:self.rectangleCoordinateArr];
+    }
+    if (self.isPolygon) {
+        model.shape = 0;
+        model.data = [self getDataString:self.polygonCoordinateArr];
+    }
+    
     model.deviceName = self.currentModel.name;
     model.dno = self.currentModel.dno;
     vc.model = model;
     vc.isNewFence = YES;
     [self.navigationController pushViewController:vc animated:YES];
+}
+- (NSString *)getDataString:(NSArray<MINCoordinateObject *> *)objArr {
+    NSMutableArray *mArr = [NSMutableArray new];
+    for (MINCoordinateObject *obj in objArr) {
+        CLLocationCoordinate2D coor = obj.coordinate;
+        NSString *coorStr = [NSString stringWithFormat:@"%lf,%lf", coor.latitude, coor.longitude];
+        [mArr addObject:coorStr];
+    }
+    return [mArr componentsJoinedByString:@","];
 }
 - (UIButton *)createBtnWithImage:(NSString *)image selectedImage:(NSString *)selectedImage title:(NSString *)title {
     UIButton *button = [[UIButton alloc] init];
@@ -445,9 +483,11 @@
 
 - (void)clearMap {
     [self.roundCoordinateArr removeAllObjects];
+    self.baiduCircleView = nil;
     [self.rectangleCoordinateArr removeAllObjects];
     self.baiduRectPolygon = nil;
     [self.polygonCoordinateArr removeAllObjects];
+    self.baiduPolygon = nil;
     if (self.baiduView.hidden == NO) {
         [self.baiduMapView removeOverlays: self.baiduMapView.overlays];
         [self.baiduMapView removeAnnotations: self.baiduMapView.annotations];
@@ -554,8 +594,14 @@
         MINCoordinateObject *obj = self.polygonCoordinateArr[i];
         coords[i] = obj.coordinate;
     }
-    BMKPolygon *polygon = [BMKPolygon polygonWithCoordinates:coords count: self.polygonCoordinateArr.count];
-    [_baiduMapView addOverlay:polygon];
+    
+    if (!self.baiduPolygon) {
+        BMKPolygon *polygon = [BMKPolygon polygonWithCoordinates:coords count: self.polygonCoordinateArr.count];
+        [_baiduMapView addOverlay:polygon];
+        self.baiduPolygon = polygon;
+    } else {
+        [self.baiduPolygon setPolygonWithCoordinates:coords count:self.polygonCoordinateArr.count];
+    }
 }
 
 - (void)addGoogleRectangle {
@@ -955,7 +1001,7 @@
 }
 
 - (BOOL)showBaidu {
-    return YES;
+    return self.baiduView.hidden == NO;
 }
 
 #pragma mark - BMKLocationServiceDelegate
@@ -980,28 +1026,16 @@
     switch (newState) {
         case 1:
             NSLog(@"---lzx: 开始拖拽");
+            CLLocationCoordinate2D viewCoor = [self.baiduMapView convertPoint:view.center toCoordinateFromView:self.baiduMapView];
             if (self.isRect) {
-                CLLocationCoordinate2D viewCoor = [self.baiduMapView convertPoint:view.center toCoordinateFromView:self.baiduMapView];
-                MINCoordinateObject *obj1 = self.rectangleCoordinateArr[0];
-                CLLocationCoordinate2D rectCoor1 = obj1.coordinate;
-                MINCoordinateObject *obj2 = self.rectangleCoordinateArr[1];
-                CLLocationCoordinate2D rectCoor2 = obj2.coordinate;
-                
-                double lat1 = rectCoor1.latitude - viewCoor.latitude;
-                lat1 = (lat1 > 0) ? lat1 : lat1 * -1;
-                double lon1 = rectCoor1.longitude - viewCoor.longitude;
-                lon1 = (lon1 > 0) ? lon1 : lon1 * -1;
-                double lat2 = rectCoor2.latitude - viewCoor.latitude;
-                lat2 = (lat2 > 0) ? lat2 : lat2 * -1;
-                double lon2 = rectCoor2.longitude - viewCoor.longitude;
-                lon2 = (lon2 > 0) ? lon2 : lon2 * -1;
-                
-                rectDragIndex = ((lat1+lon1) > (lat2+lon2)) ? 1 : 0;
-                
+                rectDragIndex = [self getCorrectIndexFromArray:self.rectangleCoordinateArr withTargetCoor:viewCoor];
+            }
+            if (self.isPolygon) {
+                rectDragIndex = [self getCorrectIndexFromArray:self.polygonCoordinateArr withTargetCoor:viewCoor];
             }
             break;
         case 2: {
-            NSLog(@"---lzx: 拖拽中");
+            NSLog(@"---lzx: 拖拽中: %d", rectDragIndex);
             if (self.isCircle) {
                 MINCoordinateObject *coorObj = self.roundCoordinateArr.firstObject;
                 CLLocationCoordinate2D center = coorObj.coordinate;
@@ -1016,6 +1050,12 @@
                 MINCoordinateObject *obj1 = self.rectangleCoordinateArr[rectDragIndex];
                 obj1.coordinate = viewCoor;
                 [self addBaiduRectangle];
+            }
+            if (self.isPolygon) {
+                CLLocationCoordinate2D viewCoor = [self.baiduMapView convertPoint:view.center toCoordinateFromView:self.baiduMapView];
+                MINCoordinateObject *obj1 = self.polygonCoordinateArr[rectDragIndex];
+                obj1.coordinate = viewCoor;
+                [self addBaiduPolygon];
             }
             break;
         }
@@ -1036,9 +1076,34 @@
                 obj1.coordinate = viewCoor;
                 [self addBaiduRectangle];
             }
+            if (self.isPolygon) {
+                CLLocationCoordinate2D viewCoor = [self.baiduMapView convertPoint:view.center toCoordinateFromView:self.baiduMapView];
+                MINCoordinateObject *obj1 = self.polygonCoordinateArr[rectDragIndex];
+                obj1.coordinate = viewCoor;
+                [self addBaiduPolygon];
+            }
             break;
         }
     }
+}
+
+- (NSUInteger)getCorrectIndexFromArray:(NSArray<MINCoordinateObject *> *)objArr withTargetCoor:(CLLocationCoordinate2D)targetCoor {
+    NSUInteger targetIdx = 0;
+    double minOffset = CGFLOAT_MAX;
+    for(int i = 0; i < objArr.count; i++) {
+        MINCoordinateObject *obj = objArr[i];
+        CLLocationCoordinate2D coor = obj.coordinate;
+        double lat1 = coor.latitude - targetCoor.latitude;
+        lat1 = (lat1 > 0) ? lat1 : lat1 * -1;
+        double lon1 = coor.longitude - targetCoor.longitude;
+        lon1 = (lon1 > 0) ? lon1 : lon1 * -1;
+        if (minOffset > (lat1+lon1)) {
+            minOffset = (lat1+lon1);
+            targetIdx = i;
+        }
+    }
+    
+    return targetIdx;
 }
 
 - (void)mapView:(BMKMapView *)mapView onClickedMapBlank:(CLLocationCoordinate2D)coordinate {
@@ -1057,8 +1122,8 @@
         CLLocationCoordinate2D rectCoor = BMKCoordinateForMapPoint(BMKMapPointMake(BMKMapRectGetMaxX(mapRect), mapRect.origin.y+mapRect.size.height/2.0));
         [self addRectAnnotation:rectCoor];
         
-        //添加公里数
-        [self addRadiusPoint_BMK:coordinate radius:self.radius];
+//        //添加公里数
+//        [self addRadiusPoint_BMK:coordinate radius:self.radius];
         
         //添加圆形
         [self addBaiduCircle:coordinate radius:self.radius];
@@ -1079,10 +1144,17 @@
             }
         }
         
-    } else if (self.polygonBtn.selected == YES) {
+    } else if (self.isPolygon == YES) {
 
         [self.polygonCoordinateArr addObject:[self getCoorObj:coordinate]];
-        [self addPoint_BMK:coordinate];
+        [self addRectAnnotation:coordinate];
+        if (self.polygonCoordinateArr.count > 2) {
+            if (self.baiduView.hidden == NO) {
+                [self addBaiduPolygon];
+            } else {
+                [self addGooglePolygon];
+            }
+        }
         
     } else if (self.pathBtn.selected == YES) {
         

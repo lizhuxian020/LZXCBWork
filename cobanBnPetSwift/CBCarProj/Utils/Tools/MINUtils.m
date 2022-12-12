@@ -239,15 +239,16 @@
 + (MBProgressHUD *)hudToView:(UIView *)view withText:(NSString *)text
 {
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo: view animated: YES];
-    hud.mode = MBProgressHUDModeIndeterminate;
-    hud.minSize = CGSizeMake(296.5 * KFitWidthRate, 153 * KFitWidthRate);
+    hud.mode = MBProgressHUDModeText;
+//    hud.minSize = CGSizeMake(296.5 * KFitWidthRate, 153 * KFitWidthRate);
     hud.label.text = text;
     hud.label.numberOfLines = NO;
-    hud.label.textColor = [UIColor colorWithRed:127.0 / 255 green:128.0 / 255 blue:129.0 / 255 alpha:1.0];
+    hud.label.textColor = UIColor.whiteColor;
+//    hud.label.textColor = [UIColor colorWithRed:127.0 / 255 green:128.0 / 255 blue:129.0 / 255 alpha:1.0];
     hud.label.font = [UIFont systemFontOfSize:15 * KFitWidthRate];
-    hud.bezelView.backgroundColor = [UIColor whiteColor];
+    hud.bezelView.backgroundColor = kCellTextColor;
     hud.bezelView.alpha = 1.0;
-    hud.backgroundColor = [kBrownColor colorWithAlphaComponent: 0.3];
+//    hud.backgroundColor = [kBrownColor colorWithAlphaComponent: 0.3];
     hud.label.text = text;
     return hud;
 }
@@ -255,15 +256,16 @@
 + (void)showProgressHudToView:(UIView *)view withText:(NSString *)text
 {
     MBProgressHUD *signUpHUD = [MBProgressHUD showHUDAddedTo:view animated:YES];
-    signUpHUD.mode = MBProgressHUDModeCustomView;
-    signUpHUD.minSize = CGSizeMake(296.5 * KFitWidthRate, 153 * KFitWidthRate);
+    signUpHUD.mode = MBProgressHUDModeText;
+//    signUpHUD.minSize = CGSizeMake(296.5 * KFitWidthRate, 153 * KFitWidthRate);
     signUpHUD.label.text = text;
     signUpHUD.label.numberOfLines = NO;
-    signUpHUD.label.textColor = [UIColor colorWithRed:127.0 / 255 green:128.0 / 255 blue:129.0 / 255 alpha:1.0];
+    signUpHUD.label.textColor = UIColor.whiteColor;
+//    signUpHUD.label.textColor = [UIColor colorWithRed:127.0 / 255 green:128.0 / 255 blue:129.0 / 255 alpha:1.0];
     signUpHUD.label.font = [UIFont systemFontOfSize:15 * KFitWidthRate];
-    signUpHUD.bezelView.backgroundColor = [UIColor whiteColor];
+    signUpHUD.bezelView.backgroundColor = kCellTextColor;
     signUpHUD.bezelView.alpha = 1.0;
-    signUpHUD.backgroundColor = [kBrownColor colorWithAlphaComponent: 0.3];
+//    signUpHUD.backgroundColor = [kBrownColor colorWithAlphaComponent: 0.3];
     [signUpHUD hideAnimated:YES afterDelay:2.0f];//0/8
 }
 

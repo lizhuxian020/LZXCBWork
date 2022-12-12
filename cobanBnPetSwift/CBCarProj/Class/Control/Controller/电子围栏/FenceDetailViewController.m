@@ -27,6 +27,8 @@
 #import "MINNormalInfoAnnotation.h"
 #import "cobanBnPetSwift-Swift.h"
 #import "CBFencyMenuView.h"
+#import "CBSportAnnotation.h"
+#import "MINAlertAnnotationView.h"
 
 //@interface MINCoordinateObject : NSObject
 //@property (nonatomic, assign) CLLocationCoordinate2D coordinate;
@@ -45,27 +47,59 @@
 @property (nonatomic, strong) BMKLocationManager *baiduLocationService;
 @property (nonatomic, assign) CLLocationCoordinate2D myBaiduLocation;
 @property (nonatomic, assign) CLLocationCoordinate2D myGoogleLocation;
-@property (nonatomic, assign) CLLocationCoordinate2D circleCoordinate;
-@property (nonatomic, strong) NSMutableArray *rectangleCoordinateArr;
-@property (nonatomic, strong) NSMutableArray *polygonCoordinateArr;
+/** 圆形坐标数组容器 */
+@property (nonatomic, strong) NSMutableArray<MINCoordinateObject *> *roundCoordinateArr;
+@property (nonatomic, strong) NSMutableArray<MINCoordinateObject *> *rectangleCoordinateArr;
+@property (nonatomic, strong) NSMutableArray<MINCoordinateObject *> *polygonCoordinateArr;
 @property (nonatomic, strong) NSMutableArray *pathleCoordinateArr;
 @property (nonatomic, strong) UIButton *shareBtn;
 @property (nonatomic, strong) UIButton *deleteBtn;
 
+@property (nonatomic, assign) BOOL isCircle;
+@property (nonatomic, assign) BOOL isRect;
+@property (nonatomic, assign) BOOL isPolygon;
+
 @property (nonatomic, strong) CBFencyMenuView *menuView;
-@property (nonatomic, strong) BMKCircle *currentCircle;
+@property (nonatomic, strong) BMKCircle *baiduCircleView;
+@property (nonatomic, assign) CLLocationDistance radius;
+@property (nonatomic, strong) MINAlertAnnotationView *baiduRadiusView;
+
+@property (nonatomic, strong) CBHomeLeftMenuDeviceInfoModel *currentModel;
+@property (nonatomic, strong) BMKPolygon *baiduRectPolygon;
+
+@property (nonatomic, strong) BMKPolygon *baiduPolygon;
 @end
 
 @implementation FenceDetailViewController
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [_baiduMapView viewWillAppear];
+    _baiduMapView.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放
+    _baiduLocationService.delegate = self;
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [_baiduMapView viewWillDisappear];
+    _baiduMapView.delegate = nil; // 不用时，置nil
+    _baiduLocationService.delegate = nil;
+}
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self createUI];
-    [self addAction];
+    self.isPolygon = self.model.shape == 0;
+    self.isCircle = self.model.shape == 1;
+    self.isRect = self.model.shape == 2;
+    
+    self.roundCoordinateArr = [NSMutableArray new];
     self.rectangleCoordinateArr = [NSMutableArray array];
     self.polygonCoordinateArr = [NSMutableArray array];
     self.pathleCoordinateArr = [NSMutableArray array];
+    [self createUI];
+    [self addAction];
 }
 
 #pragma mark - addAction
@@ -112,9 +146,17 @@
 }
 
 - (void)saveBtnClick {
-    //TODO: lzxTODO: 目前写死是圆形,timeZone
-    NSDictionary *param;
-    if (_model.shape == 1) {
+    NSMutableDictionary *param = [[NSMutableDictionary alloc] initWithDictionary:@{
+        @"data": _model.data ?: @"",
+        @"deviceArr": [self.menuView getDeviceArr],
+        @"deviceName": [self.menuView getDeviceName],
+        @"name": [self.menuView getFenceName],
+        @"shape": @(self.model.shape),
+        @"sn": self.model.sn ?: @"",
+        @"timeZone": @"8.0"
+    }];;
+    
+    if (self.model.shape == 1) {
         CGFloat lat, lon, rad;
         NSArray *arr = [_model.data componentsSeparatedByString:@","];
         if (arr.count != 3) {
@@ -123,21 +165,16 @@
         lat = [arr.firstObject doubleValue];
         lon = [arr[1] doubleValue];
         rad = [arr.lastObject doubleValue];
-        
-        param = @{
-//            @"centerPoint": [NSString stringWithFormat:@"%lf,%lf", self.currentCircle.coordinate.latitude, self.currentCircle.coordinate.longitude],
+        [param addEntriesFromDictionary:@{
             @"centerPoint": [NSString stringWithFormat:@"%lf,%lf", lat, lon],
-//            @"data":[NSString stringWithFormat:@"%lf,%lf,%lf", self.currentCircle.coordinate.latitude, self.currentCircle.coordinate.longitude, self.currentCircle.radius],
-            @"data": _model.data ?: @"",
-            @"deviceArr": [self.menuView getDeviceArr],
-            @"deviceName": [self.menuView getDeviceName],
-            @"fenId": self.model.fid ?: @"",
-            @"name": [self.menuView getFenceName],
             @"radius": [NSString stringWithFormat:@"%lf", rad],
-            @"shape": @"1",
-            @"sn": self.model.sn ?: @"",
-            @"timeZone": @"8.0"
-        };
+        }];
+    }
+    
+    if (self.model.fid) {
+        [param addEntriesFromDictionary:@{
+            @"fenId": self.model.fid,
+        }];
     }
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     kWeakSelf(self);
@@ -163,6 +200,9 @@
     if (!self.isNewFence) {
         [self baiduMap];
         [self googleMap];
+        
+        self.currentModel = [CBCommonTools CBdeviceInfo];
+        [self showCurrentSelectedDeviceLocation];
         [self createFence];
     }
 //    [self createBottomView];
@@ -210,11 +250,63 @@
 }
 
 - (void)save {
+    if (!_isNewFence) {
+        if (self.isCircle) {
+            _model.shape = 1;
+            _model.data = [NSString stringWithFormat:@"%lf,%lf,%lf", self.roundCoordinateArr.firstObject.coordinate.latitude, self.roundCoordinateArr.firstObject.coordinate.longitude, self.radius];
+        }
+        if (self.isRect) {
+            _model.shape = 2;
+            _model.data = [self getDataString:self.rectangleCoordinateArr];
+        }
+        if (self.isPolygon) {
+            _model.shape = 0;
+            _model.data = [self getDataString:self.polygonCoordinateArr];
+        }
+    }
     [self saveBtnClick];
+}
+- (NSString *)getDataString:(NSArray<MINCoordinateObject *> *)objArr {
+    NSMutableArray *mArr = [NSMutableArray new];
+    for (MINCoordinateObject *obj in objArr) {
+        CLLocationCoordinate2D coor = obj.coordinate;
+        NSString *coorStr = [NSString stringWithFormat:@"%lf,%lf", coor.latitude, coor.longitude];
+        [mArr addObject:coorStr];
+    }
+    return [mArr componentsJoinedByString:@","];
 }
 
 - (void)delete {
     [self deleteDevicePop];
+}
+
+- (BOOL)showBaidu {
+    return self.baiduView.hidden == NO;
+}
+
+- (void)showCurrentSelectedDeviceLocation {
+    if ([self showBaidu]) {
+        CBHomeLeftMenuDeviceInfoModel *deviceInfoModel = self.currentModel;
+        CLLocationCoordinate2D coor = CLLocationCoordinate2DMake(deviceInfoModel.lat.doubleValue,  deviceInfoModel.lng.doubleValue);
+        // 小车定位图标
+        MINNormalAnnotation *normalAnnotation = [[MINNormalAnnotation alloc] init];
+        normalAnnotation.icon = [CBCommonTools returnDeveceLocationImageStr:deviceInfoModel.icon isOnline:deviceInfoModel.online isWarmed:deviceInfoModel.warmed];
+        normalAnnotation.warmed = deviceInfoModel.warmed;
+        normalAnnotation.coordinate = coor;
+        normalAnnotation.isSelect = YES;// 选中设备显示最前
+        [self.baiduMapView addAnnotation: normalAnnotation];
+        
+        // 小车定位上方信息
+        MINNormalInfoAnnotation *normalInfoAnnotation = [[MINNormalInfoAnnotation alloc] init];
+        normalInfoAnnotation.deviceName = deviceInfoModel.name?:@"";
+        normalInfoAnnotation.speed = deviceInfoModel.speed?:@"";
+        normalInfoAnnotation.warmed = deviceInfoModel.warmed;
+        normalInfoAnnotation.coordinate = coor;
+        normalInfoAnnotation.isSelect = YES;// 选中设备显示最前
+        [self.baiduMapView addAnnotation: normalInfoAnnotation];
+        
+        [self.baiduMapView setCenterCoordinate:coor animated:YES];
+    }
 }
 
 - (void)createFence
@@ -229,20 +321,21 @@
             [self addGooglePolygon];
             [self googleMapFitFence: self.polygonCoordinateArr];
         }
-    }else if (self.model.shape == 1) { // 圆
+    }else if (self.isCircle) { // 圆
         NSArray *dataArr = [dataString componentsSeparatedByString: @","];
         if (dataArr.count == 3) {
             CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake( [dataArr[0] doubleValue], [dataArr[1] doubleValue]);
-            MINCoordinateObject *circleModel = [[MINCoordinateObject alloc] init];
-            circleModel.coordinate = coordinate;
-            self.circleCoordinate = coordinate;
+            self.radius = [dataArr.lastObject doubleValue];
+            
             if (self.baiduView.hidden == NO) {
+                
+                [self mapView:self.baiduMapView onClickedMapBlank:coordinate];
 //                [self addAnnotation_baidu:coordinate];
-                [self addBaiduCircleMarkerWithRadius: dataArr.lastObject];
-                [self baiduMapFitCircleFence: circleModel radius: [dataArr[2] doubleValue]];
+//                [self addBaiduCircleMarkerWithRadius: dataArr.lastObject];
+//                [self baiduMapFitCircleFence: circleModel radius: [dataArr[2] doubleValue]];
             }else {
                 [self addGoogleCircleMarkerWithRadius: dataArr.lastObject];
-                [self googleMapFitCircleFence: circleModel radius: [dataArr[2] doubleValue]];
+//                [self googleMapFitCircleFence: circleModel radius: [dataArr[2] doubleValue]];
             }
 //            [self updateMapCenter:coordinate];
         }
@@ -265,6 +358,17 @@
             [self googleMapFitFence: self.pathleCoordinateArr];
         }
     }
+}
+- (void)addRectAnnotation:(CLLocationCoordinate2D)coor {
+    CBRectAnnotation *a = [CBRectAnnotation new];
+    a.coordinate = coor;
+    [self.baiduMapView addAnnotation:a];
+}
+- (void)addRadiusPoint_BMK:(CLLocationCoordinate2D)coordinate radius:(CGFloat)radius {
+    CBRadiusAnnotation *a = [CBRadiusAnnotation new];
+    a.coordinate = coordinate;
+    a.radius = radius;
+    [self.baiduMapView addAnnotation:a];
 }
 - (void)updateMapCenter:(CLLocationCoordinate2D)coordinate {
     if (self.baiduView.hidden == NO) {
@@ -464,27 +568,37 @@
     coords[1] = rightTop;
     coords[2] = rightBottom;
     coords[3] = leftBottom;
-    BMKPolygon *polygon = [BMKPolygon polygonWithCoordinates:coords count:4];
-    [_baiduMapView addOverlay:polygon];
+    
+    if (!self.baiduRectPolygon) {
+        self.baiduRectPolygon = [BMKPolygon polygonWithCoordinates:coords count:4];
+        [_baiduMapView addOverlay:self.baiduRectPolygon];
+    } else {
+        [self.baiduRectPolygon setPolygonWithCoordinates:coords count:4];
+    }
 }
 
 - (void)addGoogleCircleMarkerWithRadius:(NSString *)radius
 {
-    CGFloat radiusNum = [radius floatValue];
-    GMSCircle *circ = [GMSCircle circleWithPosition:self.circleCoordinate
-                                             radius:radiusNum];
-    circ.fillColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
-    circ.strokeColor = [UIColor clearColor];
-    //circ.strokeWidth = 0;
-    circ.map = _googleMapView;
+//    CGFloat radiusNum = [radius floatValue];
+//    GMSCircle *circ = [GMSCircle circleWithPosition:self.circleCoordinate
+//                                             radius:radiusNum];
+//    circ.fillColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+//    circ.strokeColor = [UIColor clearColor];
+//    //circ.strokeWidth = 0;
+//    circ.map = _googleMapView;
 }
 
-- (void)addBaiduCircleMarkerWithRadius:(NSString *)radius
-{
-    CGFloat radiusNum = [radius floatValue];
-    BMKCircle *circle = [BMKCircle circleWithCenterCoordinate: self.circleCoordinate radius: radiusNum];
+- (void)addBaiduCircle:(CLLocationCoordinate2D)coor radius:(CGFloat)radius {
+    CGFloat radiusNum = radius;
+    BMKCircle *circle = [BMKCircle circleWithCenterCoordinate:coor radius: radiusNum];
     [_baiduMapView addOverlay: circle];
-    self.currentCircle = circle;
+    self.baiduCircleView = circle;
+    NSLog(@"---lzx: 生成新的: %@", self.baiduCircleView);
+    
+    CBRadiusAnnotation *a = [CBRadiusAnnotation new];
+    a.coordinate = coor;
+    a.radius = radiusNum;
+    [self.baiduMapView addAnnotation:a];
 }
 
 - (void)addGooglePath
@@ -537,18 +651,28 @@
         MINCoordinateObject *obj = self.polygonCoordinateArr[i];
         coords[i] = obj.coordinate;
     }
-    BMKPolygon *polygon = [BMKPolygon polygonWithCoordinates:coords count: self.polygonCoordinateArr.count];
-    [_baiduMapView addOverlay:polygon];
+    if (!self.baiduPolygon) {
+        BMKPolygon *polygon = [BMKPolygon polygonWithCoordinates:coords count: self.polygonCoordinateArr.count];
+        [_baiduMapView addOverlay:polygon];
+        self.baiduPolygon = polygon;
+    } else {
+        [self.baiduPolygon setPolygonWithCoordinates:coords count:self.polygonCoordinateArr.count];
+    }
 }
 
 - (void)clearMap
 {
+    [self.roundCoordinateArr removeAllObjects];
+    self.baiduCircleView = nil;
+    [self.rectangleCoordinateArr removeAllObjects];
+    [self.polygonCoordinateArr removeAllObjects];
     if (self.baiduView.hidden == NO) {
         [self.baiduMapView removeOverlays: self.baiduMapView.overlays];
         [self.baiduMapView removeAnnotations: self.baiduMapView.annotations];
     }else {
         [self.googleMapView clear];
     }
+    [self showCurrentSelectedDeviceLocation];
 }
 
 //- (void)createBottomView
@@ -622,6 +746,7 @@
     
     _baiduMapView.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放
     _baiduLocationService = [[BMKLocationManager alloc] init];
+    [_baiduLocationService startUpdatingLocation];
     _baiduMapView.userTrackingMode = BMKUserTrackingModeNone;
     [_baiduView addSubview: _baiduMapView];
     [_baiduMapView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -663,26 +788,141 @@
         }
         annotationView.imageView.image = model.icon;
         return annotationView;
-     } else if ([annotation isKindOfClass: [MINNormalInfoAnnotation class]]) {
-         // 围栏方名字
-         //MINNormalInfoAnnotation *model = (MINNormalInfoAnnotation *)annotation;
-         static NSString *AnnotationViewID = @"NormalInfoAnnotationView";
-         BMKPinAnnotationView *annotationView = (BMKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:AnnotationViewID];
-         if (!annotationView) {
-             annotationView = [[BMKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
-         }
-        
-         UILabel *label = [Utils createLbWithFrame:CGRectMake(0, 0, 147 * KFitWidthRate,  48 * KFitHeightRate) title:@"1122" aliment:NSTextAlignmentCenter color:[UIColor colorWithHexString:@"494949"] size:30*KFitHeightRate];
-         label.text = self.model.name?:@"";
-         UIImage *annotationImage = [self getImageFromView:label];
-         annotationView.image = annotationImage;
-         annotationView.centerOffset = CGPointMake(0, 40 * KFitHeightRate);//CGPointMake(0, -70 * KFitHeightRate);
-         annotationView.frame = CGRectMake(0, 0, 147 * KFitWidthRate,  48 * KFitHeightRate);
-         annotationView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0];//[UIColor greenColor];
-         return annotationView;
-         
      }
+    if ([annotation isKindOfClass: [MINNormalInfoAnnotation class]]) {
+     // 定位图标上方信息  设备信息标注
+        MINNormalInfoAnnotation *model = (MINNormalInfoAnnotation *)annotation;
+        static NSString *AnnotationViewID = @"NormalInfoAnnotationView";
+        MINAlertAnnotationView *annotationView = (MINAlertAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:AnnotationViewID];
+        if (!annotationView) {
+            annotationView = [[MINAlertAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
+        }
+        annotationView.userInteractionEnabled = YES;
+        annotationView.centerOffset = CGPointMake(0, -20*KFitHeightRate);
+        annotationView.textLbl.text = model.deviceName?:@"";
+        annotationView.frame = CGRectMake(0, 0, 70 * KFitWidthRate,  30 * KFitWidthRate);
+        if (model.isSelect) {
+            annotationView.displayPriority = BMKFeatureDisplayPriorityDefaultHigh;
+        }
+         return annotationView;
+     }
+    if ([annotation isKindOfClass: [CBRectAnnotation class]]) {
+        CBRectAnnotation *model = (CBRectAnnotation *)annotation;
+        static NSString *AnnotationViewID = @"BMKRectAnnotationView";
+        
+        BMKAnnotationView *annotationView = (BMKAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:AnnotationViewID];
+        if (!annotationView) {
+            annotationView = [[BMKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
+        }
+        annotationView.draggable = YES;
+        annotationView.image = [UIImage imageNamed:@"电子围栏-正方形-默认"];
+        return annotationView;
+    }
+    if ([annotation isKindOfClass: [CBRadiusAnnotation class]]) {
+        CBRadiusAnnotation *model = (CBRadiusAnnotation *)annotation;
+        static NSString *AnnotationViewID = @"NormalInfoAnnotationView";
+        MINAlertAnnotationView *annotationView = (MINAlertAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:AnnotationViewID];
+        if (!annotationView) {
+            annotationView = [[MINAlertAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
+        }
+        annotationView.userInteractionEnabled = YES;
+        annotationView.centerOffset = CGPointMake(0, -20*KFitHeightRate);
+        annotationView.textLbl.text = [NSString stringWithFormat:@"%.0lf", model.radius];
+        annotationView.frame = CGRectMake(0, 0, 70 * KFitWidthRate,  30 * KFitWidthRate);
+        annotationView.displayPriority = BMKFeatureDisplayPriorityDefaultHigh;
+        self.baiduRadiusView = annotationView;
+         return annotationView;
+    }
     return nil;
+}
+
+- (void)mapView:(BMKMapView *)mapView annotationView:(BMKAnnotationView *)view didChangeDragState:(BMKAnnotationViewDragState)newState fromOldState:(BMKAnnotationViewDragState)oldState {
+    
+    static NSInteger rectDragIndex = 0;
+    switch (newState) {
+        case 1:
+            NSLog(@"---lzx: 开始拖拽");
+            CLLocationCoordinate2D viewCoor = [self.baiduMapView convertPoint:view.center toCoordinateFromView:self.baiduMapView];
+            if (self.isRect) {
+                rectDragIndex = [self getCorrectIndexFromArray:self.rectangleCoordinateArr withTargetCoor:viewCoor];
+            }
+            if (self.isPolygon) {
+                rectDragIndex = [self getCorrectIndexFromArray:self.polygonCoordinateArr withTargetCoor:viewCoor];
+            }
+            break;
+        case 2: {
+            NSLog(@"---lzx: 拖拽中: %d", rectDragIndex);
+            if (self.isCircle) {
+                MINCoordinateObject *coorObj = self.roundCoordinateArr.firstObject;
+                CLLocationCoordinate2D center = coorObj.coordinate;
+                CLLocationCoordinate2D viewCoor = [self.baiduMapView convertPoint:view.center toCoordinateFromView:self.baiduMapView];
+                CLLocationDistance distance = BMKMetersBetweenMapPoints(BMKMapPointForCoordinate(center), BMKMapPointForCoordinate(viewCoor));
+                self.radius = distance;
+                BOOL success = [self.baiduCircleView setCircleWithCenterCoordinate:self.baiduCircleView.coordinate radius:distance];
+                NSLog(@"---lzx: %@, ra: %lf, dis:%lf, succ: %d",  self.baiduCircleView, self.baiduCircleView.radius, distance, success);
+                self.baiduRadiusView.textLbl.text = [NSString stringWithFormat:@"%.0lf", distance];
+            }
+            if (self.isRect) {
+                CLLocationCoordinate2D viewCoor = [self.baiduMapView convertPoint:view.center toCoordinateFromView:self.baiduMapView];
+                MINCoordinateObject *obj1 = self.rectangleCoordinateArr[rectDragIndex];
+                obj1.coordinate = viewCoor;
+                [self addBaiduRectangle];
+            }
+            if (self.isPolygon) {
+                CLLocationCoordinate2D viewCoor = [self.baiduMapView convertPoint:view.center toCoordinateFromView:self.baiduMapView];
+                MINCoordinateObject *obj1 = self.polygonCoordinateArr[rectDragIndex];
+                obj1.coordinate = viewCoor;
+                [self addBaiduPolygon];
+            }
+            break;
+        }
+        case 4: {
+            NSLog(@"---lzx: 拖拽结束");
+            if (self.isCircle) {
+                MINCoordinateObject *coorObj = self.roundCoordinateArr.firstObject;
+                CLLocationCoordinate2D center = coorObj.coordinate;
+                CLLocationCoordinate2D viewCoor = [self.baiduMapView convertPoint:view.center toCoordinateFromView:self.baiduMapView];
+                CLLocationDistance distance = BMKMetersBetweenMapPoints(BMKMapPointForCoordinate(center), BMKMapPointForCoordinate(viewCoor));
+                self.radius = distance;
+                self.baiduCircleView.radius = distance;
+                self.baiduRadiusView.textLbl.text = [NSString stringWithFormat:@"%.0lf", distance];
+                
+            }
+            if (self.isRect) {
+                CLLocationCoordinate2D viewCoor = [self.baiduMapView convertPoint:view.center toCoordinateFromView:self.baiduMapView];
+                MINCoordinateObject *obj1 = self.rectangleCoordinateArr[rectDragIndex];
+                obj1.coordinate = viewCoor;
+                [self addBaiduRectangle];
+            }
+            if (self.isPolygon) {
+                CLLocationCoordinate2D viewCoor = [self.baiduMapView convertPoint:view.center toCoordinateFromView:self.baiduMapView];
+                MINCoordinateObject *obj1 = self.polygonCoordinateArr[rectDragIndex];
+                obj1.coordinate = viewCoor;
+                [self addBaiduPolygon];
+            }
+            
+            break;
+        }
+    }
+}
+
+- (NSUInteger)getCorrectIndexFromArray:(NSArray<MINCoordinateObject *> *)objArr withTargetCoor:(CLLocationCoordinate2D)targetCoor {
+    NSUInteger targetIdx = 0;
+    double minOffset = CGFLOAT_MAX;
+    for(int i = 0; i < objArr.count; i++) {
+        MINCoordinateObject *obj = objArr[i];
+        CLLocationCoordinate2D coor = obj.coordinate;
+        double lat1 = coor.latitude - targetCoor.latitude;
+        lat1 = (lat1 > 0) ? lat1 : lat1 * -1;
+        double lon1 = coor.longitude - targetCoor.longitude;
+        lon1 = (lon1 > 0) ? lon1 : lon1 * -1;
+        if (minOffset > (lat1+lon1)) {
+            minOffset = (lat1+lon1);
+            targetIdx = i;
+        }
+    }
+    
+    return targetIdx;
 }
 - (UIImage *)getImageFromView:(UIView *)view {
     UIGraphicsBeginImageContext(view.bounds.size);
@@ -712,10 +952,48 @@
     return nil;
 }
 - (void)mapView:(BMKMapView *)mapView onClickedMapBlank:(CLLocationCoordinate2D)coordinate {
-    if (self.currentCircle) {
+    if (self.isCircle) {
         [self clearMap];
-        self.currentCircle.coordinate = coordinate;
-        [mapView addOverlay:self.currentCircle];
+        [self.roundCoordinateArr removeAllObjects];
+        [self.roundCoordinateArr addObject:[self getCoorObj:coordinate]];
+        //添加可移动小方块
+        BMKCircle *circle = [BMKCircle circleWithCenterCoordinate:coordinate radius: self.radius];
+        BMKMapRect mapRect = circle.boundingMapRect;
+        CLLocationCoordinate2D rectCoor = BMKCoordinateForMapPoint(BMKMapPointMake(BMKMapRectGetMaxX(mapRect), mapRect.origin.y+mapRect.size.height/2.0));
+        [self addRectAnnotation:rectCoor];
+//        //添加公里数
+//        [self addRadiusPoint_BMK:coordinate radius:self.radius];
+        
+        //添加圆形
+        [self addBaiduCircle:coordinate radius:self.radius];
+    } else if (self.isRect == YES) {
+        
+        if (self.rectangleCoordinateArr.count > 1) {
+            [MINUtils showProgressHudToView:self.view withText:Localized(@"不能超过两个点")];
+            return;
+        }
+        [self.rectangleCoordinateArr addObject:[self getCoorObj:coordinate]];
+        [self addRectAnnotation:coordinate];
+        if (self.rectangleCoordinateArr.count == 2) {
+            if (self.baiduView.hidden == NO) {
+                [self addBaiduRectangle];
+            } else {
+                [self addGoogleRectangle];
+            }
+        }
+        
+    } else if (self.isPolygon == YES) {
+
+        [self.polygonCoordinateArr addObject:[self getCoorObj:coordinate]];
+        [self addRectAnnotation:coordinate];
+        if (self.polygonCoordinateArr.count > 2) {
+            if (self.baiduView.hidden == NO) {
+                [self addBaiduPolygon];
+            } else {
+                [self addGooglePolygon];
+            }
+        }
+        
     }
 }
 - (void)showAlertViewWithTitle:(NSString *)title datailText:(NSString *)text indexPath:(NSIndexPath *)indexPath
@@ -772,5 +1050,10 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
+#pragma mark -- CLLocationCoordinate2D 转为对象
+- (MINCoordinateObject *)getCoorObj:(CLLocationCoordinate2D)coordinate {
+    MINCoordinateObject *coorObj = [[MINCoordinateObject alloc] init];
+    coorObj.coordinate = coordinate;
+    return coorObj;
+}
 @end
