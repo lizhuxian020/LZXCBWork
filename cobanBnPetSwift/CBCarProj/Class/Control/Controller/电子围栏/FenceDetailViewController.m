@@ -115,13 +115,14 @@
     //TODO: lzxTODO: 目前写死是圆形,timeZone
     NSDictionary *param;
     if (_model.shape == 1) {
-        CGFloat lat, lon;
+        CGFloat lat, lon, rad;
         NSArray *arr = [_model.data componentsSeparatedByString:@","];
         if (arr.count != 3) {
             return;
         }
         lat = [arr.firstObject doubleValue];
         lon = [arr[1] doubleValue];
+        rad = [arr.lastObject doubleValue];
         
         param = @{
 //            @"centerPoint": [NSString stringWithFormat:@"%lf,%lf", self.currentCircle.coordinate.latitude, self.currentCircle.coordinate.longitude],
@@ -132,7 +133,7 @@
             @"deviceName": [self.menuView getDeviceName],
             @"fenId": self.model.fid ?: @"",
             @"name": [self.menuView getFenceName],
-            @"radius": [NSString stringWithFormat:@"%lf", self.currentCircle.radius],
+            @"radius": [NSString stringWithFormat:@"%lf", rad],
             @"shape": @"1",
             @"sn": self.model.sn ?: @"",
             @"timeZone": @"8.0"
