@@ -444,6 +444,10 @@
 }
 
 - (void)clearMap {
+    [self.roundCoordinateArr removeAllObjects];
+    [self.rectangleCoordinateArr removeAllObjects];
+    self.baiduRectPolygon = nil;
+    [self.polygonCoordinateArr removeAllObjects];
     if (self.baiduView.hidden == NO) {
         [self.baiduMapView removeOverlays: self.baiduMapView.overlays];
         [self.baiduMapView removeAnnotations: self.baiduMapView.annotations];
@@ -647,14 +651,15 @@
     coords[1] = rightTop;
     coords[2] = rightBottom;
     coords[3] = leftBottom;
-    BMKPolygon *polygon = [BMKPolygon polygonWithCoordinates:coords count:4];
-    self.baiduRectPolygon = polygon;
-    [_baiduMapView addOverlay:polygon];
+    
+    if (!self.baiduRectPolygon) {
+        self.baiduRectPolygon = [BMKPolygon polygonWithCoordinates:coords count:4];
+        [_baiduMapView addOverlay:self.baiduRectPolygon];
+    } else {
+        [self.baiduRectPolygon setPolygonWithCoordinates:coords count:4];
+    }
 }
-//TODO: lzxTODO
-//- (void)getRectCoords:(void(^)(CLLocationCoordinate2D coords[])) {
-//
-//}
+
 #pragma mark -- 右上角更多操作
 - (void)showMenuViewClick {
     [self.menuView popView];
@@ -971,13 +976,12 @@
 
 - (void)mapView:(BMKMapView *)mapView annotationView:(BMKAnnotationView *)view didChangeDragState:(BMKAnnotationViewDragState)newState fromOldState:(BMKAnnotationViewDragState)oldState {
     
-    NSInteger rectDragIndex = 0;
+    static NSInteger rectDragIndex = 0;
     switch (newState) {
         case 1:
             NSLog(@"---lzx: 开始拖拽");
             if (self.isRect) {
                 CLLocationCoordinate2D viewCoor = [self.baiduMapView convertPoint:view.center toCoordinateFromView:self.baiduMapView];
-                
                 MINCoordinateObject *obj1 = self.rectangleCoordinateArr[0];
                 CLLocationCoordinate2D rectCoor1 = obj1.coordinate;
                 MINCoordinateObject *obj2 = self.rectangleCoordinateArr[1];
@@ -985,14 +989,15 @@
                 
                 double lat1 = rectCoor1.latitude - viewCoor.latitude;
                 lat1 = (lat1 > 0) ? lat1 : lat1 * -1;
-                double lat2 = rectCoor2.latitude - viewCoor.latitude;
-                lat2 = (lat2 > 0) ? lat2 : lat2 * -1;
                 double lon1 = rectCoor1.longitude - viewCoor.longitude;
                 lon1 = (lon1 > 0) ? lon1 : lon1 * -1;
+                double lat2 = rectCoor2.latitude - viewCoor.latitude;
+                lat2 = (lat2 > 0) ? lat2 : lat2 * -1;
                 double lon2 = rectCoor2.longitude - viewCoor.longitude;
                 lon2 = (lon2 > 0) ? lon2 : lon2 * -1;
                 
-                rectDragIndex = (lat1+lon1) > (lat2+lon2) ? 1 : 0;
+                rectDragIndex = ((lat1+lon1) > (lat2+lon2)) ? 1 : 0;
+                
             }
             break;
         case 2: {
@@ -1010,8 +1015,7 @@
                 CLLocationCoordinate2D viewCoor = [self.baiduMapView convertPoint:view.center toCoordinateFromView:self.baiduMapView];
                 MINCoordinateObject *obj1 = self.rectangleCoordinateArr[rectDragIndex];
                 obj1.coordinate = viewCoor;
-                [self clearMap];
-                
+                [self addBaiduRectangle];
             }
             break;
         }
@@ -1025,6 +1029,12 @@
                 self.radius = distance;
                 self.baiduCircleView.radius = distance;
                 self.baiduRadiusView.textLbl.text = [NSString stringWithFormat:@"%.0lf", distance];
+            }
+            if (self.isRect) {
+                CLLocationCoordinate2D viewCoor = [self.baiduMapView convertPoint:view.center toCoordinateFromView:self.baiduMapView];
+                MINCoordinateObject *obj1 = self.rectangleCoordinateArr[rectDragIndex];
+                obj1.coordinate = viewCoor;
+                [self addBaiduRectangle];
             }
             break;
         }
