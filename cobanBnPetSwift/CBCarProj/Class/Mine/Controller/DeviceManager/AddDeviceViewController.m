@@ -177,6 +177,12 @@
 #pragma mark - action
 - (void)rightBtnClick
 {
+    MyDeviceDetailViewController *MyDeviceDetailVC = [[MyDeviceDetailViewController alloc] init];
+    MyDeviceDetailVC.groupNameArray = self.groupNameArray;
+    MyDeviceDetailVC.groupIdArray = self.groupIdArray;
+    MyDeviceDetailVC.isAddDevice = YES;
+    MyDeviceDetailVC.isBind = YES;
+    [self.navigationController pushViewController: MyDeviceDetailVC animated:YES];
 //    if (self.deviceTextField.text.length <= 0) {
 //        [MINUtils showProgressHudToView: self.view withText:Localized(@"请输入设备编号")];
 //        return;

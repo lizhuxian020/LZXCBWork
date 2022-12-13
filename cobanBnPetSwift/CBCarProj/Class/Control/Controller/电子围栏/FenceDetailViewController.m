@@ -337,7 +337,7 @@
                 [self mapView:self.baiduMapView onClickedMapBlank:coordinate];
 //                [self addAnnotation_baidu:coordinate];
 //                [self addBaiduCircleMarkerWithRadius: dataArr.lastObject];
-//                [self baiduMapFitCircleFence: circleModel radius: [dataArr[2] doubleValue]];
+                [self baiduMapFitCircleFence:[self getCoorObj:coordinate] radius: [dataArr[2] doubleValue]];
             }else {
                 [self addGoogleCircleMarkerWithRadius: dataArr.lastObject];
 //                [self googleMapFitCircleFence: circleModel radius: [dataArr[2] doubleValue]];
@@ -455,17 +455,26 @@
     
 }
 // 百度圆
-- (void)baiduMapFitCircleFence:(MINCoordinateObject *)model radius:(double)radius
-{
-//    // 一个点的长度是0.870096
-//    BMKMapPoint circlePoint = BMKMapPointForCoordinate(model.coordinate);
-//    BMKMapRect fitRect;
-//    double pointRadius = radius / 0.6;//0.870096;
-//    fitRect.origin = BMKMapPointMake(circlePoint.x - pointRadius, circlePoint.y - pointRadius);
-//    fitRect.size = BMKMapSizeMake(pointRadius * 2, pointRadius * 2);
-//    [_baiduMapView setVisibleMapRect: fitRect];
-//    //_baiduMapView.zoomLevel = _baiduMapView.zoomLevel - 0.3;
-//    [_baiduMapView setCenterCoordinate:model.coordinate];
+- (void)baiduMapFitCircleFence:(MINCoordinateObject *)model radius:(double)radius {
+    CBHomeLeftMenuDeviceInfoModel *deviceInfoModel = self.currentModel;
+    CLLocationCoordinate2D currentDeviceCoor = CLLocationCoordinate2DMake(deviceInfoModel.lat.doubleValue,  deviceInfoModel.lng.doubleValue);
+    BMKMapPoint devicePoint = BMKMapPointForCoordinate(currentDeviceCoor);
+    
+    // 一个点的长度是0.870096
+    BMKCircle *circle = [BMKCircle circleWithCenterCoordinate:model.coordinate radius:radius];
+    BMKMapRect fitRect = circle.boundingMapRect;
+    
+    double x = devicePoint.x < fitRect.origin.x ? devicePoint.x : fitRect.origin.x;
+    double y = devicePoint.y < fitRect.origin.y ? devicePoint.y : fitRect.origin.y;
+    double offsetX = (devicePoint.x - fitRect.origin.x) < 0 ? (devicePoint.x - fitRect.origin.x) * -1 : (devicePoint.x - fitRect.origin.x);
+    double offsetY = (devicePoint.y - fitRect.origin.y) < 0 ? (devicePoint.y - fitRect.origin.y) * -1 : (devicePoint.y - fitRect.origin.y);
+    double w = offsetX > fitRect.size.width ? offsetX : fitRect.size.width;
+    double h = offsetY > fitRect.size.height ? offsetY : fitRect.size.height;
+    
+    BMKMapRect finalRect = BMKMapRectMake(x, y, w, h);
+
+    [_baiduMapView setVisibleMapRect: finalRect];
+    _baiduMapView.zoomLevel = _baiduMapView.zoomLevel - 0.3;
 }
 - (void)googleMapFitFence:(NSArray *)modelArr
 {
