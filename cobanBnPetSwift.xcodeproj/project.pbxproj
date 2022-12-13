@@ -672,6 +672,7 @@
 		B13D8BD02935CB06005F3A61 /* CBControlMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = B13D8BCF2935CB06005F3A61 /* CBControlMenuController.m */; };
 		B13D8BD32935CD83005F3A61 /* _CBControlMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B13D8BD22935CD83005F3A61 /* _CBControlMenuCell.m */; };
 		B15F916F27A19F53000953B6 /* CBPetGMSMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15F916E27A19F53000953B6 /* CBPetGMSMarker.swift */; };
+		B16649AD2948BFB9006213A2 /* CBProductSpecModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B16649AC2948BFB9006213A2 /* CBProductSpecModel.m */; };
 		B16C38C52793208D0058EAC4 /* CBPetMultiVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16C38C42793208D0058EAC4 /* CBPetMultiVC.swift */; };
 		B17A9E8F293F954E0069120D /* _CBMyDeviceInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = B17A9E8E293F954E0069120D /* _CBMyDeviceInfoView.m */; };
 		B17F1D17279461430040434F /* CBPetMultiVCNaviBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17F1D16279461430040434F /* CBPetMultiVCNaviBar.swift */; };
@@ -1883,6 +1884,8 @@
 		B13D8BD12935CD83005F3A61 /* _CBControlMenuCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBControlMenuCell.h; sourceTree = "<group>"; };
 		B13D8BD22935CD83005F3A61 /* _CBControlMenuCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _CBControlMenuCell.m; sourceTree = "<group>"; };
 		B15F916E27A19F53000953B6 /* CBPetGMSMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetGMSMarker.swift; sourceTree = "<group>"; };
+		B16649AB2948BFB9006213A2 /* CBProductSpecModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBProductSpecModel.h; sourceTree = "<group>"; };
+		B16649AC2948BFB9006213A2 /* CBProductSpecModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBProductSpecModel.m; sourceTree = "<group>"; };
 		B16C38C42793208D0058EAC4 /* CBPetMultiVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetMultiVC.swift; sourceTree = "<group>"; };
 		B17A9E8D293F954E0069120D /* _CBMyDeviceInfoView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBMyDeviceInfoView.h; sourceTree = "<group>"; };
 		B17A9E8E293F954E0069120D /* _CBMyDeviceInfoView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _CBMyDeviceInfoView.m; sourceTree = "<group>"; };
@@ -5441,6 +5444,7 @@
 		A2BCA2D9294323ED00CD4B08 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				B16649AA2948BF95006213A2 /* Model */,
 				A2BCA2DD2943242300CD4B08 /* CBDeviceTool.h */,
 				A2BCA2DE2943242300CD4B08 /* CBDeviceTool.m */,
 			);
@@ -5536,6 +5540,15 @@
 				B13D8BD22935CD83005F3A61 /* _CBControlMenuCell.m */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		B16649AA2948BF95006213A2 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				B16649AB2948BFB9006213A2 /* CBProductSpecModel.h */,
+				B16649AC2948BFB9006213A2 /* CBProductSpecModel.m */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		B16C38C227931F590058EAC4 /* MultiVC */ = {
@@ -6582,6 +6595,7 @@
 				17CDABB824CEBE5600BB9F8B /* RSILayer.m in Sources */,
 				17CDABF224CEBE5600BB9F8B /* FormTableViewCell.m in Sources */,
 				17CDAC1824CEBE5600BB9F8B /* DeviceTableViewCell.m in Sources */,
+				B16649AD2948BFB9006213A2 /* CBProductSpecModel.m in Sources */,
 				17CDAC1124CEBE5600BB9F8B /* MyDeviceModel.m in Sources */,
 				43F3D85B275A517F007F605E /* CBPetWakeUpPopView.m in Sources */,
 				179F136E24865FE6004DB559 /* CBPetPersonalPageVC.swift in Sources */,

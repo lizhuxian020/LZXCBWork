@@ -75,32 +75,12 @@
 - (NSMutableArray *)arrayData {
     if (!_arrayData) {
         _arrayData = [NSMutableArray array];
-        NSArray *arrayTitle = @[
-            _ControlConfigTitle_DCJW,
-            _ControlConfigTitle_XMJWCL,
-            _ControlConfigTitle_TT,
-            _ControlConfigTitle_DYD,
-            _ControlConfigTitle_HFYD,
-            _ControlConfigTitle_TZBJ,
-            _ControlConfigTitle_SDJ,
-            _ControlConfigTitle_YCKZ,
-            _ControlConfigTitle_BFCF,
-            _ControlConfigTitle_HFCX,
-            _ControlConfigTitle_CSBJ,
-        ];
-        NSArray *arrayTitleImage = @[
-            @"单次定位",
-            @"休眠定位策略",
-            @"听听",
-            @"断油电",
-            @"恢复油电",
-            @"停止报警",
-            @"锁电机",
-            @"远程点火",
-            @"布防撤防",
-            @"话费查询",
-            @"超速报警",
-        ];
+        __block NSArray *arrayTitle = nil;
+        __block NSArray *arrayTitleImage = nil;
+        [CBDeviceTool.shareInstance getControlData:^(NSArray * _Nonnull tArrayTitle, NSArray * _Nonnull tArrayTitleImage) {
+            arrayTitle = tArrayTitle;
+            arrayTitleImage = tArrayTitleImage;
+        }];
         for (int i = 0 ; i < arrayTitle.count ; i ++ ) {
             CBControlModel *controlModel = [[CBControlModel alloc]init];
             controlModel.titleStr = arrayTitle[i];

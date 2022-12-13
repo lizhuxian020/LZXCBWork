@@ -617,6 +617,14 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [self setupInfoPopView];
 }
 
+- (void)setDeviceInfoModelSelect:(CBHomeLeftMenuDeviceInfoModel *)deviceInfoModelSelect {
+    if (!_deviceInfoModelSelect && deviceInfoModelSelect) {
+        [CBDeviceTool.shareInstance didChooseDevice:deviceInfoModelSelect];
+    } else if (_deviceInfoModelSelect && deviceInfoModelSelect && ![_deviceInfoModelSelect.dno isEqualToString:deviceInfoModelSelect.dno]) {
+        [CBDeviceTool.shareInstance didChooseDevice:deviceInfoModelSelect];
+    }
+    _deviceInfoModelSelect = deviceInfoModelSelect;
+}
 
 - (void)setupInfoPopView {
     self.infoPopView = [_CBMyInfoPopView new];
@@ -1864,6 +1872,8 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
                 if (deviceInfoModel.dno) {
                     deviceInfoModel.zoomLevel = self.deviceInfoModelSelect.zoomLevel;
                     deviceInfoModel.devStatus = self.deviceInfoModelSelect.devStatus;
+                    deviceInfoModel.productSpecId = self.deviceInfoModelSelect.productSpecId;
+                    deviceInfoModel.proto = self.deviceInfoModelSelect.proto;
                     self.deviceInfoModelSelect = deviceInfoModel;
                     [CBCommonTools saveCBdeviceInfo:self.deviceInfoModelSelect];
                 }

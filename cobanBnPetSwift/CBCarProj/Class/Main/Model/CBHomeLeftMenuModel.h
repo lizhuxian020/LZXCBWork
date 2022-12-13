@@ -96,7 +96,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL isCheck;
 /**   */
 @property (nonatomic, copy) NSArray<CBHomeLeftMenuDeviceInfoModelFenceModel *> *listFence;
-
+@property (nonatomic, copy) NSString *productSpecId;
+@property (nonatomic, copy) NSString *proto;
 @end
 
 @interface CBHomeLeftMenuDeviceInfoModelFenceModel : NSObject
