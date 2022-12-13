@@ -17,6 +17,7 @@
 #import "CBCBCarMineHeaderView.h"
 #import "CBHomeLeftMenuView.h"
 #import "AddDeviceViewController.h"
+#import "CBControlMenuController.h"
 
 @interface MineViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, copy) NSArray *dataArrs;
@@ -119,10 +120,13 @@
         make.width.height.equalTo(self.containerView);
     }];
     [self.deviceView requestData];
+    kWeakSelf(self);
     [self.deviceView setLeftMenuBlock:^(id  _Nonnull objc) {
         if ([objc isKindOfClass:CBHomeLeftMenuDeviceInfoModel.class]) {
             CBHomeLeftMenuDeviceInfoModel *model = objc;
-            NSLog(@"%@", model);
+            CBControlMenuController *vc = CBControlMenuController.new;
+            vc.deviceInfoModelSelect = model;
+            [weakself.navigationController pushViewController:vc animated:YES];
         }
     }];
     

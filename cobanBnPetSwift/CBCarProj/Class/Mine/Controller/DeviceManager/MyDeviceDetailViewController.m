@@ -41,6 +41,7 @@
 //    self.deviceInfoTitleArr = @[@"设备IMEI号",@"设备电话号码",@"车牌颜色",@"车辆VIN",@"设备名称",@"车牌号码",@"定位图标",@"所属分组",@"设备协议类型",@"设备版本号",@"经销商ID",@"注册日期",@"有效期"];
     self.carColorArr = @[Localized(@"蓝色"), Localized(@"黄色"), Localized(@"黑色"), Localized(@"白色"), Localized(@"其他")];
     self.purposeArr = @[Localized(@"定位图"), Localized(@"人物"), Localized(@"宠物"), Localized(@"单车"), Localized(@"摩托车"), Localized(@"小车"), Localized(@"货车"), Localized(@"行李箱")];
+    //TODO: lzxTODO根据菜单权限
     self.devModelArray = @[
         @"102",@"103A/B",@"108A",@"108B",@"109",@"303F/G",@"303H/I",@"310",@"311A",@"311B/C",@"403A/B",@"401A/B",@"401C/D",Localized(@"其他")
     ];
@@ -339,6 +340,18 @@
     [paramters setObject:self.model.carNum?:@"" forKey:@"carNum"];
     [paramters setObject:[NSNumber numberWithInteger:self.model.color] forKey:@"color"];
     [paramters setObject:[NSNumber numberWithInteger:self.model.icon] forKey:@"icon"];
+    NSInteger produceSpecdIdx = [self.devModelArray indexOfObject:self.devModel];
+    if (produceSpecdIdx != NSNotFound) {
+        [paramters setObject:@(produceSpecdIdx+1) forKey:@"productSpecId"];
+    }
+    NSInteger groupIdx = [self.groupNameArray indexOfObject:self.groupName];
+    if (groupIdx != NSNotFound) {
+        if (self.groupIdArray && groupIdx < self.groupIdArray.count) {
+            [paramters setObject:self.groupIdArray[groupIdx] forKey:@"groupId"];
+        } else {
+            [paramters setObject:@(groupIdx) forKey:@"groupId"];
+        }
+    }
 
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     kWeakSelf(self);

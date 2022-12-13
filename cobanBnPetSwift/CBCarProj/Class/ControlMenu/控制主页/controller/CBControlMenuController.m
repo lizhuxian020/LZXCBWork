@@ -173,8 +173,8 @@
                     model.groupId = @"0";
                     [dataArr addObject: model];
                 }
-                [weakSelf.groupNameArr insertObject:Localized(@"默认分组") atIndex: 0];
-                [weakSelf.groupIDArr insertObject: @0 atIndex: 0];
+                [weakSelf.groupNameArr addObject:Localized(@"默认分组")];
+                [weakSelf.groupIDArr addObject:@0];
                 [weakself.devModelArr insertObject: @"0" atIndex: 0];
             }
             

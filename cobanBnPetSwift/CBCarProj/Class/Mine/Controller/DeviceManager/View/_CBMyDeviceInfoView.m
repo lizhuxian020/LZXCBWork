@@ -78,7 +78,7 @@
         _model.devModel?:@"",
         _model.version?:@"",
         [MINUtils getTimeFromTimestamp:_model.registerTime formatter:@"yyyy-MM-dd HH:mm:ss"] ?:@"",
-        [MINUtils getTimeFromTimestamp:_model.expireTime formatter:@"yyyy-MM-dd HH:mm:ss"] ?:@"",
+        _model.expireTime ? ([MINUtils getTimeFromTimestamp:_model.expireTime formatter:@"yyyy-MM-dd HH:mm:ss"] ?:@"") : Localized(@"永久"),
     ];
     
     [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
