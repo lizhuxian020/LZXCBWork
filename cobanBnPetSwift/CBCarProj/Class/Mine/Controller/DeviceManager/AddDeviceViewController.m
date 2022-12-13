@@ -87,6 +87,7 @@
     [super viewWillDisappear:animated];
     //停止捕获
     [self.session stopRunning];
+    [AppDelegate setNavigationBGColor:kBackColor :self.navigationController.navigationBar];
 }
 
 - (void)viewDidLoad {

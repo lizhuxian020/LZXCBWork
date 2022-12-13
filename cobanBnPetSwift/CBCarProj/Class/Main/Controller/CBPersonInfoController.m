@@ -17,7 +17,9 @@
 @property (nonatomic, strong) UIView *nameV;
 @property (nonatomic, strong) UIView *phoneV;
 @property (nonatomic, strong) UIView *emailV;
-
+/** 七牛云上传token */
+@property (nonatomic,strong) CBBaseQNYFileInfoModel *qnyFileModelPrivate;
+@property (nonatomic,copy) NSString *qnyToken;
 @end
 
 @implementation CBPersonInfoController
@@ -38,7 +40,7 @@
     self.nameV = [self viewWithTitle:Localized(@"昵称") renderHead:NO content:userModel.name placeHolder:Localized(@"请输入昵称") canClick:YES blk:^{
         
     }];
-    self.phoneV = [self viewWithTitle:Localized(@"手机号码") renderHead:NO content:userModel.phone placeHolder:Localized(@"请输入手机号码") canClick:YES blk:^{
+    self.phoneV = [self viewWithTitle:Localized(@"手机号码") renderHead:NO content:userModel.phone placeHolder:Localized(@"请输入手机号码") canClick:YES isDigital:YES blk:^{
         
     }];
     self.emailV = [self viewWithTitle:Localized(@"邮箱") renderHead:NO content:userModel.email placeHolder:Localized(@"请输入邮箱") canClick:YES blk:^{
@@ -70,6 +72,8 @@
         make.left.right.equalTo(@0);
         make.top.equalTo(self.phoneV.mas_bottom);
     }];
+    
+    [self getQNYFileTokenReqeust];
 }
 
 - (UIView *)viewWithTitle:(NSString *)title
@@ -77,6 +81,16 @@
                   content:(NSString *)content
               placeHolder:(NSString *)placeHolder
                  canClick:(BOOL)canClick
+                      blk:(void(^)(void))blk {
+    return [self viewWithTitle:title renderHead:renderHead content:content placeHolder:placeHolder canClick:canClick isDigital:NO blk:blk];
+}
+
+- (UIView *)viewWithTitle:(NSString *)title
+               renderHead:(BOOL)renderHead
+                  content:(NSString *)content
+              placeHolder:(NSString *)placeHolder
+                 canClick:(BOOL)canClick
+                isDigital:(BOOL)isDigital
                       blk:(void(^)(void))blk
 {
     UIView *v = [UIView new];
@@ -94,7 +108,7 @@
     if (renderHead) {
         CBPetLoginModel *userModel = [CBPetLoginModelTool getUser];
         UIImageView *img = [UIImageView new];
-        [img sd_setImageWithURL:[NSURL URLWithString:userModel.photo] placeholderImage:[UIImage imageNamed:@""]];
+        [img sd_setImageWithURL:[NSURL URLWithString:userModel.photo] placeholderImage:[UIImage imageNamed:@"个人资料"]];
         [v addSubview:img];
         [img mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.equalTo(@-10);
@@ -131,10 +145,10 @@
     
     UIView *line = [UIView new];
     [v addSubview:line];
-    line.backgroundColor = UIColor.grayColor;
+    line.backgroundColor = KCarLineColor;
     [line mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(@30);
-        make.right.equalTo(@-30);
+        make.right.equalTo(@0);
         make.height.equalTo(@1);
         make.bottom.equalTo(@0);
     }];
@@ -149,7 +163,7 @@
         }
         
         if (canClick) {
-            [[CBCarAlertView viewWithMultiInput:@[placeHolder] title:title isDigital:NO confirmCanDismiss:nil confrim:^(NSArray<NSString *> * _Nonnull contentStr) {
+            [[CBCarAlertView viewWithMultiInput:@[placeHolder] title:title isDigital:isDigital confirmCanDismiss:nil confrim:^(NSArray<NSString *> * _Nonnull contentStr) {
                 wLbl.text = contentStr.firstObject;
             }] pop];
         }
@@ -227,10 +241,33 @@
 }
 
 #pragma mark -- 上传图片
+#pragma mark -- 获取七牛云token
+- (void)getQNYFileTokenReqeust {
+    [MBProgressHUD showHUDIcon:self.view animated:YES];
+    [[CBWtNetworkRequestManager sharedInstance] getQNFileTokenSuccess:^(CBWtBaseNetworkModel * _Nonnull baseModel) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        switch (baseModel.status) {
+            case CBWtNetworkingStatus0:
+            {
+                self.qnyFileModelPrivate = [CBBaseQNYFileInfoModel mj_objectWithKeyValues:baseModel.data];
+                self.qnyToken = baseModel.data;
+            }
+                break;
+            default:
+            {
+                [CBWtMINUtils showProgressHudToView:self.view withText:baseModel.resmsg];
+            }
+                break;
+        }
+    } failure:^(NSError * _Nonnull error) {
+        //[MBProgressHUD showMessage:@"请求超时" withDelay:3.0f];
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    }];
+}
 - (void)uploadHeader:(UIImage*)image {
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     kWeakSelf(self);
-    [[CBWtNetworkRequestManager sharedInstance] uploadImageToQNFilePath:image token:@"self.qnyToken"?:@"" success:^(id  _Nonnull baseModel) {
+    [[CBWtNetworkRequestManager sharedInstance] uploadImageToQNFilePath:image token:self.qnyToken?:@"" success:^(id  _Nonnull baseModel) {
         kStrongSelf(self);
         
         NSString *imageUrl = [NSString stringWithFormat:@"%@",baseModel[@"key"]];
@@ -272,7 +309,7 @@
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         if (isSucceed) {
-            [HUD showHUDWithText:@"操作成功"];
+            [CBTopAlertView alertSuccess:Localized(@"操作成功")];
         }
         } failed:^(NSError *error) {
             [MBProgressHUD hideHUDForView:self.view animated:YES];

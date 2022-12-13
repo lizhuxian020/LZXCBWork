@@ -109,11 +109,21 @@
     CBBasePopView *popView = [[CBBasePopView alloc] initWithContentView:alertView];
     __weak CBBasePopView *wpopView = popView;
     [alertView setDidClickConfirm:^{
-        delegate;
-        confirmBlk([tfArr valueForKey:@"text"]);
-        if (!confirmCanDismiss || confirmCanDismiss([tfArr valueForKey:@"text"])) {
-            [wpopView dismiss];
+        delegate;//不能去掉=.=
+        NSArray<NSString *> *resultArr = [tfArr valueForKey:@"text"];
+        if (!confirmCanDismiss) {
+            for (NSString *text in resultArr) {
+                if (text.length == 0) {
+                    [MINUtils showProgressHudToView:UIApplication.sharedApplication.keyWindow withText:Localized(@"参数不能为空")];
+                    return;
+                }
+            }
         }
+        if (confirmCanDismiss && !confirmCanDismiss([tfArr valueForKey:@"text"])) {
+            return;
+        }
+        [wpopView dismiss];
+        confirmBlk([tfArr valueForKey:@"text"]);
     }];
     [alertView setDidClickCancel:^{
         [wpopView dismiss];
