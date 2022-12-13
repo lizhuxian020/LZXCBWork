@@ -114,6 +114,9 @@ static AFHTTPSessionManager *afManager = nil;
                 succeed(responseObject,NO);
                 //状态205，代码联系人达到上限12个。。app这边有这样错误时提示“联系人已达上限”
                 [MBProgressHUD showMessage:Localized(@"联系人列表已满") withDelay:1.5];
+            } else if ([responseObject[@"status"]integerValue] == 402) {
+                succeed(responseObject,NO);
+                [CBTopAlertView alertFail:Localized(@"设备号不存在或者重复绑定")];
             }
             else {
                 succeed(responseObject,NO);

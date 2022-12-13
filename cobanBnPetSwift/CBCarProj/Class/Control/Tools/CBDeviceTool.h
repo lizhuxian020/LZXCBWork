@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)getDeviceNames:(void(^)(NSArray<NSString *> *deviceNames))blk;
 
+- (void)getGroupName:(void(^)(NSArray<NSString *> *groupNames))blk;
+
 @end
 
 NS_ASSUME_NONNULL_END

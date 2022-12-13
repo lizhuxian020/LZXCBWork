@@ -56,4 +56,30 @@
     }];
 }
 
+- (void)getGroupName:(void(^)(NSArray<NSString *> *groupNames))blk {
+    UIWindow *window = [UIApplication.sharedApplication keyWindow];
+    [MBProgressHUD showHUDIcon:window animated:YES];
+    kWeakSelf(self);
+    [[NetWorkingManager shared]getWithUrl:@"personController/getMyDeviceList" params: @{} succeed:^(id response, BOOL isSucceed) {
+        [MBProgressHUD hideHUDForView:window animated:YES];
+        NSMutableArray *dataArr = [NSMutableArray array];
+        if (isSucceed) {
+            if (response && [response[@"data"] isKindOfClass:[NSArray class]]) {
+                NSArray *responseArr = response[@"data"];
+                for (int i = 0; i < responseArr.count - 2; i++) {
+                    NSDictionary *dataDic = responseArr[i];
+                    if (dataDic[@"groupName"]) {
+                        [dataArr addObject:dataDic[@"groupName"]];
+                    }
+                }
+//                NSDictionary *noGroupDic = responseArr[responseArr.count - 2];
+                [dataArr addObject:Localized(@"默认分组")];
+            }
+        }
+        blk(dataArr);
+    } failed:^(NSError *error) {
+        [MBProgressHUD hideHUDForView:window animated:YES];
+    }];
+}
+
 @end

@@ -136,6 +136,7 @@
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         if (isSucceed) {
+            [CBTopAlertView alertSuccess:@"操作成功"];
             [weakSelf.navigationController popViewControllerAnimated: YES];
         } else {
         }

@@ -30,16 +30,20 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self createUI];
-    [self addGesture];
-//    self.deviceInfoTitleArr = @[@"设备IMEI号",@"设备电话号码",@"车牌颜色",@"车辆VIN",@"设备名称",@"车牌号码",@"定位图标",@"所属分组",@"设备协议类型",@"设备版本号",@"经销商ID",@"注册日期",@"有效期"];
-    self.carColorArr = @[Localized(@"蓝色"), Localized(@"黄色"), Localized(@"黑色"), Localized(@"白色"), Localized(@"其他")];
-    self.purposeArr = @[Localized(@"定位图"), Localized(@"人物"), Localized(@"宠物"), Localized(@"单车"), Localized(@"摩托车"), Localized(@"小车"), Localized(@"货车"), Localized(@"行李箱")];
     
     // 扫码添加设备，可编辑
     if (self.isAddDevice) {
         self.isEdit = YES;
     }
+    
+    [self createUI];
+    [self addGesture];
+//    self.deviceInfoTitleArr = @[@"设备IMEI号",@"设备电话号码",@"车牌颜色",@"车辆VIN",@"设备名称",@"车牌号码",@"定位图标",@"所属分组",@"设备协议类型",@"设备版本号",@"经销商ID",@"注册日期",@"有效期"];
+    self.carColorArr = @[Localized(@"蓝色"), Localized(@"黄色"), Localized(@"黑色"), Localized(@"白色"), Localized(@"其他")];
+    self.purposeArr = @[Localized(@"定位图"), Localized(@"人物"), Localized(@"宠物"), Localized(@"单车"), Localized(@"摩托车"), Localized(@"小车"), Localized(@"货车"), Localized(@"行李箱")];
+    self.devModelArray = @[
+        @"102",@"103A/B",@"108A",@"108B",@"109",@"303F/G",@"303H/I",@"310",@"311A",@"311B/C",@"403A/B",@"401A/B",@"401C/D",Localized(@"其他")
+    ];
     [self reload];
 }
 - (void)reload {
@@ -81,7 +85,7 @@
         Localized(@"输入电话号码"),
         @"",
         @"",
-        @"",
+        Localized(@"请选择"),
         Localized(@"默认分组")
     ];
     [self.tableView reloadData];
@@ -100,7 +104,7 @@
     if (self.isAddDevice == NO) {
         [self initBarRighBtnTitle: Localized(@"编辑") target: self action: @selector(rightBtnClick:)];
     }else {
-        [self initBarRighBtnTitle: Localized(@"完成") target: self action: @selector(rightBtnClick:)];
+        [self initBarRighBtnTitle: Localized(@"确定") target: self action: @selector(rightBtnClick:)];
     }
     [self createTableView];
 }
@@ -122,6 +126,7 @@
         make.top.equalTo(@(PPNavigationBarHeight));
         make.left.right.bottom.equalTo(@0);
     }];
+    self.infoView.hidden = _isAddDevice;
 }
 #pragma mark - gesture
 - (void)addGesture
@@ -224,6 +229,22 @@
             }] pop];
     }
     if (row == 4 || row == 6|| row == 7) {
+        if (row == 7) {
+            [[CBDeviceTool shareInstance] getGroupName:^(NSArray<NSString *> * _Nonnull groupNames) {
+                self.groupNameArray = groupNames;
+                MINPickerView *pickerView = [[MINPickerView alloc] init];
+                pickerView.titleLabel.text = self.deviceInfoTitleArr[row];
+                pickerView.dataArr = @[self.groupNameArray];
+                pickerView.delegate = self;
+                [self.view addSubview: pickerView];
+                [pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.left.right.top.equalTo(self.view);
+                    make.height.mas_equalTo(SCREEN_HEIGHT);
+                }];
+                [pickerView showView];
+            }];
+            return;
+        }
         MINPickerView *pickerView = [[MINPickerView alloc] init];
         pickerView.titleLabel.text = self.deviceInfoTitleArr[row];
         if (row == 4) {
@@ -232,9 +253,9 @@
         if (row == 6) {
             pickerView.dataArr = @[self.devModelArray];
         }
-        if (row == 7) {
-            pickerView.dataArr = @[self.groupNameArray];
-        }
+//        if (row == 7) {
+//            pickerView.dataArr = @[self.groupNameArray];
+//        }
         pickerView.delegate = self;
         [self.view addSubview: pickerView];
         [pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -358,41 +379,37 @@
             [self editDeviceRequest];
         }
     } else { // 添加设备的情况下
-//        __weak __typeof__(self) weakSelf = self;
-//        NSMutableDictionary *paramters = [NSMutableDictionary dictionaryWithCapacity:1];
-//        MyDeviceModel *deviceModelDeviceName = self.arrayData[5];
-//        MyDeviceModel *deviceModelPhone = self.arrayData[1];
-//        MyDeviceModel *deviceModelCarNum = self.arrayData[4];
-//        MyDeviceModel *deviceModelColor = self.arrayData[2];
-//        MyDeviceModel *deviceModelIcon = self.arrayData[6];
-//
-//        [paramters setObject:self.model.dno?:@"" forKey:@"dno"];
-//        [paramters setObject:deviceModelDeviceName.name?:@"" forKey:@"dName"];
-//        [paramters setObject:deviceModelPhone.devPhone?:@"" forKey:@"devPhone"];
-//        [paramters setObject:deviceModelCarNum.carNum?:@"" forKey:@"carNum"];
-//        [paramters setObject:[NSNumber numberWithInteger:deviceModelColor.color] forKey:@"color"];
-//        [paramters setObject:[NSNumber numberWithInteger:deviceModelIcon.icon] forKey:@"icon"];
-//
-//        [MBProgressHUD showHUDIcon:self.view animated:YES];
-//        kWeakSelf(self);
-//        [[NetWorkingManager shared]postWithUrl:@"personController/addDevice" params:paramters succeed:^(id response,BOOL isSucceed) {
-//            kStrongSelf(self);
-//            [MBProgressHUD hideHUDForView:self.view animated:YES];
-//            if (isSucceed) {
-//                if (weakSelf.isBind == true) {
-//                    [weakSelf.navigationController popToRootViewControllerAnimated:YES];
-//                } else {
-//                    [weakSelf popToControllerClass: [MyDeviceViewController class]];
-//                }
-//                //[hud hideAnimated:YES];
-//            } else {
-//                //[hud hideAnimated:YES];
-//            }
-//        } failed:^(NSError *error) {
-//            //[hud hideAnimated:YES];
-//            kStrongSelf(self);
-//            [MBProgressHUD hideHUDForView:self.view animated:YES];
-//        }];
+        __weak __typeof__(self) weakSelf = self;
+        NSMutableDictionary *paramters = [NSMutableDictionary dictionaryWithCapacity:1];
+
+        [paramters setObject:self.model.dno?:@"" forKey:@"dno"];
+        [paramters setObject:self.model.name?:@"" forKey:@"dName"];
+        [paramters setObject:self.model.devPhone?:@"" forKey:@"devPhone"];
+        [paramters setObject:self.model.carNum?:@"" forKey:@"cardNum"];
+        [paramters setObject:[NSNumber numberWithInteger:self.model.color] forKey:@"color"];
+        [paramters setObject:[NSNumber numberWithInteger:self.model.icon] forKey:@"icon"];
+        NSInteger produceSpecdIdx = [self.devModelArray indexOfObject:self.devModel];
+        if (produceSpecdIdx != NSNotFound) {
+            [paramters setObject:@(produceSpecdIdx+1) forKey:@"productSpecId"];
+        }
+        NSInteger groupIdx = [self.groupNameArray indexOfObject:self.groupName];
+        if (groupIdx != NSNotFound) {
+            [paramters setObject:@(groupIdx) forKey:@"groupId"];
+        }
+
+        [MBProgressHUD showHUDIcon:self.view animated:YES];
+        kWeakSelf(self);
+        [[NetWorkingManager shared]postWithUrl:@"personController/addDevice" params:paramters succeed:^(id response,BOOL isSucceed) {
+            kStrongSelf(self);
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            if (isSucceed) {
+                [weakSelf.navigationController popToRootViewControllerAnimated:YES];
+            } else {
+            }
+        } failed:^(NSError *error) {
+            kStrongSelf(self);
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+        }];
     }
 }
 
@@ -404,16 +421,15 @@
     NSNumber *selectRow = dic[@"0"];
     DeviceDetailTableViewCell *cell = [self.tableView cellForRowAtIndexPath:self.selectIndexPath];
     NSInteger row = self.selectIndexPath.row;
-    if (self.isAddDevice == NO) {
-        if (row == 4) {
-            self.model.color = [selectRow intValue];
-        }
-        if (row == 6) {
-            self.devModel = self.devModelArray[[selectRow intValue]];
-        }
-        if (row == 7) {
-            self.groupName = self.groupNameArray[[selectRow intValue]];
-        }
+    if (row == 4) {
+        self.model.color = [selectRow intValue];
+    }
+    if (row == 6) {
+        self.devModel = self.devModelArray[[selectRow intValue]];
+    }
+    if (row == 7) {
+        self.groupName = self.groupNameArray[[selectRow intValue]];
+    }
 //        else if (self.selectIndexPath.row == 6) {
 //            MyDeviceModel *deviceModelIcon = self.arrayData[6];
 //            deviceModelIcon.icon = [selectRow intValue];
@@ -421,7 +437,6 @@
 //            // 移至分组
 //            [self moveToGroupRequestGroupId:[selectRow integerValue]];
 //        }
-    }
 //    else {
 //        if (self.selectIndexPath.row == 2) {
 //            MyDeviceModel *deviceModelColor = self.arrayData[2];

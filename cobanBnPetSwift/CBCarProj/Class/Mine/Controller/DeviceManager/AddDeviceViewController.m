@@ -178,6 +178,7 @@
 - (void)rightBtnClick
 {
     MyDeviceDetailViewController *MyDeviceDetailVC = [[MyDeviceDetailViewController alloc] init];
+    MyDeviceDetailVC.model = [[MyDeviceModel alloc]init];
     MyDeviceDetailVC.groupNameArray = self.groupNameArray;
     MyDeviceDetailVC.groupIdArray = self.groupIdArray;
     MyDeviceDetailVC.isAddDevice = YES;
