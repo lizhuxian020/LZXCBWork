@@ -83,7 +83,9 @@
 //                    if (model.warmType != 3) {
 //                        [array addObject: model];
 //                    }
-                    [array addObject: model];
+                    if (model.shape < 3) {                    
+                        [array addObject: model];
+                    }
                 }
                 weakSelf.modelArr = array;
             } else {
