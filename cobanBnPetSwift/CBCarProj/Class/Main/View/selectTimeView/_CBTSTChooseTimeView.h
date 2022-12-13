@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface _CBTSTChooseTimeView : UIView
 
-- (instancetype)initWithTitle:(NSString *)title;
+- (instancetype)initWithTitle:(NSString *)title last:(int)lastDays;
 
 - (void)activate;
 - (void)inactivate;

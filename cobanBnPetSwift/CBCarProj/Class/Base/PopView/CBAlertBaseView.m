@@ -66,11 +66,12 @@
     self.cancelLbl = [MINUtils createLabelWithText:@"取消" size:15 alignment:NSTextAlignmentCenter textColor:UIColor.blackColor];
     self.cancelLbl.font = [UIFont systemFontOfSize:15 weight:UIFontWeightBold];
     [btnC addSubview:self.cancelLbl];
+    self.cancelLbl.backgroundColor = kGreyColor;
     
     self.confirmLbl = [MINUtils createLabelWithText:@"确定" size:15 alignment:NSTextAlignmentCenter textColor:kAppMainColor];
     self.confirmLbl.font = [UIFont systemFontOfSize:15 weight:UIFontWeightBold];
     [btnC addSubview:self.confirmLbl];
-    
+    self.confirmLbl.backgroundColor = kGreyColor;
     
     UIView *line = [UIView new];
     line.backgroundColor = KCarLineColor;

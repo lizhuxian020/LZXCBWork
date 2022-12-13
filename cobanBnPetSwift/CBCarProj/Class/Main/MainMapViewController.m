@@ -382,7 +382,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     if (!_playbackTimeBasePopView) {
         
         
-        CBAlertBaseView *alertContentView = [[CBAlertBaseView alloc] initWithContentView:self.playbackSelectTimeView title:@"选择时间"];
+        CBAlertBaseView *alertContentView = [[CBAlertBaseView alloc] initWithContentView:self.playbackSelectTimeView title:Localized(@"请设置回放时间段")];
         kWeakSelf(self);
         [alertContentView setDidClickCancel:^{
             [weakself.playbackTimeBasePopView dismiss];

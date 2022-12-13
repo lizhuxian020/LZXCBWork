@@ -16,13 +16,15 @@
 
 @property (nonatomic, strong) UITextView *textView;
 
+@property (nonatomic, assign) int lastDays;
 @end
 
 @implementation _CBTSTChooseTimeView
 
-- (instancetype)initWithTitle:(NSString *)title {
+- (instancetype)initWithTitle:(NSString *)title last:(int)lastDays{
     self = [super init];
     if (self) {
+        _lastDays = lastDays;
         [self createUI];
     }
     return self;
@@ -30,7 +32,7 @@
 
 - (void)createUI {
     
-    self.titleLbl = [MINUtils createLabelWithText:@"开始时间" size:20 alignment:NSTextAlignmentCenter textColor:UIColor.blackColor];
+    self.titleLbl = [MINUtils createLabelWithText:@"开始时间" size:17 alignment:NSTextAlignmentCenter textColor:kCellTextColor];
     [self addSubview:self.titleLbl];
 
     [self.titleLbl mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -39,15 +41,16 @@
     }];
     [self.titleLbl setContentHuggingPriority:UILayoutPriorityDefaultHigh forAxis:UILayoutConstraintAxisHorizontal];
 
-    self.contentLbl = [MINUtils createLabelWithText:@"2022-22-22 22:22:22" size:20 alignment:NSTextAlignmentCenter textColor:UIColor.lightGrayColor];
+    self.contentLbl = [MINUtils createLabelWithText:@"2022-22-22 22:22:22" size:17 alignment:NSTextAlignmentCenter textColor:UIColor.lightGrayColor];
     [self addSubview:self.contentLbl];
     [self.contentLbl mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.right.equalTo(@0);
-        make.left.equalTo(self.titleLbl.mas_right).mas_offset(10);
+        make.left.equalTo(self.titleLbl.mas_right).mas_offset(20);
         make.height.equalTo(@40);
     }];
     self.contentLbl.layer.borderWidth = 1;
     self.contentLbl.layer.cornerRadius = 5;
+    self.contentLbl.layer.borderColor = KCarLineColor.CGColor;
     self.contentLbl.userInteractionEnabled = YES;
 
 
@@ -72,7 +75,8 @@
     }];
     
     [self inactivate];
-    picker.date = NSDate.date;
+    NSDate *lastDate = [NSDate.date dateByAddingTimeInterval:-24*60*60*_lastDays];
+    picker.date = lastDate;
     [self dateChange:picker];
 }
 
@@ -89,7 +93,7 @@
 
 - (void)activate {
     self.userInteractionEnabled = YES;
-    self.contentLbl.textColor = UIColor.blackColor;
+    self.contentLbl.textColor = kCellTextColor;
 }
 
 - (void)inactivate {

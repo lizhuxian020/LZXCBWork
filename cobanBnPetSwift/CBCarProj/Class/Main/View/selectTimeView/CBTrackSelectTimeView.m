@@ -53,8 +53,8 @@
         [btn setTitleColor:__TrackSelectTimeView_NormalColor forState:UIControlStateNormal];
         [btn setTitleColor:__TrackSelectTimeView_SelectedColor forState:UIControlStateSelected];
         btn.titleLabel.font = [UIFont systemFontOfSize:16];
-        [btn setImage:[UIImage imageNamed:@"单选-没选中"] forState:UIControlStateNormal];
-        [btn setImage:[UIImage imageNamed:@"单选-选中"] forState:UIControlStateSelected];
+        [btn setImage:[UIImage imageNamed:@"未选中2"] forState:UIControlStateNormal];
+        [btn setImage:[UIImage imageNamed:@"已选中2"] forState:UIControlStateSelected];
         [self addSubview:btn];
         [btn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(@15);
@@ -71,7 +71,7 @@
         lastBtn = btn;
     }
     
-    self.startView = [[_CBTSTChooseTimeView alloc] initWithTitle:@"开始时间"];
+    self.startView = [[_CBTSTChooseTimeView alloc] initWithTitle:@"开始时间" last:7];
     [self addSubview:self.startView];
     [self.startView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(@15);
@@ -79,7 +79,7 @@
         make.top.equalTo(lastBtn.mas_bottom).mas_offset(15);
     }];
     
-    self.endView = [[_CBTSTChooseTimeView alloc] initWithTitle:@"开始时间"];
+    self.endView = [[_CBTSTChooseTimeView alloc] initWithTitle:@"开始时间" last:0];
     [self addSubview:self.endView];
     [self.endView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(@15);
