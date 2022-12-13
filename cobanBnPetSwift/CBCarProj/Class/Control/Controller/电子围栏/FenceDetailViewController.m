@@ -201,6 +201,8 @@
         [self baiduMap];
         [self googleMap];
         
+        //需要马上布局, 否则fence会按全屏去展示
+        [self.view layoutIfNeeded];
         self.currentModel = [CBCommonTools CBdeviceInfo];
         [self showCurrentSelectedDeviceLocation];
         [self createFence];
@@ -312,8 +314,11 @@
 - (void)createFence
 {
     NSString *dataString = self.model.data;
-    if (self.model.shape == 0) { // 多边形
+    if (self.isPolygon) { // 多边形
         self.polygonCoordinateArr = [self getModelArr:dataString];
+        for (MINCoordinateObject *obj in self.polygonCoordinateArr) {
+            [self addRectAnnotation:obj.coordinate];
+        }
         if (self.baiduView.hidden == NO) {
             [self addBaiduPolygon];
             [self baiduMapFitFence: self.polygonCoordinateArr];
@@ -339,8 +344,11 @@
             }
 //            [self updateMapCenter:coordinate];
         }
-    }else if (self.model.shape == 2) { // 矩形
+    }else if (self.isRect) { // 矩形
         self.rectangleCoordinateArr = [self getModelArr: dataString];
+        for (MINCoordinateObject *obj in self.rectangleCoordinateArr) {
+            [self addRectAnnotation:obj.coordinate];
+        }
         if (self.baiduView.hidden == NO) {
             [self addBaiduRectangle];
             [self baiduMapFitFence: self.rectangleCoordinateArr];
@@ -412,13 +420,17 @@
 // 使百度地图展示完整的围栏，位置位置并处于地图中心 多边形，矩形，线路
 - (void)baiduMapFitFence:(NSArray *)modelArr
 {
-    MINCoordinateObject *firstModel = modelArr.firstObject;
-    BMKMapPoint firstPoint = BMKMapPointForCoordinate( firstModel.coordinate);
+    CBHomeLeftMenuDeviceInfoModel *deviceInfoModel = self.currentModel;
+    CLLocationCoordinate2D currentDeviceCoor = CLLocationCoordinate2DMake(deviceInfoModel.lat.doubleValue,  deviceInfoModel.lng.doubleValue);
+    NSMutableArray *coorArr = [NSMutableArray arrayWithArray:modelArr];
+    [coorArr addObject:[self getCoorObj:currentDeviceCoor]];
     CGFloat leftX, leftY, rightX, rightY; // 最左或右边的X、Y
-    rightX = leftX = firstPoint.x;
-    rightY = leftY = firstPoint.y;
-    for (int i = 1; i < modelArr.count; i++) {
-        MINCoordinateObject *model = modelArr[i];
+    leftX = CGFLOAT_MAX;
+    leftY = CGFLOAT_MAX;
+    rightX = CGFLOAT_MIN;
+    rightY = CGFLOAT_MIN;
+    for (int i = 0; i < coorArr.count; i++) {
+        MINCoordinateObject *model = coorArr[i];
         BMKMapPoint modelPoint = BMKMapPointForCoordinate( model.coordinate);
         if (modelPoint.x < leftX) {
             leftX = modelPoint.x;
@@ -426,31 +438,34 @@
         if (modelPoint.x > rightX) {
             rightX = modelPoint.x;
         }
-        if (modelPoint.y > leftY) {
+        if (modelPoint.y < leftY) {
             leftY = modelPoint.y;
         }
-        if (modelPoint.y < rightY) {
+        if (modelPoint.y > rightY) {
             rightY = modelPoint.y;
         }
     }
     BMKMapRect fitRect;
+    double width = rightX - leftX;
+    double height = rightY - leftY;
     fitRect.origin = BMKMapPointMake(leftX, leftY);
-    fitRect.size = BMKMapSizeMake(rightX - leftX, rightY - leftY);
+    fitRect.size = BMKMapSizeMake(width, height);
     [_baiduMapView setVisibleMapRect: fitRect];
     _baiduMapView.zoomLevel = _baiduMapView.zoomLevel - 0.3;
+    
 }
 // 百度圆
 - (void)baiduMapFitCircleFence:(MINCoordinateObject *)model radius:(double)radius
 {
-    // 一个点的长度是0.870096
-    BMKMapPoint circlePoint = BMKMapPointForCoordinate(model.coordinate);
-    BMKMapRect fitRect;
-    double pointRadius = radius / 0.6;//0.870096;
-    fitRect.origin = BMKMapPointMake(circlePoint.x - pointRadius, circlePoint.y - pointRadius);
-    fitRect.size = BMKMapSizeMake(pointRadius * 2, pointRadius * 2);
-    [_baiduMapView setVisibleMapRect: fitRect];
-    //_baiduMapView.zoomLevel = _baiduMapView.zoomLevel - 0.3;
-    [_baiduMapView setCenterCoordinate:model.coordinate];
+//    // 一个点的长度是0.870096
+//    BMKMapPoint circlePoint = BMKMapPointForCoordinate(model.coordinate);
+//    BMKMapRect fitRect;
+//    double pointRadius = radius / 0.6;//0.870096;
+//    fitRect.origin = BMKMapPointMake(circlePoint.x - pointRadius, circlePoint.y - pointRadius);
+//    fitRect.size = BMKMapSizeMake(pointRadius * 2, pointRadius * 2);
+//    [_baiduMapView setVisibleMapRect: fitRect];
+//    //_baiduMapView.zoomLevel = _baiduMapView.zoomLevel - 0.3;
+//    [_baiduMapView setCenterCoordinate:model.coordinate];
 }
 - (void)googleMapFitFence:(NSArray *)modelArr
 {
@@ -525,7 +540,6 @@
 
 - (void)addBaiduRectangle
 {
-    [self clearMap];
     MINCoordinateObject *firstObj = self.rectangleCoordinateArr.firstObject;
     MINCoordinateObject *lastObj = self.rectangleCoordinateArr.lastObject;
     CLLocationCoordinate2D firstCoor = firstObj.coordinate;
@@ -645,7 +659,6 @@
 
 - (void)addBaiduPolygon
 {
-    [self clearMap];
     CLLocationCoordinate2D coords[self.polygonCoordinateArr.count];
     for (int i = 0; i < self.polygonCoordinateArr.count; i++) {
         MINCoordinateObject *obj = self.polygonCoordinateArr[i];
@@ -966,34 +979,37 @@
         
         //添加圆形
         [self addBaiduCircle:coordinate radius:self.radius];
-    } else if (self.isRect == YES) {
+    } else if (self.isRect) {
         
-        if (self.rectangleCoordinateArr.count > 1) {
-            [MINUtils showProgressHudToView:self.view withText:Localized(@"不能超过两个点")];
-            return;
-        }
-        [self.rectangleCoordinateArr addObject:[self getCoorObj:coordinate]];
-        [self addRectAnnotation:coordinate];
-        if (self.rectangleCoordinateArr.count == 2) {
-            if (self.baiduView.hidden == NO) {
-                [self addBaiduRectangle];
-            } else {
-                [self addGoogleRectangle];
-            }
-        }
+        //进页面时就画好, 不能再点击空白
+//        if (self.rectangleCoordinateArr.count > 1) {
+//            [MINUtils showProgressHudToView:self.view withText:Localized(@"不能超过两个点")];
+//            return;
+//        }
+//        [self.rectangleCoordinateArr addObject:[self getCoorObj:coordinate]];
+//        [self addRectAnnotation:coordinate];
+//        if (self.rectangleCoordinateArr.count == 2) {
+//            if (self.baiduView.hidden == NO) {
+//                [self addBaiduRectangle];
+//            } else {
+//                [self addGoogleRectangle];
+//            }
+//        }
         
-    } else if (self.isPolygon == YES) {
-
-        [self.polygonCoordinateArr addObject:[self getCoorObj:coordinate]];
-        [self addRectAnnotation:coordinate];
-        if (self.polygonCoordinateArr.count > 2) {
-            if (self.baiduView.hidden == NO) {
-                [self addBaiduPolygon];
-            } else {
-                [self addGooglePolygon];
-            }
-        }
+    } else if (self.isPolygon) {
         
+        //进页面时就画好, 不能再点击空白
+//
+//        [self.polygonCoordinateArr addObject:[self getCoorObj:coordinate]];
+//        [self addRectAnnotation:coordinate];
+//        if (self.polygonCoordinateArr.count > 2) {
+//            if (self.baiduView.hidden == NO) {
+//                [self addBaiduPolygon];
+//            } else {
+//                [self addGooglePolygon];
+//            }
+//        }
+//
     }
 }
 - (void)showAlertViewWithTitle:(NSString *)title datailText:(NSString *)text indexPath:(NSIndexPath *)indexPath
