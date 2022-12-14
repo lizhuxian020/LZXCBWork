@@ -23,6 +23,7 @@
 
 @property (nonatomic, strong) UILabel *BALbl;
 @property (nonatomic, strong) UILabel *BBLbl;
+@property (nonatomic, strong) UITextField *bTF;
 @end
 
 @implementation _CBLocateModeView
@@ -258,6 +259,7 @@
     UITextField *cBView = [UITextField new];
     cBView.textAlignment = NSTextAlignmentCenter;
     cBView.text = @"200";
+    self.bTF = cBView;
     
     [view addSubview:cBView];
     [cBView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -368,4 +370,16 @@
     return self.currentData;
 }
 
+- (NSNumber *)getSpeed {
+    if (kStringIsEmpty(self.bTF.text)) {
+        return @0;
+    }
+    return @([self.bTF.text intValue]);
+}
+- (NSNumber *)getReportWay {
+    if (self.contentAView.hidden) {
+        return @2;
+    }
+    return @0;
+}
 @end

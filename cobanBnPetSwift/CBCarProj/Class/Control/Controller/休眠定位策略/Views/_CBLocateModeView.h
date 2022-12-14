@@ -12,6 +12,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface _CBLocateModeView : UIView
 
+- (NSNumber *)getSpeed;
+- (NSNumber *)getReportWay;
+- (NSNumber *)getTimeQS;
+- (NSNumber *)getTimeRest;
 @end
 
 NS_ASSUME_NONNULL_END

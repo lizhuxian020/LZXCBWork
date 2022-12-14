@@ -103,7 +103,13 @@
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:4];
     dic[@"dno"] = [CBCommonTools CBdeviceInfo].dno?:@"";//[AppDelegate shareInstance].currenDeviceSno;
-    dic[@"report_way"] = [self.headerView getSelectBtn];
+    dic[@"report_way"] = self.locationModeView.getReportWay;
+    dic[@"rest_mod"] = @(self.xmChooseView.currentIndex);
+    dic[@"dis_qs"] = self.locationModeView.getSpeed;
+    dic[@"time_qs"];
+    dic[@"time_rest"];
+    dic[@"time_qs_unit"] = @"s";
+    dic[@"time_rest_unit"] = @"s";
     if ([[self.headerView getSelectBtn] integerValue] == 0) {
 //        dic[@"time_qs"] = self.topDetailView.distanceBtn.titleLabel.text;
 //        dic[@"time_sos"] = self.topDetailView.SOSBtn.titleLabel.text;
@@ -133,7 +139,7 @@
         dic[@"time_qs"] = self.topDetailView.distanceTF.text;
         dic[@"time_sos"] = self.topDetailView.SOSTF.text;
         dic[@"time_rest"] = self.topDetailView.staticTF.text;
-        dic[@"dis_qs"] = self.bottomDetailView.distanceTF.text;
+//        dic[@"dis_qs"] = self.bottomDetailView.distanceTF.text;
         dic[@"dis_sos"] = self.bottomDetailView.SOSTF.text;
         dic[@"dis_rest"] = self.bottomDetailView.staticTF.text;
     }
