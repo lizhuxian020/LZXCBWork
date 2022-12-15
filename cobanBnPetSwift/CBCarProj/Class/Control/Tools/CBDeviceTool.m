@@ -199,7 +199,7 @@
         @(_currentProductSpec.callBack),
         @(_currentProductSpec.oilElectricityControl),
         @(_currentProductSpec.oilElectricityControl),
-        @(1), //TODO: lzxTODO 哪里的?
+        @(_currentProductSpec.arm),
         @(_currentProductSpec.motorControl),
         @(_currentProductSpec.remoteStart),
         @(_currentProductSpec.arm||_currentProductSpec.silentArm||_currentProductSpec.disarm),

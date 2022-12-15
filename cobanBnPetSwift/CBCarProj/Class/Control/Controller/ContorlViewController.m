@@ -209,11 +209,11 @@
     __weak __typeof__(self) weakSelf = self;
     cell.switchStateChangeBlock = ^(NSIndexPath *indexPath, BOOL isON) {
         NSLog(@"%ld %d", (long)indexPath.row , isON);
-        if (isON == YES) {
-            [weakSelf editRowDataWithIndexPath:indexPath data:@"1" switchStr:@"1"];
-        }else {
-            [weakSelf editRowDataWithIndexPath:indexPath data:@"0" switchStr:@"0"];
-        }
+//        if (isON == YES) {
+//            [weakSelf editRowDataWithIndexPath:indexPath data:@"1" switchStr:@"1"];
+//        }else {
+//            [weakSelf editRowDataWithIndexPath:indexPath data:@"0" switchStr:@"0"];
+//        }
     };
     return cell;
 }
@@ -319,28 +319,26 @@
     }
 }
 - (void)showTT {
-    [[CBCarAlertView viewWithChooseData:@[Localized(@"听听模式"),Localized(@"定位模式")] selectedIndex:0 title:_ControlConfigTitle_TT didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
+    kWeakSelf(self);
+    [[CBCarAlertView viewWithChooseData:@[Localized(@"定位模式"), Localized(@"听听模式")] selectedIndex:self.listModel.monitorMode title:_ControlConfigTitle_TT didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
         NSLog(@"%s: %@", __FUNCTION__, contentStr);
     } confrim:^(NSString * _Nonnull contentStr, NSInteger index) {
-        NSLog(@"%s: %@", __FUNCTION__, contentStr);
+        NSMutableDictionary *paramters = [NSMutableDictionary dictionaryWithDictionary:@{
+            @"monitorMode": @(index),
+        }];
+        [weakself editControlNewRequest:paramters];
     }] pop];
 }
 
 - (void)showAlertOBDViewWithTitle:(NSString *)title indexPath:(NSIndexPath *)indexPath {
     NSMutableArray *titleArr = [NSMutableArray new];
-    CBControlModel *model = self.arrayData[indexPath.row];
-    NSString *titleStr = model.titleStr;
-    if ([titleStr isEqualToString:Localized(@"断油断电")]) {
-        self.isObdMessage = NO;
-        [titleArr addObject:Localized(@"立即断油断电")];
-        [titleArr addObject:Localized(@"延时断油断电")];
-    } else {
-        self.isObdMessage = YES;
-        [titleArr addObject:Localized(@"跟随单次定位")];
-        [titleArr addObject:Localized(@"跟随多次定位")];
-    }
+    self.isObdMessage = NO;
+    [titleArr addObject:Localized(@"立即断油断电")];
+    [titleArr addObject:Localized(@"延时断油断电")];
+    NSInteger index = 0;
+    index = self.listModel.oil == 0 ? 0 : 1;
     kWeakSelf(self);
-    [[CBCarAlertView viewWithChooseData:titleArr selectedIndex:0 title:title didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
+    [[CBCarAlertView viewWithChooseData:titleArr selectedIndex:index title:title didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
         kStrongSelf(self);
         NSLog(@"%s", __FUNCTION__);
         if (index == 0) {
@@ -357,13 +355,11 @@
             }
         }
     } confrim:^(NSString * _Nonnull contentStr, NSInteger index) {
-        kStrongSelf(self);
-        NSLog(@"%s", __FUNCTION__);
-        if ([titleStr isEqualToString:_ControlConfigTitle_DYD]) {
-            [self editRowDataWithIndexPath: indexPath data:@"oil" switchStr:nil];
-        } else {
-            [self editRowDataWithIndexPath: indexPath data:@"ObdMsg" switchStr:nil];
-        }
+        NSMutableDictionary *paramters = [NSMutableDictionary dictionaryWithDictionary:@{
+            @"dydd": @(1),
+            @"oil": @(index)
+        }];
+        [weakself editControlSwitchRequest:paramters];
     }] pop];
     
 //    MINAlertView *alertView = [[MINAlertView alloc] init];
@@ -450,8 +446,12 @@
 
 // 恢复油电
 - (void)showHFYD {
+    kWeakSelf(self);
     [[CBCarAlertView viewWithAlertTips:Localized(@"是否对设备确定恢复油电？") title:_ControlConfigTitle_HFYD confrim:^(NSString * _Nonnull contentStr) {
-                
+        NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
+            @"dydd": @0,
+        }];
+        [weakself editControlSwitchRequest:param];
     }] pop];
 }
 - (void)showCSBJ {
@@ -497,79 +497,79 @@
 //        [weakAlertView hideView];
 //    };
 //}
-- (void)editRowDataWithIndexPath:(NSIndexPath *)indexPath data:(NSString *)data switchStr:(NSString *)switchStr {
-    NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:3];
-    dic[@"dno"] = [CBCommonTools CBdeviceInfo].dno?:@"";
-    if (self.arrayData.count > indexPath.row) {
-        CBControlModel *model = self.arrayData[indexPath.row];
-        NSString *titleStr = model.titleStr;
-        if ([titleStr isEqualToString:Localized(@"单次定位")]) {
-        } else if ([titleStr isEqualToString:Localized(@"休眠定位策略")]) {
-            dic[@"dcdd"] = data;
-        } else if ([titleStr isEqualToString:Localized(@"电子围栏")]) {
-        } else if ([titleStr isEqualToString:Localized(@"断油断电")]) {
-            if ([data isEqualToString: @"oil"]) {
-                dic[@"oil"] = [NSString stringWithFormat: @"%d", self.listModel.oil];;
-            }else {
-                dic[@"dydd"] = data;
-            }
-        } else if ([titleStr isEqualToString:Localized(@"布防/撤防")]) {
-            dic[@"cfbf"] = data;
-        } else if ([titleStr isEqualToString:Localized(@"振动报警")]) {
-            dic[@"warm_zd"] = data;
-        } else if ([titleStr isEqualToString:Localized(@"低电报警")]) {
-            dic[@"warm_didian"] = data;
-        } else if ([titleStr isEqualToString:Localized(@"掉电报警")]) {
-            dic[@"warm_diaodian"] = data;
-        } else if ([titleStr isEqualToString:Localized(@"位移报警")]) {
-            dic[@"warm_wy"] = data;  //位移开关
-            if (switchStr) {
-                dic[@"move_warm"] = data; //位移值
-            }
-        } else if ([titleStr isEqualToString:Localized(@"录音")]) {
-            dic[@"voice"] = data;
-        } else if ([titleStr isEqualToString:Localized(@"立即拍照")]) {
-            dic[@"photo"] = data;
-        } else if ([titleStr isEqualToString:Localized(@"请求OBD消息")]) {
-            if ([data isEqualToString: @"ObdMsg"]) {
-                dic[@"obdMsg"] = [NSString stringWithFormat: @"%d", self.listModel.obdMsg];
-                dic[@"obd"] = @"1";  // 选择了时间，就开启了OBD消息
-            }else {
-                dic[@"obd"] = data;
-            }
-        } else if ([titleStr isEqualToString:Localized(@"电话回拨")]) {
-            dic[@"phone"] = data;
-        } else if ([titleStr isEqualToString:Localized(@"超速报警")]) {
-            dic[@"over_warm"] = data;           //超速值
-            if (switchStr) {
-                dic[@"warm_speed"] = switchStr; //超速开关
-            }
-        } else if ([titleStr isEqualToString:Localized(@"信息服务下发")]) {
-        } else if ([titleStr isEqualToString:Localized(@"云台控制")]) {
-        } else if ([titleStr isEqualToString:Localized(@"多次拍照")]) {
-        } else if ([titleStr isEqualToString:Localized(@"休眠模式")]) {
-            dic[@"rest_mod"] = data;
-        } else if ([titleStr isEqualToString:Localized(@"配置设备参数")]) {
-        }
-    }
-#pragma mark -- 编辑开关类控制网络请求
-    __weak __typeof__(self) weakSelf = self;
-    [MBProgressHUD showHUDIcon:self.view animated:YES];
-    kWeakSelf(self);
-    [[NetWorkingManager shared] postWithUrl: @"devControlController/editSwitchParam" params: dic succeed:^(id response, BOOL isSucceed) {
-        kStrongSelf(self);
-        if (isSucceed) {
-            [weakSelf requestListDataWithHud:nil];
-        } else {
-            [self.tableView reloadData];
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
-        }
-    } failed:^(NSError *error) {
-        kStrongSelf(self);
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
-        [self.tableView reloadData];
-    }];
-}
+//- (void)editRowDataWithIndexPath:(NSIndexPath *)indexPath data:(NSString *)data switchStr:(NSString *)switchStr {
+//    NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:3];
+//    dic[@"dno"] = [CBCommonTools CBdeviceInfo].dno?:@"";
+//    if (self.arrayData.count > indexPath.row) {
+//        CBControlModel *model = self.arrayData[indexPath.row];
+//        NSString *titleStr = model.titleStr;
+//        if ([titleStr isEqualToString:Localized(@"单次定位")]) {
+//        } else if ([titleStr isEqualToString:Localized(@"休眠定位策略")]) {
+//            dic[@"dcdd"] = data;
+//        } else if ([titleStr isEqualToString:Localized(@"电子围栏")]) {
+//        } else if ([titleStr isEqualToString:Localized(@"断油断电")]) {
+//            if ([data isEqualToString: @"oil"]) {
+//                dic[@"oil"] = [NSString stringWithFormat: @"%d", self.listModel.oil];;
+//            }else {
+//                dic[@"dydd"] = data;
+//            }
+//        } else if ([titleStr isEqualToString:Localized(@"布防/撤防")]) {
+//            dic[@"cfbf"] = data;
+//        } else if ([titleStr isEqualToString:Localized(@"振动报警")]) {
+//            dic[@"warm_zd"] = data;
+//        } else if ([titleStr isEqualToString:Localized(@"低电报警")]) {
+//            dic[@"warm_didian"] = data;
+//        } else if ([titleStr isEqualToString:Localized(@"掉电报警")]) {
+//            dic[@"warm_diaodian"] = data;
+//        } else if ([titleStr isEqualToString:Localized(@"位移报警")]) {
+//            dic[@"warm_wy"] = data;  //位移开关
+//            if (switchStr) {
+//                dic[@"move_warm"] = data; //位移值
+//            }
+//        } else if ([titleStr isEqualToString:Localized(@"录音")]) {
+//            dic[@"voice"] = data;
+//        } else if ([titleStr isEqualToString:Localized(@"立即拍照")]) {
+//            dic[@"photo"] = data;
+//        } else if ([titleStr isEqualToString:Localized(@"请求OBD消息")]) {
+//            if ([data isEqualToString: @"ObdMsg"]) {
+//                dic[@"obdMsg"] = [NSString stringWithFormat: @"%d", self.listModel.obdMsg];
+//                dic[@"obd"] = @"1";  // 选择了时间，就开启了OBD消息
+//            }else {
+//                dic[@"obd"] = data;
+//            }
+//        } else if ([titleStr isEqualToString:Localized(@"电话回拨")]) {
+//            dic[@"phone"] = data;
+//        } else if ([titleStr isEqualToString:Localized(@"超速报警")]) {
+//            dic[@"over_warm"] = data;           //超速值
+//            if (switchStr) {
+//                dic[@"warm_speed"] = switchStr; //超速开关
+//            }
+//        } else if ([titleStr isEqualToString:Localized(@"信息服务下发")]) {
+//        } else if ([titleStr isEqualToString:Localized(@"云台控制")]) {
+//        } else if ([titleStr isEqualToString:Localized(@"多次拍照")]) {
+//        } else if ([titleStr isEqualToString:Localized(@"休眠模式")]) {
+//            dic[@"rest_mod"] = data;
+//        } else if ([titleStr isEqualToString:Localized(@"配置设备参数")]) {
+//        }
+//    }
+//#pragma mark -- 编辑开关类控制网络请求
+//    __weak __typeof__(self) weakSelf = self;
+//    [MBProgressHUD showHUDIcon:self.view animated:YES];
+//    kWeakSelf(self);
+//    [[NetWorkingManager shared] postWithUrl: @"devControlController/editSwitchParam" params: dic succeed:^(id response, BOOL isSucceed) {
+//        kStrongSelf(self);
+//        if (isSucceed) {
+//            [weakSelf requestListDataWithHud:nil];
+//        } else {
+//            [self.tableView reloadData];
+//            [MBProgressHUD hideHUDForView:self.view animated:YES];
+//        }
+//    } failed:^(NSError *error) {
+//        kStrongSelf(self);
+//        [MBProgressHUD hideHUDForView:self.view animated:YES];
+//        [self.tableView reloadData];
+//    }];
+//}
 //#pragma mark - PickerViewDelegate
 //- (void)minPickerView:(MINPickerView *)pickerView didSelectWithDic:(NSDictionary *)dic {
 //    NSNumber *number = dic[@"0"];
@@ -620,13 +620,23 @@
 - (void)clickType {
     NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
     [paramters setObject:@"0" forKey:@"warnStop"];
-    [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
     [self editControlNewRequest:paramters];
 }
 #pragma mark -- 布防/撤防
 - (void)arming_disarmingClick {
+    NSUInteger index = 0;
+    if ([self.listModel.silentArm isEqualToString:@"1"]) {
+        // 静音布防
+        index = 2;
+    } else if (self.listModel.cfbf == 1) {
+        // 布防
+        index = 0;
+    } else {
+        // 撤防
+        index = 1;
+    }
     [[CBCarAlertView viewWithChooseData:@[Localized(@"布防"),Localized(@"撤防"),Localized(@"静音布防")]
-                          selectedIndex:1
+                          selectedIndex:index
                                   title:_ControlConfigTitle_BFCF
                            didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
         
@@ -683,12 +693,16 @@
 }
 #pragma mark -- 终端设备开关设置
 - (void)editControlSwitchRequest:(NSMutableDictionary *)paramters {
+    [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     kWeakSelf(self);
     [[NetWorkingManager shared] postWithUrl: @"devControlController/editSwitchParam" params: paramters succeed:^(id response, BOOL isSucceed) {
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
-        [self requestListDataWithHud:nil];
+        if (isSucceed) {
+            [CBTopAlertView alertSuccess:Localized(@"操作成功")];
+            [self requestListDataWithHud:nil];
+        }
     } failed:^(NSError *error) {
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -696,13 +710,17 @@
 }
 #pragma mark -- 终端设备参数设置 -- 新增
 - (void)editControlNewRequest:(NSMutableDictionary *)paramters {
+    [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     kWeakSelf(self);
-    [[CBNetworkRequestManager sharedInstance] terminalSettingParamters:paramters success:^(CBBaseNetworkModel * _Nonnull baseModel) {
+    [[NetWorkingManager shared] postWithUrl:@"/devControlController/updateDeviceStatus" params:paramters succeed:^(id response, BOOL isSucceed) {
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
-        [self requestListDataWithHud:nil];
-    } failure:^(NSError * _Nonnull error) {
+        if (isSucceed) {
+            [CBTopAlertView alertSuccess:Localized(@"操作成功")];
+            [self requestListDataWithHud:nil];
+        }
+    } failed:^(NSError *error) {
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
     }];

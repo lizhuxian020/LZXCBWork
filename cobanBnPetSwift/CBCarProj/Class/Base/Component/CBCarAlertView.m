@@ -182,7 +182,7 @@
     __weak CBBasePopView *wpopView = popView;
     __weak CBAlertSelectableView *wc = c;
     [alertView setDidClickConfirm:^{
-        confirmBlk(dataArr[wc.currentIndex], 0);
+        confirmBlk(dataArr[wc.currentIndex], wc.currentIndex);
         [wpopView dismiss];
     }];
     [alertView setDidClickCancel:^{
