@@ -246,19 +246,19 @@
         } else if ([titleStr isEqualToString:_ControlConfigTitle_ACCGZTZ]) {
             self.detailLabel.hidden = YES;
             self.detailImageView.hidden = YES;
-        } else if ([titleStr isEqualToString:Localized(@"漂移抑制")]) {
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_PYYZ]) {
             self.detailLabel.hidden = YES;
             self.detailImageView.hidden = YES;
-        } else if ([titleStr isEqualToString:Localized(@"设置转弯补报角度(<180°)")]) {
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_SZZWBBJD]) {
             self.switchView.hidden = YES;
-        } else if ([titleStr isEqualToString:Localized(@"设置报警短信发送次数")]) {
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_SZBJDXFSCS]) {
             self.switchView.hidden = YES;
-        } else if ([titleStr isEqualToString:Localized(@"设置心跳间隔")]) {
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_SZXTJG]) {
             self.switchView.hidden = YES;
-        } else if ([titleStr isEqualToString:Localized(@"设备重启")]) {
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_SBCQ]) {
             self.detailLabel.hidden = YES;
             self.switchView.hidden = YES;
-        } else if ([titleStr isEqualToString:Localized(@"振动灵敏度")]) {
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_ZDLMD]) {
             self.switchView.hidden = YES;
         } else if ([titleStr isEqualToString:Localized(@"服务器转移")]) {
             self.detailLabel.hidden = YES;
@@ -268,6 +268,7 @@
 }
 - (void)setControlListModel:(MINControlListDataModel *)controlListModel {
     _controlListModel = controlListModel;
+    self.detailLabel.hidden = YES;
     if (controlListModel) {
         NSString *titleStr = _controlModel.titleStr;
         // 控制
@@ -305,18 +306,14 @@
         }
         // 终端设置
         else if ([titleStr isEqualToString:_ControlConfigTitle_SQSZ]) {
+            self.detailLabel.hidden = NO;
             self.detailLabel.text = _controlListModel.timeZone;
-       } else if ([titleStr isEqualToString:Localized(@"休眠模式")]) {
-            if (controlListModel.restMod < 6) {
-                self.detailLabel.text = [self restArr][0][controlListModel.restMod];
-            } else {
-                self.detailLabel.text = Localized(@"始终在线");
-            }
-        } else if ([titleStr isEqualToString:_ControlConfigTitle_ACCGZTZ]) {
+       } else if ([titleStr isEqualToString:_ControlConfigTitle_ACCGZTZ]) {
             self.switchView.on = !controlListModel.accNotice;
-        } else if ([titleStr isEqualToString:Localized(@"漂移抑制")]) {
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_PYYZ]) {
             self.switchView.on = !controlListModel.gpsFloat;
-        } else if ([titleStr isEqualToString:Localized(@"振动灵敏度")]) {
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_ZDLMD]) {
+            self.detailLabel.hidden = NO;
             switch (controlListModel.sensitivity) {
                 case 1:
                     self.detailLabel.text = Localized(@"高");
@@ -340,17 +337,25 @@
     _configurationModel = configurationModel;
     if (configurationModel) {
         NSString *titleStr = self.controlModel.titleStr;
-        if (([titleStr isEqualToString:Localized(@"设置油箱容积(L)")])) {
+        if (([titleStr isEqualToString:_ControlConfigTitle_SZYXRJ])) {
+            self.detailLabel.hidden = NO;
             self.detailLabel.text = [NSString stringWithFormat: @"%d", configurationModel.volume];
-        } else if ([titleStr isEqualToString:Localized(@"设置里程初始值(m)")]) {
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_SZYLJZ]) {
+            self.detailLabel.hidden = NO;
+            self.detailLabel.text = configurationModel.oilValidate == 0 ? Localized(@"零值校准") : Localized(@"满值校准");
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_SZLCCSZ]) {
+            self.detailLabel.hidden = NO;
             self.detailLabel.text = [NSString stringWithFormat: @"%d", configurationModel.mileage];
-        } else if ([titleStr isEqualToString:Localized(@"设置转弯补报角度(<180°)")]) {
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_SZZWBBJD]) {
+            self.detailLabel.hidden = NO;
             self.detailLabel.text = [NSString stringWithFormat: @"%d", configurationModel.angle];
-        } else if ([titleStr isEqualToString:Localized(@"设置报警短信发送次数")]) {
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_SZBJDXFSCS]) {
+            self.detailLabel.hidden = NO;
             self.detailLabel.text = [NSString stringWithFormat: @"%d", configurationModel.sendMsgLimit];
-        } else if ([titleStr isEqualToString:Localized(@"设置心跳间隔")]) {
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_SZXTJG]) {
+            self.detailLabel.hidden = NO;
             self.detailLabel.text = [NSString stringWithFormat: @"%@", configurationModel.heartbeatInterval];
-        } else if ([titleStr isEqualToString:Localized(@"设置短信密码")]) {
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_SZDXMM]) {
             self.detailLabel.hidden = NO;
             self.detailLabel.text = configurationModel.password?:@"";
         }
@@ -422,7 +427,7 @@
 }
 - (void)switchViewDidChange:(UISwitch *)switchView {
     if (self.switchStateChangeBlock) {
-        self.switchStateChangeBlock(self.indexPath, !switchView.isOn);
+        self.switchStateChangeBlock(self.indexPath, switchView.isOn);
     }
 }
 @end

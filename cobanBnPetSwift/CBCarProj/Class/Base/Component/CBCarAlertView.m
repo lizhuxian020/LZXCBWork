@@ -305,6 +305,7 @@
         delegate;
         NSInteger index = [pickView selectedRowInComponent:0];
         NSLog(@"---seleted: %@", arrayData[index]);
+        confirmBlk(arrayData[index]);
         [wpopView dismiss];
     }];
     [alertView setDidClickCancel:^{

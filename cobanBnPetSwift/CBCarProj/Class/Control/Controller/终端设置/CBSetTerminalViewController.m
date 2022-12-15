@@ -67,46 +67,12 @@
 - (NSMutableArray *)arrayData {
     if (!_arrayData) {
         _arrayData = [NSMutableArray array];
-        NSArray *arrayTitle = @[
-            _ControlConfigTitle_SQSZ,
-            _ControlConfigTitle_SZDXMM,
-            _ControlConfigTitle_SZSQHM,
-//            Localized(@"始终在线") ,
-//            Localized(@"休眠模式"),
-            _ControlConfigTitle_SZYXRJ,
-            _ControlConfigTitle_SZYLJZ,
-            _ControlConfigTitle_SZLCCSZ,
-//            Localized(@"疲劳驾驶参数设置"),
-//            Localized(@"碰撞报警参数设置"),
-            _ControlConfigTitle_ACCGZTZ,
-            _ControlConfigTitle_PYYZ,
-            _ControlConfigTitle_SZZWBBJD,
-            _ControlConfigTitle_SZBJDXFSCS,
-            _ControlConfigTitle_SZXTJG,
-            _ControlConfigTitle_ZDLMD,
-            _ControlConfigTitle_CSHSZ,
-            _ControlConfigTitle_SBCQ,
-        ];//Localized(@"服务器转移")
-        NSArray *arrayTitleImage = @[
-            @"时区设置",
-            @"设置短信密码",
-            @"设置授权号码",
-//            @"休眠",
-//            @"休眠",
-            @"设置油箱容积",
-            @"设置油量校准",
-            @"设置里程初始值",
-//            @"GPS-疲劳驾驶",
-//            @"碰撞报警",
-            @"ACC工作通知",
-            @"漂移抑制",
-            @"设置转弯补报角度",
-            @"设置报警发送次数",
-            @"设置心跳间隔",
-            @"振动灵敏度",
-            @"初始化设置",
-            @"设备重启"
-        ];//@"网络-"
+        __block NSArray *arrayTitle = nil;
+        __block NSArray *arrayTitleImage = nil;
+        [CBDeviceTool.shareInstance getDeviceConfigData:^(NSArray * _Nonnull _arrayTitle, NSArray * _Nonnull _arrayTitleImage) {
+            arrayTitle = _arrayTitle;
+            arrayTitleImage = _arrayTitleImage;
+        }];
         for (int i = 0 ; i < arrayTitle.count ; i ++ ) {
             CBControlModel *controlModel = [[CBControlModel alloc]init];
             controlModel.titleStr = arrayTitle[i];
@@ -202,15 +168,6 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.arrayData.count;
 }
-//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    return 62.5*KFitHeightRate;
-//}
-//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-//    return 12.5 * KFitHeightRate;
-//}
-//- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-//    return [[UIView alloc] initWithFrame: CGRectMake(0, 0, SCREEN_HEIGHT, 12.5 * KFitHeightRate)];
-//}
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *cellID = @"cellID";
     ControlTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
@@ -229,11 +186,7 @@
             kStrongSelf(self);
             NSLog(@"%ld %d", (long)indexPath.row , isON);
             NSLog(@"点击的类型%@ %d", model.titleStr , isON);
-            if (isON == YES) {
-                [self terminalSwitchClick:model.titleStr status:@"1"];
-            } else {
-                [self terminalSwitchClick:model.titleStr status:@"0"];
-            }
+            [self terminalSwitchClick:model.titleStr status:isON ? @"1" : @"0"];
         };
     }
     return cell;
@@ -335,81 +288,130 @@
 }
 #pragma mark -- 各种弹框
 - (void)showSQSZ {
+    kWeakSelf(self);
     [[CBCarAlertView viewWithSQSZTitle:_ControlConfigTitle_SQSZ initText:self.termialControlStatusModel.timeZone confrim:^(NSString * _Nonnull contentStr) {
-                
+        NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
+            @"timeZone": contentStr,
+        }];
+        [weakself terminalEditControlNewRequest:param];
     }] pop];
 }
 
 - (void)showSZDXMM {
+    kWeakSelf(self);
     [[CBCarAlertView viewWithMultiInput:@[Localized(@"输入6位短信密码"),Localized(@"请再次输入密码")] title:_ControlConfigTitle_SZDXMM  isDigital:YES confirmCanDismiss:^BOOL(NSArray<NSString *> * _Nonnull contentStr) {
+        if (kStringIsEmpty(contentStr.firstObject) || kStringIsEmpty(contentStr.lastObject)) {
+            [HUD showHUDWithText:Localized(@"参数不能为空")];
+            return NO;
+        }
         if ([contentStr.firstObject isEqualToString:contentStr.lastObject]) {
+            if (contentStr.firstObject.length != 6) {
+                [HUD showHUDWithText:Localized(@"请输入6位数的密码")];
+                return NO;
+            }
             return YES;
         } else {
-            [HUD showHUDWithText:@"密码不一致"];
+            [HUD showHUDWithText:Localized(@"两次输入的密码不一致")];
             return NO;
         }
     } confrim:^(NSArray<NSString *> * _Nonnull contentStr) {
-        NSLog(@"%@", contentStr);
+        NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
+            @"password": contentStr.firstObject,
+        }];
+        [weakself terminalEditControlNewRequest:param];
     }] pop];
 }
 - (void)showSZYXRJ {
-    [[CBCarAlertView viewWithMultiInput:@[Localized(@"输入油箱容积(L)")] title:_ControlConfigTitle_SZYXRJ isDigital:YES confirmCanDismiss:^BOOL(NSArray<NSString *> * _Nonnull contentStr) {
-        return NO;
-    } confrim:^(NSArray<NSString *> * _Nonnull contentStr) {
-        NSLog(@"%@", contentStr);
+    kWeakSelf(self);
+    [[CBCarAlertView viewWithMultiInput:@[Localized(@"输入油箱容积(L)")] title:_ControlConfigTitle_SZYXRJ isDigital:YES confirmCanDismiss:nil confrim:^(NSArray<NSString *> * _Nonnull contentStr) {
+        NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
+            @"volume": contentStr.firstObject,
+        }];
+        [weakself terminalEditControlNewRequest:param];
     }] pop];
 }
 
 - (void)showSZYLJZ {
-    [[CBCarAlertView viewWithChooseData:@[Localized(@"零值校准"),Localized(@"满值校准")] selectedIndex:0 title:_ControlConfigTitle_SZYLJZ didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
+    kWeakSelf(self);
+    [[CBCarAlertView viewWithChooseData:@[Localized(@"零值校准"),Localized(@"满值校准")] selectedIndex:self.configurationModel.oilValidate title:_ControlConfigTitle_SZYLJZ didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
         
     } confrim:^(NSString * _Nonnull contentStr, NSInteger index) {
-        
+        NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
+            @"oil_validate": @(index),
+        }];
+        [weakself terminalEditControlNewRequest:param];
     }] pop];
 }
 - (void)showSZLCCSZ {
-    [[CBCarAlertView viewWithMultiInput:@[Localized(@"输入里程初始值(m)")] title:_ControlConfigTitle_SZLCCSZ isDigital:YES confirmCanDismiss:^BOOL(NSArray<NSString *> * _Nonnull contentStr) {
-        return NO;
-    } confrim:^(NSArray<NSString *> * _Nonnull contentStr) {
-        
+    kWeakSelf(self);
+    [[CBCarAlertView viewWithMultiInput:@[Localized(@"输入里程初始值(m)")] title:_ControlConfigTitle_SZLCCSZ isDigital:YES confirmCanDismiss:nil confrim:^(NSArray<NSString *> * _Nonnull contentStr) {
+        NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
+            @"mileage": contentStr.firstObject,
+        }];
+        [weakself terminalEditControlNewRequest:param];
     }] pop];
 }
 - (void)showSZZWBBJD {
-    [[CBCarAlertView viewWithMultiInput:@[Localized(@"输入转弯补报角度°")] title:_ControlConfigTitle_SZZWBBJD isDigital:YES confirmCanDismiss:^BOOL(NSArray<NSString *> * _Nonnull contentStr) {
-        return NO;
-    } confrim:^(NSArray<NSString *> * _Nonnull contentStr) {
-        
+    kWeakSelf(self);
+    [[CBCarAlertView viewWithMultiInput:@[Localized(@"输入转弯补报角度°")] title:_ControlConfigTitle_SZZWBBJD isDigital:YES confirmCanDismiss:nil confrim:^(NSArray<NSString *> * _Nonnull contentStr) {
+        NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
+            @"angle": contentStr.firstObject,
+        }];
+        [weakself terminalEditControlNewRequest:param];
     }] pop];
 }
 - (void)showSZBJDXFSCS {
-    [[CBCarAlertView viewWithMultiInput:@[Localized(@"输入发送次数")] title:_ControlConfigTitle_SZBJDXFSCS isDigital:YES  confirmCanDismiss:^BOOL(NSArray<NSString *> * _Nonnull contentStr) {
-        return NO;
-    } confrim:^(NSArray<NSString *> * _Nonnull contentStr) {
-        
+    kWeakSelf(self);
+    [[CBCarAlertView viewWithMultiInput:@[Localized(@"输入发送次数")] title:_ControlConfigTitle_SZBJDXFSCS isDigital:YES  confirmCanDismiss:nil confrim:^(NSArray<NSString *> * _Nonnull contentStr) {
+        NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
+            @"send_msg_limit": contentStr.firstObject,
+        }];
+        [weakself terminalEditControlNewRequest:param];
     }] pop];
 }
 - (void)showSZXTJG {
-    [[CBCarAlertView viewWithMultiInput:@[Localized(@"输入心跳间隔")] title:_ControlConfigTitle_SZXTJG isDigital:YES  confirmCanDismiss:^BOOL(NSArray<NSString *> * _Nonnull contentStr) {
-        return NO;
+    kWeakSelf(self);
+    [[CBCarAlertView viewWithMultiInput:@[Localized(@"输入心跳间隔")] title:_ControlConfigTitle_SZXTJG isDigital:YES  confirmCanDismiss:^(NSArray<NSString *> *contentStr){
+        if (kStringIsEmpty(contentStr.firstObject)) {
+            [HUD showHUDWithText:Localized(@"参数不呢为空")];
+            return NO;
+        }
+        if (contentStr.firstObject.intValue < 60) {
+            [HUD showHUDWithText:Localized(@"心跳间隔不能低于60秒")];
+            return NO;
+        }
+        return YES;
     } confrim:^(NSArray<NSString *> * _Nonnull contentStr) {
-        
+        NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
+            @"heartbeat_Interval": contentStr.firstObject,
+        }];
+        [weakself terminalEditControlNewRequest:param];
     }] pop];
 }
 - (void)showZDLMD {
-    [[CBCarAlertView viewWithChooseData:@[Localized(@"高"), Localized(@"中"), Localized(@"低")] selectedIndex:0 title:_ControlConfigTitle_ZDLMD didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
+    kWeakSelf(self);
+    NSInteger index = (self.termialControlStatusModel.sensitivity - 1) >= 0 ? (self.termialControlStatusModel.sensitivity - 1) : 0;
+    [[CBCarAlertView viewWithChooseData:@[Localized(@"高"), Localized(@"中"), Localized(@"低")] selectedIndex:index title:_ControlConfigTitle_ZDLMD didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
             
     } confrim:^(NSString * _Nonnull contentStr, NSInteger index) {
-        
+        NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
+            @"sensitivity": @(index+1),
+        }];
+        [weakself terminalEditControlNewRequest:param];
     }] pop];
 }
 - (void)showCSHSZ {
+    kWeakSelf(self);
     [[CBCarAlertView viewWithAlertTips:Localized(@"确定初始化?") title:_ControlConfigTitle_CSHSZ confrim:^(NSString * _Nonnull contentStr) {
-                
+        NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
+        [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
+        [weakself terminalInitRequest:paramters];
     }] pop];
 }
 - (void)showSBCQ {
+    kWeakSelf(self);
     [[CBCarAlertView viewWithAlertTips:Localized(@"确定重启?") title:_ControlConfigTitle_SBCQ confrim:^(NSString * _Nonnull contentStr) {
-                
+        [weakself rebootDeviceRequest];
     }] pop];
 }
 #pragma mark -- 开关点击
@@ -418,102 +420,14 @@
     [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
     if ([titleStr isEqualToString:_ControlConfigTitle_ACCGZTZ]) {
         [paramters setObject:status forKey:@"accNotice"];
-        [self terminalEditControlNewRequest:paramters];
     } else if ([titleStr isEqualToString:_ControlConfigTitle_PYYZ]) {
         [paramters setObject:status forKey:@"gpsFloat"];
-        [self terminalEditControlNewRequest:paramters];
     }
-}
-#pragma mark -- 警告弹窗代理 -- 代理
-- (void)clickType:(NSString *)title {
-    NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
-    [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
-    if ([title isEqualToString:Localized(@"初始化设置")] || [title isEqualToString:Localized(@"设备重启")]) {
-        [self terminalInitRequest:paramters];
-    } else if ([title isEqualToString:Localized(@"始终在线")]) {
-        [paramters setObject:@"0" forKey:@"rest_mod"];
-        [self terminalEditControlSwitchRequest:paramters];
-    }
-}
-#pragma mark -- 输入弹窗代理 -- 代理
-- (void)updateTextFieldValue:(NSString *)inputStr returnTitle:(NSString *)title {
-    NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
-    [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
-    if ([title isEqualToString:_ControlConfigTitle_SZDXMM]) {
-        if (inputStr.length != 6) {
-            [HUD showHUDWithText:[Utils getSafeString:Localized(@"请输入6位数的密码")] withDelay:2.0];
-            return;
-        }
-        [paramters setObject:inputStr forKey:@"password"];
-    } else if ([title isEqualToString:Localized(@"设置油箱容积(L)")]) {
-        [paramters setObject:inputStr forKey:@"volume"];
-    } else if ([title isEqualToString:Localized(@"设置里程初始值(m)")]) {
-        [paramters setObject:inputStr forKey:@"mileage"];
-    } else if ([title isEqualToString:Localized(@"设置转弯补报角度(<180°)")]) {
-        [paramters setObject:inputStr forKey:@"angle"];
-    } else if ([title isEqualToString:Localized(@"设置报警短信发送次数")]) {
-        [paramters setObject:inputStr forKey:@"send_msg_limit"];
-    } else if ([title isEqualToString:Localized(@"设置心跳间隔")]) {
-        [paramters setObject:inputStr forKey:@"heartbeat_Interval"];
-    }
-    [self terminalEditControlParamRequest:paramters];
-}
-#pragma mark -- 选择振动灵敏度弹窗代理 -- 代理
-- (void)pickerPopViewClickIndex:(NSInteger)index {
-    NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
-    [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
-    switch (index) {
-        case 100:
-        {
-            [paramters setObject:@"1" forKey:@"sensitivity"];
-            [self terminalEditControlNewRequest:paramters];
-        }
-            break;
-        case 101:
-        {
-            [paramters setObject:@"2" forKey:@"sensitivity"];
-            [self terminalEditControlNewRequest:paramters];
-        }
-            break;
-        case 102:
-        {
-            [paramters setObject:@"3" forKey:@"sensitivity"];//sensitivity  //silentArm
-            [self terminalEditControlNewRequest:paramters];
-        }
-            break;
-        default:
-            break;
-    }
-}
-#pragma mark -- 设置休眠模式弹窗代理 -- 代理
-- (void)pickerRestPopViewClickIndex:(NSInteger)index time:(NSString *)time unit:(NSString *)unit {
-    NSLog(@"标题顺序%ld  时间:%@  单位:%@",(long)index,time,unit);
-    NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
-    [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
-    if (index == 4 || index == 5) {
-        if (time.length <= 0) {
-            [HUD showHUDWithText:[Utils getSafeString:Localized(@"任何一项都不能为空")] withDelay:2.0];
-            return;
-        } else if (unit.length <= 0) {
-            [HUD showHUDWithText:[Utils getSafeString:Localized(@"任何一项都不能为空")] withDelay:2.0];
-            return;
-        }
-        [paramters setObject:time forKey:@"fixAwakenTime"];
-        [paramters setObject:unit forKey:@"fixAwakenTimeUnit"];
-    }
-    [paramters setObject:[NSString stringWithFormat:@"%ld",(long)index] forKey:@"rest_mod"];
-    NSLog(@"参数:------%@--------",paramters);
-    [self terminalEditControlSwitchRequest:paramters];
-}
-#pragma mark -- 油量校准弹窗代理 -- 代理
-- (void)selectOilValueType:(NSString *)oilVale {
-    NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
-    [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
-    [paramters setObject:oilVale forKey:@"oil_validate"];
-    [self terminalEditControlParamRequest:paramters];
+    [self terminalEditControlNewRequest:paramters];
 }
 #pragma mark -- 终端设备开关设置
 - (void)terminalEditControlSwitchRequest:(NSMutableDictionary *)paramters {
+    [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     kWeakSelf(self);
     [[NetWorkingManager shared] postWithUrl:@"devControlController/editSwitchParam" params: paramters succeed:^(id response, BOOL isSucceed) {
@@ -528,12 +442,15 @@
 }
 #pragma mark -- 终端设备参数设置
 - (void)terminalEditControlParamRequest:(NSMutableDictionary *)paramters {
+    [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     kWeakSelf(self);
     [[NetWorkingManager shared] postWithUrl:@"devParamController/editDevConf" params: paramters succeed:^(id response, BOOL isSucceed) {
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
-        [self getTerminalSettingReqeust];
+        if (isSucceed) {
+            [self getTerminalSettingReqeust];
+        }
     } failed:^(NSError *error) {
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -541,14 +458,14 @@
 }
 #pragma mark -- 终端设备参数设置 -- 新增
 - (void)terminalEditControlNewRequest:(NSMutableDictionary *)paramters {
+    [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     kWeakSelf(self);
-    [[CBNetworkRequestManager sharedInstance] terminalSettingParamters:paramters success:^(CBBaseNetworkModel * _Nonnull baseModel) {
+    [[NetWorkingManager shared] postWithUrl:@"/devControlController/updateDeviceStatus" params:paramters succeed:^(id response, BOOL isSucceed) {
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         [self terminalGetControlStatusRequest];
-        
-    } failure:^(NSError * _Nonnull error) {
+    } failed:^(NSError *error) {
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
     }];
@@ -560,11 +477,37 @@
     [[NetWorkingManager shared] postWithUrl:@"devParamController/resetDevice" params: paramters succeed:^(id response, BOOL isSucceed) {
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
+        if (isSucceed) {
+            [CBTopAlertView alertSuccess:Localized(@"初始化成功")];
+            [self getTerminalSettingReqeust];
+            [self terminalGetControlStatusRequest];
+        }
     } failed:^(NSError *error) {
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
     }];
 }
+
+#pragma mark -- 设备重启
+- (void)rebootDeviceRequest {
+    NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:1];
+    dic[@"dno"] = [CBCommonTools CBdeviceInfo].dno?:@"";
+    //MBProgressHUD *hud = [MINUtils hudToView: self.view withText: Localized(@"加载中...")];
+    [MBProgressHUD showHUDIcon:self.view animated:YES];
+    kWeakSelf(self);
+    [[NetWorkingManager shared]postWithUrl:@"devParamController/rebootDevice" params: dic succeed:^(id response,BOOL isSucceed) {
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        if (isSucceed) {
+            [CBTopAlertView alertSuccess:Localized(@"重启成功")];
+            [self getTerminalSettingReqeust];
+            [self terminalGetControlStatusRequest];
+        }
+    } failed:^(NSError *error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    }];
+}
+
 /*
 #pragma mark - Navigation
 

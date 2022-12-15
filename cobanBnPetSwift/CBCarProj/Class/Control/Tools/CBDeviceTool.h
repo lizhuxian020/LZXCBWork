@@ -23,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)didChooseDevice:(CBHomeLeftMenuDeviceInfoModel *)currentModel;
 
 - (void)getControlData:(void(^)(NSArray *arrayTitle ,NSArray *arrayTitleImage))blk;
+
+- (void)getDeviceConfigData:(void(^)(NSArray *arrayTitle ,NSArray *arrayTitleImage))blk;
 @end
 
 NS_ASSUME_NONNULL_END

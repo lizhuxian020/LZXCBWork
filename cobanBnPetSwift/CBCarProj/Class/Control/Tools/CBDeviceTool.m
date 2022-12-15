@@ -202,7 +202,7 @@
         @(_currentProductSpec.arm),
         @(_currentProductSpec.motorControl),
         @(_currentProductSpec.remoteStart),
-        @(_currentProductSpec.arm||_currentProductSpec.silentArm||_currentProductSpec.disarm),
+        @(_currentProductSpec.arm),
         @(_currentProductSpec.callChargeInquiry),
         @(1), //TODO: lzxTODO 哪里的?
     ];
@@ -226,5 +226,75 @@
     return;
 }
 
-
+- (void)getDeviceConfigData:(void(^)(NSArray *arrayTitle ,NSArray *arrayTitleImage))blk {
+    NSMutableArray *titleMArr = [NSMutableArray new];
+    NSMutableArray *imageMArr = [NSMutableArray new];
+    [titleMArr addObjectsFromArray:@[
+        _ControlConfigTitle_SQSZ,
+        _ControlConfigTitle_SZDXMM,
+        _ControlConfigTitle_SZSQHM,
+        _ControlConfigTitle_SZYXRJ,
+        _ControlConfigTitle_SZYLJZ,
+        _ControlConfigTitle_SZLCCSZ,
+        _ControlConfigTitle_ACCGZTZ,
+        _ControlConfigTitle_PYYZ,
+        _ControlConfigTitle_SZZWBBJD,
+        _ControlConfigTitle_SZBJDXFSCS,
+        _ControlConfigTitle_SZXTJG,
+        _ControlConfigTitle_ZDLMD,
+        _ControlConfigTitle_CSHSZ,
+        _ControlConfigTitle_SBCQ,
+    ]];
+    [imageMArr addObjectsFromArray:@[
+        @"时区设置",
+        @"设置短信密码",
+        @"设置授权号码",
+        @"设置油箱容积",
+        @"设置油量校准",
+        @"设置里程初始值",
+        @"ACC工作通知",
+        @"漂移抑制",
+        @"设置转弯补报角度",
+        @"设置报警发送次数",
+        @"设置心跳间隔",
+        @"振动灵敏度",
+        @"初始化设置",
+        @"设备重启"
+    ]];
+    
+    NSArray *showArr = @[
+        @(_currentProductSpec.timeSet),
+        @(_currentProductSpec.passwordSet),
+        @(_currentProductSpec.authCode),
+        @(_currentProductSpec.tankVolume),
+        @(_currentProductSpec.fuelSensorCalibration),
+        @(_currentProductSpec.mileageInitialValue),
+        @(_currentProductSpec.accWorkNotice),
+        @(_currentProductSpec.gpsDriftSuppression),
+        @(_currentProductSpec.turnSupplement),
+        @(1), //TODO: lzxTODO 哪里的?
+        @(_currentProductSpec.setGprsHeartbeat),
+        @(_currentProductSpec.sensitivitySet),
+        @(_currentProductSpec.initializeSet),
+        @(_currentProductSpec.hardwareReboot),
+    ];
+    
+    if (!self.currentProductSpec) {
+        blk(titleMArr, imageMArr);
+        return;
+    }
+    NSMutableArray *waitToRemoveTitle = [NSMutableArray new];
+    NSMutableArray *waitToRemoveImg = [NSMutableArray new];
+    for (int i = 0; i < showArr.count; i++) {
+        if ([showArr[i] boolValue] == NO) {
+            [waitToRemoveTitle addObject:titleMArr[i]];
+            [waitToRemoveImg addObject:imageMArr[i]];
+        }
+    }
+    [titleMArr removeObjectsInArray:waitToRemoveTitle];
+    [imageMArr removeObjectsInArray:waitToRemoveImg];
+    
+    blk(titleMArr, imageMArr);
+    
+}
 @end
