@@ -75,6 +75,7 @@ static AFHTTPSessionManager *afManager = nil;
 
 - (void)__postWithUrl:(NSString *)url params:(NSDictionary *)params succeed:(Succeed)succeed failed:(Failed)failed {
     //NSLog(@"----uid:%d -----",[UserLoginModelManager shareManager].userInfoModel.uid);
+    afManager.requestSerializer.timeoutInterval = 20;
     CBPetLoginModel *userInfoModel = [CBPetLoginModelTool getUser];
     [afManager.requestSerializer setValue:userInfoModel.token?:@"" forHTTPHeaderField:@"token"];
     [afManager.requestSerializer setValue:[NSString stringWithFormat:@"%@",userInfoModel.uid] forHTTPHeaderField:@"uid"];
@@ -163,6 +164,7 @@ static AFHTTPSessionManager *afManager = nil;
     afManager.requestSerializer = [AFHTTPRequestSerializer serializer];
     //NSLog(@"----uid:%d -----",[UserLoginModelManager shareManager].userInfoModel.uid);
     CBPetLoginModel *userModel = [CBPetLoginModelTool getUser];
+    afManager.requestSerializer.timeoutInterval = 20;
     [afManager.requestSerializer setValue:userModel.token?:@"" forHTTPHeaderField:@"token"];
     [afManager.requestSerializer setValue:[NSString stringWithFormat:@"%@",userModel.uid] forHTTPHeaderField:@"uid"];
     NSString *newUrl = [BASE_URL_CarNet stringByAppendingString:[NSString stringWithFormat:@"%@",[url hasStringInPrefix:@"/"]]];

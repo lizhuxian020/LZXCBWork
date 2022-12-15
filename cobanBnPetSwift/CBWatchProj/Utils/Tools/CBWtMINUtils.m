@@ -294,6 +294,13 @@
     return dateString;
 }
 
++ (NSTimeInterval)getTimeIntervalWithTimeString:(NSString *)timeString formatter:(NSString *)formatterString {
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat: formatterString];
+    NSDate *date = [formatter dateFromString:timeString];
+    return [date timeIntervalSince1970];
+}
+
 + (NSDate *)getDateFromTimestamp:(NSString *)timestamp
 {
     NSDate * date = [NSDate dateWithTimeIntervalSince1970:[timestamp doubleValue] / 1000];

@@ -138,10 +138,9 @@
     }];
     
     UIImageView *arrow = [UIImageView new];
-    arrow.image = [UIImage imageNamed:@"右边"];
+    arrow.image = [UIImage imageNamed:@"查看"];
     [v addSubview:arrow];
     [arrow mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.height.equalTo(@12);
         make.centerY.equalTo(@0);
         make.right.equalTo(@-10);
     }];
@@ -150,7 +149,7 @@
         UIImageView *imgV = nil;
         if (isTime) {
             UIImageView *time = [UIImageView new];
-            time.image = [UIImage imageNamed:@"右边"];
+            time.image = [UIImage imageNamed:@"时间-可点击"];
             [v addSubview:time];
             [time mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.width.height.equalTo(@15);
@@ -191,22 +190,24 @@
 - (void)setModel:(_CBInstallInfo *)model {
     _model = model;
     
-    [self setLbl:self.installerLbl text:nil placeHolder:Localized(@"请输入")];
-    [self setLbl:self.companyLbl text:nil placeHolder:Localized(@"请输入")];
-    [self setLbl:self.timeLbl text:nil placeHolder:Localized(@"请设置时间")];
-    [self setLbl:self.placeLbl text:nil placeHolder:Localized(@"请输入")];
-    [self setLbl:self.driverLbl text:nil placeHolder:Localized(@"请输入")];
-    [self setLbl:self.phoneLbl text:nil placeHolder:Localized(@"请输入")];
-    [self setLbl:self.vinLbl text:nil placeHolder:Localized(@"请输入")];
-    [self setLbl:self.engineLbl text:nil placeHolder:Localized(@"请输入")];
-    [self setLbl:self.brandLbl text:nil placeHolder:Localized(@"请输入")];
+    
+    [self setLbl:self.installerLbl text:_model.installer placeHolder:Localized(@"请输入")];
+    [self setLbl:self.companyLbl text:_model.installCompany placeHolder:Localized(@"请输入")];
+    NSString *installTime = kStringIsEmpty(_model.installTime) ? @"" : [CBWtMINUtils getTimeFromTimestamp:_model.installTime formatter: @"yyyy-MM-dd HH:mm:ss"];
+    [self setLbl:self.timeLbl text:installTime placeHolder:Localized(@"请设置时间")];
+    [self setLbl:self.placeLbl text:_model.installLocation placeHolder:Localized(@"请输入")];
+    [self setLbl:self.driverLbl text:_model.driverName placeHolder:Localized(@"请输入")];
+    [self setLbl:self.phoneLbl text:_model.installMobile placeHolder:Localized(@"请输入")];
+    [self setLbl:self.vinLbl text:_model.vinCode placeHolder:Localized(@"请输入")];
+    [self setLbl:self.engineLbl text:_model.engineNumber placeHolder:Localized(@"请输入")];
+    [self setLbl:self.brandLbl text:_model.vehicleBrand placeHolder:Localized(@"请输入")];
     
     self.imgView.image = [UIImage imageNamed:@"选项-选中"];
 }
 
 - (void)setLbl:(UILabel *)lbl text:(NSString *)text placeHolder:(NSString *)placeHolder{
-    lbl.text = text ?: placeHolder;
-    lbl.textColor = text ? kCellTextColor : kTextFieldColor;
+    lbl.text = kStringIsEmpty(text) ? placeHolder : text;
+    lbl.textColor = kStringIsEmpty(text) ? kTextFieldColor : kCellTextColor;
 }
 
 - (void)showInput:(BOOL)isNum :(NSString *)placeHolder :(UILabel *)lbl {
@@ -340,5 +341,27 @@
 
 - (UIViewController *)getVC {
     return UIApplication.sharedApplication.keyWindow.rootViewController;
+}
+
+- (NSDictionary *)getSaveInfo {
+    NSMutableDictionary *param = [NSMutableDictionary new];
+    [self addParam:param key:@"installer" label:self.installerLbl];
+    [self addParam:param key:@"installCompany" label:self.companyLbl];
+    [self addParam:param key:@"installTime" label:self.timeLbl];
+    [self addParam:param key:@"installLocation" label:self.placeLbl];
+    [self addParam:param key:@"driverName" label:self.driverLbl];
+    [self addParam:param key:@"installerMobile" label:self.phoneLbl];
+    [self addParam:param key:@"vinCode" label:self.vinLbl];
+    [self addParam:param key:@"engineNumber" label:self.engineLbl];
+    [self addParam:param key:@"vehicleBrand" label:self.brandLbl];
+    NSString *dno = [CBCommonTools CBdeviceInfo].dno?:@"";
+    param[@"dno"] = dno;
+    return param;
+}
+
+- (void)addParam:(NSMutableDictionary *)param key:(NSString *)key label:(UILabel *)lbl {
+    if (!kStringIsEmpty(lbl.text) && ![lbl.text isEqualToString:Localized(@"请设置时间")] && ![lbl.text isEqualToString:Localized(@"请输入")]) {
+        param[key] = lbl.text;
+    }
 }
 @end

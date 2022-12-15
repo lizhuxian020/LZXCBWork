@@ -24,10 +24,12 @@
     // Do any additional setup after loading the view.
     
     [self createUI];
+    [self requestData];
 }
 
 - (void)createUI {
     [self initBarWithTitle:Localized(@"安装信息") isBack:YES];
+    [self initBarRighBtnTitle:Localized(@"保存") target:self action:@selector(save)];
     
     self.scrollView = [UIScrollView new];
     [self.view addSubview:self.scrollView];
@@ -41,6 +43,42 @@
         make.top.left.equalTo(@0);
         make.width.equalTo(self.view);
         make.bottom.equalTo(@0);
+    }];
+}
+
+- (void)requestData {
+    NSString *dno = [CBCommonTools CBdeviceInfo].dno?:@"";
+    NSString *url = [NSString stringWithFormat:@"%@%@", @"/gpsInstallController/getGpsInstall/", dno];
+    [MBProgressHUD showHUDIcon:self.view animated:YES];
+    kWeakSelf(self);
+    [[NetWorkingManager shared] getWithUrl:url params:@{} succeed:^(id response, BOOL isSucceed) {
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        if (isSucceed) {
+            if (response && response[@"data"]) {
+                _CBInstallInfo *model = [_CBInstallInfo mj_objectWithKeyValues:response[@"data"]];
+                self.infoView.model = model;
+            }
+        }
+    } failed:^(NSError *error) {
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    }];
+}
+
+- (void)save {
+    [MBProgressHUD showHUDIcon:self.view animated:YES];
+    kWeakSelf(self);
+    NSDictionary *dic = [self.infoView getSaveInfo];
+    [[NetWorkingManager shared] postJSONWithUrl:@"/gpsInstallController/updGpsInstall" params:dic succeed:^(id response, BOOL isSucceed) {
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        if (isSucceed) {
+            [CBTopAlertView alertSuccess:Localized(@"操作成功")];
+        }
+    } failed:^(NSError *error) {
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
     }];
 }
 
