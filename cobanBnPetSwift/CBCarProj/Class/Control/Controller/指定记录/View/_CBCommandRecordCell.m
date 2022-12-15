@@ -89,8 +89,8 @@
 - (void)setModel:(_CBCommandRecord *)model {
     _model = model;
     
-    _nameLbl.text = model.cmd;
-    _statusLbl.text = model.status == 0 ? Localized(@"发送中") : @(model.status).description;
+    _nameLbl.text = model.cmdName;
+    _statusLbl.text = model.statusName;
     _timeLbl.text = [CBWtMINUtils getTimeFromTimestamp: _model.createTime formatter: @"yyyy-MM-dd HH:mm:ss"];
     
 }

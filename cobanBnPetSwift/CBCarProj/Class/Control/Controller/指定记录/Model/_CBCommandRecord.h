@@ -13,8 +13,11 @@ NS_ASSUME_NONNULL_BEGIN
 @interface _CBCommandRecord : NSObject
 
 @property(nonatomic, copy) NSString *cmd;
-@property (nonatomic, assign) BOOL status;
+@property (nonatomic, assign) NSInteger status;//0：发送中，1：发送成功，2发送失败
 @property (nonatomic, copy) NSString *createTime;
+
+- (NSString *)cmdName;
+- (NSString *)statusName;
 
 //{
 //        "cmd": "TIME_ZONE",

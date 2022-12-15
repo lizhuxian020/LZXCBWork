@@ -279,25 +279,25 @@
             self.switchView.on = controlListModel.warmSpeed;
             self.centerLabel.text = [NSString stringWithFormat: @"%@Km/h", controlListModel.overWarm?:@"0"];
         } else if ([titleStr isEqualToString:Localized(@"多次定位")]) {
-            self.switchView.on = !controlListModel.dcdd;
+            self.switchView.on = controlListModel.dcdd;
         } else if ([titleStr isEqualToString:Localized(@"断油断电")]) {
-            self.switchView.on = !controlListModel.dydd;
+            self.switchView.on = controlListModel.dydd;
         }
         // 报警设置
         else if ([titleStr isEqualToString:Localized(@"掉电报警")]) {
-            self.switchView.on = !controlListModel.warmDiaodan;
+            self.switchView.on = controlListModel.warmDiaodan;
         }  else if ([titleStr isEqualToString:Localized(@"低电报警")]) {
-            self.switchView.on = !controlListModel.warmDidian;
+            self.switchView.on = controlListModel.warmDidian;
         } else if ([titleStr isEqualToString:Localized(@"盲区报警")]) {
-            self.switchView.on = !controlListModel.warnBlind;
+            self.switchView.on = controlListModel.warnBlind;
         } else if ([titleStr isEqualToString:Localized(@"紧急报警")]) {
-            self.switchView.on = !controlListModel.urgentWarn;
+            self.switchView.on = controlListModel.urgentWarn;
         } else if ([titleStr isEqualToString:Localized(@"振动报警")]) {
-            self.switchView.on = !controlListModel.warmZd;
+            self.switchView.on = controlListModel.warmZd;
         } else if ([titleStr isEqualToString:Localized(@"油量检测报警")]) {
-            self.switchView.on = !controlListModel.oilCheckWarn;
+            self.switchView.on = controlListModel.oilCheckWarn;
         } else if ([titleStr isEqualToString:Localized(@"保养通知")]) {
-            self.switchView.on = !controlListModel.serviceFlag;
+            self.switchView.on = controlListModel.serviceFlag;
             if (kStringIsEmpty(controlListModel.serviceInterval)) {
                 self.centerLabel.text = [NSString stringWithFormat: @"%@",@"请设置保养间隔"];
             } else {
@@ -309,9 +309,9 @@
             self.detailLabel.hidden = NO;
             self.detailLabel.text = _controlListModel.timeZone;
        } else if ([titleStr isEqualToString:_ControlConfigTitle_ACCGZTZ]) {
-            self.switchView.on = !controlListModel.accNotice;
+            self.switchView.on = controlListModel.accNotice;
         } else if ([titleStr isEqualToString:_ControlConfigTitle_PYYZ]) {
-            self.switchView.on = !controlListModel.gpsFloat;
+            self.switchView.on = controlListModel.gpsFloat;
         } else if ([titleStr isEqualToString:_ControlConfigTitle_ZDLMD]) {
             self.detailLabel.hidden = NO;
             switch (controlListModel.sensitivity) {

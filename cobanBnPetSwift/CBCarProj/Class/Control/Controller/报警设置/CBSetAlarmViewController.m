@@ -56,19 +56,15 @@
             Localized(@"掉电报警"),
             Localized(@"低电报警"),
             Localized(@"盲区报警") ,
-//            Localized(@"紧急报警") ,
-//            Localized(@"超速报警") ,
             Localized(@"振动报警"),
             Localized(@"油量检测报警")
         ];//Localized(@"保养通知")
         NSArray *arrayTitleImage = @[
-            @"掉电",
-            @"低电",
-            @"里程统计",
-//            @"报警统计",
-//            @"超速",
-            @"震动报警",
-            @"油量统计"
+            @"掉电报警",
+            @"低电报警",
+            @"盲区报警",
+            @"振动报警",
+            @"油量检测报警"
         ];//@"点火报表"
         for (int i = 0 ; i < arrayTitle.count ; i ++ ) {
             CBControlModel *controlModel = [[CBControlModel alloc]init];
@@ -123,9 +119,6 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.arrayData.count;
 }
-//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    return 62.5*KFitHeightRate;
-//}
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *cellID = @"cellID";
     ControlTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
@@ -140,13 +133,8 @@
         kWeakSelf(self);
         cell.switchStateChangeBlock = ^(NSIndexPath *indexPath, BOOL isON) {
             kStrongSelf(self);
-            NSLog(@"%ld %d", (long)indexPath.row , isON);
-            NSLog(@"点击的类型%@ %d", model.titleStr , isON);
-            if (isON == YES) {
-                [self switchClick:model.titleStr status:@"1"];
-            } else {
-                [self switchClick:model.titleStr status:@"0"];
-            }
+            [self switchClick:model.titleStr status:isON ? @"1" : @"0"];
+            
         };
     }
     return cell;
@@ -177,7 +165,7 @@
         [self alarmEditControlSwitchRequest:paramters];
     } else if ([titleStr isEqualToString:Localized(@"盲区报警")]) {
         [paramters setObject:status forKey:@"warnBlind"];
-        [self alarmEditControlNewRequest:paramters];
+        [self alarmEditControlSwitchRequest:paramters];
     } else if ([titleStr isEqualToString:Localized(@"紧急报警")]) {
         [paramters setObject:status forKey:@"urgentWarn"];
         [self alarmEditControlNewRequest:paramters];
@@ -189,7 +177,7 @@
         [self alarmEditControlSwitchRequest:paramters];
     } else if ([titleStr isEqualToString:Localized(@"油量检测报警")]) {
         [paramters setObject:status forKey:@"oilCheckWarn"];
-        [self alarmEditControlNewRequest:paramters];
+        [self alarmEditControlSwitchRequest:paramters];
     } else if ([titleStr isEqualToString:Localized(@"保养通知")]) {
         [paramters setObject:status forKey:@"serviceFlag"];
         [self alarmEditControlNewRequest:paramters];
