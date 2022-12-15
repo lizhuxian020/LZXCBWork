@@ -15,15 +15,23 @@
 
 @property (nonatomic, strong) UIView *contentAView;
 @property (nonatomic, strong) UIView *contentBView;
-
+@property (nonatomic, strong) NSArray *unitData;
 @property (nonatomic, strong) NSArray *currentData;
 @property (nonatomic, strong) UILabel *currentEditLbl;
 @property (nonatomic, strong) UILabel *AALbl;
+@property (nonatomic, assign) NSInteger numberAA;
 @property (nonatomic, strong) UILabel *ABLbl;
+@property (nonatomic, assign) NSInteger numberAB;
 
 @property (nonatomic, strong) UILabel *BALbl;
-@property (nonatomic, strong) UILabel *BBLbl;
+@property (nonatomic, assign) NSInteger numberBA;
 @property (nonatomic, strong) UITextField *bTF;
+
+@property (nonatomic, strong) UISwitch *AASwitch;
+@property (nonatomic, strong) UISwitch *ABSwitch;
+@property (nonatomic, strong) UISwitch *BASwitch;
+@property (nonatomic, strong) UISwitch *BBSwitch;
+
 @end
 
 @implementation _CBLocateModeView
@@ -31,6 +39,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
+        self.unitData = @[@"s", @"min", @"h", @"d"];
         [self createView];
     }
     return self;
@@ -92,6 +101,7 @@
         make.centerY.equalTo(lblA);
         make.right.equalTo(@0);
     }];
+    _AASwitch = s;
     
     UIView *cView = [UIView new];
     
@@ -138,6 +148,7 @@
         make.centerY.equalTo(lblB);
         make.right.equalTo(@0);
     }];
+    _ABSwitch = sb;
     
     UIView *cBView = [UIView new];
     
@@ -182,6 +193,8 @@
         weakself.currentEditLbl = cBLbl;
         [weakself showPickView];
     }];
+    [s addTarget:self action:@selector(switchValueDidChange:) forControlEvents:UIControlEventValueChanged];
+    [sb addTarget:self action:@selector(switchValueDidChange:) forControlEvents:UIControlEventValueChanged];
 }
 
 - (void)setupBView {
@@ -200,6 +213,7 @@
         make.centerY.equalTo(lblA);
         make.right.equalTo(@0);
     }];
+    _BASwitch = s;
     
     UIView *cView = [UIView new];
     
@@ -246,6 +260,7 @@
         make.centerY.equalTo(lblB);
         make.right.equalTo(@0);
     }];
+    _BBSwitch = sb;
     
     UILabel *uniLbl = [MINUtils createLabelWithText:Localized(@"米") size:14];
     uniLbl.textAlignment = NSTextAlignmentCenter;
@@ -279,6 +294,9 @@
         weakself.currentEditLbl = cLbl;
         [weakself showPickView];
     }];
+    
+    [s addTarget:self action:@selector(switchValueDidChange:) forControlEvents:UIControlEventValueChanged];
+    [sb addTarget:self action:@selector(switchValueDidChange:) forControlEvents:UIControlEventValueChanged];
 }
 
 - (void)addClick {
@@ -289,17 +307,38 @@
     }];
 }
 
+- (void)switchValueDidChange:(UISwitch *)s {
+    if (s == _AASwitch) {
+        [self setAA:s.on ? 30 : 0 uni:s.on ? 1 : 0];
+    }
+    if (s == _ABSwitch) {
+        [self setAB:s.on ? 30 : 0 uni:0];
+    }
+    if (s == _BASwitch) {
+        [self setBA:s.on ? 30 : 0 uni:s.on ? 1 : 0];
+    }
+    if (s == _BBSwitch) {
+        self.bTF.text = s.on ? @"200" : @"0";
+    }
+}
+
 - (void)showChooseModel {
     kWeakSelf(self);
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     [alert addAction:[UIAlertAction actionWithTitle:Localized(@"定时汇报") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         weakself.contentAView.hidden = NO;
         weakself.contentBView.hidden = YES;
+        weakself.modeLbl.text = Localized(@"定时汇报");
+        weakself.AASwitch.on = YES;
+        weakself.ABSwitch.on = YES;
     }]];
     //按钮：拍照，类型：UIAlertActionStyleDefault
     [alert addAction:[UIAlertAction actionWithTitle:Localized(@"定时和定距汇报") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action){
         weakself.contentAView.hidden = YES;
         weakself.contentBView.hidden = NO;
+        weakself.modeLbl.text = Localized(@"定时和定距汇报");
+        weakself.BASwitch.on = YES;
+        weakself.BBSwitch.on = YES;
     }]];
     //按钮：取消，类型：UIAlertActionStyleCancel
     [alert addAction:[UIAlertAction actionWithTitle:Localized(@"取消") style:UIAlertActionStyleCancel handler:nil]];
@@ -326,13 +365,19 @@
 }
 
 - (void)minPickerView:(MINPickerView *)pickerView didSelectWithDic:(NSDictionary *)dic {
-    NSLog(@"%s", __FUNCTION__);
     int numIndex = [dic[@"0"] intValue];
     int uniIndex = [dic[@"1"] intValue];
     NSString *num = self.currentData[0][numIndex];
-    NSString *uni = self.currentData[1][uniIndex];
-    NSLog(@"asd");
-    self.currentEditLbl.text = [NSString stringWithFormat:@"%@%@", @(num.intValue),uni];
+    
+    if (self.currentEditLbl == _AALbl) {
+        [self setAA:num.intValue uni:uniIndex];
+    }
+    if (self.currentEditLbl == _ABLbl) {
+        [self setAB:num.intValue uni:uniIndex];
+    }
+    if (self.currentEditLbl == _BALbl) {
+        [self setBA:num.intValue uni:uniIndex];
+    }
     
 }
 - (void)minPickerViewdidSelectCancelBtn:(MINPickerView *)pickerView {
@@ -370,16 +415,131 @@
     return self.currentData;
 }
 
-- (NSNumber *)getSpeed {
-    if (kStringIsEmpty(self.bTF.text)) {
-        return @0;
+- (void)setLocationModel:(MultiLocationModel *)locationModel {
+    _locationModel = locationModel;
+    if (_locationModel.reportWay == 2) {
+        self.contentAView.hidden = YES;
+        self.contentBView.hidden = NO;
+        self.modeLbl.text = Localized(@"定时和定距汇报");
+        
+        _BASwitch.on = !kStringIsEmpty(_locationModel.timeRest) && _locationModel.timeRest.intValue != 0;;
+        kWeakSelf(self);
+        [self getInfo:_locationModel.timeRest.intValue blk:^(int num, int uniIndex) {
+            [weakself setBA:num uni:uniIndex];
+        }];
+        _BBSwitch.on = !kStringIsEmpty(_locationModel.disQs);
+        _bTF.text = kStringIsEmpty(_locationModel.disQs) ? @"0" : _locationModel.disQs;
+    } else {
+        self.contentAView.hidden = NO;
+        self.contentBView.hidden = YES;
+        self.modeLbl.text = Localized(@"定时汇报");
+        
+        _AASwitch.on = !kStringIsEmpty(_locationModel.timeRest) && _locationModel.timeRest.intValue != 0;
+        kWeakSelf(self);
+        [self getInfo:_locationModel.timeRest.intValue blk:^(int num, int uniIndex) {
+            [weakself setAA:num uni:uniIndex];
+        }];
+        _ABSwitch.on = !kStringIsEmpty(_locationModel.timeQs) && _locationModel.timeQs.intValue != 0;;
+        [self getInfo:_locationModel.timeQs.intValue blk:^(int num, int uniIndex) {
+            [weakself setAB:num uni:uniIndex];
+        }];
     }
-    return @([self.bTF.text intValue]);
+    
+    
+}
+
+- (void)getInfo:(int)sec blk:(void(^)(int num, int uniIndex))blk {
+    int num, uidx;
+    if (sec >= (60 * 60 * 24)) {
+        uidx = 3;
+        num = sec / (60 * 60 * 24);
+        blk(num, uidx);
+        return;
+    }
+    if (sec >= (60 * 60)) {
+        uidx = 2;
+        num = sec / (60 * 60);
+        blk(num, uidx);
+        return;
+    }
+    if (sec >= (60)) {
+        uidx = 1;
+        num = sec / (60 );
+        blk(num, uidx);
+        return;
+    }
+    uidx = 0;
+    num = sec;
+    blk(num, uidx);
+}
+
+- (NSNumber *)getSpeed {
+    if (self.contentBView.hidden == NO && _BBSwitch.isOn) {
+        return @([self.bTF.text intValue]);
+    }
+    return @0;
 }
 - (NSNumber *)getReportWay {
     if (self.contentAView.hidden) {
         return @2;
     }
     return @0;
+}
+- (NSString *)getTimeQSUnit {
+    if (self.contentAView.hidden == NO && _ABSwitch.isOn) {
+        return @"s";
+    }
+    return nil;
+}
+- (NSNumber *)getTimeQS {
+    if (self.contentAView.hidden == NO && _ABSwitch.isOn) {
+        return @(_numberAB);
+    }
+    return @0;
+}
+- (NSString *)getTimeRestUnit {
+    if (self.contentAView.hidden == NO && _AASwitch.isOn) {
+        return @"s";
+    }
+    if (self.contentBView.hidden == NO && _BASwitch.isOn) {
+        return @"s";
+    }
+    return nil;
+}
+- (NSNumber *)getTimeRest {
+    if (self.contentAView.hidden == NO && _AASwitch.isOn) {
+        return @(_numberAA);
+    }
+    if (self.contentBView.hidden == NO && _BASwitch.isOn) {
+        return @(_numberBA);
+    }
+    return @0;
+}
+- (NSNumber *)getTime:(int)number :(int)unitIdx {
+    switch (unitIdx) {
+        case 0:
+            return @(number);
+        case 1:
+            return @(number * 60);
+        case 2:
+            return @(number * 60 * 60);
+        case 3:
+            return @(number * 60 * 60 * 24);
+        default:
+            return @(number);
+    }
+}
+
+- (void)setAA:(int)num uni:(int)uniIndex {
+    self.AALbl.text = [NSString stringWithFormat:@"%d%@", num, self.unitData[uniIndex]];
+    self.numberAA = num;
+}
+- (void)setAB:(int)num uni:(int)uniIndex {
+    self.ABLbl.text = [NSString stringWithFormat:@"%d%@", num, self.unitData[uniIndex]];
+    self.numberAB = num;
+}
+- (void)setBA:(int)num uni:(int)uniIndex {
+    self.BALbl.text = [NSString stringWithFormat:@"%d%@", num, self.unitData[uniIndex]];
+    self.numberBA = num;
 }
 @end

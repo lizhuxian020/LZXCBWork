@@ -7,14 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "MultiLocationModel.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @interface _CBLocateModeView : UIView
 
+@property (nonatomic, strong) MultiLocationModel *locationModel;
+
 - (NSNumber *)getSpeed;
 - (NSNumber *)getReportWay;
+- (NSString *)getTimeQSUnit;
 - (NSNumber *)getTimeQS;
+- (NSString *)getTimeRestUnit;
 - (NSNumber *)getTimeRest;
 @end
 

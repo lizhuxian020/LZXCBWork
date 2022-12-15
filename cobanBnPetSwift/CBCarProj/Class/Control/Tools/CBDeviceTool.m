@@ -193,20 +193,38 @@
         @"超速报警",
     ]];
     
+    NSArray *showArr = @[
+        @(_currentProductSpec.singlePosition),
+        @(_currentProductSpec.autoPosition),
+        @(_currentProductSpec.callBack),
+        @(_currentProductSpec.oilElectricityControl),
+        @(_currentProductSpec.oilElectricityControl),
+        @(1), //TODO: lzxTODO 哪里的?
+        @(_currentProductSpec.motorControl),
+        @(_currentProductSpec.remoteStart),
+        @(_currentProductSpec.arm||_currentProductSpec.silentArm||_currentProductSpec.disarm),
+        @(_currentProductSpec.callChargeInquiry),
+        @(1), //TODO: lzxTODO 哪里的?
+    ];
+    
     if (!self.currentProductSpec) {
         blk(titleMArr, imageMArr);
         return;
     }
-    if (self.currentProductSpec.disarm == NO) {
-        [titleMArr removeObject:_ControlConfigTitle_BFCF];
-        [imageMArr removeObject:@"布防撤防"];
+    NSMutableArray *waitToRemoveTitle = [NSMutableArray new];
+    NSMutableArray *waitToRemoveImg = [NSMutableArray new];
+    for (int i = 0; i < showArr.count; i++) {
+        if ([showArr[i] boolValue] == NO) {
+            [waitToRemoveTitle addObject:titleMArr[i]];
+            [waitToRemoveImg addObject:imageMArr[i]];
+        }
     }
-    if (self.currentProductSpec.remoteStart == NO) {
-        [titleMArr removeObject:_ControlConfigTitle_YCKZ];
-        [imageMArr removeObject:@"远程点火"];
-    }
+    [titleMArr removeObjectsInArray:waitToRemoveTitle];
+    [imageMArr removeObjectsInArray:waitToRemoveImg];
     
     blk(titleMArr, imageMArr);
     return;
 }
+
+
 @end

@@ -8,12 +8,21 @@
 
 #import "CBProductSpecModel.h"
 
+@implementation CBProductSpecReportModel
+@end
+
 @implementation CBProductSpecModel
 
 + (NSDictionary *)mj_replacedKeyFromPropertyName {
     return @{
              @"pId":@"id"
              };
+}
+
++ (NSDictionary *)mj_objectClassInArray {
+    return @{
+        @"devShowReport": CBProductSpecReportModel.class
+    };
 }
 
 @end

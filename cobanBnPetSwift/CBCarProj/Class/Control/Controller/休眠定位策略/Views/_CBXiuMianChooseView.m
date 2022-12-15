@@ -41,11 +41,13 @@
         [view addSubview:lbl];
         
         [lbl mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.left.bottom.equalTo(@0);
+            make.left.equalTo(@0);
+            make.top.equalTo(@6);
+            make.bottom.equalTo(@-6);
         }];
         
         UIImageView *imgV = [UIImageView new];
-        imgV.image = [UIImage imageNamed: i == 0 ? @"单选-选中" : @"单选-没选中"];
+        imgV.image = [UIImage imageNamed: i == 0 ? @"已选中2" : @"未选中2"];
         [view addSubview:imgV];
         [imgV mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(@0);
@@ -72,9 +74,9 @@
                 return;
             }
             weakself.currentIndex = i;
-            weakself.selectedImgV.image = [UIImage imageNamed:@"单选-没选中"];
+            weakself.selectedImgV.image = [UIImage imageNamed:@"未选中2"];
             weakself.selectedImgV = imgV;
-            imgV.image = [UIImage imageNamed:@"单选-选中"];
+            imgV.image = [UIImage imageNamed:@"已选中2"];
         }];
         
     }
