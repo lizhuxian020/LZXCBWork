@@ -194,7 +194,7 @@
 + (CBBasePopView *)viewWithCSBJTitle:(NSString *)title
                             initText:(NSString *)text
                                 open:(BOOL)open
-                             confrim:(void(^)(NSString *contentStr))confirmBlk {
+                             confrim:(void(^)(NSString *contentStr, BOOL isOpen))confirmBlk {
     
     UIView *v = [UIView new];
     v.backgroundColor = UIColor.whiteColor;
@@ -224,6 +224,7 @@
     __weak CBBasePopView *wpopView = popView;
     [alertView setDidClickConfirm:^{
         [wpopView dismiss];
+        confirmBlk(tf.text, s.isOn);
     }];
     [alertView setDidClickCancel:^{
         [wpopView dismiss];

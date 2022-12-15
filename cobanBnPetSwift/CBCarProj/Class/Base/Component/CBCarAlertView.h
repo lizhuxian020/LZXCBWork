@@ -45,7 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (CBBasePopView *)viewWithCSBJTitle:(NSString *)title
                             initText:(NSString *)text
                                 open:(BOOL)open
-                             confrim:(void(^)(NSString *contentStr))confirmBlk;
+                             confrim:(void(^)(NSString *contentStr, BOOL isOpen))confirmBlk;
 /// 时区设置的弹框
 + (CBBasePopView *)viewWithSQSZTitle:(NSString *)title
                             initText:(NSString *)text

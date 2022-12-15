@@ -116,6 +116,7 @@
         self.detailLabel.hidden = NO;
         self.detailImageView.hidden = NO;
         self.switchView.hidden = NO;
+        self.switchView.enabled = YES;
         // 控制
         if ([titleStr isEqualToString:_ControlConfigTitle_DCJW]) {
             self.detailLabel.hidden = YES;
@@ -151,11 +152,8 @@
             self.detailLabel.hidden = YES;
             self.switchView.hidden = YES;
         } else if ([titleStr isEqualToString:_ControlConfigTitle_CSBJ]) {
+            self.switchView.enabled = NO;
             self.detailLabel.hidden = YES;
-        } else if ([titleStr isEqualToString:_ControlConfigTitle_CSBJ]) {
-//            self.switchView.isON = !controlListModel.warmSpeed;
-//            self.centerLabel.text = [NSString stringWithFormat: @"%@Km/h", controlListModel.overWarm?:@"0"];
-            self.centerLabel.text = [NSString stringWithFormat: @"30Km/h"];
         } else if ([titleStr isEqualToString:Localized(@"电话唤醒")]) {
             self.switchView.hidden = YES;
             self.detailImageView.hidden = YES;
@@ -190,7 +188,6 @@
         } else if ([titleStr isEqualToString:Localized(@"紧急报警")]) {
             self.detailLabel.hidden = YES;
             self.detailImageView.hidden = YES;
-        } else if ([titleStr isEqualToString:Localized(@"超速报警")]) {
         } else if ([titleStr isEqualToString:Localized(@"振动报警")]) {
             self.detailLabel.hidden = YES;
             self.detailImageView.hidden = YES;
@@ -277,6 +274,9 @@
         if ([titleStr isEqualToString:Localized(@"电话回拨")]) {
             self.detailLabel.hidden = NO;
             self.detailLabel.text = controlListModel.phone?:@"";
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_CSBJ]) {
+            self.switchView.on = controlListModel.warmSpeed;
+            self.centerLabel.text = [NSString stringWithFormat: @"%@Km/h", controlListModel.overWarm?:@"0"];
         } else if ([titleStr isEqualToString:Localized(@"多次定位")]) {
             self.switchView.on = !controlListModel.dcdd;
         } else if ([titleStr isEqualToString:Localized(@"断油断电")]) {
@@ -291,9 +291,6 @@
             self.switchView.on = !controlListModel.warnBlind;
         } else if ([titleStr isEqualToString:Localized(@"紧急报警")]) {
             self.switchView.on = !controlListModel.urgentWarn;
-        } else if ([titleStr isEqualToString:Localized(@"超速报警")]) {
-            self.switchView.on = !controlListModel.warmSpeed;
-            self.centerLabel.text = [NSString stringWithFormat: @"%@Km/h", controlListModel.overWarm?:@"0"];
         } else if ([titleStr isEqualToString:Localized(@"振动报警")]) {
             self.switchView.on = !controlListModel.warmZd;
         } else if ([titleStr isEqualToString:Localized(@"油量检测报警")]) {

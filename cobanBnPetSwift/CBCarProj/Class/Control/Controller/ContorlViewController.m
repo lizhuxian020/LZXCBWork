@@ -250,9 +250,9 @@
         } else if ([model.titleStr isEqualToString:_ControlConfigTitle_TZBJ]) {
             [self stopWarnClick];
         } else if ([model.titleStr isEqualToString:_ControlConfigTitle_SDJ]) {
-            NSLog(@"%s", __FUNCTION__);
+            [self showSDJ];
         } else if ([model.titleStr isEqualToString:_ControlConfigTitle_YCKZ]) {
-            NSLog(@"%s", __FUNCTION__);
+            [self showYCKZ];
         } else if ([model.titleStr isEqualToString:_ControlConfigTitle_BFCF]) {
             [self arming_disarmingClick];
         } else if ([model.titleStr isEqualToString:_ControlConfigTitle_HFCX]) {
@@ -320,11 +320,11 @@
 }
 - (void)showTT {
     kWeakSelf(self);
-    [[CBCarAlertView viewWithChooseData:@[Localized(@"定位模式"), Localized(@"听听模式")] selectedIndex:self.listModel.monitorMode title:_ControlConfigTitle_TT didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
+    [[CBCarAlertView viewWithChooseData:@[Localized(@"听听模式"),Localized(@"定位模式"),] selectedIndex:self.listModel.monitorMode title:_ControlConfigTitle_TT didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
         NSLog(@"%s: %@", __FUNCTION__, contentStr);
     } confrim:^(NSString * _Nonnull contentStr, NSInteger index) {
         NSMutableDictionary *paramters = [NSMutableDictionary dictionaryWithDictionary:@{
-            @"monitorMode": @(index),
+            @"monitorMode": @(index == 0 ? 1 :0),
         }];
         [weakself editControlNewRequest:paramters];
     }] pop];
@@ -339,21 +339,6 @@
     index = self.listModel.oil == 0 ? 0 : 1;
     kWeakSelf(self);
     [[CBCarAlertView viewWithChooseData:titleArr selectedIndex:index title:title didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
-        kStrongSelf(self);
-        NSLog(@"%s", __FUNCTION__);
-        if (index == 0) {
-            if (self.isObdMessage == YES) {
-                self.listModel.obdMsg = 0;
-            }else {
-                self.listModel.oil = 0;
-            }
-        } else {
-            if (self.isObdMessage == YES) {
-                self.listModel.obdMsg = 1;
-            }else {
-                self.listModel.oil = 1;
-            }
-        }
     } confrim:^(NSString * _Nonnull contentStr, NSInteger index) {
         NSMutableDictionary *paramters = [NSMutableDictionary dictionaryWithDictionary:@{
             @"dydd": @(1),
@@ -361,87 +346,6 @@
         }];
         [weakself editControlSwitchRequest:paramters];
     }] pop];
-    
-//    MINAlertView *alertView = [[MINAlertView alloc] init];
-//    __weak MINAlertView *weakAlertView = alertView;
-//    alertView.titleLabel.text = title;
-//    [weakSelf.view addSubview: alertView];
-//    [alertView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.bottom.right.equalTo(weakSelf.view);
-//        make.height.mas_equalTo(SCREEN_HEIGHT);
-//    }];
-//    // 重置高度
-//    [alertView setContentViewHeight: 110];
-
-//    CBControlModel *model = self.arrayData[indexPath.row];
-//    NSString *titleStr = model.titleStr;
-//    if ([titleStr isEqualToString:Localized(@"断油断电")]) {
-//        self.isObdMessage = NO;
-//        weakSelf.obdTopBtn = [MINUtils createBtnWithRadius:5 * KFitHeightRate title:Localized(@"立即断油断电")];
-//    } else {
-//        self.isObdMessage = YES;
-//        weakSelf.obdTopBtn = [MINUtils createBtnWithRadius:5 * KFitHeightRate title:Localized(@"跟随单次定位")];
-//    }
-    
-//    weakSelf.obdTopBtn.layer.borderWidth = 0.5;
-//    weakSelf.obdTopBtn.layer.borderColor = kRGB(210, 210, 210).CGColor;
-//    weakSelf.obdTopBtn.layer.cornerRadius = 3 * KFitWidthRate;
-//    [alertView.contentView addSubview: weakSelf.obdTopBtn];
-//    [weakSelf.obdTopBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.centerX.top.equalTo(alertView.contentView);
-//        make.height.mas_equalTo(40 * KFitHeightRate);
-//        make.width.mas_equalTo(250 * KFitWidthRate);
-//    }];
-//    [weakSelf.obdTopBtn addTarget: self action: @selector(obdButtonClick:) forControlEvents: UIControlEventTouchUpInside];
-
-//    if ([titleStr isEqualToString:Localized(@"断油断电")]) {
-//        weakSelf.obdBttomBtn = [MINUtils createBtnWithRadius:5 * KFitHeightRate title:Localized(@"延时断油断电")];
-//    } else {
-//        weakSelf.obdBttomBtn = [MINUtils createBtnWithRadius:5 * KFitHeightRate title:Localized(@"跟随多次定位")];
-//    }
-//    weakSelf.obdBttomBtn.backgroundColor = [UIColor whiteColor];
-//    weakSelf.obdBttomBtn.layer.borderWidth = 0.5;
-//    weakSelf.obdBttomBtn.layer.borderColor = kRGB(210, 210, 210).CGColor;
-//    weakSelf.obdBttomBtn.layer.cornerRadius = 3 * KFitWidthRate;
-//    [weakSelf.obdBttomBtn setTitleColor: k137Color forState: UIControlStateNormal];
-//    [weakSelf.obdBttomBtn setTitleColor: k137Color forState: UIControlStateHighlighted];
-//    [alertView.contentView addSubview: weakSelf.obdBttomBtn];
-//    [weakSelf.obdBttomBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.centerX.equalTo(alertView.contentView);
-//        make.bottom.equalTo(alertView.contentView).with.offset(-18 * KFitWidthRate);
-//        make.height.mas_equalTo(40 * KFitHeightRate);
-//        make.width.mas_equalTo(250 * KFitWidthRate);
-//    }];
-//    [weakSelf.obdBttomBtn addTarget: self action: @selector(obdButtonClick:) forControlEvents: UIControlEventTouchUpInside];
-//    if ((weakSelf.listModel.obdMsg == 0 && self.isObdMessage == YES) || (weakSelf.listModel.oil == 0 && weakSelf.isObdMessage == NO)) {
-//        weakSelf.obdTopBtn.backgroundColor = kBlueColor;
-//        [weakSelf.obdTopBtn setTitleColor: [UIColor whiteColor] forState: UIControlStateNormal];
-//        [weakSelf.obdTopBtn setTitleColor: [UIColor whiteColor] forState: UIControlStateHighlighted];
-//        weakSelf.obdBttomBtn.backgroundColor = [UIColor whiteColor];
-//        [weakSelf.obdBttomBtn setTitleColor: k137Color forState: UIControlStateNormal];
-//        [weakSelf.obdBttomBtn setTitleColor: k137Color forState: UIControlStateHighlighted];
-//    }else {
-//        weakSelf.obdBttomBtn.backgroundColor = kBlueColor;
-//        [weakSelf.obdBttomBtn setTitleColor: [UIColor whiteColor] forState: UIControlStateNormal];
-//        [weakSelf.obdBttomBtn setTitleColor: [UIColor whiteColor] forState: UIControlStateHighlighted];
-//        weakSelf.obdTopBtn.backgroundColor = [UIColor whiteColor];
-//        [weakSelf.obdTopBtn setTitleColor: k137Color forState: UIControlStateNormal];
-//        [weakSelf.obdTopBtn setTitleColor: k137Color forState: UIControlStateHighlighted];
-//    }
-//    self.obdBttomBtn.selected = self.listModel.oil == 1?YES:NO;//YES;
-//    self.obdTopBtn.selected = self.listModel.oil == 1?NO:YES;
-//    alertView.rightBtnClick = ^{
-//        [weakAlertView hideView];
-//        // 修改model的数据，不要忘记了
-//        if ([titleStr isEqualToString:Localized(@"断油断电")]) {
-//            [weakSelf editRowDataWithIndexPath: indexPath data:@"oil" switchStr:nil];
-//        } else {
-//            [weakSelf editRowDataWithIndexPath: indexPath data:@"ObdMsg" switchStr:nil];
-//        }
-//    };
-//    alertView.leftBtnClick = ^{
-//        [weakAlertView hideView];
-//    };
 }
 
 // 恢复油电
@@ -454,9 +358,39 @@
         [weakself editControlSwitchRequest:param];
     }] pop];
 }
+
+// 锁电机
+- (void)showSDJ {
+    kWeakSelf(self);
+    [[CBCarAlertView viewWithChooseData:@[Localized(@"解锁"),  Localized(@"上锁")] selectedIndex:0 title:_ControlConfigTitle_SDJ didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
+        
+    } confrim:^(NSString * _Nonnull contentStr, NSInteger index) {
+        NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
+            @"sdj": @(index),
+        }];
+        [weakself editControlSwitchRequest:param];
+    }] pop];
+}
+// 远程控制
+- (void)showYCKZ {
+    kWeakSelf(self);
+    [[CBCarAlertView viewWithChooseData:@[Localized(@"远程点火"), Localized(@"远程熄火")] selectedIndex:0 title:_ControlConfigTitle_SDJ didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
+        
+    } confrim:^(NSString * _Nonnull contentStr, NSInteger index) {
+        NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
+            @"ycqd": @(index == 0 ? 1 : 0),
+        }];
+        [weakself editControlSwitchRequest:param];
+    }] pop];
+}
 - (void)showCSBJ {
-    [[CBCarAlertView viewWithCSBJTitle:_ControlConfigTitle_CSBJ initText:@"40" open:1 confrim:^(NSString * _Nonnull contentStr) {
-            
+    kWeakSelf(self);
+    [[CBCarAlertView viewWithCSBJTitle:_ControlConfigTitle_CSBJ initText:self.listModel.overWarm?:@"0" open:self.listModel.warmSpeed confrim:^(NSString * _Nonnull contentStr, BOOL isOpen) {
+        NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
+            @"over_warm": @(contentStr.intValue),
+            @"warm_speed": @(isOpen),
+        }];
+        [weakself editControlSwitchRequest:param];
     }] pop];
    
 }
@@ -635,6 +569,7 @@
         // 撤防
         index = 1;
     }
+    kWeakSelf(self);
     [[CBCarAlertView viewWithChooseData:@[Localized(@"布防"),Localized(@"撤防"),Localized(@"静音布防")]
                           selectedIndex:index
                                   title:_ControlConfigTitle_BFCF
@@ -642,7 +577,17 @@
         
     }
                                 confrim:^(NSString * _Nonnull contentStr, NSInteger index) {
-        
+        if (index == 2) {
+            NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
+                @"silentArm": @(1)
+            }];
+            [weakself editControlNewRequest:param];
+            return;
+        }
+        NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
+            @"cfbf": @(index == 0 ? 1 : 0)
+        }];
+        [weakself editControlSwitchRequest:param];
     }] pop];
 //    [self.armingAlertView popView];
 //    NSArray *array = @[Localized(@"布防"),Localized(@"撤防"),Localized(@"静音布防")];
