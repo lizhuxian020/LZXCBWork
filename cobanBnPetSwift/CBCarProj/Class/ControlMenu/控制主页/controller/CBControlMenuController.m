@@ -105,7 +105,7 @@
     }];
     lbl.userInteractionEnabled = YES;
     [lbl bk_whenTapped:^{
-        NSLog(@"%s", __FUNCTION__);
+        [weakself unbindDevice];
     }];
     lbl.textAlignment = NSTextAlignmentCenter;
     
@@ -135,6 +135,30 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self requestDeviceList];
+}
+
+- (void)unbindDevice {
+    kWeakSelf(self);
+    [[CBCarAlertView viewWithAlertTips:Localized(@"解除设备") title:Localized(@"提示") confrim:^(NSString * _Nonnull contentStr) {
+        [weakself requestDeleteDev];
+    }] pop];
+}
+
+- (void)requestDeleteDev {
+    [MBProgressHUD showHUDIcon:self.view animated:YES];
+    kWeakSelf(self);
+    [[NetWorkingManager shared] postWithUrl:@"/personController/delDev" params:@{
+        @"dno": self.deviceInfoModelSelect.dno ?: @""
+    } succeed:^(id response, BOOL isSucceed) {
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        if (isSucceed) {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+    } failed:^(NSError *error) {
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    }];
 }
 
 - (void)requestDeviceList {
