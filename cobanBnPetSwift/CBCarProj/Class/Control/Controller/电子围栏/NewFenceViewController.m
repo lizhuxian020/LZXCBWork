@@ -107,6 +107,8 @@
 
 @property (nonatomic, strong) GMSCircle *gmsCircle;
 @property (nonatomic, strong) UILabel *gmsRadiusLbl;
+@property (nonatomic, assign) NSInteger gmsPolygonCurrentMark;
+@property (nonatomic, strong) GMSPolygon *gmsRectPolygon;
 @end
 
 @implementation NewFenceViewController
@@ -365,7 +367,11 @@
         [MINUtils showProgressHudToView: self.view withText:Localized(@"至少需要指定1个点")];
         return;
     }
-    if ((self.isRect && !self.baiduRectPolygon)) {
+    if (self.isRect && (
+                        ([self showBaidu] && !self.baiduRectPolygon) ||
+                        (![self showBaidu] && !self.gmsRectPolygon)
+                        )
+    ) {
         [MINUtils showProgressHudToView: self.view withText:Localized(@"至少需要指定2个点")];
         return;
     }
@@ -535,15 +541,6 @@
     normalInfoMarker.iconView = lbl;
     normalInfoMarker.map = self.googleMapView;
     self.gmsRadiusLbl = lbl;
-    
-    
-    CLLocationCoordinate2D dragCoor = GMSGeometryOffset(self.circleCoordinate, radius, 90);
-    GMSMarker *mark_point = [[GMSMarker alloc] init];
-    mark_point.appearAnimation = kGMSMarkerAnimationNone;//kGMSMarkerAnimationPop;
-    mark_point.position = dragCoor;
-    mark_point.icon = [UIImage imageNamed:@"电子围栏-正方形-默认"];
-    mark_point.draggable = true;
-    mark_point.map = self.googleMapView;
 }
 
 - (void)addBaiduCircle:(CLLocationCoordinate2D)coor radius:(CGFloat)radius {
@@ -651,11 +648,16 @@
     [rect addCoordinate: rightBottom];
     [rect addCoordinate: leftBottom];
     
-    GMSPolygon *polygon = [GMSPolygon polygonWithPath:rect];
-    polygon.fillColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
-    polygon.strokeColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
-    polygon.strokeWidth = 0;//2;
-    polygon.map = _googleMapView;
+    if (!self.gmsRectPolygon) {
+        GMSPolygon *polygon = [GMSPolygon polygonWithPath:rect];
+        polygon.fillColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+        polygon.strokeColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+        polygon.strokeWidth = 0;//2;
+        polygon.map = _googleMapView;
+        self.gmsRectPolygon = polygon;
+    } else {
+        self.gmsRectPolygon.path = rect;
+    }
 }
 - (void)addBaiduRectangle {
     MINCoordinateObject *firstObj = self.rectangleCoordinateArr.firstObject;
@@ -918,10 +920,34 @@
     
 }
 #pragma mark - GoogleMaps
+- (void)mapView:(GMSMapView *)mapView didBeginDraggingMarker:(GMSMarker *)marker {
+    if (self.isRect) {
+        self.gmsPolygonCurrentMark = [self getCorrectIndexFromArray:self.rectangleCoordinateArr withTargetCoor:marker.position];
+    }
+}
+
 - (void)mapView:(GMSMapView *)mapView didDragMarker:(GMSMarker *)marker {
-    self.radius = GMSGeometryDistance(self.circleCoordinate, marker.position);
-    self.gmsCircle.radius = self.radius;
-    self.gmsRadiusLbl.text = [NSString stringWithFormat:@"%.0lf", self.radius];
+    if (self.isCircle) {
+        self.radius = GMSGeometryDistance(self.circleCoordinate, marker.position);
+        self.gmsCircle.radius = self.radius;
+        self.gmsRadiusLbl.text = [NSString stringWithFormat:@"%.0lf", self.radius];
+    }
+    if (self.isRect) {
+        [self.rectangleCoordinateArr replaceObjectAtIndex:self.gmsPolygonCurrentMark withObject:[self getCoorObj:marker.position]];
+        [self addGoogleRectangle];
+    }
+}
+
+- (void)mapView:(GMSMapView *)mapView didEndDraggingMarker:(GMSMarker *)marker {
+    if (self.isCircle) {
+        self.radius = GMSGeometryDistance(self.circleCoordinate, marker.position);
+        self.gmsCircle.radius = self.radius;
+        self.gmsRadiusLbl.text = [NSString stringWithFormat:@"%.0lf", self.radius];
+    }
+    if (self.isRect) {
+        [self.rectangleCoordinateArr replaceObjectAtIndex:self.gmsPolygonCurrentMark withObject:[self getCoorObj:marker.position]];
+        [self addGoogleRectangle];
+    }
 }
 - (void)mapView:(GMSMapView *)mapView didTapAtCoordinate:(CLLocationCoordinate2D)coordinate {
     if (self.isCircle == YES) {
@@ -932,13 +958,19 @@
         
         [self addGoogleCircleMarkerWithRadius:self.radius];
         
-    } else if (self.rectangleBtn.selected == YES) {
+        CLLocationCoordinate2D dragCoor = GMSGeometryOffset(self.circleCoordinate, self.radius, 90);
+        [self addPoint_GMS:dragCoor];
+        
+    } else if (self.isRect == YES) {
         if (self.rectangleCoordinateArr.count > 1) {
-            [MINUtils showProgressHudToView:self.view withText:@"不能超过两个点"];
+            [MINUtils showProgressHudToView:self.view withText:Localized(@"不能超过两个点")];
             return;
         }
         [self.rectangleCoordinateArr addObject:[self getCoorObj:coordinate]];
         [self addPoint_GMS:coordinate];
+        if (self.rectangleCoordinateArr.count == 2) {
+            [self addGoogleRectangle];
+        }
         
     } else if (self.polygonBtn.selected == YES) {
 
@@ -954,10 +986,10 @@
 - (void)addPoint_GMS:(CLLocationCoordinate2D)coordinate {
     GMSMarker *mark_point = [[GMSMarker alloc] init];
     mark_point.appearAnimation = kGMSMarkerAnimationNone;//kGMSMarkerAnimationPop;
-    CBTrackPointView *iconView = [[CBTrackPointView alloc]initWithFrame:CGRectMake(0, 0, 10*KFitWidthRate, 10*KFitWidthRate)];
     mark_point.position = coordinate;
-    mark_point.iconView = iconView;
-    mark_point.groundAnchor = CGPointMake(0.5, 0.5);
+    mark_point.icon = [UIImage imageNamed:@"电子围栏-正方形-默认"];
+    mark_point.draggable = true;
+    mark_point.groundAnchor = CGPointMake(0.5f, 0.5f);
     mark_point.map = self.googleMapView;
 }
 
@@ -1151,11 +1183,7 @@
         [self.rectangleCoordinateArr addObject:[self getCoorObj:coordinate]];
         [self addRectAnnotation:coordinate];
         if (self.rectangleCoordinateArr.count == 2) {
-            if (self.baiduView.hidden == NO) {
-                [self addBaiduRectangle];
-            } else {
-                [self addGoogleRectangle];
-            }
+            [self addBaiduRectangle];
         }
         
     } else if (self.isPolygon == YES) {
