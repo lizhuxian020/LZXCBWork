@@ -13,13 +13,14 @@
 @interface CBPersonInfoController ()
 
 @property (nonatomic, strong) UIView *imgV;
+@property (nonatomic, strong) UIImageView *headerView;
 @property (nonatomic, strong) UIView *accountV;
 @property (nonatomic, strong) UIView *nameV;
 @property (nonatomic, strong) UIView *phoneV;
 @property (nonatomic, strong) UIView *emailV;
 /** 七牛云上传token */
-@property (nonatomic,strong) CBBaseQNYFileInfoModel *qnyFileModelPrivate;
 @property (nonatomic,copy) NSString *qnyToken;
+@property (nonatomic, copy) NSString *headerUrl ; /** <##> **/
 @end
 
 @implementation CBPersonInfoController
@@ -108,6 +109,7 @@
     if (renderHead) {
         CBPetLoginModel *userModel = [CBPetLoginModelTool getUser];
         UIImageView *img = [UIImageView new];
+        self.headerView = img;
         [img sd_setImageWithURL:[NSURL URLWithString:userModel.photo] placeholderImage:[UIImage imageNamed:@"个人资料"]];
         [v addSubview:img];
         [img mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -218,7 +220,8 @@
     // 压缩需要上传的图片
     UIImage *uploadImage = [self imageWithImageSimple:newPhoto scaledToSize:CGSizeMake(83, 83)];
     
-//    [self uploadHeader: uploadImage];
+    self.headerView.image = uploadImage;
+    [self uploadHeader: uploadImage];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -243,24 +246,18 @@
 #pragma mark -- 上传图片
 #pragma mark -- 获取七牛云token
 - (void)getQNYFileTokenReqeust {
-    [MBProgressHUD showHUDIcon:self.view animated:YES];
-    [[CBWtNetworkRequestManager sharedInstance] getQNFileTokenSuccess:^(CBWtBaseNetworkModel * _Nonnull baseModel) {
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    kWeakSelf(self);
+    [[NetWorkingManager shared] getWithUrl:@"/systemController/getUploadToken" params:nil succeed:^(id response, BOOL isSucceed) {
+        kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
-        switch (baseModel.status) {
-            case CBWtNetworkingStatus0:
-            {
-                self.qnyFileModelPrivate = [CBBaseQNYFileInfoModel mj_objectWithKeyValues:baseModel.data];
-                self.qnyToken = baseModel.data;
+        if (isSucceed) {
+            if (response && response[@"data"]) {
+                self.qnyToken = response[@"data"];
             }
-                break;
-            default:
-            {
-                [CBWtMINUtils showProgressHudToView:self.view withText:baseModel.resmsg];
-            }
-                break;
         }
-    } failure:^(NSError * _Nonnull error) {
-        //[MBProgressHUD showMessage:@"请求超时" withDelay:3.0f];
+    } failed:^(NSError *error) {
+        kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
     }];
 }
@@ -269,13 +266,13 @@
     kWeakSelf(self);
     [[CBWtNetworkRequestManager sharedInstance] uploadImageToQNFilePath:image token:self.qnyToken?:@"" success:^(id  _Nonnull baseModel) {
         kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
         
         NSString *imageUrl = [NSString stringWithFormat:@"%@",baseModel[@"key"]];
         NSString *headImageUrlStr = [NSString stringWithFormat:@"%@%@",@"http://cdn.clw.gpstrackerxy.com/",imageUrl];
         
         NSLog(@"--------头像路径--------%@",headImageUrlStr);
-        //TODO: LZXTODO获取到头像路径后续操作
-//        [self requestUploadImageWithFileUrl:headImageUrlStr hud:nil];
+        self.headerUrl = headImageUrlStr;
         
     } failure:^(NSError * _Nonnull error) {
         kStrongSelf(self);
@@ -293,15 +290,18 @@
 }
 
 - (void)save {
-    NSLog(@"%s", __FUNCTION__);
     NSString *name = [self getContent:self.nameV];
     NSString *phone = [self getContent:self.phoneV];
     NSString *email = [self getContent:self.emailV];
-    NSDictionary *param = @{
+    NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
         @"userName": name ?: @"",
         @"phone": phone ?: @"",
         @"email": email ?: @"",
-    };
+    }];
+    if (self.headerUrl) {
+        param[@"photo"] = self.headerUrl;
+    }
+    
     
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     kWeakSelf(self);

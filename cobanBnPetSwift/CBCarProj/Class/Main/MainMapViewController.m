@@ -167,6 +167,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     // 开启定时器，每20s刷新，各设备详情
     [self startTimer];
     [AppDelegate isShowGoogle];
+    [self requestUserData];
 }
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear: animated];
@@ -1227,6 +1228,23 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     } else {
         NSLog(@"反geo检索发送失败");
     }
+}
+
+#pragma mark --获取用户信息
+- (void)requestUserData {
+    kWeakSelf(self);
+    [MBProgressHUD showHUDIcon:self.googleView animated:YES];
+    [[NetWorkingManager shared] getWithUrl:@"/userController/getUserInfoByUid" params:@{} succeed:^(id response, BOOL isSucceed) {
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.googleView animated:YES];
+        if (isSucceed) {
+            CBPetLoginModel *model = [CBPetLoginModel mj_objectWithKeyValues:response];
+            [CBPetLoginModelTool saveUser:model];
+        }
+    } failed:^(NSError *error) {
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.googleView animated:YES];
+    }];
 }
 
 #pragma mark ------------paoViewActions------------
