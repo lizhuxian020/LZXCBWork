@@ -52,20 +52,13 @@
 - (NSMutableArray *)arrayData {
     if (!_arrayData) {
         _arrayData = [NSMutableArray array];
-        NSArray *arrayTitle = @[
-            Localized(@"掉电报警"),
-            Localized(@"低电报警"),
-            Localized(@"盲区报警") ,
-            Localized(@"振动报警"),
-            Localized(@"油量检测报警")
-        ];//Localized(@"保养通知")
-        NSArray *arrayTitleImage = @[
-            @"掉电报警",
-            @"低电报警",
-            @"盲区报警",
-            @"振动报警",
-            @"油量检测报警"
-        ];//@"点火报表"
+        
+        __block NSArray *arrayTitle = nil;
+        __block NSArray *arrayTitleImage = nil;
+        [CBDeviceTool.shareInstance getAlarmConfigData:^(NSArray * _Nonnull _arrayTitle, NSArray * _Nonnull _arrayTitleImage) {
+            arrayTitle = _arrayTitle;
+            arrayTitleImage = _arrayTitleImage;
+        }];
         for (int i = 0 ; i < arrayTitle.count ; i ++ ) {
             CBControlModel *controlModel = [[CBControlModel alloc]init];
             controlModel.titleStr = arrayTitle[i];

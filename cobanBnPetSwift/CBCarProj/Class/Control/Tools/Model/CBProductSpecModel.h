@@ -77,6 +77,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy) NSString *proto;
 @property(nonatomic, copy) NSString *tbDevModelId;
 
+- (BOOL)isShowOverSpeed;
+- (BOOL)isShowDiaodian;
+- (BOOL)isShowDidian;
+- (BOOL)isShowBlind;
+- (BOOL)isShowZd;
+- (BOOL)isShowOilCheck;
+
 @property (nonatomic, strong) CBProductSpecReportModel *devShowReport;
 @end
 

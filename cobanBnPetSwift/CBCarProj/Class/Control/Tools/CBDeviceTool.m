@@ -204,7 +204,7 @@
         @(_currentProductSpec.remoteStart),
         @(_currentProductSpec.arm),
         @(_currentProductSpec.callChargeInquiry),
-        @(1), //TODO: lzxTODO 哪里的?
+        @(_currentProductSpec.isShowOverSpeed),
     ];
     
     if (!self.currentProductSpec) {
@@ -272,7 +272,7 @@
         @(_currentProductSpec.accWorkNotice),
         @(_currentProductSpec.gpsDriftSuppression),
         @(_currentProductSpec.turnSupplement),
-        @(1), //TODO: lzxTODO 哪里的?
+        @(0), //一直不显示
         @(_currentProductSpec.setGprsHeartbeat),
         @(_currentProductSpec.sensitivitySet),
         @(_currentProductSpec.initializeSet),
@@ -296,5 +296,49 @@
     
     blk(titleMArr, imageMArr);
     
+}
+
+- (void)getAlarmConfigData:(void(^)(NSArray *arrayTitle ,NSArray *arrayTitleImage))blk {
+    NSMutableArray *titleMArr = [NSMutableArray new];
+    NSMutableArray *imageMArr = [NSMutableArray new];
+    [titleMArr addObjectsFromArray:@[
+        Localized(@"掉电报警"),
+        Localized(@"低电报警"),
+        Localized(@"盲区报警") ,
+        Localized(@"振动报警"),
+        Localized(@"油量检测报警")
+    ]];
+    [imageMArr addObjectsFromArray:@[
+        @"掉电报警",
+        @"低电报警",
+        @"盲区报警",
+        @"振动报警",
+        @"油量检测报警"
+    ]];
+    
+    NSArray *showArr = @[
+        @(_currentProductSpec.isShowDiaodian),
+        @(_currentProductSpec.isShowDidian),
+        @(_currentProductSpec.isShowBlind),
+        @(_currentProductSpec.isShowZd),
+        @(_currentProductSpec.isShowOilCheck),
+    ];
+    
+    if (!self.currentProductSpec) {
+        blk(titleMArr, imageMArr);
+        return;
+    }
+    NSMutableArray *waitToRemoveTitle = [NSMutableArray new];
+    NSMutableArray *waitToRemoveImg = [NSMutableArray new];
+    for (int i = 0; i < showArr.count; i++) {
+        if ([showArr[i] boolValue] == NO) {
+            [waitToRemoveTitle addObject:titleMArr[i]];
+            [waitToRemoveImg addObject:imageMArr[i]];
+        }
+    }
+    [titleMArr removeObjectsInArray:waitToRemoveTitle];
+    [imageMArr removeObjectsInArray:waitToRemoveImg];
+    
+    blk(titleMArr, imageMArr);
 }
 @end

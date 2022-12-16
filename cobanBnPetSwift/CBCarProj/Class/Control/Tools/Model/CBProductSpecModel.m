@@ -25,4 +25,23 @@
     };
 }
 
+- (BOOL)isShowOverSpeed {
+    return [_alarmSwitch containsString:@"6"];
+}
+- (BOOL)isShowDiaodian {
+    return [_alarmSwitch containsString:@"1"];
+}
+- (BOOL)isShowDidian {
+    return [_alarmSwitch containsString:@"2"];
+}
+- (BOOL)isShowBlind {
+    return [_alarmSwitch containsString:@"3"];
+}
+- (BOOL)isShowZd {
+    return [_alarmSwitch containsString:@"8"];
+}
+- (BOOL)isShowOilCheck {
+    return [_alarmSwitch containsString:@"7"];
+}
+
 @end
