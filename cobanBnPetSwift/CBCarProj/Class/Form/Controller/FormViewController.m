@@ -19,10 +19,7 @@
 #import "AboutUsViewController.h"
 #import "cobanBnPetSwift-Swift.h"
 @interface FormViewController () <UITableViewDelegate, UITableViewDataSource>
-{
-    NSMutableArray *sectionStatusArr;
-}
-@property (nonatomic, strong) NSArray *sectionArr; // section的数组，0表示显示 1表示不显示项
+@property (nonatomic, strong) NSMutableArray *sectionStatusArr;
 @property (nonatomic, strong) FormProtocalModel *model;
 @property (nonatomic, copy) NSArray *sectionTitleArr;
 @property (nonatomic, copy) NSArray *sectionImageTitleArr;
@@ -41,21 +38,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+
     [self createUI];
-    self.sectionArr = [NSMutableArray arrayWithArray: @[@1, @1, @1, @1, @1, @1, @1, @1, @1]];
-    // 分别是 速度报表，怠速报表，停留统计，点火报表，里程统计，油量统计，报警统计，OBD报表，电子围栏报表，多媒体记录报表
-//    self.sectionTitleArr = @[Localized(@"速度报表"), Localized(@"怠速报表"), Localized(@"停留统计"), Localized(@"点火报表"), Localized(@"里程统计"), Localized(@"油量统计"), Localized(@"报警统计"), Localized(@"OBD报表"), Localized(@"电子围栏报表"), Localized(@"多媒体记录报表"), Localized(@"调度记录报表")];
-    self.sectionTitleArr = @[Localized(@"速度报表"), Localized(@"怠速报表"), Localized(@"停留统计"), Localized(@"点火报表"), Localized(@"里程统计"), Localized(@"油量统计"), Localized(@"报警统计"), Localized(@"OBD报表"), Localized(@"电子围栏报表")];
-//    self.sectionImageTitleArr = @[@"速度报表", @"怠速报表", @"停留统计", @"点火报表", @"里程统计", @"油量统计", @"报警统计", @"OBD报表", @"电子围栏报表", @"多媒体记录报表", @"调度记录报表"];
-    self.sectionImageTitleArr = @[@"速度报表", @"怠速报表", @"停留统计", @"点火报表", @"里程统计", @"油量统计", @"报警统计", @"OBD报表", @"电子围栏报表"];
-    self.oilTitleArr = @[Localized(@"日里程耗油报表"), Localized(@"油量里程速度表"), Localized(@"加油报表"), Localized(@"漏油报表")];
-    self.oilImageArr = @[@"日里程耗油报表",@"油量里程速度表",@"加油报表",@"漏油报表"];
-    self.warnTitleArr = @[Localized(@"所有报警统计报表"), Localized(@"SOS报警统计报表"), Localized(@"超速报警统计报表"), Localized(@"疲劳驾驶统计报表"), Localized(@"欠压报警统计报表"), Localized(@"掉电报警统计报表"), Localized(@"振动报警统计报表"), Localized(@"开门报警统计报表"), Localized(@"点火报警统计报表"), Localized(@"位移报警统计报表"), Localized(@"偷油漏油报警统计报表"), Localized(@"碰撞报警报表")];
-    self.warnImageArr = @[@"所有报警统计报表", @"SOS报警统计报表", @"超速报警统计报表", @"疲劳驾驶统计报表", @"欠压报警统计报表", @"掉电报警统计报表", @"振动报警统计报表", @"开门报警统计报表", @"点火报警统计报表", @"位移报警统计报表", @"偷油漏油报警统计报表", @"碰撞报警报表"];
-    self.electronicTitleArr = @[Localized(@"入围栏报警报表"), Localized(@"出围栏报警报表"), Localized(@"出入围栏报警报表")];
-    self.electronicImageArr = @[@"入围栏报警报表", @"出围栏报警报表", @"出入围栏报警报表"];
-    sectionStatusArr = [NSMutableArray arrayWithObjects: @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, nil];
-    
 //    //设置预估高为0 tableView刷新后防止滚动,闪动
     self.tableView.estimatedRowHeight = 0;
     self.tableView.estimatedSectionHeaderHeight = 0;
@@ -63,6 +47,24 @@
 }
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    kWeakSelf(self);
+    [[CBDeviceTool shareInstance] getReportData:^(NSArray * _Nonnull sectionArr, NSArray * _Nonnull sectionTitleArr, NSArray * _Nonnull sectionImageTitleArr, NSArray * _Nonnull oilTitleArr, NSArray * _Nonnull oilImageArr, NSArray * _Nonnull warnTitleArr, NSArray * _Nonnull warnImageArr, NSArray * _Nonnull electronicTitleArr, NSArray * _Nonnull electronicImageArr) {
+        weakself.sectionStatusArr = [NSMutableArray arrayWithArray:sectionArr];
+        weakself.sectionTitleArr = sectionTitleArr;
+        weakself.sectionImageTitleArr = sectionImageTitleArr;
+        
+        weakself.oilTitleArr = oilTitleArr;
+        weakself.oilImageArr = oilImageArr;
+        
+        weakself.warnTitleArr = warnTitleArr;
+        weakself.warnImageArr = warnImageArr;
+        
+        weakself.electronicTitleArr = electronicTitleArr;
+        weakself.electronicImageArr = electronicImageArr;
+        
+    }];
+    [self.tableView reloadData];
     
     CBHomeLeftMenuDeviceInfoModel *model = [CBCommonTools CBdeviceInfo];
     [self initBarRighBtnTitle: model.name?:@"" target: self action: @selector(didRightBtn)];
@@ -202,21 +204,21 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return self.sectionArr.count;
+    return self.sectionStatusArr.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    int flag = [sectionStatusArr[section] intValue];
+    int flag = [self.sectionStatusArr[section] intValue];
     if (flag == 0) {
         return 0;
     }
-    if (section == 5 && [self.sectionArr[section] intValue] == 1) { // 油量统计
-        return 4;
-    }else if (section == 6 && [self.sectionArr[section] intValue] == 1) { // 报警统计
-        return 12;
-    }else if (section == 8 && [self.sectionArr[section] intValue] == 1) { // 电子围栏报表
-        return 3;
+    if (section == 5) { // 油量统计
+        return self.oilTitleArr.count;
+    }else if (section == 6) { // 报警统计
+        return self.warnTitleArr.count;
+    }else if (section == 8) { // 电子围栏报表
+        return self.electronicTitleArr.count;
     }
     return 0;
 }
@@ -244,9 +246,6 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    if ([self.sectionArr[section] intValue] == 0) {
-        return nil;
-    }
     FormHeaderView *view = [[FormHeaderView alloc] init];
 //    view.frame = CGRectMake(0, 0, SCREEN_HEIGHT, 50 * KFitHeightRate);
     view.titleLabel.text = self.sectionTitleArr[section];
@@ -255,7 +254,7 @@
     view.section = section;
     [view checkIfShowBottomLine:self.sectionImageTitleArr currentIdx:section];
 //    [view setCornerWithSection: section];
-    int flag = [sectionStatusArr[section] intValue];
+    int flag = [_sectionStatusArr[section] intValue];
     if (flag == 0) {
         view.arrowImageBtn.selected = NO;//YES;
         view.exArrowImageBtn.selected = NO;//YES;
@@ -315,16 +314,15 @@
 
 - (void)reloadTableSectionAtIndex:(NSInteger) section
 {
-    int flag = [sectionStatusArr[section] intValue];
+    int flag = [_sectionStatusArr[section] intValue];
     if (flag == 0) {
-        [sectionStatusArr setObject: @1 atIndexedSubscript: section];
+        [_sectionStatusArr setObject: @1 atIndexedSubscript: section];
     }else {
-        [sectionStatusArr setObject: @0 atIndexedSubscript: section];
+        [_sectionStatusArr setObject: @0 atIndexedSubscript: section];
     }
     //刷新当前的分组
-    //NSIndexSet *set = [[NSIndexSet alloc] initWithIndex: section];
-    //[self.tableView reloadSections:set withRowAnimation:UITableViewRowAnimationNone];
-    [self.tableView reloadData];
+    NSIndexSet *set = [[NSIndexSet alloc] initWithIndex: section];
+    [self.tableView reloadSections:set withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -334,9 +332,6 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if ([self.sectionArr[section] intValue] == 0) {
-        return 0;
-    }
     return 50;
 }
 

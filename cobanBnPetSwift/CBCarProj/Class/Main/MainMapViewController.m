@@ -619,12 +619,10 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 }
 
 - (void)setDeviceInfoModelSelect:(CBHomeLeftMenuDeviceInfoModel *)deviceInfoModelSelect {
-    if (!_deviceInfoModelSelect && deviceInfoModelSelect) {
-        [CBDeviceTool.shareInstance didChooseDevice:deviceInfoModelSelect];
-    } else if (_deviceInfoModelSelect && deviceInfoModelSelect && ![_deviceInfoModelSelect.dno isEqualToString:deviceInfoModelSelect.dno]) {
-        [CBDeviceTool.shareInstance didChooseDevice:deviceInfoModelSelect];
-    }
     _deviceInfoModelSelect = deviceInfoModelSelect;
+    if (_deviceInfoModelSelect) {
+        [CBDeviceTool.shareInstance didChooseDevice:_deviceInfoModelSelect];
+    }
 }
 
 - (void)setupInfoPopView {

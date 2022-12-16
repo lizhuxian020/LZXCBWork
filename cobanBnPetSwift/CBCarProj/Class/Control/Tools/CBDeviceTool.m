@@ -382,4 +382,134 @@
     
     blk(titleMArr, imageMArr);
 }
+
+- (void)getReportData:(void(^)(NSArray *sectionArr, NSArray *sectionTitleArr, NSArray *sectionImageTitleArr, NSArray *oilTitleArr, NSArray *oilImageArr, NSArray *warnTitleArr, NSArray *warnImageArr, NSArray *electronicTitleArr, NSArray *electronicImageArr))blk {
+    NSMutableArray *sectionArr = [NSMutableArray new];
+    NSMutableArray *sectionTitleArr = [NSMutableArray new];
+    NSMutableArray *sectionImageTitleArr = [NSMutableArray new];
+    NSMutableArray *oilTitleArr = [NSMutableArray new];
+    NSMutableArray *oilImageArr = [NSMutableArray new];
+    NSMutableArray *warnTitleArr = [NSMutableArray new];
+    NSMutableArray *warnImageArr = [NSMutableArray new];
+    NSMutableArray *electronicTitleArr = [NSMutableArray new];
+    NSMutableArray *electronicImageArr = [NSMutableArray new];
+    
+    [sectionTitleArr addObjectsFromArray:@[
+        Localized(@"速度报表"),
+        Localized(@"怠速报表"),
+        Localized(@"停留统计"),
+        Localized(@"点火报表"),
+        Localized(@"里程统计"),
+        Localized(@"油量统计"),
+        Localized(@"报警统计"),
+        Localized(@"OBD报表"),
+        Localized(@"电子围栏报表")
+    ]];
+    [sectionImageTitleArr addObjectsFromArray:@[
+        @"速度报表", @"怠速报表", @"停留统计", @"点火报表", @"里程统计", @"油量统计", @"报警统计", @"OBD报表", @"电子围栏报表"
+    ]];
+    
+    NSArray *sectionShowArr = @[
+        @(_currentProductSpec.devShowReport.curvesSpeed),
+        @(_currentProductSpec.devShowReport.reportIdle),
+        @(_currentProductSpec.devShowReport.reportStop),
+        @(_currentProductSpec.devShowReport.reportIgnition),
+        @(_currentProductSpec.devShowReport.reportMiles),
+        @(_currentProductSpec.devShowReport.reportOil),
+        @(1),
+        @(_currentProductSpec.devShowReport.reportObd),
+        @(_currentProductSpec.devShowReport.reportFence),
+    ];
+    
+   
+    [oilTitleArr addObjectsFromArray:@[
+        Localized(@"日里程耗油报表"), Localized(@"油量里程速度表"), Localized(@"加油报表"), Localized(@"漏油报表")
+    ]];
+    [oilImageArr addObjectsFromArray:@[
+        @"日里程耗油报表",@"油量里程速度表",@"加油报表",@"漏油报表"
+    ]];
+    
+    NSArray *oilShowArr = @[
+        @(1),
+        @(1),
+        @(1),
+        @(1),
+    ];
+    
+    [warnTitleArr addObjectsFromArray:@[
+        Localized(@"所有报警统计报表"),
+        Localized(@"SOS报警统计报表"),
+        Localized(@"超速报警统计报表"),
+        Localized(@"疲劳驾驶统计报表"),
+        Localized(@"欠压报警统计报表"),
+        Localized(@"掉电报警统计报表"),
+        Localized(@"振动报警统计报表"),
+        Localized(@"开门报警统计报表"),
+        Localized(@"点火报警统计报表"),
+        Localized(@"位移报警统计报表"),
+        Localized(@"偷油漏油报警统计报表"),
+        Localized(@"碰撞报警报表")
+    ]];
+    [warnImageArr addObjectsFromArray:@[
+        @"所有报警统计报表", @"SOS报警统计报表", @"超速报警统计报表", @"疲劳驾驶统计报表", @"欠压报警统计报表", @"掉电报警统计报表", @"振动报警统计报表", @"开门报警统计报表", @"点火报警统计报表", @"位移报警统计报表", @"偷油漏油报警统计报表", @"碰撞报警报表"
+    ]];
+    
+    NSArray *warnShowArr = @[
+        @(_currentProductSpec.devShowReport.warmAll),
+        @(_currentProductSpec.devShowReport.warmSos),
+        @(_currentProductSpec.devShowReport.warmChaosu),
+        @(_currentProductSpec.devShowReport.warmTired),
+        @(_currentProductSpec.devShowReport.warmQianya),
+        @(_currentProductSpec.devShowReport.warmDiaodian),
+        @(_currentProductSpec.devShowReport.warmZhendong),
+        @(_currentProductSpec.devShowReport.warmKaimen),
+        @(_currentProductSpec.devShowReport.warmDianhuo),
+        @(_currentProductSpec.devShowReport.warmWeiyi),
+        @(_currentProductSpec.devShowReport.warmTouyou),
+        @(_currentProductSpec.devShowReport.warmPz),
+    ];
+    
+    [electronicTitleArr addObjectsFromArray:@[
+        Localized(@"入围栏报警报表"), Localized(@"出围栏报警报表"), Localized(@"出入围栏报警报表")
+    ]];
+    [electronicImageArr addObjectsFromArray:@[
+        @"入围栏报警报表", @"出围栏报警报表", @"出入围栏报警报表"
+    ]];
+    
+    NSArray *electronicShowArr = @[
+        @(1),@(1),@(1),
+    ];
+    
+    
+    if (!self.currentProductSpec) {
+        blk(sectionArr, sectionTitleArr, sectionImageTitleArr, oilTitleArr, oilImageArr, warnTitleArr, warnImageArr, electronicTitleArr, electronicImageArr);
+        return;
+    }
+    [self processArrayData:sectionTitleArr withShowData:sectionShowArr];
+    [self processArrayData:sectionImageTitleArr withShowData:sectionShowArr];
+    for (id obj in sectionTitleArr) {
+        [sectionArr addObject:@0];
+    }
+    
+    [self processArrayData:oilTitleArr withShowData:oilShowArr];
+    [self processArrayData:oilImageArr withShowData:oilShowArr];
+    
+    [self processArrayData:warnTitleArr withShowData:warnShowArr];
+    [self processArrayData:warnImageArr withShowData:warnShowArr];
+    
+    [self processArrayData:electronicTitleArr withShowData:electronicShowArr];
+    [self processArrayData:electronicImageArr withShowData:electronicShowArr];
+    
+    blk(sectionArr, sectionTitleArr, sectionImageTitleArr, oilTitleArr, oilImageArr, warnTitleArr, warnImageArr, electronicTitleArr, electronicImageArr);
+}
+
+- (void)processArrayData:(NSMutableArray *)arrayData withShowData:(NSArray<NSNumber *> *)showArray {
+    NSMutableArray *waitToRemoveArr = [NSMutableArray new];
+    for (int i = 0; i < showArray.count; i++) {
+        if ([showArray[i] boolValue] == NO) {
+            [waitToRemoveArr addObject:arrayData[i]];
+        }
+    }
+    [arrayData removeObjectsInArray:waitToRemoveArr];
+}
 @end
