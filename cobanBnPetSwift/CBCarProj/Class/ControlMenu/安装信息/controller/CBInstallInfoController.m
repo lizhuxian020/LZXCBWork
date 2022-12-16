@@ -15,6 +15,10 @@
 
 @property (nonatomic, strong) _CBInstallInfoView *infoView;
 
+/** 七牛云上传token */
+@property (nonatomic,strong) CBBaseQNYFileInfoModel *qnyFileModelPrivate;
+@property (nonatomic,copy) NSString *qnyToken;
+@property (nonatomic, copy) NSString *picUrl ; /** <##> **/
 @end
 
 @implementation CBInstallInfoController
@@ -25,6 +29,7 @@
     
     [self createUI];
     [self requestData];
+    [self getQNYFileTokenReqeust];
 }
 
 - (void)createUI {
@@ -38,6 +43,10 @@
     }];
     
     self.infoView = [_CBInstallInfoView new];
+    kWeakSelf(self);
+    [self.infoView setDidChooseImg:^(UIImage * _Nonnull image) {
+        [weakself uploadHeader:image];
+    }];
     [self.scrollView addSubview:self.infoView];
     [self.infoView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.equalTo(@0);
@@ -69,7 +78,10 @@
 - (void)save {
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     kWeakSelf(self);
-    NSDictionary *dic = [self.infoView getSaveInfo];
+    NSMutableDictionary *dic = [self.infoView getSaveInfo];
+    if (self.picUrl) {
+        dic[@"installPicture"] = self.picUrl;
+    }
     [[NetWorkingManager shared] postJSONWithUrl:@"/gpsInstallController/updGpsInstall" params:dic succeed:^(id response, BOOL isSucceed) {
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -77,6 +89,47 @@
             [CBTopAlertView alertSuccess:Localized(@"操作成功")];
         }
     } failed:^(NSError *error) {
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    }];
+}
+#pragma mark -- 获取七牛云token
+- (void)getQNYFileTokenReqeust {
+    [[CBWtNetworkRequestManager sharedInstance] getQNFileTokenSuccess:^(CBWtBaseNetworkModel * _Nonnull baseModel) {
+        switch (baseModel.status) {
+                
+            case CBWtNetworkingStatus0:
+            {
+                self.qnyFileModelPrivate = [CBBaseQNYFileInfoModel mj_objectWithKeyValues:baseModel.data];
+                self.qnyToken = baseModel.data;
+            }
+                break;
+            default:
+            {
+                [CBWtMINUtils showProgressHudToView:self.view withText:baseModel.resmsg];
+            }
+                break;
+        }
+    } failure:^(NSError * _Nonnull error) {
+        //[MBProgressHUD showMessage:@"请求超时" withDelay:3.0f];
+    }];
+}
+
+#pragma mark -- 上传图片
+- (void)uploadHeader:(UIImage*)image {
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    kWeakSelf(self);
+    [[CBWtNetworkRequestManager sharedInstance] uploadImageToQNFilePath:image token:self.qnyToken?:@"" success:^(id  _Nonnull baseModel) {
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        
+        NSString *imageUrl = [NSString stringWithFormat:@"%@",baseModel[@"key"]];
+        NSString *headImageUrlStr = [NSString stringWithFormat:@"%@%@",@"http://cdn.clw.gpstrackerxy.com/",imageUrl];
+        
+        NSLog(@"--------头像路径--------%@",headImageUrlStr);
+        self.picUrl = headImageUrlStr;
+        
+    } failure:^(NSError * _Nonnull error) {
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
     }];

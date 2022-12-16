@@ -14,7 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) _CBInstallInfo *model;
 
-- (NSDictionary *)getSaveInfo;
+@property (nonatomic, copy) void(^didChooseImg)(UIImage *image);
+
+- (NSMutableDictionary *)getSaveInfo;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -202,7 +202,7 @@
     [self setLbl:self.engineLbl text:_model.engineNumber placeHolder:Localized(@"请输入")];
     [self setLbl:self.brandLbl text:_model.vehicleBrand placeHolder:Localized(@"请输入")];
     
-    self.imgView.image = [UIImage imageNamed:@"选项-选中"];
+    [self.imgView sd_setImageWithURL:[NSURL URLWithString:model.installPicture] placeholderImage:[UIImage imageNamed:@"选项-选中"]];
 }
 
 - (void)setLbl:(UILabel *)lbl text:(NSString *)text placeHolder:(NSString *)placeHolder{
@@ -318,7 +318,9 @@
     
     kWeakSelf(self);
     [picker dismissViewControllerAnimated:YES completion:^{
-            
+        if (uploadImage && weakself.didChooseImg) {
+            weakself.didChooseImg(uploadImage);
+        }
     }];
 }
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
@@ -343,7 +345,7 @@
     return UIApplication.sharedApplication.keyWindow.rootViewController;
 }
 
-- (NSDictionary *)getSaveInfo {
+- (NSMutableDictionary *)getSaveInfo {
     NSMutableDictionary *param = [NSMutableDictionary new];
     [self addParam:param key:@"installer" label:self.installerLbl];
     [self addParam:param key:@"installCompany" label:self.companyLbl];
