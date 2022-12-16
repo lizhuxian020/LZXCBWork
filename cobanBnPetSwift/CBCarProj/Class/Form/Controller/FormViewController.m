@@ -23,7 +23,6 @@
     NSMutableArray *sectionStatusArr;
 }
 @property (nonatomic, strong) NSArray *sectionArr; // section的数组，0表示显示 1表示不显示项
-@property (nonatomic, strong) NSArray *alarmArr; // alarm的数组, 0表示显示 1表示不显示项
 @property (nonatomic, strong) FormProtocalModel *model;
 @property (nonatomic, copy) NSArray *sectionTitleArr;
 @property (nonatomic, copy) NSArray *sectionImageTitleArr;
@@ -33,7 +32,6 @@
 @property (nonatomic, copy) NSArray *warnImageArr;
 @property (nonatomic, copy) NSArray *electronicTitleArr;
 @property (nonatomic, copy) NSArray *electronicImageArr;
-@property (nonatomic, assign) NSInteger lastAlarm;
 //@property (nonatomic, strong) NSMutableArray *showArr; // 显示项
 @property (nonatomic, strong) _CBMyInfoPopView *infoPopView;
 @end
@@ -46,8 +44,6 @@
     [self createUI];
     self.sectionArr = [NSMutableArray arrayWithArray: @[@1, @1, @1, @1, @1, @1, @1, @1, @1]];
     // 分别是 速度报表，怠速报表，停留统计，点火报表，里程统计，油量统计，报警统计，OBD报表，电子围栏报表，多媒体记录报表
-    self.alarmArr = [NSMutableArray arrayWithArray: @[@1, @1, @1, @1, @1, @1, @1, @1, @1, @1, @1, @1]];
-    // 分别是 所有报警，sos报警，超速报警，疲劳驾驶，欠压报警，掉电报警，振动报警，开门报警，点火报警，位移报警，偷油漏油报警，碰撞报警统计报表
 //    self.sectionTitleArr = @[Localized(@"速度报表"), Localized(@"怠速报表"), Localized(@"停留统计"), Localized(@"点火报表"), Localized(@"里程统计"), Localized(@"油量统计"), Localized(@"报警统计"), Localized(@"OBD报表"), Localized(@"电子围栏报表"), Localized(@"多媒体记录报表"), Localized(@"调度记录报表")];
     self.sectionTitleArr = @[Localized(@"速度报表"), Localized(@"怠速报表"), Localized(@"停留统计"), Localized(@"点火报表"), Localized(@"里程统计"), Localized(@"油量统计"), Localized(@"报警统计"), Localized(@"OBD报表"), Localized(@"电子围栏报表")];
 //    self.sectionImageTitleArr = @[@"速度报表", @"怠速报表", @"停留统计", @"点火报表", @"里程统计", @"油量统计", @"报警统计", @"OBD报表", @"电子围栏报表", @"多媒体记录报表", @"调度记录报表"];
@@ -59,14 +55,6 @@
     self.electronicTitleArr = @[Localized(@"入围栏报警报表"), Localized(@"出围栏报警报表"), Localized(@"出入围栏报警报表")];
     self.electronicImageArr = @[@"入围栏报警报表", @"出围栏报警报表", @"出入围栏报警报表"];
     sectionStatusArr = [NSMutableArray arrayWithObjects: @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, nil];
-    // 设置需要显示报警的cell的最后一个index
-    for (int i = 0; i < self.alarmArr.count; i++) {
-        if ([self.alarmArr[self.alarmArr.count - 1 - i] integerValue] == 1) {
-            self.lastAlarm = self.alarmArr.count - 1 - i;
-            break;
-        }
-    }
-    //[self requestData];
     
 //    //设置预估高为0 tableView刷新后防止滚动,闪动
     self.tableView.estimatedRowHeight = 0;
@@ -78,41 +66,6 @@
     
     CBHomeLeftMenuDeviceInfoModel *model = [CBCommonTools CBdeviceInfo];
     [self initBarRighBtnTitle: model.name?:@"" target: self action: @selector(didRightBtn)];
-}
-#pragma mark -- 根据协议展示控制功能
-- (void)requestData
-{
-    __weak __typeof__(self) weakSelf = self;
-    NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:1];
-    //dic[@"proto"] = [AppDelegate shareInstance].potocal;
-    //MBProgressHUD *hud = [MINUtils hudToView: self.view withText: Localized(@"加载中...")];
-    [MBProgressHUD showHUDIcon:self.view animated:YES];
-    kWeakSelf(self);
-    [[NetWorkingManager shared]getWithUrl:@"devReportController/getMenuByProto" params: dic succeed:^(id response,BOOL isSucceed) {
-        kStrongSelf(self);
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
-        if (isSucceed) {
-            if (response && [response[@"data"] isKindOfClass:[NSDictionary class]]) {
-                FormProtocalModel *model = [FormProtocalModel yy_modelWithJSON: response[@"data"]];
-                weakSelf.sectionArr = [model getSectionArr];
-                weakSelf.alarmArr = [model getWarmArr];
-                for (int i = 0; i < weakSelf.alarmArr.count; i++) {
-                    if ([weakSelf.alarmArr[weakSelf.alarmArr.count - 1 - i] integerValue] == 1) {
-                        weakSelf.lastAlarm = weakSelf.alarmArr.count - 1 - i;
-                        break;
-                    }
-                }
-                [weakSelf.tableView reloadData];
-
-            }
-        }else {
-
-        }
-    } failed:^(NSError *error) {
-        kStrongSelf(self);
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
-        
-    }];
 }
 
 #pragma mark - CreateUI
@@ -128,6 +81,7 @@
 - (void)createTableView
 {
     self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.backgroundColor = kBackColor;
@@ -269,28 +223,11 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 6 && [self.alarmArr[indexPath.row] integerValue] == 0) {
-        FormTableViewCell *cell = [[FormTableViewCell alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, 0)];
-        cell.backView.hidden = YES;
-        return cell;
-    }
     static NSString *cellIndentify = @"FormTableViewCell";
-    static NSString *cellIndentifyLast = @"FormTableViewCellLast";
     FormTableViewCell *cell = nil;
-    NSInteger numNumOfRow = [tableView numberOfRowsInSection: indexPath.section];
-    if (numNumOfRow == indexPath.row + 1 || (self.lastAlarm == indexPath.row && indexPath.section == 6)) {
-        cell = [tableView dequeueReusableCellWithIdentifier: cellIndentifyLast];
-        if (cell == nil) {
-            cell = [[FormTableViewCell alloc] initWithStyle: UITableViewCellStyleSubtitle reuseIdentifier: cellIndentifyLast];
-        }
-    }else {
-        cell = [tableView dequeueReusableCellWithIdentifier: cellIndentify];
-        if (cell == nil) {
-            cell = [[FormTableViewCell alloc] initWithStyle: UITableViewCellStyleSubtitle reuseIdentifier: cellIndentify];
-            if ((self.lastAlarm != indexPath.row && indexPath.section == 6) || indexPath.section != 6) {
-                [cell addBottomLineView];
-            }
-        }
+    cell = [tableView dequeueReusableCellWithIdentifier: cellIndentify];
+    if (cell == nil) {
+        cell = [[FormTableViewCell alloc] initWithStyle: UITableViewCellStyleSubtitle reuseIdentifier: cellIndentify];
     }
     if (indexPath.section == 5) { // 油量统计
         cell.nameLabel.text = self.oilTitleArr[indexPath.row];
@@ -316,7 +253,7 @@
     view.exTitleLabel.text = self.sectionTitleArr[section];
     view.titleImageView.image = [UIImage imageNamed: self.sectionImageTitleArr[section]];
     view.section = section;
-    [view addBottomLineView];
+    [view checkIfShowBottomLine:self.sectionImageTitleArr currentIdx:section];
 //    [view setCornerWithSection: section];
     int flag = [sectionStatusArr[section] intValue];
     if (flag == 0) {
@@ -392,9 +329,6 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 6 && [self.alarmArr[indexPath.row] integerValue] == 0) {
-        return 0;
-    }
     return 50;
 }
 
@@ -415,39 +349,6 @@
 {
     return 0.01;
 }
-//
-//- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-//    if (indexPath.section == 6 && [self.alarmArr[indexPath.row] integerValue] == 0) {
-//        return ;
-//    }
-//    FormTableViewCell *deviceCell = (FormTableViewCell *)cell;
-//    if (deviceCell.isCreate == NO) {
-//        CGFloat cornerRadius = 5.f * KFitHeightRate;
-////        cell.backgroundColor = UIColor.clearColor;
-//        CAShapeLayer *layer = [[CAShapeLayer alloc] init];
-//        CGMutablePathRef pathRef = CGPathCreateMutable();
-//        CGRect bounds = CGRectMake(0, 0, SCREEN_HEIGHT - 12.5 * KFitWidthRate - 12.5 * KFitWidthRate, 50 * KFitHeightRate);
-//        if ((self.lastAlarm == indexPath.row && indexPath.section == 6) || indexPath.row == [tableView numberOfRowsInSection:indexPath.section] - 1) {
-//            CGPathMoveToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMinY(bounds));
-//            CGPathAddArcToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMaxY(bounds), CGRectGetMidX(bounds), CGRectGetMaxY(bounds), cornerRadius);
-//            CGPathAddArcToPoint(pathRef, nil, CGRectGetMaxX(bounds) - 1, CGRectGetMaxY(bounds), CGRectGetMaxX(bounds) -1, CGRectGetMidY(bounds), cornerRadius);
-//            CGPathAddLineToPoint(pathRef, nil, CGRectGetMaxX(bounds) -1, CGRectGetMinY(bounds));
-//        }else { // 中间的view
-//            CGPathMoveToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMaxY(bounds));
-//            CGPathAddLineToPoint(pathRef, nil, CGRectGetMinX(bounds), CGRectGetMinY(bounds));
-//            CGPathAddLineToPoint(pathRef, nil, CGRectGetMaxX(bounds)-1, CGRectGetMinY(bounds));
-//            CGPathAddLineToPoint(pathRef, nil, CGRectGetMaxX(bounds)-1, CGRectGetMaxY(bounds));
-//        }
-//        layer.path = pathRef;
-//        //颜色修改
-//        layer.fillColor = kCellBackColor.CGColor;
-//        layer.strokeColor = kCellBackColor.CGColor;
-//        CFRelease(pathRef);
-//        [deviceCell.backView.layer insertSublayer: layer atIndex: 0];
-//        deviceCell.isCreate = YES;
-//    }
-//}
-
 #pragma mark - Other Method
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -18,7 +18,7 @@
 @property (nonatomic, strong) UIButton *exArrowImageBtn;
 - (void)setDownforwardImage;
 //- (void)setCornerWithSection:(NSInteger)section;
-- (void)addBottomLineView;
+- (void)checkIfShowBottomLine:(NSArray *)imageArray currentIdx:(NSUInteger)index;
 - (void)showExpandableView;
 - (void)hideExpandableView;
 @end

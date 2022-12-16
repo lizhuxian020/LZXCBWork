@@ -29,6 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)getAlarmConfigData:(void(^)(NSArray *arrayTitle ,NSArray *arrayTitleImage))blk;
 
 - (void)getXiumianData:(void(^)(NSArray *arrayTitle, NSArray *arrayId))blk;
+
+- (void)getReportData:(void(^)(NSArray *sectionArr, NSArray *sectionTitleArr, NSArray *sectionImageTitleArr))blk;
 @end
 
 NS_ASSUME_NONNULL_END

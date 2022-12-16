@@ -15,6 +15,8 @@
 @property (nonatomic, strong) UIButton *headBtn;
 
 @property (nonatomic, strong) UIView *expandableView;
+
+@property (nonatomic, strong) UIView *lineView;
 @end
 
 @implementation FormHeaderView
@@ -95,6 +97,16 @@
     }];
     
     [backView bringSubviewToFront:_headBtn];
+    
+    UIView *lineView = [MINUtils createLineView];
+    [backView addSubview: lineView];
+    [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(backView);
+        make.height.mas_equalTo(1);
+        make.left.equalTo(self.titleImageView.mas_right);
+        make.right.equalTo(self.arrowImageBtn.mas_right);
+    }];
+    self.lineView = lineView;
 }
 
 - (void)headBtnClick
@@ -144,16 +156,25 @@
 //    layer.fillColor = kCellBackColor.CGColor;
 //}
 
-- (void)addBottomLineView
-{
-    UIView *lineView = [MINUtils createLineView];
-    [backView addSubview: lineView];
-    [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(backView);
-        make.height.mas_equalTo(1);
-        make.left.equalTo(self.titleImageView.mas_right);
-        make.right.equalTo(self.arrowImageBtn.mas_right);
-    }];
+- (void)checkIfShowBottomLine:(NSArray *)imageArray currentIdx:(NSUInteger)index {
+//    self.sectionImageTitleArr = @[@"速度报表", @"怠速报表", @"停留统计", @"点火报表", @"里程统计", @"油量统计", @"报警统计", @"OBD报表", @"电子围栏报表"];
+    self.lineView.hidden = NO;
+    if (index == imageArray.count - 1) {
+        self.lineView.hidden = YES;
+        return;
+    }
+    NSUInteger nextIdx = index + 1;
+    NSString *nextImageString = imageArray[nextIdx];
+    NSString *currentImageString = imageArray[index];
+    NSArray *canExpandArr = @[@"电子围栏报表", @"油量统计", @"报警统计"];
+    if ([canExpandArr containsObject:nextImageString] && ![canExpandArr containsObject:currentImageString]) {
+        self.lineView.hidden = YES;
+        return;
+    }
+    if ([canExpandArr containsObject:currentImageString] && ![canExpandArr containsObject:nextImageString]) {
+        self.lineView.hidden = YES;
+        return;
+    }
 }
 
 - (void)showExpandableView {

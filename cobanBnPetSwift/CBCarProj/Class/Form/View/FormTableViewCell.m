@@ -11,6 +11,7 @@
 {
     UIImageView *rightBtnImageView;
 }
+@property (nonatomic, strong) UIView *lineView;
 @end
 
 @implementation FormTableViewCell
@@ -53,6 +54,15 @@
             make.right.equalTo(_backView).with.offset(-10 * KFitWidthRate);
         }];
         
+        UIView *lineView = [MINUtils createLineView];
+        [_backView addSubview: lineView];
+        [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.bottom.equalTo(_backView);
+            make.height.mas_equalTo(1);
+            make.left.equalTo(_imgView);
+            make.right.equalTo(rightBtnImageView);
+        }];
+        self.lineView = lineView;
     }
     return self;
 }
