@@ -12,16 +12,19 @@
 
 @property (nonatomic, strong) NSArray *data;
 
+@property (nonatomic, strong) NSArray *idArr;
+
 @property (nonatomic, strong) UIImageView *selectedImgV;
 
 @end
 
 @implementation _CBXiuMianChooseView
 
-- (instancetype)initWithData:(NSArray *)data {
+- (instancetype)initWithData:(NSArray *)data :(NSArray *)idArr{
     self = [super init];
     if (self) {
         self.data = data;
+        self.idArr = idArr;
         [self createView];
     }
     return self;
@@ -70,15 +73,17 @@
         lastView = view;
         
         [view bk_whenTapped:^{
-            if (weakself.currentIndex == i) {
+            if (weakself.currentIndex == [weakself.idArr[i] integerValue]) {
                 return;
             }
-            weakself.currentIndex = i;
+            weakself.currentIndex = [weakself.idArr[i] integerValue];
             weakself.selectedImgV.image = [UIImage imageNamed:@"未选中2"];
             weakself.selectedImgV = imgV;
             imgV.image = [UIImage imageNamed:@"已选中2"];
         }];
-        
+        if (i == 0) {
+            self.currentIndex = [weakself.idArr[i] integerValue];
+        }
     }
     
     UIView *line = [UIView new];

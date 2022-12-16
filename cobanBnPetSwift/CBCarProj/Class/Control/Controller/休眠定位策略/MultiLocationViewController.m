@@ -18,6 +18,7 @@
 @property (nonatomic, strong) _CBXiuMianChooseView *xmChooseView;
 @property (nonatomic, strong) _CBLocateModeView *locationModeView;
 @property (nonatomic, strong) NSArray *restArr;
+@property (nonatomic, strong) NSArray *restIdArr;
 @end
 
 @implementation MultiLocationViewController
@@ -25,7 +26,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.restArr = @[Localized(@"长在线"), Localized(@"振动休眠"), Localized(@"时间休眠"), Localized(@"深度振动休眠"), Localized(@"定时报告"), Localized(@"定时报告+深度振动休眠")];
+//    self.restArr = @[Localized(@"长在线"), Localized(@"振动休眠"), Localized(@"时间休眠"), Localized(@"深度振动休眠"), Localized(@"定时报告"), Localized(@"定时报告+深度振动休眠")];
+//    self.restIdArr = @[@0, @1, @2, @3, @4, @5];
+    kWeakSelf(self);
+    [CBDeviceTool.shareInstance getXiumianData:^(NSArray * _Nonnull arrayTitle, NSArray * _Nonnull arrayId) {
+        weakself.restArr = arrayTitle;
+        weakself.restIdArr = arrayId;
+    }];
     [self createUI];
     [self requestData];
 }
@@ -68,7 +75,7 @@
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:4];
     dic[@"dno"] = [CBCommonTools CBdeviceInfo].dno?:@"";//[AppDelegate shareInstance].currenDeviceSno;
     dic[@"report_way"] = self.locationModeView.getReportWay;
-    dic[@"rest_mod"] = @(self.xmChooseView.currentIndex+1);
+    dic[@"rest_mod"] = @(self.xmChooseView.currentIndex+1);//休眠模式 都要+1   不是0-5是 1-6
     dic[@"dis_qs"] = self.locationModeView.getSpeed;
     dic[@"time_qs"] = self.locationModeView.getTimeQS;
     dic[@"time_rest"] = self.locationModeView.getTimeRest;
@@ -102,7 +109,7 @@
     [self showBackGround];
     [self initBarRighBtnTitle: Localized(@"确定") target: self action: @selector(rightBtnClick)];
     
-    self.xmChooseView = [[_CBXiuMianChooseView alloc] initWithData:self.restArr];
+    self.xmChooseView = [[_CBXiuMianChooseView alloc] initWithData:self.restArr :self.restIdArr];
     [self.view addSubview:self.xmChooseView];
     [self.xmChooseView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view).with.offset(12.5 * KFitHeightRate + kNavAndStatusHeight);

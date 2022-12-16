@@ -341,4 +341,45 @@
     
     blk(titleMArr, imageMArr);
 }
+
+- (void)getXiumianData:(void(^)(NSArray *arrayTitle, NSArray *arrayId))blk {
+    NSMutableArray *titleMArr = [NSMutableArray new];
+    NSMutableArray *imageMArr = [NSMutableArray new];
+    [titleMArr addObjectsFromArray:@[
+        Localized(@"长在线"),
+        Localized(@"振动休眠"),
+        Localized(@"时间休眠"),
+        Localized(@"深度振动休眠"),
+        Localized(@"定时报告"),
+        Localized(@"定时报告+深度振动休眠")]];
+    [imageMArr addObjectsFromArray:@[
+        @0, @1, @2, @3, @4, @5
+    ]];
+    
+    NSArray *showArr = @[
+        @([_currentProductSpec.hibernates containsString:@"0"]),
+        @([_currentProductSpec.hibernates containsString:@"1"]),
+        @([_currentProductSpec.hibernates containsString:@"2"]),
+        @([_currentProductSpec.hibernates containsString:@"3"]),
+        @([_currentProductSpec.hibernates containsString:@"4"]),
+        @([_currentProductSpec.hibernates containsString:@"5"]),
+    ];
+    
+    if (!self.currentProductSpec) {
+        blk(titleMArr, imageMArr);
+        return;
+    }
+    NSMutableArray *waitToRemoveTitle = [NSMutableArray new];
+    NSMutableArray *waitToRemoveImg = [NSMutableArray new];
+    for (int i = 0; i < showArr.count; i++) {
+        if ([showArr[i] boolValue] == NO) {
+            [waitToRemoveTitle addObject:titleMArr[i]];
+            [waitToRemoveImg addObject:imageMArr[i]];
+        }
+    }
+    [titleMArr removeObjectsInArray:waitToRemoveTitle];
+    [imageMArr removeObjectsInArray:waitToRemoveImg];
+    
+    blk(titleMArr, imageMArr);
+}
 @end

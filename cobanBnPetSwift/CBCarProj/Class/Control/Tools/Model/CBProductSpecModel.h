@@ -58,8 +58,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL remoteStart;//    远程启动
 @property (nonatomic, assign) BOOL electricFence;//    电子围栏
 @property (nonatomic, assign) BOOL callBack;//    听听
-@property (nonatomic, copy) NSString *alarmSwitch;// "8,3,4,6,5,1"   1低电 2外电断电 3盲区 4紧急 5移位 6超速 7油量检测 8震动, TODO: lzxTODO
-@property (nonatomic, copy) NSString *hibernates;//:"0,1,2,3,4,5" ‘2,4,5,6,1,3’    休眠模式TODO: lzxTODO
+@property (nonatomic, copy) NSString *alarmSwitch;// "8,3,4,6,5,1"   1低电 2外电断电 3盲区 4紧急 5移位 6超速 7油量检测 8震动,
+@property (nonatomic, copy) NSString *hibernates;//:"0,1,2,3,4,5" ‘2,4,5,6,1,3’    休眠模式 //休眠模式 都要+1   不是0-5是 1-6
 @property (nonatomic, assign) BOOL setGprsHeartbeat;//: 1    设置GPRS心跳
 @property (nonatomic, assign) BOOL timeSet;//: 1    终端时区设置
 @property (nonatomic, assign) BOOL initializeSet;//: 1    初始化设置
