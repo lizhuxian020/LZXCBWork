@@ -109,6 +109,7 @@
 @property (nonatomic, strong) UILabel *gmsRadiusLbl;
 @property (nonatomic, assign) NSInteger gmsPolygonCurrentMark;
 @property (nonatomic, strong) GMSPolygon *gmsRectPolygon;
+@property (nonatomic, strong) GMSPolygon *gmsPolygon;
 @end
 
 @implementation NewFenceViewController
@@ -375,7 +376,11 @@
         [MINUtils showProgressHudToView: self.view withText:Localized(@"至少需要指定2个点")];
         return;
     }
-    if ((self.isPolygon && !self.baiduPolygon)) {
+    if (self.isPolygon && (
+                           ([self showBaidu] && !self.baiduPolygon) ||
+                           (![self showBaidu] && !self.gmsPolygon)
+                           )
+    ) {
         [MINUtils showProgressHudToView: self.view withText:Localized(@"至少需要指定3个点")];
         return;
     }
@@ -471,10 +476,13 @@
 - (void)clearMap {
     [self.roundCoordinateArr removeAllObjects];
     self.baiduCircleView = nil;
+    self.gmsCircle = nil;
     [self.rectangleCoordinateArr removeAllObjects];
     self.baiduRectPolygon = nil;
+    self.gmsRectPolygon = nil;
     [self.polygonCoordinateArr removeAllObjects];
     self.baiduPolygon = nil;
+    self.gmsPolygon = nil;
     if (self.baiduView.hidden == NO) {
         [self.baiduMapView removeOverlays: self.baiduMapView.overlays];
         [self.baiduMapView removeAnnotations: self.baiduMapView.annotations];
@@ -560,11 +568,16 @@
         MINCoordinateObject *obj = self.polygonCoordinateArr[i];
         [path addLatitude: obj.coordinate.latitude longitude: obj.coordinate.longitude];
     }
-    GMSPolygon *polygon = [GMSPolygon polygonWithPath: path];
-    polygon.fillColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
-    polygon.strokeColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
-    polygon.strokeWidth = 0;//2;
-    polygon.map = _googleMapView;
+    if (!self.gmsPolygon) {
+        GMSPolygon *polygon = [GMSPolygon polygonWithPath: path];
+        polygon.fillColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+        polygon.strokeColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+        polygon.strokeWidth = 0;//2;
+        polygon.map = _googleMapView;
+        self.gmsPolygon = polygon;
+    } else {
+        self.gmsPolygon.path = path;
+    }
 }
 - (void)addGooglePath {
     GMSMutablePath *path = [GMSMutablePath path];
@@ -924,6 +937,9 @@
     if (self.isRect) {
         self.gmsPolygonCurrentMark = [self getCorrectIndexFromArray:self.rectangleCoordinateArr withTargetCoor:marker.position];
     }
+    if (self.isPolygon) {
+        self.gmsPolygonCurrentMark = [self getCorrectIndexFromArray:self.polygonCoordinateArr withTargetCoor:marker.position];
+    }
 }
 
 - (void)mapView:(GMSMapView *)mapView didDragMarker:(GMSMarker *)marker {
@@ -936,6 +952,10 @@
         [self.rectangleCoordinateArr replaceObjectAtIndex:self.gmsPolygonCurrentMark withObject:[self getCoorObj:marker.position]];
         [self addGoogleRectangle];
     }
+    if (self.isPolygon) {
+        [self.polygonCoordinateArr replaceObjectAtIndex:self.gmsPolygonCurrentMark withObject:[self getCoorObj:marker.position]];
+        [self addGooglePolygon];
+    }
 }
 
 - (void)mapView:(GMSMapView *)mapView didEndDraggingMarker:(GMSMarker *)marker {
@@ -947,6 +967,10 @@
     if (self.isRect) {
         [self.rectangleCoordinateArr replaceObjectAtIndex:self.gmsPolygonCurrentMark withObject:[self getCoorObj:marker.position]];
         [self addGoogleRectangle];
+    }
+    if (self.isPolygon) {
+        [self.polygonCoordinateArr replaceObjectAtIndex:self.gmsPolygonCurrentMark withObject:[self getCoorObj:marker.position]];
+        [self addGooglePolygon];
     }
 }
 - (void)mapView:(GMSMapView *)mapView didTapAtCoordinate:(CLLocationCoordinate2D)coordinate {
@@ -972,10 +996,13 @@
             [self addGoogleRectangle];
         }
         
-    } else if (self.polygonBtn.selected == YES) {
+    } else if (self.isPolygon == YES) {
 
         [self.polygonCoordinateArr addObject:[self getCoorObj:coordinate]];
         [self addPoint_GMS:coordinate];
+        if (self.polygonCoordinateArr.count > 2) {
+            [self addGooglePolygon];
+        }
         
     }else if (self.pathBtn.selected == YES) {
         
@@ -1191,11 +1218,7 @@
         [self.polygonCoordinateArr addObject:[self getCoorObj:coordinate]];
         [self addRectAnnotation:coordinate];
         if (self.polygonCoordinateArr.count > 2) {
-            if (self.baiduView.hidden == NO) {
-                [self addBaiduPolygon];
-            } else {
-                [self addGooglePolygon];
-            }
+            [self addBaiduPolygon];
         }
         
     } else if (self.pathBtn.selected == YES) {
