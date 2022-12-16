@@ -107,8 +107,6 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 @property (nonatomic, assign) CLLocationCoordinate2D myBaiduLocation;
 @property (nonatomic, assign) CLLocationCoordinate2D myGoogleLocation;
 
-@property (nonatomic, strong) CLLocationManager *locationManager;
-
 @property (nonatomic, assign) CGFloat speed; // 速度
 @property (nonatomic, assign) CGFloat totalTime;
 @property (nonatomic, strong) NSMutableArray *currentTimeArr; //记录当前播放轨迹每段动画的开始时间。
@@ -150,6 +148,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 @property (nonatomic, assign) BOOL isStartTrack;
 @property (nonatomic, strong) _CBMyInfoPopView *infoPopView;
 
+@property (nonatomic, strong) GMSCoordinateBounds *gmsBounds; //Google可见范围
 @end
 
 @implementation MainMapViewController
@@ -160,14 +159,10 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [_baiduMapView viewWillAppear];
 //    _baiduMapView.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放
 //    _baiduLocationService.delegate = self;
-//    self.navigationItem.title = [CBCommonTools CBdeviceInfo].name?:@"";
-    
-    // 判断当前地区是国内还是国外
-    [self showMyLocation];
     // 开启定时器，每20s刷新，各设备详情
     [self startTimer];
     [AppDelegate isShowGoogle];
-    [self requestUserData];
+//    [self requestUserData];
 }
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear: animated];
@@ -244,28 +239,9 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [self endTimer];
     NSLog(@"MainMapViewController   销毁。。。。。");
 }
-- (void)showMyLocation {
-    //启动定位
-    [self.locationManager startUpdatingLocation];
-    [self.locationManager requestWhenInUseAuthorization];
-}
 - (void)requestListData {
     [self sliderView];
     [self.sliderView requestData];
-}
-- (CLLocationManager *)locationManager {
-    if (_locationManager == nil) {
-        _locationManager = [[CLLocationManager alloc]init];
-        //设置代理
-        _locationManager.delegate = self;
-        //设置定位精度
-        _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-        //定位频率,每隔多少米定位一次
-        CLLocationDistance distance = 10.0;//十米定位一次
-        _locationManager.distanceFilter = distance;
-        [_locationManager setDesiredAccuracy: kCLLocationAccuracyBest];
-    }
-    return _locationManager;
 }
 - (NSMutableArray *)slider_array {
     if (!_slider_array) {
@@ -290,7 +266,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
             kStrongSelf(self);
             CBHomeLeftMenuDeviceInfoModel *model = (CBHomeLeftMenuDeviceInfoModel *)objc;
             // 刷新本地存储的 选中设备
-            model.zoomLevel = self.deviceInfoModelSelect.zoomLevel;
+//            model.zoomLevel = self.deviceInfoModelSelect.zoomLevel;
             model.devStatus = self.deviceInfoModelSelect.devStatus;
             self.deviceInfoModelSelect = model;
             [CBCommonTools saveCBdeviceInfo:model];
@@ -328,56 +304,6 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         }];
     }
     return _noDeviceDataView;
-}
-//- (UIButton *)switchMapType {
-//    if (!_switchMapType) {
-//        _switchMapType = [[UIButton alloc]init];
-//        [_switchMapType setImage:[UIImage imageNamed:@"car_map_statellite_11"] forState:UIControlStateNormal];
-//        _switchMapType.backgroundColor = UIColor.grayColor;
-//        _switchMapType.layer.masksToBounds = YES;
-//        _switchMapType.layer.cornerRadius = 20;
-//        [_switchMapType addTarget:self action:@selector(switchMap:) forControlEvents:UIControlEventTouchUpInside];
-//        [self.view addSubview:_switchMapType];
-//        [_switchMapType mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.top.mas_equalTo(PPNavigationBarHeight+15);
-//            make.right.mas_equalTo(-15);
-//            make.size.mas_equalTo(CGSizeMake(40, 40));
-//        }];
-//        if ([AppDelegate shareInstance].IsShowGoogleMap == YES) {
-//            _switchMapType.hidden = false;
-//        } else {
-//            _switchMapType.hidden = false;
-//        }
-//    }
-//    return _switchMapType;
-//}
-//- (void)switchMap:(UIButton *)sender {
-//    if ([AppDelegate shareInstance].IsShowGoogleMap) {
-//        if (_googleMapView.mapType == kGMSTypeHybrid) {
-//            [_switchMapType setImage:[UIImage imageNamed:@"car_map_statellite_11"]forState:UIControlStateNormal];
-//            _googleMapView.mapType = kGMSTypeNormal;
-//        } else {
-//            [_switchMapType setImage:[UIImage imageNamed:@"car_map_normal_11"]forState:UIControlStateNormal];
-//            _googleMapView.mapType = kGMSTypeHybrid;
-//        }
-//    } else {
-//        if (_baiduMapView.mapType == BMKMapTypeSatellite) {
-//            [_switchMapType setImage:[UIImage imageNamed:@"car_map_statellite_11"]forState:UIControlStateNormal];
-//            [_baiduMapView setMapType:BMKMapTypeStandard];
-//        } else {
-//            [_switchMapType setImage:[UIImage imageNamed:@"car_map_normal_11"]forState:UIControlStateNormal];
-//            [_baiduMapView setMapType:BMKMapTypeSatellite];
-//        }
-//    }
-//}
-- (void)showSelectDevice:(CBHomeLeftMenuDeviceInfoModel *)deviceInfoModel {
-    CLLocationCoordinate2D coor = CLLocationCoordinate2DMake(deviceInfoModel.lat.doubleValue,  deviceInfoModel.lng.doubleValue);
-    // 更新选中的设备在地图中位置
-    if ([AppDelegate shareInstance].IsShowGoogleMap == NO) {
-        [self.baiduMapView setCenterCoordinate:coor animated: YES];
-    } else {
-        [self.googleMapView setCamera:[GMSCameraPosition cameraWithLatitude:deviceInfoModel.lat.doubleValue longitude:deviceInfoModel.lng.doubleValue zoom:self.deviceInfoModelSelect.zoomLevel.integerValue]];
-    }
 }
 - (CBBasePopView *)playbackTimeBasePopView {
     if (!_playbackTimeBasePopView) {
@@ -450,18 +376,66 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     _baiduMapView.zoomLevel = _baiduMapView.zoomLevel - 0.3;
 }
 - (void)googleMapFitFence:(NSArray *)modelArr {
-    GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] init];
+    GMSCoordinateBounds *bounds = self.gmsBounds;
     for (MINCoordinateObject *model in modelArr) {
         bounds = [bounds includingCoordinate: model.coordinate];
     }
-    [_googleMapView animateWithCameraUpdate: [GMSCameraUpdate fitBounds: bounds withPadding: 30.0f]];
+    self.gmsBounds = bounds;
 }
 - (void)googleMapFitCircleFence:(MINCoordinateObject *)model radius:(double)radius {
-    GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] init];
-    bounds = [bounds includingCoordinate: model.coordinate];
-    CGFloat zoomLevel = [GMSCameraPosition zoomAtCoordinate: model.coordinate forMeters: radius perPoints: 50];
-    [_googleMapView animateWithCameraUpdate: [GMSCameraUpdate fitBounds: bounds withPadding: 30.0f]];
-    [_googleMapView animateToZoom: zoomLevel];
+    GMSCoordinateBounds *bounds = self.gmsBounds;
+    
+    CLLocationCoordinate2D north = [self calculateLatLng:model.coordinate Distance:radius/1000 Radians:0];
+    CLLocationCoordinate2D east = [self calculateLatLng:model.coordinate Distance:radius/1000 Radians:90];
+    CLLocationCoordinate2D south = [self calculateLatLng:model.coordinate Distance:radius/1000 Radians:180];
+    CLLocationCoordinate2D west = [self calculateLatLng:model.coordinate Distance:radius/1000 Radians:270];
+    bounds = [bounds includingCoordinate: north];
+    bounds = [bounds includingCoordinate: east];
+    bounds = [bounds includingCoordinate: south];
+    bounds = [bounds includingCoordinate: west];
+    
+    self.gmsBounds = bounds;
+}
+/**
+通过 A 点经纬度增加公里数得到 B 点经纬度
+@param centerCoordinate  A 点坐标
+@param distance 公里数(km)
+@param radians  正北方向(0 ~ 360)
+@return 返回值
+*/
+- (CLLocationCoordinate2D)calculateLatLng:(CLLocationCoordinate2D)centerCoordinate Distance:(CLLocationDistance)distance Radians:(CLLocationDistance)radians {
+    static double Rc = 6378137;// 地球的赤道半径
+    static double Rj = 6356725;// 极半径
+    double m_LoDeg,m_LoMin,m_LoSec;
+    double m_LaDeg,m_LaMin,m_LaSec;
+    double m_Longitude,m_Latitude;
+    double m_RadLo,m_RadLa;
+    double Ec;
+    double Ed;
+    m_LaDeg = centerCoordinate.latitude;
+    m_LaMin = (centerCoordinate.latitude - m_LaDeg) * 60;
+    m_LaSec = (centerCoordinate.latitude - m_LaDeg-m_LaMin / 60) * 3600;
+    m_LoDeg = centerCoordinate.longitude;
+    m_LoMin = (centerCoordinate.longitude - m_LoDeg) * 60;
+    m_LoSec = (centerCoordinate.longitude - m_LoDeg - m_LoMin / 60) * 3600;
+    m_Longitude = centerCoordinate.longitude;
+    m_Latitude = centerCoordinate.latitude;
+    m_RadLo = centerCoordinate.longitude * M_PI / 180.;
+    m_RadLa = centerCoordinate.latitude * M_PI / 180.;
+    Ec = Rj + (Rc - Rj) * (90 - m_Latitude) / 90.;
+    Ed = Ec * cos(cos(M_PI / (180 / m_RadLa)));
+    double dx = distance * 1000 * sin(M_PI / (180 / radians));
+    double dy = distance * 1000 * cos(M_PI / (180 / radians));
+    CLLocationDegrees latitude = (dx / Ed + m_RadLo) * 180 / M_PI;
+    CLLocationDegrees longitude = (dy / Ec + m_RadLa) * 180 / M_PI;
+    CLLocationCoordinate2D newCoordinate;
+
+    newCoordinate.latitude = longitude;
+
+    newCoordinate.longitude = latitude;
+
+    return newCoordinate;
+
 }
 - (void)baiduMap {
     if (!_baiduView) {
@@ -507,11 +481,14 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:40.056898
                                                                 longitude:116.307626
                                                                      zoom:18];
-        _googleMapView = [GMSMapView mapWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, SCREEN_HEIGHT) camera:camera];
-        //    _googleMapView.myLocationEnabled = YES;
-        //_googleMapView.mapType = kGMSTypeHybrid;
+        _googleMapView = [GMSMapView mapWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) camera:camera];
         _googleMapView.delegate = self;
         [_googleView addSubview: _googleMapView];
+        [_googleMapView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.edges.equalTo(@0);
+        }];
+        
+        [_googleView layoutIfNeeded];
         
         // 回放轨迹的line和路径
         // Creates a marker in the center of the map.
@@ -590,25 +567,6 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 }
 #pragma mark - CreateUI
 - (void)createUI {
-//    [self initBarWithTitle: Localized(@"定位") isBack: NO];
-//    if (self.deviceInfoModelSelect) {
-//        self.navigationItem.title = self.deviceInfoModelSelect.name?:@"";
-//    } else {
-//        self.navigationItem.title = @"";
-//    }
-//    // 导航右侧按钮隐藏
-//    UIImage *backImage = [UIImage imageNamed: @"列表"];
-//    UIButton *backBtn = [[UIButton alloc] initWithFrame: CGRectMake(0, 0,  44,  44)];
-//    [backBtn addTarget: self action: @selector(leftBtnClick) forControlEvents: UIControlEventTouchUpInside];
-//    [backBtn setImage: [UIImage imageNamed: @"列表-有状态"] forState: UIControlStateSelected];
-//    [backBtn setImage: backImage forState: UIControlStateNormal];
-//    [backBtn setImageEdgeInsets: UIEdgeInsetsMake(0, 0, 0, 20)];
-//    UIBarButtonItem *barItem = [[UIBarButtonItem alloc] initWithCustomView: backBtn];
-//    UIBarButtonItem * spaceItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-//    //将宽度设为负值
-//    spaceItem.width = 10 * KFitWidthRate;
-//    self.navigationItem.leftBarButtonItems = @[barItem, spaceItem];
-    
     
     self.deviceInfoModelSelect = [CBCommonTools CBdeviceInfo];
     [self baiduMap];
@@ -698,7 +656,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     btn.backgroundColor = KWtCellBackColor;
 //    btn.layer.masksToBounds = YES;
     btn.layer.cornerRadius = 20;
-    [btn.layer setMasksToBounds:YES];
+//    [btn.layer setMasksToBounds:YES];
     [self.view addSubview:btn];
     return btn;
 }
@@ -818,7 +776,6 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     /* 返回YES，则不响应其他事件,NO 继续响应，比如上方的事件*/
     [self.paopaoView popView];
     CLLocationCoordinate2D anchor = marker.position;
-    [_googleMapView addSubview: self.paopaoView];
     kWeakSelf(self);
     [self.paopaoView setDidClickMove:^(NSString * _Nonnull moveStr) {
         [weakself sendMoveRequest:moveStr];
@@ -834,22 +791,32 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
                 break;
             case CBCarPaopaoViewClickTypeClose:
             {
-                //[self getDeviceLocationInfoRequest];
+                //
             }
                 break;
             case CBCarPaopaoViewClickTypeNavigationClick:
             {
+                [self.paopaoView dismiss];
                 // 导航
                 [self navigationClick];
             }
                 break;
-            case CBCarPaopaoViewClickTypeDeleteWarm:
-            {
-                [self.paopaoView dismiss];
-                // 处理报警
-                [self dealWithWarmedStatusRequestDeno:obj annotationView:nil];
+            case CBCarPaopaoViewClickTypeTrack: {
+                if (self.isStartTrack) {
+                    [self setEndTrack];
+                } else {
+                    [self setCanStartTrack];
+                }
             }
                 break;
+            case CBCarPaopaoViewClickTypeTitle: {
+                [self.paopaoView dismiss];
+                CBControlMenuController *vc = CBControlMenuController.new;
+                vc.deviceInfoModelSelect = self.deviceInfoModelSelect;
+                [self.navigationController pushViewController:vc animated:YES];
+            }
+                break;
+                
             default:
                 break;
         }
@@ -878,37 +845,39 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     
     // 更新选中设备在地图中居中位置
     // 目标点到屏幕顶部距离
-    CGFloat targetPt_y = (SCREEN_HEIGHT-377.5*KFitWidthRate)/2 + 377.5*KFitWidthRate + 50*KFitHeightRate;
+    CGFloat wholeHeight = SCREEN_HEIGHT;
+    CGFloat targetPt_y = (wholeHeight -377.5*KFitWidthRate)/2 + 377.5*KFitWidthRate;
     // 经纬度 转为坐标
     CLLocationCoordinate2D coorData = CLLocationCoordinate2DMake(deviceInfoModelPublic.lat.doubleValue, deviceInfoModelPublic.lng.doubleValue);
     CGPoint ppt = [_googleMapView.projection pointForCoordinate:coorData];
     
     // 调整后的坐标转为经纬度
-    CLLocationCoordinate2D coor = [_googleMapView.projection coordinateForPoint:CGPointMake(ppt.x, ppt.y + SCREEN_HEIGHT/2 - targetPt_y)];
-    [_googleMapView setCamera:[GMSCameraPosition cameraWithLatitude:coor.latitude longitude:coor.longitude zoom:self.deviceInfoModelSelect.zoomLevel.integerValue]];
+    CLLocationCoordinate2D coor = [_googleMapView.projection coordinateForPoint:CGPointMake(ppt.x, ppt.y + wholeHeight/2 - targetPt_y - TabBARHEIGHT)];
+    NSLog(@"----didclicklzx: %lf, %lf", coor.latitude, coor.longitude);
+    [_googleMapView setCamera:[GMSCameraPosition cameraWithLatitude:coor.latitude longitude:coor.longitude zoom:_googleMapView.camera.zoom]];
     
-    // 谷歌地图反向地理编码
-    GMSGeocoder *geocoder = [[GMSGeocoder alloc]init];
-    [geocoder reverseGeocodeCoordinate:CLLocationCoordinate2DMake(self.selectDeviceDetailModel.lat.doubleValue,self.selectDeviceDetailModel.lng.doubleValue) completionHandler:^(GMSReverseGeocodeResponse *response, NSError *error) {
-        kStrongSelf(self);
-        if (response.results.count > 0) {
-            GMSAddress *address = response.results[0];
-            NSString *addressStr = [NSString stringWithFormat:@"%@%@%@%@%@",address.country,address.administrativeArea,address.locality,address.subLocality,address.thoroughfare];
-            NSLog(@"位置::::%@",addressStr);
-            self.selectDeviceDetailModel.address = addressStr;
-            self.paopaoView.deviceInfoModel = self.selectDeviceDetailModel;
-        }
-    }];
+//    // 谷歌地图反向地理编码
+//    GMSGeocoder *geocoder = [[GMSGeocoder alloc]init];
+//    [geocoder reverseGeocodeCoordinate:CLLocationCoordinate2DMake(self.selectDeviceDetailModel.lat.doubleValue,self.selectDeviceDetailModel.lng.doubleValue) completionHandler:^(GMSReverseGeocodeResponse *response, NSError *error) {
+//        kStrongSelf(self);
+//        if (response.results.count > 0) {
+//            GMSAddress *address = response.results[0];
+//            NSString *addressStr = [NSString stringWithFormat:@"%@%@%@%@%@",address.country,address.administrativeArea,address.locality,address.subLocality,address.thoroughfare];
+//            NSLog(@"位置::::%@",addressStr);
+//            self.selectDeviceDetailModel.address = addressStr;
+//            self.paopaoView.deviceInfoModel = self.selectDeviceDetailModel;
+//        }
+//    }];
     
     return YES;
 }
 //刷帧方法是这个：
 - (void)mapView:(GMSMapView *)mapView didChangeCameraPosition:(GMSCameraPosition *)position {
-    // 本地保存地显示比例
-    if (self.deviceInfoModelSelect) {
-        self.deviceInfoModelSelect.zoomLevel = [NSString stringWithFormat:@"%ld",(long)mapView.camera.zoom];
-        [CBCommonTools saveCBdeviceInfo:self.deviceInfoModelSelect];
-    }
+//    // 本地保存地显示比例
+//    if (self.deviceInfoModelSelect) {
+//        self.deviceInfoModelSelect.zoomLevel = [NSString stringWithFormat:@"%ld",(long)mapView.camera.zoom];
+//        [CBCommonTools saveCBdeviceInfo:self.deviceInfoModelSelect];
+//    }
 }
 - (void)mapView:(GMSMapView *)mapView didTapInfoWindowOfMarker:(GMSMarker *)marker {
     NSLog(@"点击大头针的弹出视窗时调用");
@@ -1057,12 +1026,12 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 }
 //地图区域改变完成后会调用此接口
 - (void)mapView:(BMKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
-    NSLog(@"---地图比例---%f-----------",mapView.zoomLevel);
-    // 本地保存地显示比例
-    if (self.deviceInfoModelSelect) {
-        self.deviceInfoModelSelect.zoomLevel = [NSString stringWithFormat:@"%ld",(long)mapView.zoomLevel];
-        [CBCommonTools saveCBdeviceInfo:self.deviceInfoModelSelect];
-    }
+//    NSLog(@"---地图比例---%f-----------",mapView.zoomLevel);
+//    // 本地保存地显示比例
+//    if (self.deviceInfoModelSelect) {
+//        self.deviceInfoModelSelect.zoomLevel = [NSString stringWithFormat:@"%ld",(long)mapView.zoomLevel];
+//        [CBCommonTools saveCBdeviceInfo:self.deviceInfoModelSelect];
+//    }
 }
 /**
  *点中底图空白处会回调此接口
@@ -1146,13 +1115,6 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
                 [self.paopaoView dismiss];
                 // 导航
                 [self navigationClick];
-            }
-                break;
-            case CBCarPaopaoViewClickTypeDeleteWarm:
-            {
-                [self.paopaoView dismiss];
-                // 处理报警
-                [self dealWithWarmedStatusRequestDeno:obj annotationView:view];
             }
                 break;
             case CBCarPaopaoViewClickTypeTrack: {
@@ -1278,45 +1240,45 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     self.linePath_realTime = [GMSMutablePath path];
     [self.linePath_realTime removeAllCoordinates];
 }
-#pragma mark --处理报警
-- (void)dealWithWarmedStatusRequestDeno:(NSString *)deno annotationView:(BMKAnnotationView *)annotationView {
-    kWeakSelf(self);
-    [MBProgressHUD showHUDIcon:self.googleView animated:YES];
-    NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
-    [paramters setObject:deno?:@"" forKey:@"dno"];
-    [[CBNetworkRequestManager sharedInstance] dealWithWarmedParamters:paramters success:^(CBBaseNetworkModel * _Nonnull baseModel) {
-        kStrongSelf(self);
-        [HUD hideHud];
-        [MBProgressHUD hideHUDForView:self.googleView animated:YES];
-        switch (baseModel.status) {
-            case CBNetworkingStatus0:
-            {
-                // 关闭泡泡
-                [annotationView.paopaoView removeFromSuperview];
-                
-                // 清除百度地图标注和轨迹设置
-                [self clearBaiduMap];
-                [self.googleMapView clear];
-                
-                [self.sliderView requestData];
-                
-                [self getDeviceLocationInfoRequest];
-            }
-                break;
-            default:
-            {
-                [HUD showHUDWithText:baseModel.resmsg withDelay:3.0];
-            }
-                break;
-        }
-        
-    } failure:^(NSError * _Nonnull error) {
-        kStrongSelf(self);
-        [HUD hideHud];
-        [MBProgressHUD hideHUDForView:self.googleView animated:YES];
-        [HUD showHUDWithText:Localized(@"请求超时") withDelay:3.0];
-    }];
-}
+//#pragma mark --处理报警
+//- (void)dealWithWarmedStatusRequestDeno:(NSString *)deno annotationView:(BMKAnnotationView *)annotationView {
+//    kWeakSelf(self);
+//    [MBProgressHUD showHUDIcon:self.googleView animated:YES];
+//    NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
+//    [paramters setObject:deno?:@"" forKey:@"dno"];
+//    [[CBNetworkRequestManager sharedInstance] dealWithWarmedParamters:paramters success:^(CBBaseNetworkModel * _Nonnull baseModel) {
+//        kStrongSelf(self);
+//        [HUD hideHud];
+//        [MBProgressHUD hideHUDForView:self.googleView animated:YES];
+//        switch (baseModel.status) {
+//            case CBNetworkingStatus0:
+//            {
+//                // 关闭泡泡
+//                [annotationView.paopaoView removeFromSuperview];
+//
+//                // 清除百度地图标注和轨迹设置
+//                [self clearBaiduMap];
+//                [self.googleMapView clear];
+//
+//                [self.sliderView requestData];
+//
+//                [self getDeviceLocationInfoRequest];
+//            }
+//                break;
+//            default:
+//            {
+//                [HUD showHUDWithText:baseModel.resmsg withDelay:3.0];
+//            }
+//                break;
+//        }
+//
+//    } failure:^(NSError * _Nonnull error) {
+//        kStrongSelf(self);
+//        [HUD hideHud];
+//        [MBProgressHUD hideHUDForView:self.googleView animated:YES];
+//        [HUD showHUDWithText:Localized(@"请求超时") withDelay:3.0];
+//    }];
+//}
 #pragma mark --导航
 - (void)navigationClick {
     MKMapItem *myLocation = [MKMapItem mapItemForCurrentLocation];
@@ -1408,66 +1370,66 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     }];
 }
 - (void)showPlayBackView {
-    if (self.baiduView.hidden == NO) {
-        [self clearBaiduMap];
-    } else {
-        [self.googleMapView clear];
-    }
-    if (playBackView == nil) {
-        playBackView =  [[MINPlayBackView alloc] init];
-        [self.view addSubview: playBackView];
-        [playBackView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.bottom.left.right.equalTo(self.view);
-//            make.bottom.equalTo(self.view).with.offset(-self.tabBarController.tabBar.frame.size.height);
-            make.height.mas_equalTo(120 * KFitHeightRate);
-        }];
-        __weak __typeof__(self) weakSelf = self;
-        playBackView.playBtnClickBlock = ^(BOOL isSelected) {
-            isAnimate = isSelected;
-            if (isAnimate == YES) {
-                if (weakSelf.baiduView.hidden == NO) {
-                    [weakSelf running];
-                }else {
-                    __weak __typeof__(GMSMarker *)weakMarker = weakSelf.marker;
-                    [weakSelf animateToNextCoord: weakMarker];
-                }
-            }
-            if (weakSelf.playTrackTimer) {
-                if (isAnimate == YES) {
-                    // 继续定时器
-                    [weakSelf.playTrackTimer setFireDate:[NSDate distantPast]];
-                } else {
-                    // 暂停定时器
-                    [weakSelf.playTrackTimer setFireDate:[NSDate distantFuture]];
-                }
-            }
-        };
-        playBackView.playTimeSlideBlock = ^(CGFloat currentSecond) {
-            int playIndex = 0;
-            for (int i = 0; i < weakSelf.currentTimeArr.count; i++) {
-                if (currentSecond < [weakSelf.currentTimeArr[i] floatValue]) {
-                    if (i > 0) {
-                        playIndex = i - 1;
-                        break;
-                    }else {
-                        playIndex = i;
-                    }
-                }
-            }
-            currentIndex = playIndex;
-            if (weakSelf.googleMapView.hidden == NO) {
-                CoordsList *coordList = weakSelf.marker.userData;
-                coordList.target = playIndex;
-            }
-        };
-        playBackView.speedSlideBlock = ^(CGFloat currentSpeed) {
-            weakSelf.speed = currentSpeed;
-        };
-    }
-    playBackView.totalTime = self.totalTime;
-    [AppDelegate shareInstance].isShowPlayBackView = YES;
-    [playBackView show];
-    [self initPlayBackLineAndMarker];
+//    if (self.baiduView.hidden == NO) {
+//        [self clearBaiduMap];
+//    } else {
+//        [self.googleMapView clear];
+//    }
+//    if (playBackView == nil) {
+//        playBackView =  [[MINPlayBackView alloc] init];
+//        [self.view addSubview: playBackView];
+//        [playBackView mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.bottom.left.right.equalTo(self.view);
+////            make.bottom.equalTo(self.view).with.offset(-self.tabBarController.tabBar.frame.size.height);
+//            make.height.mas_equalTo(120 * KFitHeightRate);
+//        }];
+//        __weak __typeof__(self) weakSelf = self;
+//        playBackView.playBtnClickBlock = ^(BOOL isSelected) {
+//            isAnimate = isSelected;
+//            if (isAnimate == YES) {
+//                if (weakSelf.baiduView.hidden == NO) {
+//                    [weakSelf running];
+//                }else {
+//                    __weak __typeof__(GMSMarker *)weakMarker = weakSelf.marker;
+//                    [weakSelf animateToNextCoord: weakMarker];
+//                }
+//            }
+//            if (weakSelf.playTrackTimer) {
+//                if (isAnimate == YES) {
+//                    // 继续定时器
+//                    [weakSelf.playTrackTimer setFireDate:[NSDate distantPast]];
+//                } else {
+//                    // 暂停定时器
+//                    [weakSelf.playTrackTimer setFireDate:[NSDate distantFuture]];
+//                }
+//            }
+//        };
+//        playBackView.playTimeSlideBlock = ^(CGFloat currentSecond) {
+//            int playIndex = 0;
+//            for (int i = 0; i < weakSelf.currentTimeArr.count; i++) {
+//                if (currentSecond < [weakSelf.currentTimeArr[i] floatValue]) {
+//                    if (i > 0) {
+//                        playIndex = i - 1;
+//                        break;
+//                    }else {
+//                        playIndex = i;
+//                    }
+//                }
+//            }
+//            currentIndex = playIndex;
+//            if (weakSelf.googleMapView.hidden == NO) {
+//                CoordsList *coordList = weakSelf.marker.userData;
+//                coordList.target = playIndex;
+//            }
+//        };
+//        playBackView.speedSlideBlock = ^(CGFloat currentSpeed) {
+//            weakSelf.speed = currentSpeed;
+//        };
+//    }
+//    playBackView.totalTime = self.totalTime;
+//    [AppDelegate shareInstance].isShowPlayBackView = YES;
+//    [playBackView show];
+//    [self initPlayBackLineAndMarker];
 }
 - (void)hidePlayBackView {
     // 轨迹数组初始化
@@ -1483,81 +1445,81 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [self setupMapZoomLevelMethod];
 }
 - (void)initPlayBackLineAndMarker {
-    if (self.baiduView.hidden == NO) {
-        CLLocationCoordinate2D paths[sportNodeNum];
-        for (NSInteger i = 0; i < sportNodeNum ; i++) {
-            BMKSportNode *node = sportNodes[i];
-            paths[i] = node.coordinate;
-        }
-        isAnimate = YES;
-        // 创建轨迹路径
-        pathPloyline = [BMKPolyline polylineWithCoordinates: paths count: sportNodeNum];
-        [self.baiduMapView addOverlay:pathPloyline];
-        // 添加圆点标注
-        for (NSInteger i = 0; i < sportNodeNum ; i++) {
-            if (i > 0) {
-                sportPointAnnotation = [[CBSportAnnotation alloc]init];
-                sportPointAnnotation.coordinate = paths[i];
-                [self.baiduMapView addAnnotation:sportPointAnnotation];
-            }
-        }
-        // 添加轨迹车头标注
-        sportAnnotation = [[BMKPointAnnotation alloc]init];
-        sportAnnotation.coordinate = paths[0];
-        [self.baiduMapView addAnnotation:sportAnnotation];
-        
-        currentIndex = 0;
-        self.baiduMapView.centerCoordinate = paths[0];
-        self.baiduMapView.zoomLevel = 20;//19;
-        // 本地保存地显示比例
-        if (self.deviceInfoModelSelect) {
-            self.deviceInfoModelSelect.zoomLevel = [NSString stringWithFormat:@"%d",20];
-            [CBCommonTools saveCBdeviceInfo:self.deviceInfoModelSelect];
-        }
-    } else {
-        self.polyline.strokeColor = [UIColor orangeColor];
-        self.polyline.strokeWidth = 2*KFitWidthRate;
-        for(int idx = 0; idx < sportNodes.count; idx++)
-        {
-            BMKSportNode *node = [sportNodes objectAtIndex:idx];
-            CLLocationCoordinate2D location = node.coordinate;
-            [self.linePath addCoordinate:location];
-            
-            // 添加轨迹上的圆点
-            if (idx > 0) {
-                GMSMarker *mark_point = [[GMSMarker alloc] init];
-                mark_point.appearAnimation = kGMSMarkerAnimationPop;
-                mark_point.position = location;
-                UIView *iconView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 10*KFitWidthRate, 10*KFitWidthRate)];
-                iconView.backgroundColor = kBlueColor;
-                iconView.layer.masksToBounds = YES;
-                iconView.layer.cornerRadius = 5*KFitWidthRate;
-                mark_point.iconView = iconView;
-                mark_point.groundAnchor = CGPointMake(0.5f, 0.5f);
-    
-                mark_point.map = self.googleMapView;
-            }
-        }
-        BMKSportNode *firstNode = [sportNodes objectAtIndex: 0];
-        CLLocationCoordinate2D coordinate = firstNode.coordinate;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            _googleMapView.camera = [GMSCameraPosition cameraWithLatitude: coordinate.latitude longitude: coordinate.longitude zoom:self.deviceInfoModelSelect.zoomLevel.integerValue];
-        });
-        self.polyline.path = self.linePath;
-        self.polyline.map = self.googleMapView;
-        
-        self.marker = [GMSMarker markerWithPosition:[self.linePath coordinateAtIndex:0]];
-        self.marker.icon = [CBCommonTools returnDeveceLocationImageStr:self.selectDeviceDetailModel.icon isOnline:self.selectDeviceDetailModel.online isWarmed:self.selectDeviceDetailModel.warmed];
-        self.marker.groundAnchor = CGPointMake(0.5f, 0.5f);
-        self.marker.flat = YES;
-        self.marker.map = _googleMapView;
-        self.marker.userData = [[CoordsList alloc] initWithPath: self.linePath];
-        CoordsList *coords = self.marker.userData;
-        CLLocationCoordinate2D previous = [coords.path coordinateAtIndex: 0];
-        CLLocationCoordinate2D coord = [coords.path coordinateAtIndex: 1];
-        CLLocationDirection heading = GMSGeometryHeading(previous, coord);
-        self.marker.rotation = heading;
-    }
+//    if (self.baiduView.hidden == NO) {
+//        CLLocationCoordinate2D paths[sportNodeNum];
+//        for (NSInteger i = 0; i < sportNodeNum ; i++) {
+//            BMKSportNode *node = sportNodes[i];
+//            paths[i] = node.coordinate;
+//        }
+//        isAnimate = YES;
+//        // 创建轨迹路径
+//        pathPloyline = [BMKPolyline polylineWithCoordinates: paths count: sportNodeNum];
+//        [self.baiduMapView addOverlay:pathPloyline];
+//        // 添加圆点标注
+//        for (NSInteger i = 0; i < sportNodeNum ; i++) {
+//            if (i > 0) {
+//                sportPointAnnotation = [[CBSportAnnotation alloc]init];
+//                sportPointAnnotation.coordinate = paths[i];
+//                [self.baiduMapView addAnnotation:sportPointAnnotation];
+//            }
+//        }
+//        // 添加轨迹车头标注
+//        sportAnnotation = [[BMKPointAnnotation alloc]init];
+//        sportAnnotation.coordinate = paths[0];
+//        [self.baiduMapView addAnnotation:sportAnnotation];
+//
+//        currentIndex = 0;
+//        self.baiduMapView.centerCoordinate = paths[0];
+//        self.baiduMapView.zoomLevel = 20;//19;
+//        // 本地保存地显示比例
+//        if (self.deviceInfoModelSelect) {
+//            self.deviceInfoModelSelect.zoomLevel = [NSString stringWithFormat:@"%d",20];
+//            [CBCommonTools saveCBdeviceInfo:self.deviceInfoModelSelect];
+//        }
+//    } else {
+//        self.polyline.strokeColor = [UIColor orangeColor];
+//        self.polyline.strokeWidth = 2*KFitWidthRate;
+//        for(int idx = 0; idx < sportNodes.count; idx++)
+//        {
+//            BMKSportNode *node = [sportNodes objectAtIndex:idx];
+//            CLLocationCoordinate2D location = node.coordinate;
+//            [self.linePath addCoordinate:location];
+//
+//            // 添加轨迹上的圆点
+//            if (idx > 0) {
+//                GMSMarker *mark_point = [[GMSMarker alloc] init];
+//                mark_point.appearAnimation = kGMSMarkerAnimationPop;
+//                mark_point.position = location;
+//                UIView *iconView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 10*KFitWidthRate, 10*KFitWidthRate)];
+//                iconView.backgroundColor = kBlueColor;
+//                iconView.layer.masksToBounds = YES;
+//                iconView.layer.cornerRadius = 5*KFitWidthRate;
+//                mark_point.iconView = iconView;
+//                mark_point.groundAnchor = CGPointMake(0.5f, 0.5f);
+//
+//                mark_point.map = self.googleMapView;
+//            }
+//        }
+//        BMKSportNode *firstNode = [sportNodes objectAtIndex: 0];
+//        CLLocationCoordinate2D coordinate = firstNode.coordinate;
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            _googleMapView.camera = [GMSCameraPosition cameraWithLatitude: coordinate.latitude longitude: coordinate.longitude zoom:self.deviceInfoModelSelect.zoomLevel.integerValue];
+//        });
+//        self.polyline.path = self.linePath;
+//        self.polyline.map = self.googleMapView;
+//
+//        self.marker = [GMSMarker markerWithPosition:[self.linePath coordinateAtIndex:0]];
+//        self.marker.icon = [CBCommonTools returnDeveceLocationImageStr:self.selectDeviceDetailModel.icon isOnline:self.selectDeviceDetailModel.online isWarmed:self.selectDeviceDetailModel.warmed];
+//        self.marker.groundAnchor = CGPointMake(0.5f, 0.5f);
+//        self.marker.flat = YES;
+//        self.marker.map = _googleMapView;
+//        self.marker.userData = [[CoordsList alloc] initWithPath: self.linePath];
+//        CoordsList *coords = self.marker.userData;
+//        CLLocationCoordinate2D previous = [coords.path coordinateAtIndex: 0];
+//        CLLocationCoordinate2D coord = [coords.path coordinateAtIndex: 1];
+//        CLLocationDirection heading = GMSGeometryHeading(previous, coord);
+//        self.marker.rotation = heading;
+//    }
 }
 - (void)running {
     [self running_time];
@@ -1652,82 +1614,82 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     }
 }
 - (void)animateToNextCoord:(GMSMarker *)marker {
-    CoordsList *coords = marker.userData;
-    CLLocationCoordinate2D coord = [coords next];
-    CLLocationCoordinate2D previous = marker.position;
-    if (coord.latitude != -1 && coord.longitude != -1) {
-        if (lastIndex != currentIndex) {
-            CLLocationDirection heading = GMSGeometryHeading(previous, coord);
-            marker.position = coord;
-            if (marker.flat) {
-                marker.rotation = heading;
-            }
-            [CATransaction begin];
-            [CATransaction setAnimationDuration: 0.01];
-            __weak MainMapViewController *weakSelf = self;
-            [CATransaction setCompletionBlock:^{
-                
-                if (isAnimate == YES) {
-                    [weakSelf animateToNextCoord:marker];
-                }
-            }];
-            marker.position = coord;
-            [CATransaction commit];
-            [self.googleMapView.superview layoutIfNeeded];
-            currentIndex = coords.target;
-            lastIndex = coords.target;
-            
-        } else {
-            CLLocationDirection heading = GMSGeometryHeading(previous, coord);
-            CLLocationDistance distance = GMSGeometryDistance(previous, coord);
-            // Use CATransaction to set a custom duration for this animation. By default, changes to the
-            // position are already animated, but with a very short default duration. When the animation is
-            // complete, trigger another animation step.
-            [CATransaction begin];
-            //CGFloat time = (13 - self.speed)/13.0 * (node.distance/node.speed);
-            // 速度默认30
-            CGFloat time = (distance/(self.speed?self.speed:30));
-            time = time > 1?1:time;
-            time = (13 - self.speed)/13.0 * time;
-            [CATransaction setAnimationDuration:time];//(distance / (22 + self.speed * 2))
-            __weak MainMapViewController *weakSelf = self;
-            [CATransaction setCompletionBlock:^{
-                
-                if (isAnimate == YES) {
-                    [weakSelf animateToNextCoord:marker];
-                }
-            }];
-            marker.position = coord;
-            [CATransaction commit];
-            // If this marker is flat, implicitly trigger a change in rotation, which will finish quickly.
-            if (marker.flat) {
-                marker.rotation = heading;
-            }
-            if (currentIndex < sportNodes.count - 1) {
-                //BMKSportNode *node = sportNodes[currentIndex];
-                //NSString *timeString = [MINUtils getTimeFromTimestamp: node.create_time formatter: @"YYYY-MM-dd HH:mm:ss"];
-                //playBackView.timeSpeedDistanceLabel.text = @"";//[NSString stringWithFormat: @"%@ 速度:%.0fKm/h 里程:%.2fKm", timeString, node.speed, node.distance / 1000];
-                [UIView animateWithDuration:time animations:^{ //(distance / (22 + self.speed * 2))
-                    [playBackView.playTimeSlide setValue: [self.currentTimeArr[currentIndex] floatValue] / self.totalTime animated: YES];
-                }];
-                [playBackView setCurrentTime: [self.currentTimeArr[currentIndex] floatValue]];
-            }
-            currentIndex = coords.target;
-            lastIndex = coords.target;
-        }
-        
-    } else {
-        marker = [GMSMarker markerWithPosition:[self.linePath coordinateAtIndex:0]];
-        playBackView.playBtn.selected = NO;
-        playBackView.playTimeSlide.value = 0;
-        playBackView.starTimeLabel.text = @"00:00";
-        isAnimate = NO;
-        
-        CoordsList *coords = marker.userData;
-        coords.target = 0;
-        currentIndex = 0;
-        lastIndex = 0;
-    }
+//    CoordsList *coords = marker.userData;
+//    CLLocationCoordinate2D coord = [coords next];
+//    CLLocationCoordinate2D previous = marker.position;
+//    if (coord.latitude != -1 && coord.longitude != -1) {
+//        if (lastIndex != currentIndex) {
+//            CLLocationDirection heading = GMSGeometryHeading(previous, coord);
+//            marker.position = coord;
+//            if (marker.flat) {
+//                marker.rotation = heading;
+//            }
+//            [CATransaction begin];
+//            [CATransaction setAnimationDuration: 0.01];
+//            __weak MainMapViewController *weakSelf = self;
+//            [CATransaction setCompletionBlock:^{
+//
+//                if (isAnimate == YES) {
+//                    [weakSelf animateToNextCoord:marker];
+//                }
+//            }];
+//            marker.position = coord;
+//            [CATransaction commit];
+//            [self.googleMapView.superview layoutIfNeeded];
+//            currentIndex = coords.target;
+//            lastIndex = coords.target;
+//
+//        } else {
+//            CLLocationDirection heading = GMSGeometryHeading(previous, coord);
+//            CLLocationDistance distance = GMSGeometryDistance(previous, coord);
+//            // Use CATransaction to set a custom duration for this animation. By default, changes to the
+//            // position are already animated, but with a very short default duration. When the animation is
+//            // complete, trigger another animation step.
+//            [CATransaction begin];
+//            //CGFloat time = (13 - self.speed)/13.0 * (node.distance/node.speed);
+//            // 速度默认30
+//            CGFloat time = (distance/(self.speed?self.speed:30));
+//            time = time > 1?1:time;
+//            time = (13 - self.speed)/13.0 * time;
+//            [CATransaction setAnimationDuration:time];//(distance / (22 + self.speed * 2))
+//            __weak MainMapViewController *weakSelf = self;
+//            [CATransaction setCompletionBlock:^{
+//
+//                if (isAnimate == YES) {
+//                    [weakSelf animateToNextCoord:marker];
+//                }
+//            }];
+//            marker.position = coord;
+//            [CATransaction commit];
+//            // If this marker is flat, implicitly trigger a change in rotation, which will finish quickly.
+//            if (marker.flat) {
+//                marker.rotation = heading;
+//            }
+//            if (currentIndex < sportNodes.count - 1) {
+//                //BMKSportNode *node = sportNodes[currentIndex];
+//                //NSString *timeString = [MINUtils getTimeFromTimestamp: node.create_time formatter: @"YYYY-MM-dd HH:mm:ss"];
+//                //playBackView.timeSpeedDistanceLabel.text = @"";//[NSString stringWithFormat: @"%@ 速度:%.0fKm/h 里程:%.2fKm", timeString, node.speed, node.distance / 1000];
+//                [UIView animateWithDuration:time animations:^{ //(distance / (22 + self.speed * 2))
+//                    [playBackView.playTimeSlide setValue: [self.currentTimeArr[currentIndex] floatValue] / self.totalTime animated: YES];
+//                }];
+//                [playBackView setCurrentTime: [self.currentTimeArr[currentIndex] floatValue]];
+//            }
+//            currentIndex = coords.target;
+//            lastIndex = coords.target;
+//        }
+//
+//    } else {
+//        marker = [GMSMarker markerWithPosition:[self.linePath coordinateAtIndex:0]];
+//        playBackView.playBtn.selected = NO;
+//        playBackView.playTimeSlide.value = 0;
+//        playBackView.starTimeLabel.text = @"00:00";
+//        isAnimate = NO;
+//
+//        CoordsList *coords = marker.userData;
+//        coords.target = 0;
+//        currentIndex = 0;
+//        lastIndex = 0;
+//    }
 }
 - (UIImage *)getImageFromView:(UIView *)view{
     UIGraphicsBeginImageContext(view.bounds.size);
@@ -1838,6 +1800,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
                 [self clearBaiduMap];
                 [self.googleMapView clear];
                 self.googleMapView.selectedMarker = nil;
+                self.gmsBounds = [[GMSCoordinateBounds alloc] init];
                 
                 // 设备信息存储到本地
                 [CBCommonTools saveCBdeviceInfoList:baseModel];
@@ -1886,7 +1849,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
                     return;
                 }
                 if (deviceInfoModel.dno) {
-                    deviceInfoModel.zoomLevel = self.deviceInfoModelSelect.zoomLevel;
+//                    deviceInfoModel.zoomLevel = self.deviceInfoModelSelect.zoomLevel;
                     deviceInfoModel.devStatus = self.deviceInfoModelSelect.devStatus;
                     deviceInfoModel.productSpecId = self.deviceInfoModelSelect.productSpecId;
                     deviceInfoModel.proto = self.deviceInfoModelSelect.proto;
@@ -1931,114 +1894,114 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 //
 //}
 - (void)startTrack:(CBHomeLeftMenuDeviceInfoModel *)deviceInfoModel {
-    TrackModel *trackModel = [[TrackModel alloc]init];//[TrackModel yy_modelWithDictionary:baseModel.data];
-    trackModel.lat = deviceInfoModel.lat.doubleValue;
-    trackModel.lng = deviceInfoModel.lng.doubleValue;
-    trackModel.speed = deviceInfoModel.speed.doubleValue;
-    BMKSportNode *sportModel = [[BMKSportNode alloc] init];
-    CLLocationCoordinate2D coor = CLLocationCoordinate2DMake(trackModel.lat,trackModel.lng);
-    
-    if ([AppDelegate shareInstance].IsShowGoogleMap) {
-        // google地图
-        sportModel.coordinate = coor;
-        //[sportNodes_realTime addObject:sportModel];
-        if (!(deviceInfoModel.lat.doubleValue == self.deviceInfoModelSelect.lat.doubleValue && deviceInfoModel.lng.doubleValue == self.deviceInfoModelSelect.lng.doubleValue)) {
-            // 位置不变
-            //CGFloat distance = [_googleMapView getd];
-            // 第二个点有距离的时候再打点
-            [self->sportNodes_realTime addObject:sportModel];
-        }
-        sportNodeNum_realTime = sportNodes_realTime.count;
-        
-        // 有两点时，创建轨迹
-        if (sportNodes_realTime.count > 1) {
-            self.polyline_realTime.strokeColor = kRGB(128, 189, 86);
-            self.polyline_realTime.strokeWidth = 2*KFitWidthRate;
-            for(int idx = 0; idx < sportNodes_realTime.count; idx++)
-            {
-                BMKSportNode *node = [sportNodes_realTime objectAtIndex:idx];
-                CLLocationCoordinate2D location = node.coordinate;
-                [self.linePath_realTime addCoordinate:location];
-                
-                // 添加轨迹上的圆点
-                if (idx > 0 && idx < (sportNodes_realTime.count - 1)) {
-                    
-                    GMSMarker *mark_point = [[GMSMarker alloc] init];
-                    mark_point.appearAnimation = kGMSMarkerAnimationNone;//kGMSMarkerAnimationPop;
-                    mark_point.position = location;
-                    CBTrackPointView *iconView = [[CBTrackPointView alloc]initWithFrame:CGRectMake(0, 0, 10*KFitWidthRate, 10*KFitWidthRate)];
-                    mark_point.iconView = iconView;
-                    mark_point.groundAnchor = CGPointMake(0.5, 0.5);
-                    mark_point.map = self.googleMapView;
-                }
-            }
-//            BMKSportNode *firstNode = [sportNodes_realTime objectAtIndex:0];
-//            CLLocationCoordinate2D coordinate = firstNode.coordinate;
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                _googleMapView.camera = [GMSCameraPosition cameraWithLatitude:coordinate.latitude longitude:coordinate.longitude zoom:self.deviceInfoModelSelect.zoomLevel.integerValue];
-//            });
-            self.polyline_realTime.path = self.linePath_realTime;
-            self.polyline_realTime.map = _googleMapView;
-        }
-        //更新中心位置
-        [self.googleMapView setCamera:[GMSCameraPosition cameraWithLatitude:self.deviceInfoModelSelect.lat.doubleValue longitude:self.deviceInfoModelSelect.lng.doubleValue zoom:self.deviceInfoModelSelect.zoomLevel.integerValue]];
-    } else {
-        // 百度地图
-        [self setupMapZoomLevelMethod];
-        sportModel.coordinate = coor;
-        if (!(deviceInfoModel.lat.doubleValue == self.deviceInfoModelSelect.lat.doubleValue && deviceInfoModel.lng.doubleValue == self.deviceInfoModelSelect.lng.doubleValue)) {
-            // 位置不变 不打点
-            [sportNodes_realTime addObject:sportModel];
-        }
-        sportNodeNum_realTime = sportNodes_realTime.count;
-        
-        // 有两点时，创建轨迹
-        if (sportNodes_realTime.count > 1) {
-            CLLocationCoordinate2D paths[sportNodeNum_realTime];
-            for (NSInteger i = 0; i < sportNodeNum_realTime ; i++) {
-                BMKSportNode *node = sportNodes_realTime[i];
-                paths[i] = node.coordinate;
-            }
-            // 添加圆点标注
-            for (NSInteger i = 0; i < sportNodeNum_realTime ; i++) {
-                sportPointAnnotation_realTime = [[CBSportAnnotation alloc]init];
-                sportPointAnnotation_realTime.coordinate = paths[i];
-                [self.baiduMapView addAnnotation:sportPointAnnotation_realTime];
-            }
-            // 创建轨迹路径
-            pathPloyline_realTime = [BMKPolyline polylineWithCoordinates: paths count:sportNodeNum_realTime];
-            [self.baiduMapView addOverlay:pathPloyline_realTime];
-        }
-        //更新中心位置
-        CLLocationCoordinate2D coorData = CLLocationCoordinate2DMake(self.deviceInfoModelSelect.lat.doubleValue, self.deviceInfoModelSelect.lng.doubleValue);
-        [self.baiduMapView setCenterCoordinate:coorData animated: YES];
-    }
+//    TrackModel *trackModel = [[TrackModel alloc]init];//[TrackModel yy_modelWithDictionary:baseModel.data];
+//    trackModel.lat = deviceInfoModel.lat.doubleValue;
+//    trackModel.lng = deviceInfoModel.lng.doubleValue;
+//    trackModel.speed = deviceInfoModel.speed.doubleValue;
+//    BMKSportNode *sportModel = [[BMKSportNode alloc] init];
+//    CLLocationCoordinate2D coor = CLLocationCoordinate2DMake(trackModel.lat,trackModel.lng);
+//
+//    if ([AppDelegate shareInstance].IsShowGoogleMap) {
+//        // google地图
+//        sportModel.coordinate = coor;
+//        //[sportNodes_realTime addObject:sportModel];
+//        if (!(deviceInfoModel.lat.doubleValue == self.deviceInfoModelSelect.lat.doubleValue && deviceInfoModel.lng.doubleValue == self.deviceInfoModelSelect.lng.doubleValue)) {
+//            // 位置不变
+//            //CGFloat distance = [_googleMapView getd];
+//            // 第二个点有距离的时候再打点
+//            [self->sportNodes_realTime addObject:sportModel];
+//        }
+//        sportNodeNum_realTime = sportNodes_realTime.count;
+//
+//        // 有两点时，创建轨迹
+//        if (sportNodes_realTime.count > 1) {
+//            self.polyline_realTime.strokeColor = kRGB(128, 189, 86);
+//            self.polyline_realTime.strokeWidth = 2*KFitWidthRate;
+//            for(int idx = 0; idx < sportNodes_realTime.count; idx++)
+//            {
+//                BMKSportNode *node = [sportNodes_realTime objectAtIndex:idx];
+//                CLLocationCoordinate2D location = node.coordinate;
+//                [self.linePath_realTime addCoordinate:location];
+//
+//                // 添加轨迹上的圆点
+//                if (idx > 0 && idx < (sportNodes_realTime.count - 1)) {
+//
+//                    GMSMarker *mark_point = [[GMSMarker alloc] init];
+//                    mark_point.appearAnimation = kGMSMarkerAnimationNone;//kGMSMarkerAnimationPop;
+//                    mark_point.position = location;
+//                    CBTrackPointView *iconView = [[CBTrackPointView alloc]initWithFrame:CGRectMake(0, 0, 10*KFitWidthRate, 10*KFitWidthRate)];
+//                    mark_point.iconView = iconView;
+//                    mark_point.groundAnchor = CGPointMake(0.5, 0.5);
+//                    mark_point.map = self.googleMapView;
+//                }
+//            }
+////            BMKSportNode *firstNode = [sportNodes_realTime objectAtIndex:0];
+////            CLLocationCoordinate2D coordinate = firstNode.coordinate;
+////            dispatch_async(dispatch_get_main_queue(), ^{
+////                _googleMapView.camera = [GMSCameraPosition cameraWithLatitude:coordinate.latitude longitude:coordinate.longitude zoom:self.deviceInfoModelSelect.zoomLevel.integerValue];
+////            });
+//            self.polyline_realTime.path = self.linePath_realTime;
+//            self.polyline_realTime.map = _googleMapView;
+//        }
+//        //更新中心位置
+//        [self.googleMapView setCamera:[GMSCameraPosition cameraWithLatitude:self.deviceInfoModelSelect.lat.doubleValue longitude:self.deviceInfoModelSelect.lng.doubleValue zoom:self.deviceInfoModelSelect.zoomLevel.integerValue]];
+//    } else {
+//        // 百度地图
+//        [self setupMapZoomLevelMethod];
+//        sportModel.coordinate = coor;
+//        if (!(deviceInfoModel.lat.doubleValue == self.deviceInfoModelSelect.lat.doubleValue && deviceInfoModel.lng.doubleValue == self.deviceInfoModelSelect.lng.doubleValue)) {
+//            // 位置不变 不打点
+//            [sportNodes_realTime addObject:sportModel];
+//        }
+//        sportNodeNum_realTime = sportNodes_realTime.count;
+//
+//        // 有两点时，创建轨迹
+//        if (sportNodes_realTime.count > 1) {
+//            CLLocationCoordinate2D paths[sportNodeNum_realTime];
+//            for (NSInteger i = 0; i < sportNodeNum_realTime ; i++) {
+//                BMKSportNode *node = sportNodes_realTime[i];
+//                paths[i] = node.coordinate;
+//            }
+//            // 添加圆点标注
+//            for (NSInteger i = 0; i < sportNodeNum_realTime ; i++) {
+//                sportPointAnnotation_realTime = [[CBSportAnnotation alloc]init];
+//                sportPointAnnotation_realTime.coordinate = paths[i];
+//                [self.baiduMapView addAnnotation:sportPointAnnotation_realTime];
+//            }
+//            // 创建轨迹路径
+//            pathPloyline_realTime = [BMKPolyline polylineWithCoordinates: paths count:sportNodeNum_realTime];
+//            [self.baiduMapView addOverlay:pathPloyline_realTime];
+//        }
+//        //更新中心位置
+//        CLLocationCoordinate2D coorData = CLLocationCoordinate2DMake(self.deviceInfoModelSelect.lat.doubleValue, self.deviceInfoModelSelect.lng.doubleValue);
+//        [self.baiduMapView setCenterCoordinate:coorData animated: YES];
+//    }
 }
 #pragma mark -- 从缓存里获取设备详情，并居中显示,刷新地图
 - (void)getLocalDeviceInfoBaseModel {
-    // 清除地图标注和轨迹
-    [self clearBaiduMap];
-    [self.googleMapView clear];
-    self.googleMapView.selectedMarker = nil;
-    // 设备详情从本地取
-    CBBaseNetworkModel *deviceInfoList = [CBCommonTools CBdeviceInfoList];
-    CBHomeLeftMenuDeviceInfoModel *deviceInfoModel;
-    for (NSDictionary *dic in deviceInfoList.data) {
-        CBHomeLeftMenuDeviceInfoModel *model = [CBHomeLeftMenuDeviceInfoModel yy_modelWithJSON:dic];
-        if ([model.dno isEqualToString:self.deviceInfoModelSelect.dno]) {
-            deviceInfoModel = model;
-        }
-        // 添加地图标注
-        [self filterAnnotation:model];
-    }
-    if ([AppDelegate shareInstance].IsShowGoogleMap) {
-        //更新中心位置
-        [self.googleMapView setCamera:[GMSCameraPosition cameraWithLatitude:self.deviceInfoModelSelect.lat.doubleValue longitude:self.deviceInfoModelSelect.lng.doubleValue zoom:self.deviceInfoModelSelect.zoomLevel.integerValue]];
-    } else {
-        //更新中心位置
-        CLLocationCoordinate2D coorData = CLLocationCoordinate2DMake(self.deviceInfoModelSelect.lat.doubleValue, self.deviceInfoModelSelect.lng.doubleValue);
-        [self.baiduMapView setCenterCoordinate:coorData animated:YES];
-    }
+//    // 清除地图标注和轨迹
+//    [self clearBaiduMap];
+//    [self.googleMapView clear];
+//    self.googleMapView.selectedMarker = nil;
+//    // 设备详情从本地取
+//    CBBaseNetworkModel *deviceInfoList = [CBCommonTools CBdeviceInfoList];
+//    CBHomeLeftMenuDeviceInfoModel *deviceInfoModel;
+//    for (NSDictionary *dic in deviceInfoList.data) {
+//        CBHomeLeftMenuDeviceInfoModel *model = [CBHomeLeftMenuDeviceInfoModel yy_modelWithJSON:dic];
+//        if ([model.dno isEqualToString:self.deviceInfoModelSelect.dno]) {
+//            deviceInfoModel = model;
+//        }
+//        // 添加地图标注
+//        [self filterAnnotation:model];
+//    }
+//    if ([AppDelegate shareInstance].IsShowGoogleMap) {
+//        //更新中心位置
+//        [self.googleMapView setCamera:[GMSCameraPosition cameraWithLatitude:self.deviceInfoModelSelect.lat.doubleValue longitude:self.deviceInfoModelSelect.lng.doubleValue zoom:self.deviceInfoModelSelect.zoomLevel.integerValue]];
+//    } else {
+//        //更新中心位置
+//        CLLocationCoordinate2D coorData = CLLocationCoordinate2DMake(self.deviceInfoModelSelect.lat.doubleValue, self.deviceInfoModelSelect.lng.doubleValue);
+//        [self.baiduMapView setCenterCoordinate:coorData animated:YES];
+//    }
 }
 - (void)startTimer {
     if (!self.homeTimer || ![self.homeTimer isValid]) {
@@ -2060,65 +2023,11 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         self.homeTimer = nil;
     }
 }
-#pragma mark - CLLocationManagerDelegate
-- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
-    //定位失败，作相应处理。
-    NSLog(@"定位失败");
-    [MBProgressHUD hideHUDForView:self.view animated:YES];
-    // 定位失败的话，默认使用百度地图，国内
-    [AppDelegate shareInstance].IsShowGoogleMap = NO;
-    [self baiduMap];
-    [self googleMap];
-}
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(nonnull NSArray<CLLocation *> *)locations
-{
-    [MBProgressHUD hideHUDForView:self.view animated:YES];
-    [self.locationManager stopUpdatingLocation];
-    CLLocation *curLocation = [locations firstObject];
-    //通过location得到当前位置的经纬度
-    CLLocationCoordinate2D curCoordinate2D = curLocation.coordinate;
-    if ([CBCommonTools checkIsChina:CLLocationCoordinate2DMake(curCoordinate2D.latitude,curCoordinate2D.longitude)]) {
-        curCoordinate2D = [TQLocationConverter transformFromWGSToGCJ:curCoordinate2D];
-    }
-    NSLog(@"latitude = %f, longitude = %f dd%@", curCoordinate2D.latitude, curCoordinate2D.longitude,[AppDelegate shareInstance].IsShowGoogleMap?@"yes":@"no");
-
-    /* 确定当前地区是国内还是国外后，选择使用地图的类型 */
-//    [AppDelegate shareInstance].IsShowGoogleMap = ![CBCommonTools checkIsChina:CLLocationCoordinate2DMake(curCoordinate2D.latitude,curCoordinate2D.longitude)];
-    
-    [self baiduMap];
-    [self googleMap];
-    
-    if ([AppDelegate shareInstance].isShowPlayBackView) {
-        // 回看轨迹页面，不刷新
-        return;
-    }
-    
-    CLLocationCoordinate2D realCoor = curCoordinate2D;
-    // 更新选中的设备在地图中位置
-    if ([AppDelegate shareInstance].IsShowGoogleMap == NO) {
-        [self.baiduMapView setCenterCoordinate:realCoor animated: YES];
-    } else {
-        [self.googleMapView setCamera:[GMSCameraPosition cameraWithLatitude:realCoor.latitude longitude:realCoor.longitude zoom:16]];
-    }
-    
-    self.deviceInfoModelSelect = [CBCommonTools CBdeviceInfo];
-    if (self.deviceInfoModelSelect) {
-        CLLocationCoordinate2D coor = CLLocationCoordinate2DMake(self.deviceInfoModelSelect.lat.doubleValue,  self.deviceInfoModelSelect.lng.doubleValue);
-        self.navigationItem.title = self.deviceInfoModelSelect.name?:@"";
-        // 更新选中的设备在地图中位置
-        if ([AppDelegate shareInstance].IsShowGoogleMap == NO) {
-            [self.baiduMapView setCenterCoordinate:coor animated: YES];
-        } else {
-            [self.googleMapView setCamera:[GMSCameraPosition cameraWithLatitude:self.deviceInfoModelSelect.lat.doubleValue longitude:self.deviceInfoModelSelect.lng.doubleValue zoom:self.deviceInfoModelSelect.zoomLevel.integerValue]];
-        }
-    }
-}
 - (void)filterAnnotation:(CBHomeLeftMenuDeviceInfoModel*)deviceInfoModel {
     [self updateMapMarkMethod:deviceInfoModel];
 }
 #pragma mark -- 添加标注
 - (void)updateMapMarkMethod:(CBHomeLeftMenuDeviceInfoModel *)deviceInfoModel {
-    [self setupMapZoomLevelMethod];
     CLLocationCoordinate2D coor = CLLocationCoordinate2DMake(deviceInfoModel.lat.doubleValue,  deviceInfoModel.lng.doubleValue);
     // 小车定位图标
     MINNormalAnnotation *normalAnnotation = [[MINNormalAnnotation alloc] init];
@@ -2129,7 +2038,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         normalAnnotation.isSelect = YES;// 选中设备显示最前
     }
     [self.baiduMapView addAnnotation: normalAnnotation];
-    
+
     // 小车定位上方信息
     MINNormalInfoAnnotation *normalInfoAnnotation = [[MINNormalInfoAnnotation alloc] init];
     normalInfoAnnotation.deviceName = deviceInfoModel.name?:@"";
@@ -2140,12 +2049,11 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         normalInfoAnnotation.isSelect = YES;// 选中设备显示最前
     }
     [self.baiduMapView addAnnotation: normalInfoAnnotation];
-    
+
     // 小车定位图标
     GMSMarker *normalMarker = [[GMSMarker alloc] init];
     normalMarker.appearAnimation = kGMSMarkerAnimationPop;
     normalMarker.position = coor;
-    //normalMarker.title = @"marker";
     UIImage *icon = [CBCommonTools returnDeveceLocationImageStr:deviceInfoModel.icon isOnline:deviceInfoModel.online isWarmed:deviceInfoModel.warmed];
     UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, icon.size.width, icon.size.height)];
     imageView.image = icon;
@@ -2154,37 +2062,22 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     normalMarker.map = self.googleMapView;
     if ([deviceInfoModel.dno isEqualToString:self.deviceInfoModelSelect.dno]) {
         // 选中设备显示最前
-        //normalMarker.map.selectedMarker = normalMarker;
         self.googleMapView.selectedMarker = normalMarker;
     }
-    
+
     // 小车定位上方信息
     GMSMarker *normalInfoMarker = [[GMSMarker alloc] init];
     normalInfoMarker.appearAnimation = kGMSMarkerAnimationPop;
     normalInfoMarker.position = coor;
-    //normalInfoMarker.groundAnchor = CGPointMake(0.5f, 0.5f);
-    normalInfoMarker.groundAnchor = CGPointMake(0.5f, 1.5f);
-    MINMapPaoPaoView *iconView = [[MINMapPaoPaoView alloc] initWithNormalFrame: CGRectMake(0, 0, 147 * KFitWidthRate, 53.5 * KFitWidthRate)];
-    iconView.titleLabel.text = deviceInfoModel.name?:@"";
-//    iconView.speedAndStayLabel.text = [NSString stringWithFormat:@"%@:%@Km/h",Localized(@"速度"),deviceInfoModel.speed?:@"0"];
-    normalInfoMarker.iconView = iconView;
-//    if ([deviceInfoModel.warmed isEqualToString:@"1"]) {
-//        iconView.backView.backgroundColor = [UIColor redColor];
-//        iconView.titleLabel.textColor = [UIColor whiteColor];;
-//        iconView.speedAndStayLabel.textColor = [UIColor whiteColor];
-//    } else if ([deviceInfoModel.warmed isEqualToString:@"0"]) {
-//        iconView.backView.backgroundColor = [UIColor clearColor];
-//        iconView.titleLabel.textColor = kBlueColor;
-//        iconView.speedAndStayLabel.textColor = [UIColor blackColor];
-//    } else {
-//        iconView.backgroundColor = [UIColor clearColor];
-//        iconView.titleLabel.textColor = kBlueColor;
-//        iconView.speedAndStayLabel.textColor = [UIColor blackColor];
-//    }
+
+    normalInfoMarker.groundAnchor = CGPointMake(0.5f, 2.0f);
+    UILabel *lbl = [MINUtils createLabelWithText:deviceInfoModel.name?:@"" size:14 alignment:NSTextAlignmentCenter textColor:kCellTextColor];
+    [lbl sizeToFit];
+    lbl.backgroundColor = [UIColor colorWithWhite:1 alpha:0.8];
+    normalInfoMarker.iconView = lbl;
     normalInfoMarker.map = self.googleMapView;
     if ([deviceInfoModel.dno isEqualToString:self.deviceInfoModelSelect.dno]) {
         // 选中设备显示最前
-        //normalMarker.map.selectedMarker = normalMarker;
         self.googleMapView.selectedMarker = normalMarker;
     }
 }
@@ -2255,27 +2148,27 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
             }
         }
             break;
-        case 3:
-        {// 线路
-            self.pathleCoordinateArr = [self getModelArr:dataString];
-            if (self.baiduView.hidden == NO) {
-                [self addBaiduPath];
-                [self baiduMapFitFence: self.pathleCoordinateArr];
-            }else {
-                [self addGooglePath];
-                [self googleMapFitFence: self.pathleCoordinateArr];
-            }
-        }
-            break;
+//        case 3:
+//        {// 线路
+//            self.pathleCoordinateArr = [self getModelArr:dataString];
+//            if (self.baiduView.hidden == NO) {
+//                [self addBaiduPath];
+//                [self baiduMapFitFence: self.pathleCoordinateArr];
+//            }else {
+//                [self addGooglePath];
+//                [self googleMapFitFence: self.pathleCoordinateArr];
+//            }
+//        }
+//            break;
         default:
             break;
     }
 }
 #pragma mark -- 设置地图比例
 - (void)setupMapZoomLevelMethod {
-    if (self.deviceInfoModelSelect.zoomLevel) {
-        self.baiduMapView.zoomLevel = self.deviceInfoModelSelect.zoomLevel.integerValue;//20;
-    }
+//    if (self.deviceInfoModelSelect.zoomLevel) {
+//        self.baiduMapView.zoomLevel = self.deviceInfoModelSelect.zoomLevel.integerValue;//20;
+//    }
 }
 - (void)updateMapCenter {
     if (!self.deviceInfoModelSelect) {
@@ -2283,7 +2176,8 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     }
     if ([AppDelegate shareInstance].IsShowGoogleMap) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.googleMapView.camera = [GMSCameraPosition cameraWithLatitude:self.deviceInfoModelSelect.lat.doubleValue longitude:self.deviceInfoModelSelect.lng.doubleValue zoom:self.deviceInfoModelSelect.zoomLevel.integerValue];
+            [self.gmsBounds includingCoordinate:CLLocationCoordinate2DMake(self.deviceInfoModelSelect.lat.doubleValue, self.deviceInfoModelSelect.lng.doubleValue)];
+            [self.googleMapView animateWithCameraUpdate:[GMSCameraUpdate fitBounds:self.gmsBounds withPadding:30.f]];
         });
     } else {
         //更新中心位置
@@ -2316,7 +2210,6 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 }
 #pragma mark - Other Method
 - (void)addBaiduPolygon {
-    //[self clearMap];
     CLLocationCoordinate2D coords[self.polygonCoordinateArr.count];
     for (int i = 0; i < self.polygonCoordinateArr.count; i++) {
         MINCoordinateObject *obj = self.polygonCoordinateArr[i];
@@ -2326,7 +2219,6 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [_baiduMapView addOverlay:polygon];
 }
 - (void)addGooglePolygon {
-    //[self clearMap];
     GMSMutablePath *path = [GMSMutablePath path];
     for (int i = 0; i < self.polygonCoordinateArr.count; i++) {
         MINCoordinateObject *obj = self.polygonCoordinateArr[i];
@@ -2349,7 +2241,6 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
                                              radius:radiusNum];
     circ.fillColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
     circ.strokeColor = [UIColor clearColor];
-    //circ.strokeWidth = 0;
     circ.map = _googleMapView;
 }
 // 百度圆
@@ -2365,7 +2256,6 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [_baiduMapView setCenterCoordinate:model.coordinate];
 }
 - (void)addGoogleRectangle {
-    //[self clearMap];
     MINCoordinateObject *firstObj = self.rectangleCoordinateArr.firstObject;
     MINCoordinateObject *lastObj = self.rectangleCoordinateArr.lastObject;
     CLLocationCoordinate2D firstCoor = firstObj.coordinate;
@@ -2408,7 +2298,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [rect addCoordinate: rightTop];
     [rect addCoordinate: rightBottom];
     [rect addCoordinate: leftBottom];
-    
+
     GMSPolygon *polygon = [GMSPolygon polygonWithPath:rect];
     polygon.fillColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
     polygon.strokeColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
@@ -2464,17 +2354,17 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [_baiduMapView addOverlay:polygon];
 }
 - (void)addGooglePath {
-    //[self clearMap];
-    GMSMutablePath *path = [GMSMutablePath path];
-    for (int i = 0; i < self.pathleCoordinateArr.count; i++) {
-        MINCoordinateObject *obj = self.pathleCoordinateArr[i];
-        [path addLatitude: obj.coordinate.latitude longitude: obj.coordinate.longitude];
-    }
-    GMSPolyline *polyline = [GMSPolyline polylineWithPath:path];
-    polyline.strokeWidth = 4 * KFitWidthRate;
-    polyline.strokeColor = kBlueColor;
-    polyline.geodesic = YES;
-    polyline.map = _googleMapView;
+//    //[self clearMap];
+//    GMSMutablePath *path = [GMSMutablePath path];
+//    for (int i = 0; i < self.pathleCoordinateArr.count; i++) {
+//        MINCoordinateObject *obj = self.pathleCoordinateArr[i];
+//        [path addLatitude: obj.coordinate.latitude longitude: obj.coordinate.longitude];
+//    }
+//    GMSPolyline *polyline = [GMSPolyline polylineWithPath:path];
+//    polyline.strokeWidth = 4 * KFitWidthRate;
+//    polyline.strokeColor = kBlueColor;
+//    polyline.geodesic = YES;
+//    polyline.map = _googleMapView;
 }
 - (void)addBaiduPath {
     //[self clearMap];
