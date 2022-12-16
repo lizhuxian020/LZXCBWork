@@ -66,8 +66,13 @@
 
 @property (nonatomic, strong) CBHomeLeftMenuDeviceInfoModel *currentModel;
 @property (nonatomic, strong) BMKPolygon *baiduRectPolygon;
-
 @property (nonatomic, strong) BMKPolygon *baiduPolygon;
+
+@property (nonatomic, strong) GMSCircle *gmsCircle;
+@property (nonatomic, strong) UILabel *gmsRadiusLbl;
+@property (nonatomic, assign) NSInteger gmsPolygonCurrentMark;
+@property (nonatomic, strong) GMSPolygon *gmsRectPolygon;
+@property (nonatomic, strong) GMSPolygon *gmsPolygon;
 @end
 
 @implementation FenceDetailViewController
@@ -288,9 +293,9 @@
 }
 
 - (void)showCurrentSelectedDeviceLocation {
+    CBHomeLeftMenuDeviceInfoModel *deviceInfoModel = self.currentModel;
+    CLLocationCoordinate2D coor = CLLocationCoordinate2DMake(deviceInfoModel.lat.doubleValue,  deviceInfoModel.lng.doubleValue);
     if ([self showBaidu]) {
-        CBHomeLeftMenuDeviceInfoModel *deviceInfoModel = self.currentModel;
-        CLLocationCoordinate2D coor = CLLocationCoordinate2DMake(deviceInfoModel.lat.doubleValue,  deviceInfoModel.lng.doubleValue);
         // 小车定位图标
         MINNormalAnnotation *normalAnnotation = [[MINNormalAnnotation alloc] init];
         normalAnnotation.icon = [CBCommonTools returnDeveceLocationImageStr:deviceInfoModel.icon isOnline:deviceInfoModel.online isWarmed:deviceInfoModel.warmed];
@@ -309,6 +314,34 @@
         [self.baiduMapView addAnnotation: normalInfoAnnotation];
         
         [self.baiduMapView setCenterCoordinate:coor animated:YES];
+    } else {
+        // 小车定位图标
+        GMSMarker *normalMarker = [[GMSMarker alloc] init];
+        normalMarker.appearAnimation = kGMSMarkerAnimationNone;
+        normalMarker.position = coor;
+        UIImage *icon = [CBCommonTools returnDeveceLocationImageStr:deviceInfoModel.icon isOnline:deviceInfoModel.online isWarmed:deviceInfoModel.warmed];
+        UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, icon.size.width, icon.size.height)];
+        imageView.image = icon;
+        normalMarker.iconView = imageView;
+        normalMarker.groundAnchor = CGPointMake(0.5, 0.5);
+        normalMarker.map = self.googleMapView;
+        // 选中设备显示最前
+        self.googleMapView.selectedMarker = normalMarker;
+
+        // 小车定位上方信息
+        GMSMarker *normalInfoMarker = [[GMSMarker alloc] init];
+        normalInfoMarker.appearAnimation = kGMSMarkerAnimationNone;
+        normalInfoMarker.position = coor;
+
+        normalInfoMarker.groundAnchor = CGPointMake(0.5f, 2.0f);
+        UILabel *lbl = [MINUtils createLabelWithText:deviceInfoModel.name?:@"" size:14 alignment:NSTextAlignmentCenter textColor:kCellTextColor];
+        [lbl sizeToFit];
+        lbl.backgroundColor = [UIColor colorWithWhite:1 alpha:0.8];
+        normalInfoMarker.iconView = lbl;
+        normalInfoMarker.map = self.googleMapView;
+        // 选中设备显示最前
+        self.googleMapView.selectedMarker = normalMarker;
+        self.googleMapView.camera = [GMSCameraPosition cameraWithLatitude:coor.latitude longitude:coor.longitude zoom:self.googleMapView.camera.zoom];
     }
 }
 
@@ -318,7 +351,11 @@
     if (self.isPolygon) { // 多边形
         self.polygonCoordinateArr = [self getModelArr:dataString];
         for (MINCoordinateObject *obj in self.polygonCoordinateArr) {
-            [self addRectAnnotation:obj.coordinate];
+            if (self.baiduView.hidden == NO) {
+                [self addRectAnnotation:obj.coordinate];
+            } else {
+                [self addPoint_GMS:obj.coordinate];
+            }
         }
         if (self.baiduView.hidden == NO) {
             [self addBaiduPolygon];
@@ -340,15 +377,20 @@
 //                [self addBaiduCircleMarkerWithRadius: dataArr.lastObject];
                 [self baiduMapFitCircleFence:[self getCoorObj:coordinate] radius: [dataArr[2] doubleValue]];
             }else {
-                [self addGoogleCircleMarkerWithRadius: dataArr.lastObject];
-//                [self googleMapFitCircleFence: circleModel radius: [dataArr[2] doubleValue]];
+                [self mapView:self.googleMapView didTapAtCoordinate:coordinate];
+//                [self addGoogleCircleMarkerWithRadius: dataArr.lastObject];
+                [self googleMapFitCircleFence:coordinate radius:self.radius];
             }
 //            [self updateMapCenter:coordinate];
         }
     }else if (self.isRect) { // 矩形
         self.rectangleCoordinateArr = [self getModelArr: dataString];
         for (MINCoordinateObject *obj in self.rectangleCoordinateArr) {
-            [self addRectAnnotation:obj.coordinate];
+            if (self.baiduView.hidden == NO) {
+                [self addRectAnnotation:obj.coordinate];
+            } else {
+                [self addPoint_GMS:obj.coordinate];
+            }
         }
         if (self.baiduView.hidden == NO) {
             [self addBaiduRectangle];
@@ -485,19 +527,26 @@
     }
     [_googleMapView animateWithCameraUpdate: [GMSCameraUpdate fitBounds: bounds withPadding: 110.0f]];//30.0f 面积距离屏幕宽
 }
-
-- (void)googleMapFitCircleFence:(MINCoordinateObject *)model radius:(double)radius
-{
+- (void)addPoint_GMS:(CLLocationCoordinate2D)coordinate {
+    GMSMarker *mark_point = [[GMSMarker alloc] init];
+    mark_point.appearAnimation = kGMSMarkerAnimationNone;//kGMSMarkerAnimationPop;
+    mark_point.position = coordinate;
+    mark_point.icon = [UIImage imageNamed:@"电子围栏-正方形-默认"];
+    mark_point.draggable = true;
+    mark_point.groundAnchor = CGPointMake(0.5f, 0.5f);
+    mark_point.map = self.googleMapView;
+}
+- (void)googleMapFitCircleFence:(CLLocationCoordinate2D)coor radius:(double)radius {
     GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] init];
-    bounds = [bounds includingCoordinate: model.coordinate];
-    CGFloat zoomLevel = [GMSCameraPosition zoomAtCoordinate: model.coordinate forMeters: radius perPoints: 50];
-    [_googleMapView animateWithCameraUpdate: [GMSCameraUpdate fitBounds: bounds withPadding: 30.0f]];
-    [_googleMapView animateToZoom: zoomLevel];
+    bounds = [bounds includingCoordinate: GMSGeometryOffset(coor, radius, 0)];
+    bounds = [bounds includingCoordinate: GMSGeometryOffset(coor, radius, 90)];
+    bounds = [bounds includingCoordinate: GMSGeometryOffset(coor, radius, 180)];
+    bounds = [bounds includingCoordinate: GMSGeometryOffset(coor, radius, 270)];
+    [_googleMapView animateWithCameraUpdate: [GMSCameraUpdate fitBounds: bounds withPadding: 100.0f]];
 }
 
 - (void)addGoogleRectangle
 {
-    [self clearMap];
     MINCoordinateObject *firstObj = self.rectangleCoordinateArr.firstObject;
     MINCoordinateObject *lastObj = self.rectangleCoordinateArr.lastObject;
     CLLocationCoordinate2D firstCoor = firstObj.coordinate;
@@ -541,11 +590,16 @@
     [rect addCoordinate: rightBottom];
     [rect addCoordinate: leftBottom];
     
-    GMSPolygon *polygon = [GMSPolygon polygonWithPath:rect];
-    polygon.fillColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
-    polygon.strokeColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
-    polygon.strokeWidth = 0;//2;
-    polygon.map = _googleMapView;
+    if (!self.gmsRectPolygon) {
+        GMSPolygon *polygon = [GMSPolygon polygonWithPath:rect];
+        polygon.fillColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+        polygon.strokeColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+        polygon.strokeWidth = 0;//2;
+        polygon.map = _googleMapView;
+        self.gmsRectPolygon = polygon;
+    } else {
+        self.gmsRectPolygon.path = rect;
+    }
 }
 
 - (void)addBaiduRectangle
@@ -601,15 +655,26 @@
     }
 }
 
-- (void)addGoogleCircleMarkerWithRadius:(NSString *)radius
-{
-//    CGFloat radiusNum = [radius floatValue];
-//    GMSCircle *circ = [GMSCircle circleWithPosition:self.circleCoordinate
-//                                             radius:radiusNum];
-//    circ.fillColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
-//    circ.strokeColor = [UIColor clearColor];
-//    //circ.strokeWidth = 0;
-//    circ.map = _googleMapView;
+- (void)addGoogleCircleMarkerWithRadius:(CLLocationDistance)radius {
+    GMSCircle *circ = [GMSCircle circleWithPosition:self.roundCoordinateArr.firstObject.coordinate
+                                             radius:radius];
+    circ.fillColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+    circ.strokeWidth = 0;
+    circ.map = _googleMapView;
+    self.gmsCircle = circ;
+    // 半径
+    GMSMarker *normalInfoMarker = [[GMSMarker alloc] init];
+    normalInfoMarker.appearAnimation = kGMSMarkerAnimationNone;
+    normalInfoMarker.position = self.roundCoordinateArr.firstObject.coordinate;
+
+//    normalInfoMarker.groundAnchor = CGPointMake(0.5f, 2.0f);
+    UILabel *lbl = [MINUtils createLabelWithText:[NSString stringWithFormat:@"%.0lf", radius] size:14 alignment:NSTextAlignmentCenter textColor:kCellTextColor];
+    [lbl sizeToFit];
+    lbl.width += 30;
+    lbl.backgroundColor = [UIColor colorWithWhite:1 alpha:0.8];
+    normalInfoMarker.iconView = lbl;
+    normalInfoMarker.map = self.googleMapView;
+    self.gmsRadiusLbl = lbl;
 }
 
 - (void)addBaiduCircle:(CLLocationCoordinate2D)coor radius:(CGFloat)radius {
@@ -627,7 +692,6 @@
 
 - (void)addGooglePath
 {
-    [self clearMap];
     GMSMutablePath *path = [GMSMutablePath path];
     for (int i = 0; i < self.pathleCoordinateArr.count; i++) {
         MINCoordinateObject *obj = self.pathleCoordinateArr[i];
@@ -642,7 +706,6 @@
 
 - (void)addBaiduPath
 {
-    [self clearMap];
     CLLocationCoordinate2D coords[self.pathleCoordinateArr.count];
     for (int i = 0; i < self.pathleCoordinateArr.count; i++) {
         MINCoordinateObject *obj = self.pathleCoordinateArr[i];
@@ -654,17 +717,21 @@
 
 - (void)addGooglePolygon
 {
-    [self clearMap];
     GMSMutablePath *path = [GMSMutablePath path];
     for (int i = 0; i < self.polygonCoordinateArr.count; i++) {
         MINCoordinateObject *obj = self.polygonCoordinateArr[i];
         [path addLatitude: obj.coordinate.latitude longitude: obj.coordinate.longitude];
     }
-    GMSPolygon *polygon = [GMSPolygon polygonWithPath: path];
-    polygon.fillColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
-    polygon.strokeColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
-    polygon.strokeWidth = 0;//2;
-    polygon.map = _googleMapView;
+    if (!self.gmsPolygon) {
+        GMSPolygon *polygon = [GMSPolygon polygonWithPath: path];
+        polygon.fillColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+        polygon.strokeColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+        polygon.strokeWidth = 0;//2;
+        polygon.map = _googleMapView;
+        self.gmsPolygon = polygon;
+    } else {
+        self.gmsPolygon.path = path;
+    }
 }
 
 - (void)addBaiduPolygon
@@ -687,6 +754,7 @@
 {
     [self.roundCoordinateArr removeAllObjects];
     self.baiduCircleView = nil;
+    self.gmsCircle = nil;
     [self.rectangleCoordinateArr removeAllObjects];
     [self.polygonCoordinateArr removeAllObjects];
     if (self.baiduView.hidden == NO) {
@@ -788,7 +856,7 @@
     }];
     GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:40.056898
                                                             longitude:116.307626
-                                                                 zoom:16];
+                                                                 zoom:14];
     _googleMapView = [GMSMapView mapWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - 50*KFitHeightRate) camera:camera];
     //    _googleMapView.myLocationEnabled = YES;
     _googleMapView.delegate = self;
@@ -796,6 +864,60 @@
     [_googleMapView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(@0);
     }];
+}
+#pragma mark - GMSMapViewDelegate
+- (void)mapView:(GMSMapView *)mapView didTapAtCoordinate:(CLLocationCoordinate2D)coordinate {
+    if (self.isCircle == YES) {
+        [self clearMap];
+        [self.roundCoordinateArr removeAllObjects];
+        [self.roundCoordinateArr addObject:[self getCoorObj:coordinate]];
+        
+        [self addGoogleCircleMarkerWithRadius:self.radius];
+        
+        CLLocationCoordinate2D dragCoor = GMSGeometryOffset(coordinate, self.radius, 90);
+        [self addPoint_GMS:dragCoor];
+        
+    }
+}
+- (void)mapView:(GMSMapView *)mapView didBeginDraggingMarker:(GMSMarker *)marker {
+    if (self.isRect) {
+        self.gmsPolygonCurrentMark = [self getCorrectIndexFromArray:self.rectangleCoordinateArr withTargetCoor:marker.position];
+    }
+    if (self.isPolygon) {
+        self.gmsPolygonCurrentMark = [self getCorrectIndexFromArray:self.polygonCoordinateArr withTargetCoor:marker.position];
+    }
+}
+
+- (void)mapView:(GMSMapView *)mapView didDragMarker:(GMSMarker *)marker {
+    if (self.isCircle) {
+        self.radius = GMSGeometryDistance(self.roundCoordinateArr.firstObject.coordinate, marker.position);
+        self.gmsCircle.radius = self.radius;
+        self.gmsRadiusLbl.text = [NSString stringWithFormat:@"%.0lf", self.radius];
+    }
+    if (self.isRect) {
+        [self.rectangleCoordinateArr replaceObjectAtIndex:self.gmsPolygonCurrentMark withObject:[self getCoorObj:marker.position]];
+        [self addGoogleRectangle];
+    }
+    if (self.isPolygon) {
+        [self.polygonCoordinateArr replaceObjectAtIndex:self.gmsPolygonCurrentMark withObject:[self getCoorObj:marker.position]];
+        [self addGooglePolygon];
+    }
+}
+
+- (void)mapView:(GMSMapView *)mapView didEndDraggingMarker:(GMSMarker *)marker {
+    if (self.isCircle) {
+        self.radius = GMSGeometryDistance(self.roundCoordinateArr.firstObject.coordinate, marker.position);
+        self.gmsCircle.radius = self.radius;
+        self.gmsRadiusLbl.text = [NSString stringWithFormat:@"%.0lf", self.radius];
+    }
+    if (self.isRect) {
+        [self.rectangleCoordinateArr replaceObjectAtIndex:self.gmsPolygonCurrentMark withObject:[self getCoorObj:marker.position]];
+        [self addGoogleRectangle];
+    }
+    if (self.isPolygon) {
+        [self.polygonCoordinateArr replaceObjectAtIndex:self.gmsPolygonCurrentMark withObject:[self getCoorObj:marker.position]];
+        [self addGooglePolygon];
+    }
 }
 #pragma mark - BMKMapViewDelegate
 /* 添加标注 会调此方法 */
