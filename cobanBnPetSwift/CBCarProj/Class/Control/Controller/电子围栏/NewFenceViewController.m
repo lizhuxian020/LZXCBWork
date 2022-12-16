@@ -103,8 +103,10 @@
 @property (nonatomic, assign) CLLocationDistance radius;
 
 @property (nonatomic, strong) BMKPolygon *baiduRectPolygon;
-
 @property (nonatomic, strong) BMKPolygon *baiduPolygon;
+
+@property (nonatomic, strong) GMSCircle *gmsCircle;
+@property (nonatomic, strong) UILabel *gmsRadiusLbl;
 @end
 
 @implementation NewFenceViewController
@@ -138,14 +140,12 @@
 - (void)createUI
 {
     [self initBarWithTitle:Localized(@"新增围栏") isBack: YES];
-//    [self initBarRightImageName:@"gengduo" target:self action:@selector(showMenuViewClick)];
     [self addRightBtns];
     [self createBottomView];
     
     [self baiduMap];
     [self googleMap];
     
-//    [self commitBtn];
     [self showCurrentSelectedDeviceLocation];
 }
 - (void)addRightBtns {
@@ -357,7 +357,11 @@
     [self clearMap];
 }
 - (void)clickNext {
-    if ((self.isCircle && !self.baiduCircleView)) {
+    if (self.isCircle && (
+                          ([self showBaidu] && !self.baiduCircleView) ||
+                          (![self showBaidu] && !self.gmsCircle)
+                          )
+    ) {
         [MINUtils showProgressHudToView: self.view withText:Localized(@"至少需要指定1个点")];
         return;
     }
@@ -432,8 +436,6 @@
     _baiduMapView.isSelectedAnnotationViewFront = YES;
     
     _baiduMapView.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放
-    _baiduLocationService = [[BMKLocationManager alloc] init];
-    [_baiduLocationService startUpdatingLocation];
     _baiduMapView.userTrackingMode = BMKUserTrackingModeNone;
     [_baiduView addSubview: _baiduMapView];
     [_baiduMapView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -451,34 +453,13 @@
     }];
     GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:40.056898
                                                             longitude:116.307626
-                                                                 zoom:16];
-    _googleMapView = [GMSMapView mapWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, SCREEN_HEIGHT) camera:camera];
-    //    _googleMapView.myLocationEnabled = YES;
+                                                                 zoom:14];
+    _googleMapView = [GMSMapView mapWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) camera:camera];
     _googleMapView.delegate = self;
     [_googleView addSubview: _googleMapView];
     [_googleMapView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(@0);
     }];
-    //定位管理器
-    _locationManager = [[CLLocationManager alloc]init];
-    //如果没有授权则请求用户授权
-    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined){
-        [_locationManager requestWhenInUseAuthorization];
-    }
-    if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways){
-        if (self.locationManager.delegate == nil) {
-            //设置代理
-            _locationManager.delegate = self;
-            //设置定位精度
-            _locationManager.desiredAccuracy=kCLLocationAccuracyBest;
-            //定位频率,每隔多少米定位一次
-            CLLocationDistance distance = 10.0;//十米定位一次
-            _locationManager.distanceFilter = distance;
-            [_locationManager setDesiredAccuracy: kCLLocationAccuracyBest];
-            //启动跟踪定位
-            [_locationManager startUpdatingLocation];
-        }
-    }
 }
 
 - (void)clearMap {
@@ -524,7 +505,7 @@
             if (weakSelf.baiduView.hidden == NO) {
 //                [weakSelf addBaiduCircleMarkerWithRadius:weakSelf.textField.text];
             }else {
-                [weakSelf addGoogleCircleMarkerWithRadius:weakSelf.textField.text];
+//                [weakSelf addGoogleCircleMarkerWithRadius:weakSelf.textField.text];
             }
             weakSelf.isCircleCreate = YES;
             weakSelf.circleRadius = weakSelf.textField.text;
@@ -534,13 +515,35 @@
         [weakAlertView hideView];
     };
 }
-- (void)addGoogleCircleMarkerWithRadius:(NSString *)radius {
-    CGFloat radiusNum = [radius floatValue];
+- (void)addGoogleCircleMarkerWithRadius:(CLLocationDistance)radius {
     GMSCircle *circ = [GMSCircle circleWithPosition:self.circleCoordinate
-                                             radius:radiusNum];
+                                             radius:radius];
     circ.fillColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
     circ.strokeWidth = 0;
     circ.map = _googleMapView;
+    self.gmsCircle = circ;
+    // 半径
+    GMSMarker *normalInfoMarker = [[GMSMarker alloc] init];
+    normalInfoMarker.appearAnimation = kGMSMarkerAnimationNone;
+    normalInfoMarker.position = self.circleCoordinate;
+
+//    normalInfoMarker.groundAnchor = CGPointMake(0.5f, 2.0f);
+    UILabel *lbl = [MINUtils createLabelWithText:[NSString stringWithFormat:@"%.0lf", radius] size:14 alignment:NSTextAlignmentCenter textColor:kCellTextColor];
+    [lbl sizeToFit];
+    lbl.width += 30;
+    lbl.backgroundColor = [UIColor colorWithWhite:1 alpha:0.8];
+    normalInfoMarker.iconView = lbl;
+    normalInfoMarker.map = self.googleMapView;
+    self.gmsRadiusLbl = lbl;
+    
+    
+    CLLocationCoordinate2D dragCoor = GMSGeometryOffset(self.circleCoordinate, radius, 90);
+    GMSMarker *mark_point = [[GMSMarker alloc] init];
+    mark_point.appearAnimation = kGMSMarkerAnimationNone;//kGMSMarkerAnimationPop;
+    mark_point.position = dragCoor;
+    mark_point.icon = [UIImage imageNamed:@"电子围栏-正方形-默认"];
+    mark_point.draggable = true;
+    mark_point.map = self.googleMapView;
 }
 
 - (void)addBaiduCircle:(CLLocationCoordinate2D)coor radius:(CGFloat)radius {
@@ -915,15 +918,19 @@
     
 }
 #pragma mark - GoogleMaps
+- (void)mapView:(GMSMapView *)mapView didDragMarker:(GMSMarker *)marker {
+    self.radius = GMSGeometryDistance(self.circleCoordinate, marker.position);
+    self.gmsCircle.radius = self.radius;
+    self.gmsRadiusLbl.text = [NSString stringWithFormat:@"%.0lf", self.radius];
+}
 - (void)mapView:(GMSMapView *)mapView didTapAtCoordinate:(CLLocationCoordinate2D)coordinate {
-    if (self.circleBtn.selected == YES) {
+    if (self.isCircle == YES) {
+        [self clearMap];
         self.circleCoordinate = coordinate;
-        if (self.roundCoordinateArr.count > 0) {
-            [MINUtils showProgressHudToView:self.view withText:@"不能超过一个点"];
-            return;
-        }
+        [self.roundCoordinateArr removeAllObjects];
         [self.roundCoordinateArr addObject:[self getCoorObj:coordinate]];
-        [self addPoint_GMS:coordinate];
+        
+        [self addGoogleCircleMarkerWithRadius:self.radius];
         
     } else if (self.rectangleBtn.selected == YES) {
         if (self.rectangleCoordinateArr.count > 1) {
@@ -953,32 +960,11 @@
     mark_point.groundAnchor = CGPointMake(0.5, 0.5);
     mark_point.map = self.googleMapView;
 }
--(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(nonnull NSArray<CLLocation *> *)locations {
-    [_locationManager stopUpdatingLocation];
-    CLLocation *curLocation = [locations firstObject];
-    //    通过location  或得到当前位置的经纬度
-    CLLocationCoordinate2D curCoordinate2D = curLocation.coordinate;
-    if ([CBCommonTools checkIsChina:CLLocationCoordinate2DMake(curCoordinate2D.latitude,curCoordinate2D.longitude)]) {
-        curCoordinate2D = [TQLocationConverter transformFromWGSToGCJ:curCoordinate2D];
-    }
-    NSLog(@"latitude = %f, longitude = %f", curCoordinate2D.latitude, curCoordinate2D.longitude);
-    self.myGoogleLocation = curCoordinate2D;
-//    [self showMyLocation];
-}
-
-- (void)showMyLocation {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [_googleMapView clear];
-        NSLog(@"%f, %f", self.myGoogleLocation.latitude, self.myGoogleLocation.longitude);
-        _googleMapView.camera = [GMSCameraPosition cameraWithLatitude:self.myGoogleLocation.latitude longitude:self.myGoogleLocation.longitude zoom: 16];
-        [_baiduMapView setCenterCoordinate:CLLocationCoordinate2DMake(self.myGoogleLocation.latitude,self.myGoogleLocation.longitude) animated:YES];
-    });
-}
 
 - (void)showCurrentSelectedDeviceLocation {
+    CBHomeLeftMenuDeviceInfoModel *deviceInfoModel = self.currentModel;
+    CLLocationCoordinate2D coor = CLLocationCoordinate2DMake(deviceInfoModel.lat.doubleValue,  deviceInfoModel.lng.doubleValue);
     if ([self showBaidu]) {
-        CBHomeLeftMenuDeviceInfoModel *deviceInfoModel = self.currentModel;
-        CLLocationCoordinate2D coor = CLLocationCoordinate2DMake(deviceInfoModel.lat.doubleValue,  deviceInfoModel.lng.doubleValue);
         // 小车定位图标
         MINNormalAnnotation *normalAnnotation = [[MINNormalAnnotation alloc] init];
         normalAnnotation.icon = [CBCommonTools returnDeveceLocationImageStr:deviceInfoModel.icon isOnline:deviceInfoModel.online isWarmed:deviceInfoModel.warmed];
@@ -997,6 +983,34 @@
         [self.baiduMapView addAnnotation: normalInfoAnnotation];
         
         [self.baiduMapView setCenterCoordinate:coor animated:YES];
+    } else {
+        // 小车定位图标
+        GMSMarker *normalMarker = [[GMSMarker alloc] init];
+        normalMarker.appearAnimation = kGMSMarkerAnimationNone;
+        normalMarker.position = coor;
+        UIImage *icon = [CBCommonTools returnDeveceLocationImageStr:deviceInfoModel.icon isOnline:deviceInfoModel.online isWarmed:deviceInfoModel.warmed];
+        UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, icon.size.width, icon.size.height)];
+        imageView.image = icon;
+        normalMarker.iconView = imageView;
+        normalMarker.groundAnchor = CGPointMake(0.5, 0.5);
+        normalMarker.map = self.googleMapView;
+        // 选中设备显示最前
+        self.googleMapView.selectedMarker = normalMarker;
+
+        // 小车定位上方信息
+        GMSMarker *normalInfoMarker = [[GMSMarker alloc] init];
+        normalInfoMarker.appearAnimation = kGMSMarkerAnimationNone;
+        normalInfoMarker.position = coor;
+
+        normalInfoMarker.groundAnchor = CGPointMake(0.5f, 2.0f);
+        UILabel *lbl = [MINUtils createLabelWithText:deviceInfoModel.name?:@"" size:14 alignment:NSTextAlignmentCenter textColor:kCellTextColor];
+        [lbl sizeToFit];
+        lbl.backgroundColor = [UIColor colorWithWhite:1 alpha:0.8];
+        normalInfoMarker.iconView = lbl;
+        normalInfoMarker.map = self.googleMapView;
+        // 选中设备显示最前
+        self.googleMapView.selectedMarker = normalMarker;
+        self.googleMapView.camera = [GMSCameraPosition cameraWithLatitude:coor.latitude longitude:coor.longitude zoom:self.googleMapView.camera.zoom];
     }
 }
 
