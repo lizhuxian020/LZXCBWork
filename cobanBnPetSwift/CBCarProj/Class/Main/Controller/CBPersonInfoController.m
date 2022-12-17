@@ -30,7 +30,7 @@
     [self initBarWithTitle:Localized(@"个人信息") isBack:YES];
     [self initBarRighBtnTitle:@"保存" target:self action:@selector(save)];
     
-    CBPetLoginModel *userModel = [CBPetLoginModelTool getUser];
+    CBCarUserModel *userModel = [CBCarUserInstance.shared userModel];
     
     self.imgV = [self viewWithTitle:Localized(@"头像") renderHead:YES content:nil placeHolder:nil canClick:YES blk:^{
         
@@ -107,7 +107,7 @@
     UILabel *contentLbl = nil;
     
     if (renderHead) {
-        CBPetLoginModel *userModel = [CBPetLoginModelTool getUser];
+        CBCarUserModel *userModel = [CBCarUserInstance.shared userModel];
         UIImageView *img = [UIImageView new];
         self.headerView = img;
         [img sd_setImageWithURL:[NSURL URLWithString:userModel.photo] placeholderImage:[UIImage imageNamed:@"个人资料"]];

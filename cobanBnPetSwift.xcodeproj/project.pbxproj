@@ -682,6 +682,7 @@
 		B19D6A7029326FB100D2420B /* CBPersonInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = B19D6A6F29326FB100D2420B /* CBPersonInfoController.m */; };
 		B19D6A742932776F00D2420B /* CBCarAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = B19D6A732932776F00D2420B /* CBCarAlertView.m */; };
 		B1A4093329366DC3004B22E1 /* CBAlertSelectableView.m in Sources */ = {isa = PBXBuildFile; fileRef = B1A4093229366DC3004B22E1 /* CBAlertSelectableView.m */; };
+		B1C78285294D932F00CD0BB0 /* CBCarUserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B1C78284294D932F00CD0BB0 /* CBCarUserModel.m */; };
 		B1D0D08E292FC80900ECA328 /* CBCarAlertMsgController.m in Sources */ = {isa = PBXBuildFile; fileRef = B1D0D08D292FC80900ECA328 /* CBCarAlertMsgController.m */; };
 		B1D0D092292FCAD300ECA328 /* _CBCarAlertMsgCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B1D0D091292FCAD300ECA328 /* _CBCarAlertMsgCell.m */; };
 		B1D0D096292FD2D900ECA328 /* _CBCarAlertMsgModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B1D0D095292FD2D900ECA328 /* _CBCarAlertMsgModel.m */; };
@@ -1903,6 +1904,8 @@
 		B1A4092F293661AA004B22E1 /* CBCarControlConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBCarControlConfig.h; sourceTree = "<group>"; };
 		B1A4093129366DC3004B22E1 /* CBAlertSelectableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBAlertSelectableView.h; sourceTree = "<group>"; };
 		B1A4093229366DC3004B22E1 /* CBAlertSelectableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBAlertSelectableView.m; sourceTree = "<group>"; };
+		B1C78283294D932F00CD0BB0 /* CBCarUserModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBCarUserModel.h; sourceTree = "<group>"; };
+		B1C78284294D932F00CD0BB0 /* CBCarUserModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBCarUserModel.m; sourceTree = "<group>"; };
 		B1D0D08C292FC80900ECA328 /* CBCarAlertMsgController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBCarAlertMsgController.h; sourceTree = "<group>"; };
 		B1D0D08D292FC80900ECA328 /* CBCarAlertMsgController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBCarAlertMsgController.m; sourceTree = "<group>"; };
 		B1D0D090292FCAD300ECA328 /* _CBCarAlertMsgCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBCarAlertMsgCell.h; sourceTree = "<group>"; };
@@ -3955,6 +3958,7 @@
 		17CDA9DB24CEBE5400BB9F8B /* Class */ = {
 			isa = PBXGroup;
 			children = (
+				B1C78282294D932100CD0BB0 /* CarUser */,
 				B13D8BCA2935CA90005F3A61 /* ControlMenu */,
 				B1D0D08A292FC7E400ECA328 /* AlertMsg */,
 				B1D3565B292E5ED800E677F7 /* Base */,
@@ -5646,6 +5650,15 @@
 			path = AlertContentView;
 			sourceTree = "<group>";
 		};
+		B1C78282294D932100CD0BB0 /* CarUser */ = {
+			isa = PBXGroup;
+			children = (
+				B1C78283294D932F00CD0BB0 /* CBCarUserModel.h */,
+				B1C78284294D932F00CD0BB0 /* CBCarUserModel.m */,
+			);
+			path = CarUser;
+			sourceTree = "<group>";
+		};
 		B1D0D08A292FC7E400ECA328 /* AlertMsg */ = {
 			isa = PBXGroup;
 			children = (
@@ -6469,6 +6482,7 @@
 				1782BF5024C0427E00544C36 /* HomeWatchInfoView.m in Sources */,
 				4360DB5624810B6C00D2A03C /* amrFileCodec.mm in Sources */,
 				1782BF7724C0427E00544C36 /* CBGuardGSMarkView.m in Sources */,
+				B1C78285294D932F00CD0BB0 /* CBCarUserModel.m in Sources */,
 				435B2542247D8057006CC6A1 /* CBPetFunctionListenView.swift in Sources */,
 				1782BF2E24C0427E00544C36 /* NSMutableAttributedString+Category.m in Sources */,
 				1782BF3324C0427E00544C36 /* AppSettingViewController.m in Sources */,

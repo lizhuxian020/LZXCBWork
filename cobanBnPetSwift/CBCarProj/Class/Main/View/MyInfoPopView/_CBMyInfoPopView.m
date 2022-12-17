@@ -57,10 +57,7 @@
         make.width.height.equalTo(@20);
     }];
     
-    CBPetLoginModel *userModel = [CBPetLoginModelTool getUser];
-    
     UIImageView *arrowV = [UIImageView new];
-    [arrowV sd_setImageWithURL:[NSURL URLWithString:userModel.photo ?: @""] placeholderImage:[UIImage imageNamed:@"个人资料"]];
     [self.contentView addSubview:arrowV];
     [arrowV mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(@10);
@@ -70,13 +67,15 @@
     arrowV.layer.cornerRadius = 150/2;
     [arrowV.layer setMasksToBounds:YES];
     [arrowV clipsToBounds];
+    self.arrowView = arrowV;
     
-    UILabel *phoneLbl = [MINUtils createLabelWithText:userModel.phone ?: userModel.email ?: @"" size:14 alignment:NSTextAlignmentCenter textColor:UIColor.blackColor];
+    UILabel *phoneLbl = [MINUtils createLabelWithText:@"" size:14 alignment:NSTextAlignmentCenter textColor:UIColor.blackColor];
     [self.contentView addSubview:phoneLbl];
     [phoneLbl mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(arrowV.mas_bottom).mas_offset(10);
         make.centerX.equalTo(@0);
     }];
+    self.phoneLbl = phoneLbl;
     
     UIView *infoV = [self viewWithImg:@"个人资料" title:Localized(@"个人信息")];
     UIView *aboutV = [self viewWithImg:@"关于我们" title:Localized(@"关于我们")];
@@ -168,7 +167,11 @@
 }
 
 - (void)pop {
-    NSLog(@"%s", __FUNCTION__);
+    
+    CBCarUserModel *userModel = CBCarUserInstance.shared.userModel;
+    NSString *url = userModel.photo;
+    [self.arrowView sd_setImageWithURL:[NSURL URLWithString:userModel.photo ?: @""] placeholderImage:[UIImage imageNamed:@"个人资料"]];
+    self.phoneLbl.text = userModel.phone ?: userModel.email ?: @"";
     
     [UIApplication.sharedApplication.keyWindow addSubview:self];
     [self.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -182,7 +185,6 @@
 }
 
 - (void)dismiss {
-    NSLog(@"%s", __FUNCTION__);
     [self.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(@(0));
     }];

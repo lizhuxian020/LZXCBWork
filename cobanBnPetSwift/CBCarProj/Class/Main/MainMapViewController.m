@@ -162,7 +162,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     // 开启定时器，每20s刷新，各设备详情
     [self startTimer];
     [AppDelegate isShowGoogle];
-//    [self requestUserData];
+    [self requestUserData];
 }
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear: animated];
@@ -627,20 +627,12 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 //    self.alertBtn.BadgeValue = @"99";
     
     self.personBtn = [self createBtn:@"个人资料"];
+    [self.personBtn.layer setMasksToBounds:YES];
     [self.personBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.width.height.equalTo(self.deviceListBtn);
         make.right.equalTo(@-15);
     }];
     [self.personBtn addTarget:self action:@selector(didClickPersonBtn) forControlEvents:UIControlEventTouchUpInside];
-    CBPetLoginModel *userModel = [CBPetLoginModelTool getUser];
-    kWeakSelf(self);
-    [SDWebImageDownloader.sharedDownloader downloadImageWithURL:[NSURL URLWithString:userModel.photo] options:SDWebImageDownloaderUseNSURLCache progress:nil completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished) {
-        if (image) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [weakself.personBtn setImage:image forState:UIControlStateNormal];
-            });
-        }
-    }];
     
     self.locateBtn = [self createBtn:@"单次定位"];
     [self.locateBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -1193,12 +1185,22 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 - (void)requestUserData {
     kWeakSelf(self);
     [MBProgressHUD showHUDIcon:self.googleView animated:YES];
-    [[NetWorkingManager shared] getWithUrl:@"/userController/getUserInfoByUid" params:@{} succeed:^(id response, BOOL isSucceed) {
+    CBPetLoginModel *userModel = [CBPetLoginModelTool getUser];
+    [[NetWorkingManager shared] getWithUrl:@"/userController/getUserInfoByUid" params:@{
+        @"id": [NSString stringWithFormat:@"%@",userModel.uid]
+    } succeed:^(id response, BOOL isSucceed) {
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.googleView animated:YES];
-        if (isSucceed) {
-            CBPetLoginModel *model = [CBPetLoginModel mj_objectWithKeyValues:response];
-            [CBPetLoginModelTool saveUser:model];
+        if (isSucceed && response && response[@"data"]) {
+            CBCarUserModel *model = [CBCarUserModel mj_objectWithKeyValues:response[@"data"]];
+            CBCarUserInstance.shared.userModel = model;
+            [SDWebImageDownloader.sharedDownloader downloadImageWithURL:[NSURL URLWithString:model.photo] options:SDWebImageDownloaderUseNSURLCache progress:nil completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished) {
+                if (image) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [weakself.personBtn setImage:image forState:UIControlStateNormal];
+                    });
+                }
+            }];
         }
     } failed:^(NSError *error) {
         kStrongSelf(self);
