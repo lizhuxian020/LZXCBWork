@@ -765,7 +765,7 @@
 - (void)setDeviceInfoModel:(DeviceDetailModel *)deviceInfoModel {
     _deviceInfoModel = deviceInfoModel;
     if (deviceInfoModel) {
-        _titleLabel.text = [NSString stringWithFormat:@"%@",kStringIsEmpty(deviceInfoModel.carNum)?Localized(@"未知"):deviceInfoModel.carNum];
+        _titleLabel.text = [NSString stringWithFormat:@"%@",kStringIsEmpty(deviceInfoModel.carNum)?Localized(@"未知"):deviceInfoModel.name];
         
         _lngLb.attributedText = [self getAttStr:Localized(@"经纬度:") content:[NSString stringWithFormat:@"%@, %@", deviceInfoModel.lng, deviceInfoModel.lat]];
         //TODO: LZXTODO由于首页只有getDevData，里面没有devStatus字段，只有getMyDeviceList接口才有这个字段
@@ -793,9 +793,9 @@
 //        _sleepModelLb.text = [NSString stringWithFormat:@"%@:%@",Localized(@"休眠模式"),[self returnSleepModel:deviceInfoModel.restMod]];
         _sleepModelLb.attributedText = [self getAttStr:Localized(@"休眠模式:") content:[self returnSleepModel:deviceInfoModel.restMod]];
 //        _gsmNumberLb.text = [NSString stringWithFormat:@"GSM:%@",deviceInfoModel.gsm?:@"0"];
-        _gsmNumberLb.attributedText = [self getAttStr:@"GSM:" content:deviceInfoModel.gsm?:@"0"];
+        _gsmNumberLb.attributedText = [self getAttStr:@"GSM:" content:deviceInfoModel.gsm.intValue >= 15 ? Localized(@"强") : Localized(@"弱")];
 //        _gpsNumberLb.text = [NSString stringWithFormat:@"GPS:%@%@",deviceInfoModel.gps?:@"",Localized(@"颗")];
-        _gpsNumberLb.attributedText = [self getAttStr:@"GPS:" content:[NSString stringWithFormat:@"%@%@",deviceInfoModel.gps?:@"",Localized(@"颗")]];
+        _gpsNumberLb.attributedText = [self getAttStr:@"GPS:" content:[NSString stringWithFormat:@"%@",(deviceInfoModel.gps.intValue >= 4 ? Localized(@"强") : Localized(@"弱"))]];
         _reportLb.attributedText = [self getAttStr:Localized(@"上报策略:") content:@"xxx"];
 //        _warmTypeLb.text = [NSString stringWithFormat: @"%@%@",Localized(@"报警类型:"), warmTypeStr];
         
