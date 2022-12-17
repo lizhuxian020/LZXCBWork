@@ -726,7 +726,6 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 }
 
 - (void)didClickAlertBtn {
-    NSLog(@"%s", __FUNCTION__);
     [self.navigationController pushViewController:CBCarAlertMsgController.new animated:YES];
 }
 

@@ -25,10 +25,9 @@
     kWeakSelf(self);
     
     [self initBarWithTitle:Localized(@"报警消息") isBack:YES];
-    [self initBarRightImageName:@"列表-1" target:self action:@selector(showPopView)];
+    [self initBarRightImageName:@"更多" target:self action:@selector(showPopView)];
     self.popView = [_CBAlertMsgMenuPopView new];
     [self.popView setDidClick:^{
-        NSLog(@"%s", __FUNCTION__);
         [weakself requestAllRead];
     }];
     [self.popView setDidClickCheck:^{

@@ -35,7 +35,7 @@
 }
 
 - (void)createUI {
-    self.contentView.backgroundColor = UIColor.lightGrayColor;
+    self.contentView.backgroundColor = kGreyColor;
     self.myContentView = [UIView new];
     self.myContentView.backgroundColor = UIColor.whiteColor;
     [self.contentView addSubview:self.myContentView];
@@ -92,24 +92,27 @@
         make.bottom.equalTo(@-20);
     }];
     
-    self.stopBtn = [MINUtils createBtnWithRadius:10 title:Localized(@"停止报警")];
+    self.stopBtn = [MINUtils createBtnWithRadius:20 title:Localized(@"停止报警")];
+    self.stopBtn.backgroundColor = kAppMainColor;
     [self.myContentView addSubview:self.stopBtn];
     [self.stopBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.actionT);
         make.right.equalTo(@-10);
-        make.width.equalTo(@80);
+        make.width.equalTo(@120);
+        make.height.equalTo(@40);
     }];
     
-    self.checkBtn = [MINUtils createBtnWithRadius:10 title:Localized(@"查看")];
-    self.checkBtn.layer.borderColor = kBlueColor.CGColor;
+    self.checkBtn = [MINUtils createBtnWithRadius:20 title:Localized(@"查看")];
+    self.checkBtn.layer.borderColor = kAppMainColor.CGColor;
     self.checkBtn.layer.borderWidth = 1;
     self.checkBtn.backgroundColor = UIColor.whiteColor;
-    [self.checkBtn setTitleColor:kBlueColor forState:UIControlStateNormal];
+    [self.checkBtn setTitleColor:kAppMainColor forState:UIControlStateNormal];
     [self.myContentView addSubview:self.checkBtn];
     [self.checkBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.actionT);
         make.right.equalTo(self.stopBtn.mas_left).mas_offset(-10);
-        make.width.equalTo(@80);
+        make.width.equalTo(@120);
+        make.height.equalTo(@40);
     }];
     
     kWeakSelf(self);
@@ -144,7 +147,7 @@
         case 12:
             return @"震动";
     }
-    return @"";
+    return type;
 }
 
 @end

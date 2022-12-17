@@ -110,6 +110,7 @@
     UIButton *rightBtn = [[UIButton alloc] initWithFrame: CGRectMake(0, 0,  27 * KFitHeightRate,  24 * KFitHeightRate)];
     [rightBtn addTarget:self action:action forControlEvents: UIControlEventTouchUpInside];
     [rightBtn setImage: [UIImage imageNamed: name] forState: UIControlStateNormal];
+    [rightBtn setImage: [UIImage imageNamed: name] forState: UIControlStateHighlighted];
     UIBarButtonItem *barItem = [[UIBarButtonItem alloc] initWithCustomView: rightBtn];
     UIBarButtonItem * spaceItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
     //将宽度设为负值
