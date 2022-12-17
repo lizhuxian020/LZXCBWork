@@ -44,7 +44,7 @@
 //    }
     
     [MBProgressHUD showHUDIcon:self.view animated:YES];
-    CBHomeLeftMenuDeviceInfoModel *deviceModel = [CBCommonTools CBdeviceInfo];
+    CBHomeLeftMenuDeviceInfoModel *deviceModel = _deviceInfoModelSelect;
     NSDictionary *param = @{
         @"dno": deviceModel.dno ?: @"",
         @"length": @100,

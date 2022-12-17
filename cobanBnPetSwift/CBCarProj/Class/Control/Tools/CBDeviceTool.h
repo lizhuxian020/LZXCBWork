@@ -22,15 +22,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)didChooseDevice:(CBHomeLeftMenuDeviceInfoModel *)currentModel;
 
-- (void)getControlData:(void(^)(NSArray *arrayTitle ,NSArray *arrayTitleImage))blk;
+- (void)getControlData:(CBHomeLeftMenuDeviceInfoModel *)deviceModel blk:(void(^)(NSArray *arrayTitle ,NSArray *arrayTitleImage))blk;
 
-- (void)getDeviceConfigData:(void(^)(NSArray *arrayTitle ,NSArray *arrayTitleImage))blk;
+- (void)getDeviceConfigData:(CBHomeLeftMenuDeviceInfoModel *)deviceModel blk:(void(^)(NSArray *arrayTitle ,NSArray *arrayTitleImage))blk;
 
-- (void)getAlarmConfigData:(void(^)(NSArray *arrayTitle ,NSArray *arrayTitleImage))blk;
+- (void)getAlarmConfigData:(CBHomeLeftMenuDeviceInfoModel *)deviceModel blk:(void(^)(NSArray *arrayTitle ,NSArray *arrayTitleImage))blk;
 
-- (void)getXiumianData:(void(^)(NSArray *arrayTitle, NSArray *arrayId))blk;
+- (void)getXiumianData:(CBHomeLeftMenuDeviceInfoModel *)deviceModel blk:(void(^)(NSArray *arrayTitle, NSArray *arrayId))blk;
 
-- (void)getReportData:(void(^)(NSArray *sectionArr, NSArray *sectionTitleArr, NSArray *sectionImageTitleArr, NSArray *oilTitleArr, NSArray *oilImageArr, NSArray *warnTitleArr, NSArray *warnImageArr, NSArray *electronicTitleArr, NSArray *electronicImageArr))blk;
+- (void)getReportData:(CBHomeLeftMenuDeviceInfoModel *)deviceModel blk:(void(^)(NSArray *sectionArr, NSArray *sectionTitleArr, NSArray *sectionImageTitleArr, NSArray *oilTitleArr, NSArray *oilImageArr, NSArray *warnTitleArr, NSArray *warnImageArr, NSArray *electronicTitleArr, NSArray *electronicImageArr))blk;
 @end
 
 NS_ASSUME_NONNULL_END

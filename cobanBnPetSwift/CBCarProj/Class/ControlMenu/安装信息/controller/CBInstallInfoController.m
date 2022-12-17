@@ -56,7 +56,7 @@
 }
 
 - (void)requestData {
-    NSString *dno = [CBCommonTools CBdeviceInfo].dno?:@"";
+    NSString *dno = _deviceInfoModelSelect.dno?:@"";
     NSString *url = [NSString stringWithFormat:@"%@%@", @"/gpsInstallController/getGpsInstall/", dno];
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     kWeakSelf(self);

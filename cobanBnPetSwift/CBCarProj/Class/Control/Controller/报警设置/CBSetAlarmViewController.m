@@ -55,7 +55,7 @@
         
         __block NSArray *arrayTitle = nil;
         __block NSArray *arrayTitleImage = nil;
-        [CBDeviceTool.shareInstance getAlarmConfigData:^(NSArray * _Nonnull _arrayTitle, NSArray * _Nonnull _arrayTitleImage) {
+        [CBDeviceTool.shareInstance getAlarmConfigData:_deviceInfoModelSelect blk:^(NSArray * _Nonnull _arrayTitle, NSArray * _Nonnull _arrayTitleImage) {
             arrayTitle = _arrayTitle;
             arrayTitleImage = _arrayTitleImage;
         }];
@@ -87,7 +87,7 @@
     [MBProgressHUD hideHUDForView:self.view animated:YES];
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
-    [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
+    [paramters setObject:_deviceInfoModelSelect.dno?:@"" forKey:@"dno"];
     kWeakSelf(self);
     [[NetWorkingManager shared] getWithUrl:@"devControlController/getParamListApp" params:paramters succeed:^(id response,BOOL isSucceed) {
         kStrongSelf(self);
@@ -149,7 +149,7 @@
 #pragma mark -- 开关
 - (void)switchClick:(NSString *)titleStr status:(NSString *)status {
     NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
-    [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
+    [paramters setObject:_deviceInfoModelSelect.dno?:@"" forKey:@"dno"];
     if ([titleStr isEqualToString:Localized(@"掉电报警")]) {
         [paramters setObject:status forKey:@"warm_diaodian"];
         [self alarmEditControlSwitchRequest:paramters];
@@ -189,7 +189,7 @@
             return;
         }
         NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
-        [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
+        [paramters setObject:_deviceInfoModelSelect.dno?:@"" forKey:@"dno"];
         [paramters setObject:inputStr?:@"" forKey:@"over_warm"];
         [self alarmEditControlParamRequest:paramters];
     }
@@ -201,7 +201,7 @@
 #pragma mark -- 保养通知 -- 代理
 - (void)returnTextFieldValueTimeStr:(NSString *)timeStr serviceFlagStr:(NSString *)serviceFlagStr {
     NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
-    [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
+    [paramters setObject:_deviceInfoModelSelect.dno?:@"" forKey:@"dno"];
     [paramters setObject:timeStr forKey:@"serviceInterval"];
     [paramters setObject:serviceFlagStr forKey:@"serviceMileage"];
     [paramters setObject:@"1" forKey:@"serviceFlag"];

@@ -49,7 +49,7 @@
     [super viewWillAppear:animated];
     
     kWeakSelf(self);
-    [[CBDeviceTool shareInstance] getReportData:^(NSArray * _Nonnull sectionArr, NSArray * _Nonnull sectionTitleArr, NSArray * _Nonnull sectionImageTitleArr, NSArray * _Nonnull oilTitleArr, NSArray * _Nonnull oilImageArr, NSArray * _Nonnull warnTitleArr, NSArray * _Nonnull warnImageArr, NSArray * _Nonnull electronicTitleArr, NSArray * _Nonnull electronicImageArr) {
+    [[CBDeviceTool shareInstance] getReportData:[CBCommonTools CBdeviceInfo] blk:^(NSArray * _Nonnull sectionArr, NSArray * _Nonnull sectionTitleArr, NSArray * _Nonnull sectionImageTitleArr, NSArray * _Nonnull oilTitleArr, NSArray * _Nonnull oilImageArr, NSArray * _Nonnull warnTitleArr, NSArray * _Nonnull warnImageArr, NSArray * _Nonnull electronicTitleArr, NSArray * _Nonnull electronicImageArr) {
         weakself.sectionStatusArr = [NSMutableArray arrayWithArray:sectionArr];
         weakself.sectionTitleArr = sectionTitleArr;
         weakself.sectionImageTitleArr = sectionImageTitleArr;

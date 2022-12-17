@@ -53,7 +53,9 @@
             @"title": Localized(@"控制指令"),
             @"blk": ^{
                 NSLog(@"%s", __FUNCTION__);
-                [weakself.navigationController pushViewController:ContorlViewController.new animated:YES];
+                ContorlViewController *vc = ContorlViewController.new;
+                vc.deviceInfoModelSelect = weakself.deviceInfoModelSelect;
+                [weakself.navigationController pushViewController:vc animated:YES];
             }
         },
         @{
@@ -61,31 +63,36 @@
             @"title": Localized(@"终端设置"),
             @"blk": ^{
                 NSLog(@"%s", __FUNCTION__);
-                [weakself.navigationController pushViewController:CBSetTerminalViewController.new animated:YES];
+                CBSetTerminalViewController *vc = [CBSetTerminalViewController new];
+                vc.deviceInfoModelSelect = weakself.deviceInfoModelSelect;
+                [weakself.navigationController pushViewController:vc animated:YES];
             }
         },
         @{
             @"icon": @"指令记录",
             @"title": Localized(@"指令记录"),
             @"blk": ^{
-                NSLog(@"%s", __FUNCTION__);
-                [weakself.navigationController pushViewController:CBCommandRecordController.new animated:YES];
+                CBCommandRecordController *vc = [CBCommandRecordController new];
+                vc.deviceInfoModelSelect = weakself.deviceInfoModelSelect;
+                [weakself.navigationController pushViewController:vc animated:YES];
             }
         },
         @{
             @"icon": @"报警设置",
             @"title": Localized(@"报警设置"),
             @"blk": ^{
-                NSLog(@"%s", __FUNCTION__);
-                [weakself.navigationController pushViewController:CBSetAlarmViewController.new animated:YES];
+                CBSetAlarmViewController *vc = [CBSetAlarmViewController new];
+                vc.deviceInfoModelSelect = weakself.deviceInfoModelSelect;
+                [weakself.navigationController pushViewController:vc animated:YES];
             }
         },
         @{
             @"icon": @"安装信息",
             @"title": Localized(@"安装信息"),
             @"blk": ^{
-                NSLog(@"%s", __FUNCTION__);
-                [weakself.navigationController pushViewController:CBInstallInfoController.new animated:YES];
+                CBInstallInfoController *vc = [CBInstallInfoController new];
+                vc.deviceInfoModelSelect = weakself.deviceInfoModelSelect;
+                [weakself.navigationController pushViewController:vc animated:YES];
             }
         }
     ];

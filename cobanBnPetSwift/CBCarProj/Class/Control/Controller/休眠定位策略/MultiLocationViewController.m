@@ -29,7 +29,7 @@
 //    self.restArr = @[Localized(@"长在线"), Localized(@"振动休眠"), Localized(@"时间休眠"), Localized(@"深度振动休眠"), Localized(@"定时报告"), Localized(@"定时报告+深度振动休眠")];
 //    self.restIdArr = @[@0, @1, @2, @3, @4, @5];
     kWeakSelf(self);
-    [CBDeviceTool.shareInstance getXiumianData:^(NSArray * _Nonnull arrayTitle, NSArray * _Nonnull arrayId) {
+    [CBDeviceTool.shareInstance getXiumianData:_deviceInfoModelSelect blk:^(NSArray * _Nonnull arrayTitle, NSArray * _Nonnull arrayId) {
         weakself.restArr = arrayTitle;
         weakself.restIdArr = arrayId;
     }];
@@ -41,7 +41,7 @@
 {
     __weak __typeof__(self) weakSelf = self;
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:1];
-    dic[@"dno"] = [CBCommonTools CBdeviceInfo].dno?:@"";//[AppDelegate shareInstance].currenDeviceSno;
+    dic[@"dno"] = _deviceInfoModelSelect.dno?:@"";//[AppDelegate shareInstance].currenDeviceSno;
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     kWeakSelf(self);
     [[NetWorkingManager shared]getWithUrl:@"devControlController/getMulPosParamList" params: dic succeed:^(id response,BOOL isSucceed) {
@@ -73,7 +73,7 @@
     //[hud hideAnimated: YES];
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:4];
-    dic[@"dno"] = [CBCommonTools CBdeviceInfo].dno?:@"";//[AppDelegate shareInstance].currenDeviceSno;
+    dic[@"dno"] = _deviceInfoModelSelect.dno?:@"";//[AppDelegate shareInstance].currenDeviceSno;
     dic[@"report_way"] = self.locationModeView.getReportWay;
     dic[@"rest_mod"] = @(self.xmChooseView.currentIndex+1);//休眠模式 都要+1   不是0-5是 1-6
     dic[@"dis_qs"] = self.locationModeView.getSpeed;

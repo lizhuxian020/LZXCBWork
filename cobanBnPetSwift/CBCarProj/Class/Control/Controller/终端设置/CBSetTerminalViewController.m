@@ -69,7 +69,7 @@
         _arrayData = [NSMutableArray array];
         __block NSArray *arrayTitle = nil;
         __block NSArray *arrayTitleImage = nil;
-        [CBDeviceTool.shareInstance getDeviceConfigData:^(NSArray * _Nonnull _arrayTitle, NSArray * _Nonnull _arrayTitleImage) {
+        [CBDeviceTool.shareInstance getDeviceConfigData:_deviceInfoModelSelect blk:^(NSArray * _Nonnull _arrayTitle, NSArray * _Nonnull _arrayTitleImage) {
             arrayTitle = _arrayTitle;
             arrayTitleImage = _arrayTitleImage;
         }];
@@ -122,7 +122,7 @@
     [MBProgressHUD hideHUDForView:self.view animated:YES];
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
-    [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
+    [paramters setObject:_deviceInfoModelSelect.dno?:@"" forKey:@"dno"];
     kWeakSelf(self);
     [[NetWorkingManager shared] getWithUrl:@"devControlController/getParamListApp" params:paramters succeed:^(id response,BOOL isSucceed) {
         kStrongSelf(self);
@@ -143,7 +143,7 @@
 #pragma mark -- 获取终端设置参数
 - (void)getTerminalSettingReqeust {
     NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
-    [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
+    [paramters setObject:_deviceInfoModelSelect.dno?:@"" forKey:@"dno"];
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     kWeakSelf(self);
     [[NetWorkingManager shared]getWithUrl:@"devParamController/getDevConfList" params:paramters succeed:^(id response,BOOL isSucceed) {
@@ -404,7 +404,7 @@
     kWeakSelf(self);
     [[CBCarAlertView viewWithAlertTips:Localized(@"确定初始化?") title:_ControlConfigTitle_CSHSZ confrim:^(NSString * _Nonnull contentStr) {
         NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
-        [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
+        [paramters setObject:_deviceInfoModelSelect.dno?:@"" forKey:@"dno"];
         [weakself terminalInitRequest:paramters];
     }] pop];
 }
@@ -417,7 +417,7 @@
 #pragma mark -- 开关点击
 - (void)terminalSwitchClick:(NSString *)titleStr status:(NSString *)status {
     NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
-    [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
+    [paramters setObject:_deviceInfoModelSelect.dno?:@"" forKey:@"dno"];
     if ([titleStr isEqualToString:_ControlConfigTitle_ACCGZTZ]) {
         [paramters setObject:status forKey:@"accNotice"];
     } else if ([titleStr isEqualToString:_ControlConfigTitle_PYYZ]) {
@@ -427,7 +427,7 @@
 }
 #pragma mark -- 终端设备开关设置
 - (void)terminalEditControlSwitchRequest:(NSMutableDictionary *)paramters {
-    [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
+    [paramters setObject:_deviceInfoModelSelect.dno?:@"" forKey:@"dno"];
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     kWeakSelf(self);
     [[NetWorkingManager shared] postWithUrl:@"devControlController/editSwitchParam" params: paramters succeed:^(id response, BOOL isSucceed) {
@@ -442,7 +442,7 @@
 }
 #pragma mark -- 终端设备参数设置
 - (void)terminalEditControlParamRequest:(NSMutableDictionary *)paramters {
-    [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
+    [paramters setObject:_deviceInfoModelSelect.dno?:@"" forKey:@"dno"];
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     kWeakSelf(self);
     [[NetWorkingManager shared] postWithUrl:@"devParamController/editDevConf" params: paramters succeed:^(id response, BOOL isSucceed) {
@@ -458,7 +458,7 @@
 }
 #pragma mark -- 终端设备参数设置 -- 新增
 - (void)terminalEditControlNewRequest:(NSMutableDictionary *)paramters {
-    [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
+    [paramters setObject:_deviceInfoModelSelect.dno?:@"" forKey:@"dno"];
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     kWeakSelf(self);
     [[NetWorkingManager shared] postWithUrl:@"/devControlController/updateDeviceStatus" params:paramters succeed:^(id response, BOOL isSucceed) {
@@ -491,7 +491,7 @@
 #pragma mark -- 设备重启
 - (void)rebootDeviceRequest {
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:1];
-    dic[@"dno"] = [CBCommonTools CBdeviceInfo].dno?:@"";
+    dic[@"dno"] = _deviceInfoModelSelect.dno?:@"";
     //MBProgressHUD *hud = [MINUtils hudToView: self.view withText: Localized(@"加载中...")];
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     kWeakSelf(self);

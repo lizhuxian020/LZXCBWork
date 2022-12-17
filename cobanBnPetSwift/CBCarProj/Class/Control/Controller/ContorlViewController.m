@@ -77,7 +77,7 @@
         _arrayData = [NSMutableArray array];
         __block NSArray *arrayTitle = nil;
         __block NSArray *arrayTitleImage = nil;
-        [CBDeviceTool.shareInstance getControlData:^(NSArray * _Nonnull tArrayTitle, NSArray * _Nonnull tArrayTitleImage) {
+        [CBDeviceTool.shareInstance getControlData:_deviceInfoModelSelect blk:^(NSArray * _Nonnull tArrayTitle, NSArray * _Nonnull tArrayTitleImage) {
             arrayTitle = tArrayTitle;
             arrayTitleImage = tArrayTitleImage;
         }];
@@ -117,7 +117,7 @@
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     __weak __typeof__(self) weakSelf = self;
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:1];
-    dic[@"dno"] = [CBCommonTools CBdeviceInfo].dno?:@"";
+    dic[@"dno"] = _deviceInfoModelSelect.dno?:@"";
     [[NetWorkingManager shared]getWithUrl:@"devControlController/getParamListApp" params: dic succeed:^(id response,BOOL isSucceed) {
         NSLog(@"----开关类参数-%@-----",response);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -238,6 +238,7 @@
 //            if (cell.switchView.isON == !self.listModel.dcdd) { // 取反是因为UI的结构导致的
             //休眠定位策略
             MultiLocationViewController *locationVC = [[MultiLocationViewController alloc] init];
+            locationVC.deviceInfoModelSelect = _deviceInfoModelSelect;
             locationVC.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController: locationVC animated: YES];
 //            }
@@ -433,7 +434,7 @@
 //}
 //- (void)editRowDataWithIndexPath:(NSIndexPath *)indexPath data:(NSString *)data switchStr:(NSString *)switchStr {
 //    NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:3];
-//    dic[@"dno"] = [CBCommonTools CBdeviceInfo].dno?:@"";
+//    dic[@"dno"] = _deviceInfoModelSelect.dno?:@"";
 //    if (self.arrayData.count > indexPath.row) {
 //        CBControlModel *model = self.arrayData[indexPath.row];
 //        NSString *titleStr = model.titleStr;
@@ -529,7 +530,7 @@
 - (void)updateTextFieldValue:(NSString *)inputStr returnTitle:(NSString *)title {
     if ([title isEqualToString:Localized(@"电话回拨")]) {
         NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
-        [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
+        [paramters setObject:_deviceInfoModelSelect.dno?:@"" forKey:@"dno"];
         [paramters setObject:inputStr?:@"" forKey:@"phone"];
         [self editControlSwitchRequest:paramters];
     } else if ([title isEqualToString:Localized(@"电话唤醒")]) {
@@ -612,7 +613,7 @@
         case 100:
         {
             NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
-            [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
+            [paramters setObject:_deviceInfoModelSelect.dno?:@"" forKey:@"dno"];
             [paramters setObject:@"1" forKey:@"cfbf"];
             [self editControlSwitchRequest:paramters];
         }
@@ -620,7 +621,7 @@
         case 101:
         {
             NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
-            [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
+            [paramters setObject:_deviceInfoModelSelect.dno?:@"" forKey:@"dno"];
             [paramters setObject:@"0" forKey:@"cfbf"];
             [self editControlSwitchRequest:paramters];
         }
@@ -628,7 +629,7 @@
         case 102:
         {
             NSMutableDictionary *paramters = [NSMutableDictionary dictionaryWithObject:@"1" forKey:@"silentArm"];
-            [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
+            [paramters setObject:_deviceInfoModelSelect.dno?:@"" forKey:@"dno"];
             [self editControlNewRequest:paramters];
         }
             break;
@@ -638,7 +639,7 @@
 }
 #pragma mark -- 终端设备开关设置
 - (void)editControlSwitchRequest:(NSMutableDictionary *)paramters {
-    [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
+    [paramters setObject:_deviceInfoModelSelect.dno?:@"" forKey:@"dno"];
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     kWeakSelf(self);
     [[NetWorkingManager shared] postWithUrl: @"devControlController/editSwitchParam" params: paramters succeed:^(id response, BOOL isSucceed) {
@@ -655,7 +656,7 @@
 }
 #pragma mark -- 终端设备参数设置 -- 新增
 - (void)editControlNewRequest:(NSMutableDictionary *)paramters {
-    [paramters setObject:[CBCommonTools CBdeviceInfo].dno?:@"" forKey:@"dno"];
+    [paramters setObject:_deviceInfoModelSelect.dno?:@"" forKey:@"dno"];
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     kWeakSelf(self);
     [[NetWorkingManager shared] postWithUrl:@"/devControlController/updateDeviceStatus" params:paramters succeed:^(id response, BOOL isSucceed) {

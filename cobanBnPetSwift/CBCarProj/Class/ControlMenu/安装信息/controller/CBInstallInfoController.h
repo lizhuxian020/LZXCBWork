@@ -12,6 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CBInstallInfoController : MINBaseViewController
 
+/** 选中的设备  */
+@property (nonatomic, strong) CBHomeLeftMenuDeviceInfoModel *deviceInfoModelSelect;
+
 @end
 
 NS_ASSUME_NONNULL_END

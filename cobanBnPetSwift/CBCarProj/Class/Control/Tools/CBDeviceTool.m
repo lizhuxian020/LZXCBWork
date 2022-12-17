@@ -15,6 +15,7 @@
 
 @property (nonatomic, strong) CBProductSpecModel *currentProductSpec;;
 
+@property (nonatomic, strong) NSArray<CBProductSpecModel *> *productSpecData;
 @end
 
 @implementation CBDeviceTool
@@ -114,6 +115,7 @@
         if (isSucceed) {
             if (response && [response[@"data"] isKindOfClass:[NSArray class]]) {
                 NSArray<CBProductSpecModel *> *modelArr = [CBProductSpecModel mj_objectArrayWithKeyValuesArray:response[@"data"]];
+                self.productSpecData = modelArr;
                 CBProductSpecModel *defaultModel = nil;
                 for (CBProductSpecModel *model in modelArr) {
                     if ([model.tbDevModelId isEqualToString:@"70"] && [model.proto isEqualToString:@"0"]) {
@@ -170,7 +172,26 @@
     }];
 }
 
-- (void)getControlData:(void(^)(NSArray *arrayTitle ,NSArray *arrayTitleImage))blk {
+- (CBProductSpecModel *)_getSpecModelWithDevice:(CBHomeLeftMenuDeviceInfoModel *)deviceModel {
+    if (!self.productSpecData) {
+        return nil;
+    }
+    CBProductSpecModel *targetModel = nil;
+    CBProductSpecModel *defaultModel = nil;
+    for (CBProductSpecModel *model in self.productSpecData) {
+        if ([model.tbDevModelId isEqualToString:@"70"] && [model.proto isEqualToString:@"0"]) {
+            defaultModel = model;
+        }
+        if ([model.proto isEqualToString:deviceModel.proto] && [model.tbDevModelId isEqualToString:deviceModel.productSpecId]) {
+            targetModel = model;
+            return targetModel;
+        }
+    }
+    return defaultModel;
+}
+
+- (void)getControlData:(CBHomeLeftMenuDeviceInfoModel *)deviceModel blk:(void(^)(NSArray *arrayTitle ,NSArray *arrayTitleImage))blk {
+    CBProductSpecModel *targetSpecModel = [self _getSpecModelWithDevice:deviceModel];
     NSMutableArray *titleMArr = [NSMutableArray new];
     NSMutableArray *imageMArr = [NSMutableArray new];
     [titleMArr addObjectsFromArray:@[
@@ -201,17 +222,17 @@
     ]];
     
     NSArray *showArr = @[
-        @(_currentProductSpec.singlePosition),
-        @(_currentProductSpec.autoPosition),
-        @(_currentProductSpec.callBack),
-        @(_currentProductSpec.oilElectricityControl),
-        @(_currentProductSpec.oilElectricityControl),
-        @(_currentProductSpec.arm),
-        @(_currentProductSpec.motorControl),
-        @(_currentProductSpec.remoteStart),
-        @(_currentProductSpec.arm),
-        @(_currentProductSpec.callChargeInquiry),
-        @(_currentProductSpec.isShowOverSpeed),
+        @(targetSpecModel.singlePosition),
+        @(targetSpecModel.autoPosition),
+        @(targetSpecModel.callBack),
+        @(targetSpecModel.oilElectricityControl),
+        @(targetSpecModel.oilElectricityControl),
+        @(targetSpecModel.arm),
+        @(targetSpecModel.motorControl),
+        @(targetSpecModel.remoteStart),
+        @(targetSpecModel.arm),
+        @(targetSpecModel.callChargeInquiry),
+        @(targetSpecModel.isShowOverSpeed),
     ];
     
     if (!self.currentProductSpec) {
@@ -233,7 +254,8 @@
     return;
 }
 
-- (void)getDeviceConfigData:(void(^)(NSArray *arrayTitle ,NSArray *arrayTitleImage))blk {
+- (void)getDeviceConfigData:(CBHomeLeftMenuDeviceInfoModel *)deviceModel blk:(void(^)(NSArray *arrayTitle ,NSArray *arrayTitleImage))blk {
+    CBProductSpecModel *targetSpecModel = [self _getSpecModelWithDevice:deviceModel];
     NSMutableArray *titleMArr = [NSMutableArray new];
     NSMutableArray *imageMArr = [NSMutableArray new];
     [titleMArr addObjectsFromArray:@[
@@ -270,20 +292,20 @@
     ]];
     
     NSArray *showArr = @[
-        @(_currentProductSpec.timeSet),
-        @(_currentProductSpec.passwordSet),
-        @(_currentProductSpec.authCode),
-        @(_currentProductSpec.tankVolume),
-        @(_currentProductSpec.fuelSensorCalibration),
-        @(_currentProductSpec.mileageInitialValue),
-        @(_currentProductSpec.accWorkNotice),
-        @(_currentProductSpec.gpsDriftSuppression),
-        @(_currentProductSpec.turnSupplement),
+        @(targetSpecModel.timeSet),
+        @(targetSpecModel.passwordSet),
+        @(targetSpecModel.authCode),
+        @(targetSpecModel.tankVolume),
+        @(targetSpecModel.fuelSensorCalibration),
+        @(targetSpecModel.mileageInitialValue),
+        @(targetSpecModel.accWorkNotice),
+        @(targetSpecModel.gpsDriftSuppression),
+        @(targetSpecModel.turnSupplement),
         @(0), //一直不显示
-        @(_currentProductSpec.setGprsHeartbeat),
-        @(_currentProductSpec.sensitivitySet),
-        @(_currentProductSpec.initializeSet),
-        @(_currentProductSpec.hardwareReboot),
+        @(targetSpecModel.setGprsHeartbeat),
+        @(targetSpecModel.sensitivitySet),
+        @(targetSpecModel.initializeSet),
+        @(targetSpecModel.hardwareReboot),
     ];
     
     if (!self.currentProductSpec) {
@@ -305,7 +327,8 @@
     
 }
 
-- (void)getAlarmConfigData:(void(^)(NSArray *arrayTitle ,NSArray *arrayTitleImage))blk {
+- (void)getAlarmConfigData:(CBHomeLeftMenuDeviceInfoModel *)deviceModel blk:(void(^)(NSArray *arrayTitle ,NSArray *arrayTitleImage))blk {
+    CBProductSpecModel *targetSpecModel = [self _getSpecModelWithDevice:deviceModel];
     NSMutableArray *titleMArr = [NSMutableArray new];
     NSMutableArray *imageMArr = [NSMutableArray new];
     [titleMArr addObjectsFromArray:@[
@@ -324,11 +347,11 @@
     ]];
     
     NSArray *showArr = @[
-        @(_currentProductSpec.isShowDiaodian),
-        @(_currentProductSpec.isShowDidian),
-        @(_currentProductSpec.isShowBlind),
-        @(_currentProductSpec.isShowZd),
-        @(_currentProductSpec.isShowOilCheck),
+        @(targetSpecModel.isShowDiaodian),
+        @(targetSpecModel.isShowDidian),
+        @(targetSpecModel.isShowBlind),
+        @(targetSpecModel.isShowZd),
+        @(targetSpecModel.isShowOilCheck),
     ];
     
     if (!self.currentProductSpec) {
@@ -349,7 +372,8 @@
     blk(titleMArr, imageMArr);
 }
 
-- (void)getXiumianData:(void(^)(NSArray *arrayTitle, NSArray *arrayId))blk {
+- (void)getXiumianData:(CBHomeLeftMenuDeviceInfoModel *)deviceModel blk:(void(^)(NSArray *arrayTitle, NSArray *arrayId))blk {
+    CBProductSpecModel *targetSpecModel = [self _getSpecModelWithDevice:deviceModel];
     NSMutableArray *titleMArr = [NSMutableArray new];
     NSMutableArray *imageMArr = [NSMutableArray new];
     [titleMArr addObjectsFromArray:@[
@@ -364,12 +388,12 @@
     ]];
     
     NSArray *showArr = @[
-        @([_currentProductSpec.hibernates containsString:@"0"]),
-        @([_currentProductSpec.hibernates containsString:@"1"]),
-        @([_currentProductSpec.hibernates containsString:@"2"]),
-        @([_currentProductSpec.hibernates containsString:@"3"]),
-        @([_currentProductSpec.hibernates containsString:@"4"]),
-        @([_currentProductSpec.hibernates containsString:@"5"]),
+        @([targetSpecModel.hibernates containsString:@"0"]),
+        @([targetSpecModel.hibernates containsString:@"1"]),
+        @([targetSpecModel.hibernates containsString:@"2"]),
+        @([targetSpecModel.hibernates containsString:@"3"]),
+        @([targetSpecModel.hibernates containsString:@"4"]),
+        @([targetSpecModel.hibernates containsString:@"5"]),
     ];
     
     if (!self.currentProductSpec) {
@@ -390,7 +414,8 @@
     blk(titleMArr, imageMArr);
 }
 
-- (void)getReportData:(void(^)(NSArray *sectionArr, NSArray *sectionTitleArr, NSArray *sectionImageTitleArr, NSArray *oilTitleArr, NSArray *oilImageArr, NSArray *warnTitleArr, NSArray *warnImageArr, NSArray *electronicTitleArr, NSArray *electronicImageArr))blk {
+- (void)getReportData:(CBHomeLeftMenuDeviceInfoModel *)deviceModel blk:(void(^)(NSArray *sectionArr, NSArray *sectionTitleArr, NSArray *sectionImageTitleArr, NSArray *oilTitleArr, NSArray *oilImageArr, NSArray *warnTitleArr, NSArray *warnImageArr, NSArray *electronicTitleArr, NSArray *electronicImageArr))blk {
+    CBProductSpecModel *targetSpecModel = [self _getSpecModelWithDevice:deviceModel];
     NSMutableArray *sectionArr = [NSMutableArray new];
     NSMutableArray *sectionTitleArr = [NSMutableArray new];
     NSMutableArray *sectionImageTitleArr = [NSMutableArray new];
@@ -417,15 +442,15 @@
     ]];
     
     NSArray *sectionShowArr = @[
-        @(_currentProductSpec.devShowReport.curvesSpeed),
-        @(_currentProductSpec.devShowReport.reportIdle),
-        @(_currentProductSpec.devShowReport.reportStop),
-        @(_currentProductSpec.devShowReport.reportIgnition),
-        @(_currentProductSpec.devShowReport.reportMiles),
-        @(_currentProductSpec.devShowReport.reportOil),
+        @(targetSpecModel.devShowReport.curvesSpeed),
+        @(targetSpecModel.devShowReport.reportIdle),
+        @(targetSpecModel.devShowReport.reportStop),
+        @(targetSpecModel.devShowReport.reportIgnition),
+        @(targetSpecModel.devShowReport.reportMiles),
+        @(targetSpecModel.devShowReport.reportOil),
         @(1),
-        @(_currentProductSpec.devShowReport.reportObd),
-        @(_currentProductSpec.devShowReport.reportFence),
+        @(targetSpecModel.devShowReport.reportObd),
+        @(targetSpecModel.devShowReport.reportFence),
     ];
     
    
@@ -462,18 +487,18 @@
     ]];
     
     NSArray *warnShowArr = @[
-        @(_currentProductSpec.devShowReport.warmAll),
-        @(_currentProductSpec.devShowReport.warmSos),
-        @(_currentProductSpec.devShowReport.warmChaosu),
-        @(_currentProductSpec.devShowReport.warmTired),
-        @(_currentProductSpec.devShowReport.warmQianya),
-        @(_currentProductSpec.devShowReport.warmDiaodian),
-        @(_currentProductSpec.devShowReport.warmZhendong),
-        @(_currentProductSpec.devShowReport.warmKaimen),
-        @(_currentProductSpec.devShowReport.warmDianhuo),
-        @(_currentProductSpec.devShowReport.warmWeiyi),
-        @(_currentProductSpec.devShowReport.warmTouyou),
-        @(_currentProductSpec.devShowReport.warmPz),
+        @(targetSpecModel.devShowReport.warmAll),
+        @(targetSpecModel.devShowReport.warmSos),
+        @(targetSpecModel.devShowReport.warmChaosu),
+        @(targetSpecModel.devShowReport.warmTired),
+        @(targetSpecModel.devShowReport.warmQianya),
+        @(targetSpecModel.devShowReport.warmDiaodian),
+        @(targetSpecModel.devShowReport.warmZhendong),
+        @(targetSpecModel.devShowReport.warmKaimen),
+        @(targetSpecModel.devShowReport.warmDianhuo),
+        @(targetSpecModel.devShowReport.warmWeiyi),
+        @(targetSpecModel.devShowReport.warmTouyou),
+        @(targetSpecModel.devShowReport.warmPz),
     ];
     
     [electronicTitleArr addObjectsFromArray:@[
