@@ -1771,6 +1771,88 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [self.view endEditing:YES];
     [self hideListView];
 }
+//#pragma mark -- paoView
+//- (void)showPaoView {
+//    kWeakSelf(self);
+//    [self.paopaoView setDidClickMove:^(NSString * _Nonnull moveStr) {
+//        [weakself sendMoveRequest:moveStr];
+//    }];
+//    self.paopaoView.clickBlock = ^(CBCarPaopaoViewClickType type, id  _Nonnull obj) {
+//        kStrongSelf(self);
+//        switch (type) {
+//            case CBCarPaopaoViewClickTypePlayBack:
+//            {
+//                [self.paopaoView dismiss];
+//                [self requestTrackDataWithModel: obj];
+//            }
+//                break;
+//            case CBCarPaopaoViewClickTypeClose:
+//            {
+//                //
+//            }
+//                break;
+//            case CBCarPaopaoViewClickTypeNavigationClick:
+//            {
+//                [self.paopaoView dismiss];
+//                // 导航
+//                [self navigationClick];
+//            }
+//                break;
+//            case CBCarPaopaoViewClickTypeTrack: {
+//                if (self.isStartTrack) {
+//                    [self setEndTrack];
+//                } else {
+//                    [self setCanStartTrack];
+//                }
+//            }
+//                break;
+//            case CBCarPaopaoViewClickTypeTitle: {
+//                [self.paopaoView dismiss];
+//                CBControlMenuController *vc = CBControlMenuController.new;
+//                vc.deviceInfoModelSelect = self.deviceInfoModelSelect;
+//                [self.navigationController pushViewController:vc animated:YES];
+//            }
+//                break;
+//
+//            default:
+//                break;
+//        }
+//    };
+//
+//    if ([self.selectDeviceDetailModel.warmed isEqualToString:@"1"]) {
+//        // 报警
+//        [self.paopaoView setAlertStyleIsWarmed:YES];
+//    } else {
+//        [self.paopaoView setAlertStyleIsWarmed:NO];
+//    }
+//
+//    self.paopaoView.dno = self.selectDeviceDetailModel.dno;
+////    self.paopaoView.deviceInfoModel = self.selectDeviceDetailModel;
+//
+//    [self reqeustPaoViewData:^(CBCarPaoModel *paoModel) {
+//        [weakself.paopaoView popView];
+//        weakself.paopaoView.paoModel = paoModel;
+//    }];
+//}
+//#pragma mark -- 请求paoView数据
+//- (void)reqeustPaoViewData:(void(^)(CBCarPaoModel *paoModel))blk {
+//    kWeakSelf(self);
+//    [MBProgressHUD showHUDIcon:self.view animated:YES];
+//    [[NetWorkingManager shared] getWithUrl:@"/devControlController/getParamList" params:@{
+//        @"dno": self.selectDeviceDetailModel.dno
+//    } succeed:^(id response, BOOL isSucceed) {
+//        kStrongSelf(self);
+//        [MBProgressHUD hideHUDForView:self.view animated:YES];
+//        if (!isSucceed) {
+//            return;
+//        }
+//        CBCarPaoModel *model = [CBCarPaoModel mj_objectWithKeyValues:response[@"data"]];
+//        blk(model);
+//    } failed:^(NSError *error) {
+//        kStrongSelf(self);
+//        [MBProgressHUD hideHUDForView:self.view animated:YES];
+//    }];
+//}
 #pragma mark -- 每20s刷新各设备详情
 - (void)getDeviceLocationInfoRequest {
     if (self.paopaoView.isAlertPaopaoView == YES) {

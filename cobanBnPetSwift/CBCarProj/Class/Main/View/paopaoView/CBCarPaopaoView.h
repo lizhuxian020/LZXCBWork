@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CBCarPaoModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -33,6 +34,7 @@ typedef enum : NSInteger {
 @property (nonatomic,copy) void (^clickBlock)(CBCarPaopaoViewClickType type, id obj);
 @property (nonatomic, copy) void (^didClickMove)(NSString *moveStr);
 @property (nonatomic,strong) DeviceDetailModel *deviceInfoModel;
+@property (nonatomic, strong) CBCarPaoModel *paoModel;
 @property (nonatomic, copy) NSString *dno;
 /* 弹出框时，YES地图中心点不动 NO设置中心点*/
 @property (nonatomic, assign) BOOL isAlertPaopaoView;
