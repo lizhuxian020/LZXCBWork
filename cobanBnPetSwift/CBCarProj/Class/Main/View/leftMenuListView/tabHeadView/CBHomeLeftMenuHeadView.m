@@ -62,7 +62,7 @@
 - (UILabel *)sectionTitleLabel {
     if (!_sectionTitleLabel) {
         
-        _sectionTitleLabel = [MINUtils createLabelWithText:@"博派 (30)" size: 15 * KFitHeightRate alignment: NSTextAlignmentLeft textColor:kRGB(96, 96, 96)];
+        _sectionTitleLabel = [MINUtils createLabelWithText:@"博派 (30)" size: HomeLeftMenu_FontSize alignment: NSTextAlignmentLeft textColor:kRGB(96, 96, 96)];
         [self.cardView addSubview: _sectionTitleLabel];
         [_sectionTitleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.cardView.mas_left).offset(13*KFitWidthRate);
@@ -76,11 +76,11 @@
 - (UIButton *)btnArrow {
     if (!_btnArrow) {
         
-        UIImage *arrowImage = [UIImage imageNamed:@"右边"];
-        UIImage *arrowImageDown = [UIImage imageNamed:@"下边"];
+        UIImage *arrowImage = [UIImage imageNamed:@"点击更多"];
+        UIImage *arrowImageDown = [UIImage imageNamed:@"下拉"];
         _btnArrow = [[UIButton alloc] init];
-        [_btnArrow setImage: [UIImage imageNamed:@"右边"] forState: UIControlStateNormal];
-        [_btnArrow setImage: [UIImage imageNamed:@"下边"] forState: UIControlStateSelected];
+        [_btnArrow setImage: [UIImage imageNamed:@"点击更多"] forState: UIControlStateNormal];
+        [_btnArrow setImage: [UIImage imageNamed:@"下拉"] forState: UIControlStateSelected];
         [self.cardView addSubview: _btnArrow];
         [_btnArrow mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.mas_equalTo(self.cardView.mas_right).offset(- 13 * KFitWidthRate);

@@ -104,7 +104,7 @@
 - (void)createContent {
     self.containerView = [UIScrollView new];
     [self.view addSubview:self.containerView];
-    self.containerView.backgroundColor = UIColor.redColor;
+    self.containerView.backgroundColor = kBackColor;
     [self.containerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.headerView.mas_bottom);
         make.left.right.bottom.equalTo(@0);
@@ -114,6 +114,8 @@
     self.containerView.delegate = self;
     
     self.deviceView = [[CBHomeLeftMenuView alloc] initWithFrame:CGRectZero withSlideArray:self.slider_array index:0];
+    self.deviceView.layer.cornerRadius = 0;
+    self.deviceView.layer.borderWidth = 0;
     [self.containerView addSubview:self.deviceView];
     [self.deviceView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.equalTo(@0);

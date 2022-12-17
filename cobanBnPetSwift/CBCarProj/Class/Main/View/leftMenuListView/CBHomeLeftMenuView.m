@@ -75,6 +75,14 @@
         [self initScrollView];
 
         [self initDownTableViews];
+        
+        
+        [self layoutIfNeeded];
+        
+        self.layer.cornerRadius = 10*KFitHeightRate;
+        [self.layer setMasksToBounds:YES];
+        self.layer.borderColor = kRGB(210, 210, 210).CGColor;
+        self.layer.borderWidth = 1;
     }
     return self;
 }
@@ -105,7 +113,7 @@
     [_topScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.textFieldView.mas_bottom).mas_offset(HomeLeftMenu_Padding);
         make.left.right.equalTo(@0);
-        make.height.equalTo(@HomeLeftMenu_TitleHeight);
+        make.height.equalTo(@(HomeLeftMenu_TitleHeight));
     }];
 
     self.buttonsArray = [NSMutableArray array];
@@ -114,7 +122,7 @@
 //        button.tag = HomeLetfMenu_TitleBtnBaseTag+i;
         if (i == 0)
             _selectBtn = button;
-        button.titleLabel.font = i==0?[UIFont systemFontOfSize: 14*KFitHeightRate]:[UIFont systemFontOfSize: 14*KFitHeightRate];
+        button.titleLabel.font = i==0?[UIFont systemFontOfSize: HomeLeftMenu_FontSize]:[UIFont systemFontOfSize: HomeLeftMenu_FontSize];
         [button setTitleColor:i==0?HomeLeftMenu_TitleSelectedColor:HomeLeftMenu_TitleNormalColor forState:UIControlStateNormal];
         CBHomeLeftMenuSliderModel *model = self.sliderArray[i];
         [button setTitle:model.title forState:UIControlStateNormal];
@@ -128,7 +136,7 @@
     CGFloat width = KLeftMenuWidth/self.sliderArray.count;
     CGFloat siderWidth = width;//20;
     _slideLineView = [[UIView alloc] initWithFrame:CGRectMake((width-siderWidth)/2.0, HomeLeftMenu_TitleHeight - HomeLeftMenu_TitleLineHeight, siderWidth, HomeLeftMenu_TitleLineHeight)];
-    [_slideLineView setBackgroundColor:[UIColor blackColor]];
+    [_slideLineView setBackgroundColor:kAppMainColor];
     [_topScrollView addSubview:_slideLineView];
 }
 - (UIView *)textFieldView {
@@ -144,7 +152,7 @@
             make.height.mas_equalTo(HomeLeftMenu_TitleHeight);
         }];
         _textFieldView.layer.borderWidth = 1;
-        _textFieldView.layer.borderColor = UIColor.grayColor.CGColor;
+        _textFieldView.layer.borderColor = KCarLineColor.CGColor;
         _textFieldView.layer.cornerRadius = 3;
         
         _searchTextFeild = [MINUtils createTextFieldWithHoldText:Localized(@"设备号/车牌号/IMEI") fontSize: 13 * KFitHeightRate];
@@ -163,6 +171,7 @@
 //        _searchTextFeild.leftView = leftView;
 //        _searchTextFeild.leftViewMode = UITextFieldViewModeAlways;
         [_textFieldView addSubview: _searchTextFeild];
+        _searchTextFeild.font = [UIFont systemFontOfSize:HomeLeftMenu_FontSize];
         [_searchTextFeild mas_makeConstraints:^(MASConstraintMaker *make) {
 //            make.edges.equalTo(@0);
             make.top.bottom.right.equalTo(@0);

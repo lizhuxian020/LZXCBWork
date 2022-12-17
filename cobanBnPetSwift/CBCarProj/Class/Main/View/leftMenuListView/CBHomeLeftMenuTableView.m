@@ -135,7 +135,7 @@ static NSString *homeHeadViewIndentifer = @"homeHeadViewIndentifer";
     return 40*KFitHeightRate;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 50 * KFitHeightRate;
+    return 40;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     return 0.001f;

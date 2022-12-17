@@ -262,7 +262,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 }
 - (CBHomeLeftMenuView *)sliderView {
     if (!_sliderView) {
-        _sliderView = [[CBHomeLeftMenuView alloc]initWithFrame:CGRectMake(0, -415 * KFitHeightRate, 305 * KFitWidthRate, 415 * KFitHeightRate) withSlideArray:self.slider_array index:0];
+        _sliderView = [[CBHomeLeftMenuView alloc]initWithFrame:CGRectMake(HomeLeftMenu_LeftMargin, -HomeLeftMenu_Height, HomeLeftMenu_Width, HomeLeftMenu_Height) withSlideArray:self.slider_array index:0];
         [self.view addSubview:_sliderView];
         kWeakSelf(self);
         _sliderView.leftMenuBlock = ^(id  _Nonnull objc) {
@@ -544,14 +544,14 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     self.isListViewShow = YES;
     [self.view bringSubviewToFront:self.sliderView];
     [UIView animateWithDuration: 0.3 animations:^{
-        self.sliderView.frame = CGRectMake(0, kNavAndStatusHeight, HomeLeftMenu_Width, HomeLeftMenu_Height);
+        self.sliderView.frame = CGRectMake(HomeLeftMenu_LeftMargin, kNavAndStatusHeight, HomeLeftMenu_Width, HomeLeftMenu_Height);
     }];
     [self.sliderView requestData];
 }
 - (void)hideListView {
     self.isListViewShow = NO;
     [UIView animateWithDuration: 0.3 animations:^{
-        self.sliderView.frame = CGRectMake(0, -HomeLeftMenu_Height, HomeLeftMenu_Width, HomeLeftMenu_Height);
+        self.sliderView.frame = CGRectMake(HomeLeftMenu_LeftMargin, -HomeLeftMenu_Height, HomeLeftMenu_Width, HomeLeftMenu_Height);
     }];
 }
 - (void)tarbarLongPress {

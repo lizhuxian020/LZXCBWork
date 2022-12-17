@@ -7,6 +7,7 @@
 //
 
 #import "CBHomeLeftMenuTableViewCell.h"
+#import "MainViewConfig.h"
 
 @interface CBHomeLeftMenuTableViewCell ()
 @property (nonatomic, strong) UIImageView *deviceImageView;
@@ -62,7 +63,7 @@
 }
 - (UILabel *)deviceNameLabel {
     if (!_deviceNameLabel) {
-        _deviceNameLabel = [MINUtils createLabelWithText: @"粤A 23456" size: 13 * KFitHeightRate  alignment: NSTextAlignmentLeft textColor: kRGB(137 , 137, 137) ];
+        _deviceNameLabel = [MINUtils createLabelWithText: @"粤A 23456" size:HomeLeftMenu_ContentFontSize  alignment: NSTextAlignmentLeft textColor: kRGB(137 , 137, 137) ];
         [self addSubview: _deviceNameLabel];
         [_deviceNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(self).with.offset(-9 * KFitHeightRate);
@@ -75,7 +76,7 @@
 }
 - (UILabel *)deviceStatusLabel {
     if (!_deviceStatusLabel) {
-        _deviceStatusLabel = [MINUtils createLabelWithText: @"设备号: 62521" size: 13 * KFitHeightRate  alignment: NSTextAlignmentLeft textColor: kRGB(137 , 137, 137) ];
+        _deviceStatusLabel = [MINUtils createLabelWithText: @"设备号: 62521" size:HomeLeftMenu_ContentFontSize  alignment: NSTextAlignmentLeft textColor: kRGB(137 , 137, 137) ];
         [self addSubview: _deviceStatusLabel];
         [_deviceStatusLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(self).with.offset(9 * KFitHeightRate);
@@ -88,14 +89,12 @@
 }
 - (UIImageView *)rightBtnImageView {
     if (!_rightBtnImageView) {
-        UIImage *rightImage = [UIImage imageNamed:@"左边-三角"];
+        UIImage *rightImage = [UIImage imageNamed:@"查看"];
         _rightBtnImageView = [[UIImageView alloc] initWithImage: rightImage];
         [self addSubview: _rightBtnImageView];
         [_rightBtnImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(self);
             make.right.equalTo(self).with.offset(-10 * KFitWidthRate);
-            make.height.mas_equalTo(rightImage.size.height * KFitHeightRate);
-            make.width.mas_equalTo(rightImage.size.width * KFitHeightRate);
         }];
     }
     return _rightBtnImageView;
@@ -134,7 +133,7 @@
     if ([deviceInfoModel.warmed isEqualToString:@"1"]) {
         self.warmedImageView.hidden = NO;
     }
-    if ([deviceInfoModel.online isEqualToString:@"1"]) {
+//    if ([deviceInfoModel.online isEqualToString:@"1"]) {
         image = [CBCommonTools returnDeveceListImageWithDic:dic];
         self.deviceImageView.image = image;
         [self.deviceImageView mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -143,7 +142,7 @@
             make.height.mas_equalTo(image.size.height * KFitHeightRate);
             make.width.mas_equalTo(image.size.width * KFitWidthRate);
         }];
-    }
+//    }
     _deviceNameLabel.text = deviceInfoModel.name?:@"";
     if ([deviceInfoModel.devStatus isEqualToString:@"0"]) {
         self.deviceStatusLabel.text = Localized(@"未使用");
