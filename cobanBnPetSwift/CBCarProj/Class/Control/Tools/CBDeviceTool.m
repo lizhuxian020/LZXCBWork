@@ -121,8 +121,10 @@
                     if ([model.tbDevModelId isEqualToString:@"70"] && [model.proto isEqualToString:@"0"]) {
                         defaultModel = model;
                     }
-                    [self.productSepcArr addObject:model.name];
-                    [self.productSepcIdArr addObject:model.pId];
+                    if (![self.productSepcArr containsObject:model.name]) {
+                        [self.productSepcArr addObject:model.name];
+                        [self.productSepcIdArr addObject:model.pId];
+                    }
                     if ([model.proto isEqualToString:currentModel.proto] && [model.tbDevModelId isEqualToString:currentModel.productSpecId]) {
                         self.currentProductSpec = model;
                     }

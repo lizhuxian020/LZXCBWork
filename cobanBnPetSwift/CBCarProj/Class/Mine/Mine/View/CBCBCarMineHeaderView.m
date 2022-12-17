@@ -82,14 +82,14 @@
 
 - (void)createSubTitle {
     
-    UIButton *scanBtn = [MINUtils createBtnWithNormalImage:[UIImage imageNamed:@"单选-选中"] selectedImage:[UIImage imageNamed:@"单选-选中"]];
+    UIButton *scanBtn = [MINUtils createBtnWithNormalImage:[UIImage imageNamed:@"扫码"] selectedImage:[UIImage imageNamed:@"扫码"]];
     UITapGestureRecognizer *scanBtnTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didClickAdd:)];
     [scanBtn addGestureRecognizer:scanBtnTap];
     
     
     UILabel *addGroupLbl = [UILabel new];
     addGroupLbl.text = @"添加组";
-    addGroupLbl.textColor = KWtAppMainColor;
+    addGroupLbl.textColor = kAppMainColor;
     addGroupLbl.font = __CM_NormalFont;
     addGroupLbl.userInteractionEnabled  =YES;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didClickAdd:)];
@@ -97,7 +97,7 @@
     
     UILabel *addSubAccountLbl = [UILabel new];
     addSubAccountLbl.text = @"添加";
-    addSubAccountLbl.textColor = KWtAppMainColor;
+    addSubAccountLbl.textColor = kAppMainColor;
     addSubAccountLbl.font = __CM_NormalFont;
     addSubAccountLbl.userInteractionEnabled  =YES;
     UITapGestureRecognizer *addSubAccountLblTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didClickAdd:)];
