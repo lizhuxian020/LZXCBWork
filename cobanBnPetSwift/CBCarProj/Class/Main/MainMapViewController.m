@@ -54,6 +54,7 @@
 #import "AboutUsViewController.h"
 #import "CBPersonInfoController.h"
 #import "CBControlMenuController.h"
+#import "CBAppUpdateManager.h"
 
 @interface MainMapViewController ()
 <BMKMapViewDelegate, CLLocationManagerDelegate, GMSMapViewDelegate,
@@ -189,6 +190,8 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    [CBAppUpdateManager.shared check];
     
     //更新一下值
     [AppDelegate shareInstance].IsShowGoogleMap = [AppDelegate isShowGoogle];
@@ -1771,6 +1774,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [self.view endEditing:YES];
     [self hideListView];
 }
+
 //#pragma mark -- paoView
 //- (void)showPaoView {
 //    kWeakSelf(self);
