@@ -35,6 +35,11 @@ NS_ASSUME_NONNULL_BEGIN
                                title:(NSString *)title
                              confrim:(void(^)(NSString *contentStr))confirmBlk;
 
++ (CBBasePopView *)viewWithAlertTips:(NSString *)tips
+                               title:(NSString *)title
+                              cancel:(void(^)(void))cancelBlk
+                             confrim:(void(^)(NSString *contentStr))confirmBlk;
+
 + (CBBasePopView *)viewWithChooseData:(NSArray<NSString *> *)dataArr
                         selectedIndex:(NSInteger)index
                                 title:(NSString *)title

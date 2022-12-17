@@ -142,6 +142,13 @@
 + (CBBasePopView *)viewWithAlertTips:(NSString *)tips
                                title:(NSString *)title
                              confrim:(void(^)(NSString *contentStr))confirmBlk {
+    return [self viewWithAlertTips:tips title:title cancel:nil confrim:confirmBlk];
+}
+
++ (CBBasePopView *)viewWithAlertTips:(NSString *)tips
+                               title:(NSString *)title
+                              cancel:(void(^)(void))cancelBlk
+                             confrim:(void(^)(NSString *contentStr))confirmBlk {
     UIView *c = [UIView new];
     c.backgroundColor = UIColor.whiteColor;
     UILabel *lbl = [MINUtils createLabelWithText:tips size:17 alignment:NSTextAlignmentCenter textColor:kCellTextColor];
@@ -165,6 +172,9 @@
     }];
     [alertView setDidClickCancel:^{
         [wpopView dismiss];
+        if (cancelBlk) {
+            cancelBlk();
+        }
     }];
     return popView;
 }
