@@ -730,12 +730,10 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 }
 
 - (void)didClickPersonBtn {
-    NSLog(@"%s", __FUNCTION__);
     [self.infoPopView pop];
 }
 
 - (void)didClickLocateBtn {
-    NSLog(@"%s", __FUNCTION__);
     [self requestDeviceSingleLocation];
 }
 

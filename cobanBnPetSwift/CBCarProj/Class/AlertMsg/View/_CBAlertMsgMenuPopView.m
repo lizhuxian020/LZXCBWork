@@ -40,14 +40,18 @@
     }];
     self.contentView.backgroundColor = UIColor.whiteColor;
     self.contentView.alpha = 0;
+    self.contentView.layer.borderColor = KCarLineColor.CGColor;
+    self.contentView.layer.borderWidth = 1;
+    self.contentView.layer.cornerRadius = 5;
+    self.contentView.layer.masksToBounds = YES;
     
-    UIView *allRead = [self viewWithImg:@"" title:Localized(@"全部已读")];
+    UIView *allRead = [self viewWithImg:@"一键确认报警" title:Localized(@"全部已读")];
     [self.contentView addSubview:allRead];
     [allRead mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(@0);
     }];
     
-    UIView *checkAll = [self viewWithImg:@"" title:Localized(@"查看所有报警")];
+    UIView *checkAll = [self viewWithImg:@"查看全部报警" title:Localized(@"查看所有报警")];
     [self.contentView addSubview:checkAll];
     [checkAll mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.equalTo(@0);
@@ -77,7 +81,7 @@
         make.width.height.equalTo(@15);
         make.bottom.equalTo(@-10);
     }];
-    UILabel *lbl = [MINUtils createLabelWithText:title size:14 alignment:NSTextAlignmentCenter textColor:UIColor.blackColor];
+    UILabel *lbl = [MINUtils createLabelWithText:title size:14 alignment:NSTextAlignmentLeft textColor:UIColor.blackColor];
     [c addSubview:lbl];
     [lbl mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(imgV);

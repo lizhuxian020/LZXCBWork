@@ -41,7 +41,7 @@
     }];
     [self.tableView registerClass:_CBCarAlertMsgCell.class forCellReuseIdentifier:@"_CBCarAlertMsgCell"];
     
-    self.tableView.mj_header = [MJRefreshHeader headerWithRefreshingBlock:^{
+    self.tableView.mj_header = [MJRefreshStateHeader headerWithRefreshingBlock:^{
         [weakself requestData];
     }];
     
@@ -56,7 +56,7 @@
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         if (isSucceed) {
-            [HUD showHUDWithText:@"操作成功"];
+            [HUD showHUDWithText:Localized(@"操作成功")];
         }
         } failed:^(NSError *error) {
             [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -125,7 +125,7 @@
     kWeakSelf(self);
     [[NetWorkingManager shared] getWithUrl:url params:nil succeed:^(id response, BOOL isSucceed) {
         kStrongSelf(self);
-        [HUD showHUDWithText:@"成功"];
+        [HUD showHUDWithText:Localized(@"操作成功")];
         [self requestData];
         } failed:^(NSError *error) {
             
