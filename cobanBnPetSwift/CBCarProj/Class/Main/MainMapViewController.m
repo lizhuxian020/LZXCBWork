@@ -2174,8 +2174,12 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 }
 #pragma mark -- UITabBarViewController delegate
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
+    if ([AppDelegate shareInstance].isShowPlayBackView) {
+        [self hidePlayBackView];
+        return NO;
+    }
     // 未选中设备时，控制模块和报表模块不能点击
-    if ([viewController.tabBarItem.title isEqualToString:Localized(@"控制")] || [viewController.tabBarItem.title isEqualToString:Localized(@"报表")]) {
+    if ([viewController.tabBarItem.title isEqualToString:Localized(@"电子围栏")] || [viewController.tabBarItem.title isEqualToString:Localized(@"报表")]) {
         CBPetLoginModel *userLogin = [CBPetLoginModelTool getUser];
         CBHomeLeftMenuDeviceInfoModel *deviceModelInfo = [CBCommonTools CBdeviceInfo];
         // 没有选中
