@@ -163,8 +163,8 @@
     rightBtn.backgroundColor = [UIColor whiteColor];
     [rightBtn setTitle: title forState: UIControlStateNormal];
     [rightBtn setTitle: title forState: UIControlStateHighlighted];
-    [rightBtn setTitleColor: kRGB(26, 151, 251) forState: UIControlStateNormal];
-    [rightBtn setTitleColor: kRGB(26, 151, 251) forState: UIControlStateHighlighted];
+    [rightBtn setTitleColor: kAppMainColor forState: UIControlStateNormal];
+    [rightBtn setTitleColor: kAppMainColor forState: UIControlStateHighlighted];
     [rightBtn addTarget:self action:action forControlEvents: UIControlEventTouchUpInside];
     rightBtn.layer.cornerRadius = 5 * KFitWidthRate;
     rightBtn.titleLabel.font = [UIFont systemFontOfSize: 15 * KFitHeightRate];

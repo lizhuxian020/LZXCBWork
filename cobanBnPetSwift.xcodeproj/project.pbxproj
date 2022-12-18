@@ -6933,7 +6933,7 @@
 				);
 				MARKETING_VERSION = 2.5;
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.coban.iot;
+				PRODUCT_BUNDLE_IDENTIFIER = com.coban.iotasd;
 				PRODUCT_MODULE_NAME = cobanBnPetSwift;
 				PRODUCT_NAME = "巴诺物联网";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -6977,7 +6977,7 @@
 				);
 				MARKETING_VERSION = 2.5;
 				OTHER_LDFLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.coban.iot;
+				PRODUCT_BUNDLE_IDENTIFIER = com.coban.iotasd;
 				PRODUCT_MODULE_NAME = cobanBnPetSwift;
 				PRODUCT_NAME = "巴诺物联网";
 				PROVISIONING_PROFILE_SPECIFIER = "";

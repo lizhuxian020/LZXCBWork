@@ -93,7 +93,7 @@
     }];
 }
 - (void)didRightBtn {
-    [self.infoPopView pop];
+//    [self.infoPopView pop];
 }
 - (void)setupInfoPopView {
     self.infoPopView = [_CBMyInfoPopView new];
@@ -147,56 +147,59 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CBHomeLeftMenuDeviceInfoModel *model = [CBCommonTools CBdeviceInfo];
+    NSString *sectionTitle = self.sectionTitleArr[indexPath.section];
+    
     // 这里显示曲线的只有 日里程耗油报表 和 油量里程速度表
-    if (indexPath.section == 5 && indexPath.row == 0) { // 日里程耗油报表
-        BarChartViewController *doubleYBarChartVC = [[BarChartViewController alloc] init];
-        doubleYBarChartVC.hidesBottomBarWhenPushed = YES;
-        doubleYBarChartVC.titleName = model.name?:@"";//@"ASFE2EF3";
-        doubleYBarChartVC.isDoubleYChart = YES;
-        [self.navigationController pushViewController: doubleYBarChartVC animated:YES];
-    }else if (indexPath.section == 5 && indexPath.row == 1) { // 油量里程速度表
-        LineChartViewController *doubleYLineChartVC = [[LineChartViewController alloc] init];
-        doubleYLineChartVC.hidesBottomBarWhenPushed = YES;
-        doubleYLineChartVC.isDoubleYChart = YES;
-        doubleYLineChartVC.titleName = model.name?:@"";//@"ASFE2EF3";
-        [self.navigationController pushViewController: doubleYLineChartVC animated:YES];
-    }else { // 其余都是一种类型
+    if ([sectionTitle isEqualToString:Localized(@"油量统计")]) {
+        NSString *oilTitle = self.oilTitleArr[indexPath.row];
+        if ([oilTitle isEqualToString:Localized(@"日里程耗油报表")]) { // 日里程耗油报表
+            BarChartViewController *doubleYBarChartVC = [[BarChartViewController alloc] init];
+            doubleYBarChartVC.hidesBottomBarWhenPushed = YES;
+            doubleYBarChartVC.titleName = model.name?:@"";//@"ASFE2EF3";
+            doubleYBarChartVC.isDoubleYChart = YES;
+            [self.navigationController pushViewController: doubleYBarChartVC animated:YES];
+        }
+        if ([oilTitle isEqualToString:Localized(@"油量里程速度表")]) {// 油量里程速度表
+            LineChartViewController *doubleYLineChartVC = [[LineChartViewController alloc] init];
+            doubleYLineChartVC.hidesBottomBarWhenPushed = YES;
+            doubleYLineChartVC.isDoubleYChart = YES;
+            doubleYLineChartVC.titleName = model.name?:@"";//@"ASFE2EF3";
+            [self.navigationController pushViewController: doubleYLineChartVC animated:YES];
+        }
+    } else { // 其余都是一种类型
         FormDateChooseViewController *formDateChooseVC = [[FormDateChooseViewController alloc] init];
         formDateChooseVC.hidesBottomBarWhenPushed = YES;
-        if (indexPath.section == 5 && indexPath.row == 2) {
-            formDateChooseVC.type = FormTypePourOil;
-        }else if (indexPath.section == 5 && indexPath.row == 3) {
-            formDateChooseVC.type = FormTypeOilLeak;
-        }else if (indexPath.section == 6 && indexPath.row == 0) {
-            formDateChooseVC.type = FormTypeAllAlarm;
-        }else if (indexPath.section == 6 && indexPath.row == 1) {
-            formDateChooseVC.type = FormTypeSOSAlarm;
-        }else if (indexPath.section == 6 && indexPath.row == 2) {
-            formDateChooseVC.type = FormTypeOverspeedAlarm;
-        }else if (indexPath.section == 6 && indexPath.row == 3) {
-            formDateChooseVC.type = FormTypeTiredAlarm;
-        }else if (indexPath.section == 6 && indexPath.row == 4) {
-            formDateChooseVC.type = FormTypeUnderpackingAlarm;
-        }else if (indexPath.section == 6 && indexPath.row == 5) {
-            formDateChooseVC.type = FormTypePowerDownAlarm;
-        }else if (indexPath.section == 6 && indexPath.row == 6) {
-            formDateChooseVC.type = FormTypeShakeAlarm;
-        }else if (indexPath.section == 6 && indexPath.row == 7) {
-            formDateChooseVC.type = FormTypeOpenDoorAlarm;
-        }else if (indexPath.section == 6 && indexPath.row == 8) {
-            formDateChooseVC.type = FormTypeFireAlarm;
-        }else if (indexPath.section == 6 && indexPath.row == 9) {
-            formDateChooseVC.type = FormTypeMoveAlarm;
-        }else if (indexPath.section == 6 && indexPath.row == 10) {
-            formDateChooseVC.type = FormTypeGasolineTheftAlarm;
-        }else if (indexPath.section == 6 && indexPath.row == 11) {
-            formDateChooseVC.type = FormTypeCollisionAlarm;
-        }else if (indexPath.section == 8 && indexPath.row == 0) {
-            formDateChooseVC.type = FormTypeInFencing;
-        }else if (indexPath.section == 8 && indexPath.row == 1) {
-            formDateChooseVC.type = FormTypeOutFencing;
-        }else if (indexPath.section == 8 && indexPath.row == 2) {
-            formDateChooseVC.type = FormTypeInOutFencing;
+        if ([sectionTitle isEqualToString:Localized(@"油量统计")]) {
+            NSString *oilTitle = self.oilTitleArr[indexPath.row];
+            formDateChooseVC.type =
+            [oilTitle isEqualToString:Localized(@"加油报表")] ? FormTypePourOil :
+            [oilTitle isEqualToString:Localized(@"漏油报表")] ? FormTypeOilLeak :
+            FormTypePourOil;
+        }
+        if ([sectionTitle isEqualToString:Localized(@"报警统计")]) {
+            NSString *alarmTitle = self.warnTitleArr[indexPath.row];
+            formDateChooseVC.type =
+            [alarmTitle isEqualToString: Localized(@"所有报警统计报表")] ? FormTypeAllAlarm :
+            [alarmTitle isEqualToString: Localized(@"SOS报警统计报表")] ? FormTypeSOSAlarm :
+            [alarmTitle isEqualToString: Localized(@"超速报警统计报表")] ? FormTypeOverspeedAlarm :
+            [alarmTitle isEqualToString: Localized(@"疲劳驾驶统计报表")] ? FormTypeTiredAlarm :
+            [alarmTitle isEqualToString: Localized(@"欠压报警统计报表")] ? FormTypeUnderpackingAlarm :
+            [alarmTitle isEqualToString: Localized(@"掉电报警统计报表")] ? FormTypePowerDownAlarm :
+            [alarmTitle isEqualToString: Localized(@"振动报警统计报表")] ? FormTypeShakeAlarm :
+            [alarmTitle isEqualToString: Localized(@"开门报警统计报表")] ? FormTypeOpenDoorAlarm :
+            [alarmTitle isEqualToString: Localized(@"点火报警统计报表")] ? FormTypeFireAlarm :
+            [alarmTitle isEqualToString: Localized(@"位移报警统计报表")] ? FormTypeMoveAlarm :
+            [alarmTitle isEqualToString: Localized(@"偷油漏油报警统计报表")] ? FormTypeGasolineTheftAlarm :
+            [alarmTitle isEqualToString: Localized(@"碰撞报警报表")] ? FormTypeCollisionAlarm :
+            FormTypeAllAlarm;
+        }
+        if ([sectionTitle isEqualToString:Localized(@"电子围栏报表")]) {
+            NSString *eleString = self.electronicTitleArr[indexPath.row];
+            formDateChooseVC.type =
+            [eleString isEqualToString:Localized(@"入围栏报警报表")] ? FormTypeInFencing :
+            [eleString isEqualToString:Localized(@"出围栏报警报表")] ? FormTypeOutFencing :
+            [eleString isEqualToString:Localized(@"出入围栏报警报表")] ? FormTypeInOutFencing :
+            FormTypeInFencing;
         }
         [self.navigationController pushViewController: formDateChooseVC animated: YES];
     }
@@ -213,11 +216,12 @@
     if (flag == 0) {
         return 0;
     }
-    if (section == 5) { // 油量统计
+    NSString *sectionTitle = self.sectionTitleArr[section];
+    if ([sectionTitle isEqualToString:Localized(@"油量统计")]) { // 油量统计
         return self.oilTitleArr.count;
-    }else if (section == 6) { // 报警统计
+    } else if ([sectionTitle isEqualToString:Localized(@"报警统计")]) { // 报警统计
         return self.warnTitleArr.count;
-    }else if (section == 8) { // 电子围栏报表
+    } else if ([sectionTitle isEqualToString:Localized(@"电子围栏报表")]) { // 电子围栏报表
         return self.electronicTitleArr.count;
     }
     return 0;
@@ -231,13 +235,14 @@
     if (cell == nil) {
         cell = [[FormTableViewCell alloc] initWithStyle: UITableViewCellStyleSubtitle reuseIdentifier: cellIndentify];
     }
-    if (indexPath.section == 5) { // 油量统计
+    NSString *sectionTitle = self.sectionTitleArr[indexPath.section];
+    if ([sectionTitle isEqualToString:Localized(@"油量统计")]) { // 油量统计
         cell.nameLabel.text = self.oilTitleArr[indexPath.row];
         cell.imgView.image = [UIImage imageNamed:self.oilImageArr[indexPath.row]];
-    }else if (indexPath.section == 6) { // 报警统计
+    } else if ([sectionTitle isEqualToString:Localized(@"报警统计")]) { // 报警统计
         cell.nameLabel.text = self.warnTitleArr[indexPath.row];
         cell.imgView.image = [UIImage imageNamed:self.warnImageArr[indexPath.row]];
-    }else if (indexPath.section == 8) { // 电子围栏报表
+    } else if ([sectionTitle isEqualToString:Localized(@"电子围栏报表")]) { // 电子围栏报表
         cell.nameLabel.text = self.electronicTitleArr[indexPath.row];
         cell.imgView.image = [UIImage imageNamed:self.electronicImageArr[indexPath.row]];
     }
@@ -262,7 +267,10 @@
         view.arrowImageBtn.selected = YES;//NO;
         view.exArrowImageBtn.selected = YES;//NO;
     }
-    if (section == 5 || section == 6 || section == 8) { // 5油量统计 6报警统计 8电子围栏报表
+    NSString *sectionTitle = self.sectionTitleArr[section];
+    if ([sectionTitle isEqualToString:Localized(@"油量统计")] ||
+        [sectionTitle isEqualToString:Localized(@"报警统计")] ||
+        [sectionTitle isEqualToString:Localized(@"电子围栏报表")]) { // 5油量统计 6报警统计 8电子围栏报表
         [view setDownforwardImage];
         [view showExpandableView];
     } else {
@@ -274,37 +282,42 @@
     view.headerBtnClick = ^(NSInteger section) {
         
         CBHomeLeftMenuDeviceInfoModel *model = [CBCommonTools CBdeviceInfo];
-        if (section == 0) { // 速度报表
+        if ([sectionTitle isEqualToString:Localized(@"速度报表")]) { // 速度报表
             LineChartViewController *singleLineChartVC = [[LineChartViewController alloc] init];
             singleLineChartVC.hidesBottomBarWhenPushed = YES;
             singleLineChartVC.titleName = model.name?:@"";//@"ASFE2EF3";
             [self.navigationController pushViewController: singleLineChartVC animated: YES];
-        }else if (section == 4) { // 里程统计
+        }else if ([sectionTitle isEqualToString:Localized(@"里程统计")]) { // 里程统计
             BarChartViewController *singleBarChartVC = [[BarChartViewController alloc] init];
             singleBarChartVC.hidesBottomBarWhenPushed = YES;
             singleBarChartVC.titleName = model.name?:@"";//@"ASFE2EF3";
             [self.navigationController pushViewController: singleBarChartVC animated: YES];
-        }else if (section == 5 || section == 6 || section == 8){ // 这里是展开还是收缩
+        }else if ([sectionTitle isEqualToString:Localized(@"油量统计")] ||
+                  [sectionTitle isEqualToString:Localized(@"报警统计")] ||
+                  [sectionTitle isEqualToString:Localized(@"电子围栏报表")]) { // 5油量统计 6报警统计 8电子围栏报表 // 这里是展开还是收缩
             weakHeadView.arrowImageBtn.selected = !weakHeadView.arrowImageBtn.selected;
             weakHeadView.exArrowImageBtn.selected = !weakHeadView.exArrowImageBtn.selected;
             [weakSelf reloadTableSectionAtIndex: section];
-        }else if (section == 9) { // 多媒体记录报表
-            MultimediaViewController *multimedieVC = [[MultimediaViewController alloc] init];
-            multimedieVC.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController: multimedieVC animated: YES];
-        }else { // 其他都一样
+        }
+//        else if (section == 9) { // 多媒体记录报表
+//            MultimediaViewController *multimedieVC = [[MultimediaViewController alloc] init];
+//            multimedieVC.hidesBottomBarWhenPushed = YES;
+//            [self.navigationController pushViewController: multimedieVC animated: YES];
+//        }
+        else { // 其他都一样
             FormDateChooseViewController *formDateChooseVC = [[FormDateChooseViewController alloc] init];
-            if (section == 1) {
+            if ([sectionTitle isEqualToString:Localized(@"怠速报表")]) {
                 formDateChooseVC.type = FormTypeIdling;
-            }else if (section == 2) {
+            }else if ([sectionTitle isEqualToString:Localized(@"停留统计")]) {
                 formDateChooseVC.type = FormTypeStay;
-            }else if (section == 3) {
+            }else if ([sectionTitle isEqualToString:Localized(@"点火报表")]) {
                 formDateChooseVC.type = FormTypeFire;
-            }else if (section == 7) {
+            }else if ([sectionTitle isEqualToString:Localized(@"OBD报表")]) {
                 formDateChooseVC.type = FormTypeOBD;
-            }else if (section == 10) {
-                formDateChooseVC.type = FormTypeSchedule;
             }
+//            else if (section == 10) {
+//                formDateChooseVC.type = FormTypeSchedule;
+//            }
             formDateChooseVC.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController: formDateChooseVC animated: YES];
         }
