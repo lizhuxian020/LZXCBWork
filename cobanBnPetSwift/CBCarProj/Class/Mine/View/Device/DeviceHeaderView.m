@@ -16,7 +16,8 @@
         // 创建圆角顶部背景view
         self.backgroundColor = kBackColor;
         UIView *backView = [[UIView alloc] init];
-        backView.backgroundColor = kRGB(243, 244, 245);
+//        backView.backgroundColor = kRGB(243, 244, 245);
+        backView.backgroundColor = kBackColor;
         backView.layer.cornerRadius = 5 * KFitHeightRate;
         [self addSubview: backView];
         [backView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -75,16 +76,15 @@
 //            make.width.mas_offset(250 * KFitWidthRate);
         }];
         _arrowImageBtn = [[UIButton alloc] init];
-        UIImage *arrowImage = [UIImage imageNamed:@"上边"];
-        UIImage *arrowImageRight = [UIImage imageNamed:@"右边"];
-        [_arrowImageBtn setImage: [UIImage imageNamed:@"右边"] forState: UIControlStateNormal];
-        [_arrowImageBtn setImage: [UIImage imageNamed:@"下边"] forState: UIControlStateSelected];
+        UIImage *arrowImageRight = [UIImage imageNamed:@"点击更多"];
+        [_arrowImageBtn setImage: [UIImage imageNamed:@"点击更多"] forState: UIControlStateNormal];
+        [_arrowImageBtn setImage: [UIImage imageNamed:@"下拉"] forState: UIControlStateSelected];
         [backView addSubview: _arrowImageBtn];
         [_arrowImageBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.mas_equalTo(backView).with.offset(- 13 * KFitWidthRate);
             make.centerY.equalTo(backView);
             make.height.mas_equalTo(arrowImageRight.size.height);
-            make.width.mas_equalTo(arrowImage.size.width);
+            make.width.mas_equalTo(arrowImageRight.size.width);
         }];
         _headerBtn = [[UIButton alloc] init];
         [_headerBtn addTarget: self action: @selector(deviceHeaderBtnClick) forControlEvents: UIControlEventTouchUpInside];

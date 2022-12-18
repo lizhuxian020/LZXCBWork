@@ -29,8 +29,8 @@
         [_deviceImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(_backView);
             make.centerX.equalTo(_backView.mas_left).with.offset(20 * KFitWidthRate);
-            make.height.mas_equalTo(image.size.height * KFitHeightRate);
-            make.width.mas_equalTo(image.size.width * KFitWidthRate);
+            make.height.mas_equalTo(image.size.height);
+            make.width.mas_equalTo(image.size.width);
         }];
         _deviceCodeLabel = [MINUtils createLabelWithText: @"粤A 23456" size: 13 * KFitHeightRate  alignment: NSTextAlignmentLeft textColor: kRGB(137 , 137, 137) ];
         [_backView addSubview: _deviceCodeLabel];
@@ -50,14 +50,14 @@
             make.height.mas_equalTo(15 * KFitHeightRate);
             make.width.mas_equalTo(110 * KFitWidthRate);
         }];
-        UIImage *rightImage = [UIImage imageNamed:@"左边-三角"];
+        UIImage *rightImage = [UIImage imageNamed:@"点击更多"];
         _rightBtnImageView = [[UIImageView alloc] initWithImage: rightImage];
         [_backView addSubview: _rightBtnImageView];
         [_rightBtnImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(_backView);
             make.right.equalTo(_backView).with.offset(-10 * KFitWidthRate);
-            make.height.mas_equalTo(rightImage.size.height * KFitHeightRate);
-            make.width.mas_equalTo(rightImage.size.width * KFitHeightRate);
+            make.height.mas_equalTo(rightImage.size.height);
+            make.width.mas_equalTo(rightImage.size.width);
         }];
         _deleteBtn = [MINUtils createNoBorderBtnWithTitle: @"删除" titleColor: [UIColor whiteColor] fontSize: 15 * KFitWidthRate backgroundColor: kRGB(252, 30 , 28)];
         [_deleteBtn addTarget: self action: @selector(deviceDeleteBtnClick) forControlEvents: UIControlEventTouchUpInside];
@@ -135,8 +135,8 @@
         }
         [self.deviceImageView setImage: image];
         [self.deviceImageView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.height.mas_equalTo(image.size.height * KFitHeightRate);
-            make.width.mas_equalTo(image.size.width * KFitWidthRate);
+            make.height.mas_equalTo(image.size.height);
+            make.width.mas_equalTo(image.size.width);
         }];
         self.deviceCodeLabel.text = deviceText;
         if (statusType == DeviceStatusTypeAtSpeed) {
@@ -168,8 +168,8 @@
         }
         [self.deviceImageView setImage: image];
         [self.deviceImageView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.height.mas_equalTo(image.size.height * KFitHeightRate);
-            make.width.mas_equalTo(image.size.width * KFitWidthRate);
+            make.height.mas_equalTo(image.size.height);
+            make.width.mas_equalTo(image.size.width);
         }];
         self.deviceCodeLabel.text = deviceText;
         self.contentLabel.text = contentText;
@@ -180,213 +180,20 @@
 
 - (void)setDeviceInfoModel:(MyDeviceModel *)deviceInfoModel {
     _deviceInfoModel = deviceInfoModel;
-    if (deviceInfoModel) {
-        UIImage *image = nil;
-        switch (deviceInfoModel.icon) {
-            case 0:
-            {
-                image = [UIImage imageNamed: @"定位图"];
-                self.deviceImageView.image = [UIImage imageNamed:@"定位图"];
-            }
-                break;
-             case 1:
-            {
-                image = [UIImage imageNamed: @"人物"];
-                self.deviceImageView.image = [UIImage imageNamed:@"人物"];
-
-            }
-                break;
-            case 2:
-            {
-                image = [UIImage imageNamed: @"宠物"];
-                self.deviceImageView.image = [UIImage imageNamed:@"宠物"];
-
-            }
-                break;
-            case 3:
-            {
-                image = [UIImage imageNamed: @"单车"];
-                self.deviceImageView.image = [UIImage imageNamed:@"单车"];
-
-            }
-                break;
-            case 4:
-            {
-                image = [UIImage imageNamed: @"摩托车"];
-                self.deviceImageView.image = [UIImage imageNamed:@"摩托车"];
-            }
-                break;
-            case 5:
-            {
-                image = [UIImage imageNamed: @"小车"];
-                self.deviceImageView.image = [UIImage imageNamed:@"小车"];
-            }
-                break;
-            case 6:
-            {
-                image = [UIImage imageNamed: @"货车"];
-                self.deviceImageView.image = [UIImage imageNamed:@"货车"];
-            }
-                break;
-            case 7:
-            {
-                image = [UIImage imageNamed: @"行李箱"];
-                self.deviceImageView.image = [UIImage imageNamed:@"行李箱"];
-            }
-                break;
-            default:
-                break;
-        }
-        [self.deviceImageView mas_updateConstraints:^(MASConstraintMaker *make) {
-//            make.centerY.equalTo(self);
-//            make.centerX.equalTo(self.mas_left).with.offset(20 * KFitWidthRate);
-            make.height.mas_equalTo(image.size.height * KFitHeightRate);
-            make.width.mas_equalTo(image.size.width * KFitWidthRate);
-        }];
-        
-        self.deviceCodeLabel.text = deviceInfoModel.name?:@"";
-        
-//        UIImage *image = nil;
-//        if (deviceInfoModel.online == 1) {
-//            // 1 在线
-//            if (deviceInfoModel.warmed == 1) {
-//                // 1 报警
-//                if (deviceInfoModel.icon == 0) {
-//                    image = [UIImage imageNamed: @"定位图-报警"];
-//                    self.deviceImageView.image = [UIImage imageNamed:@"定位图-报警"];
-//                } else if (deviceInfoModel.icon == 1) {
-//                    image = [UIImage imageNamed: @"人物-报警"];
-//                    self.deviceImageView.image = [UIImage imageNamed:@"人物-报警"];
-//                } else if (deviceInfoModel.icon == 2) {
-//                    image = [UIImage imageNamed: @"宠物-报警"];
-//                    self.deviceImageView.image = [UIImage imageNamed:@"宠物-报警"];
-//                } else if (deviceInfoModel.icon == 3) {
-//                    image = [UIImage imageNamed: @"单车-报警"];
-//                    self.deviceImageView.image = [UIImage imageNamed:@"单车-报警"];
-//                } else if (deviceInfoModel.icon == 4) {
-//                    image = [UIImage imageNamed: @"摩托车-报警"];
-//                    self.deviceImageView.image = [UIImage imageNamed:@"摩托车-报警"];
-//                } else if (deviceInfoModel.icon == 5) {
-//                    image = [UIImage imageNamed: @"小车-报警"];
-//                    self.deviceImageView.image = [UIImage imageNamed:@"小车-报警"];
-//                } else if (deviceInfoModel.icon == 6) {
-//                    image = [UIImage imageNamed: @"货车-报警"];
-//                    self.deviceImageView.image = [UIImage imageNamed:@"货车-报警"];
-//                } else if (deviceInfoModel.icon == 7) {
-//                    image = [UIImage imageNamed: @"行李箱-报警"];
-//                    self.deviceImageView.image = [UIImage imageNamed:@"行李箱-报警"];
-//                }
-//                [self.deviceImageView mas_updateConstraints:^(MASConstraintMaker *make) {
-//                    make.centerY.equalTo(self);
-//                    make.centerX.equalTo(self.mas_left).with.offset(20 * KFitWidthRate);
-//                    make.height.mas_equalTo(image.size.height * KFitHeightRate);
-//                    make.width.mas_equalTo(image.size.width * KFitWidthRate);
-//                }];
-//            } else {
-//                // 0或nil 未报警
-//                if (deviceInfoModel.icon == 0) {
-//                    image = [UIImage imageNamed: @"定位图"];
-//                    self.deviceImageView.image = [UIImage imageNamed:@"定位图"];
-//                } else if (deviceInfoModel.icon == 1) {
-//                    image = [UIImage imageNamed: @"人物"];
-//                    self.deviceImageView.image = [UIImage imageNamed:@"人物"];
-//                } else if (deviceInfoModel.icon == 2) {
-//                    image = [UIImage imageNamed: @"宠物"];
-//                    self.deviceImageView.image = [UIImage imageNamed:@"宠物"];
-//                } else if (deviceInfoModel.icon == 3) {
-//                    image = [UIImage imageNamed: @"单车"];
-//                    self.deviceImageView.image = [UIImage imageNamed:@"单车"];
-//                } else if (deviceInfoModel.icon == 4) {
-//                    image = [UIImage imageNamed: @"摩托车"];
-//                    self.deviceImageView.image = [UIImage imageNamed:@"摩托车"];
-//                } else if (deviceInfoModel.icon == 5) {
-//                    image = [UIImage imageNamed: @"小车"];
-//                    self.deviceImageView.image = [UIImage imageNamed:@"小车"];
-//                } else if (deviceInfoModel.icon == 6) {
-//                    image = [UIImage imageNamed: @"货车"];
-//                    self.deviceImageView.image = [UIImage imageNamed:@"货车"];
-//                } else if (deviceInfoModel.icon == 7) {
-//                    image = [UIImage imageNamed: @"行李箱"];
-//                    self.deviceImageView.image = [UIImage imageNamed:@"行李箱"];
-//                }
-//                [self.deviceImageView mas_updateConstraints:^(MASConstraintMaker *make) {
-//                    make.centerY.equalTo(self);
-//                    make.centerX.equalTo(self.mas_left).with.offset(20 * KFitWidthRate);
-//                    make.height.mas_equalTo(image.size.height * KFitHeightRate);
-//                    make.width.mas_equalTo(image.size.width * KFitWidthRate);
-//                }];
-//            }
-//        } else {
-//            // 0 离线
-//            if (deviceInfoModel.warmed == 1) {
-//                // 1 报警
-//                if (deviceInfoModel.icon == 0) {
-//                    image = [UIImage imageNamed: @"定位图-报警"];
-//                    self.deviceImageView.image = [UIImage imageNamed:@"定位图-报警"];
-//                } else if (deviceInfoModel.icon == 1) {
-//                    image = [UIImage imageNamed: @"人物-报警"];
-//                    self.deviceImageView.image = [UIImage imageNamed:@"人物-报警"];
-//                } else if (deviceInfoModel.icon == 2) {
-//                    image = [UIImage imageNamed: @"宠物-报警"];
-//                    self.deviceImageView.image = [UIImage imageNamed:@"宠物-报警"];
-//                } else if (deviceInfoModel.icon == 3) {
-//                    image = [UIImage imageNamed: @"单车-报警"];
-//                    self.deviceImageView.image = [UIImage imageNamed:@"单车-报警"];
-//                } else if (deviceInfoModel.icon == 4) {
-//                    image = [UIImage imageNamed: @"摩托车-报警"];
-//                    self.deviceImageView.image = [UIImage imageNamed:@"摩托车-报警"];
-//                } else if (deviceInfoModel.icon == 5) {
-//                    image = [UIImage imageNamed: @"小车-报警"];
-//                    self.deviceImageView.image = [UIImage imageNamed:@"小车-报警"];
-//                } else if (deviceInfoModel.icon == 6) {
-//                    image = [UIImage imageNamed: @"货车-报警"];
-//                    self.deviceImageView.image = [UIImage imageNamed:@"货车-报警"];
-//                } else if (deviceInfoModel.icon == 7) {
-//                    image = [UIImage imageNamed: @"行李箱-报警"];
-//                    self.deviceImageView.image = [UIImage imageNamed:@"行李箱-报警"];
-//                }
-//                [self.deviceImageView mas_updateConstraints:^(MASConstraintMaker *make) {
-//                    make.centerY.equalTo(self);
-//                    make.centerX.equalTo(self.mas_left).with.offset(20 * KFitWidthRate);
-//                    make.height.mas_equalTo(image.size.height * KFitHeightRate);
-//                    make.width.mas_equalTo(image.size.width * KFitWidthRate);
-//                }];
-//            } else {
-//                if (deviceInfoModel.icon == 0) {
-//                    image = [UIImage imageNamed: @"定位图-离线"];
-//                    self.deviceImageView.image = [UIImage imageNamed:@"定位图-离线"];
-//                } else if (deviceInfoModel.icon == 1) {
-//                    image = [UIImage imageNamed: @"人物-离线"];
-//                    self.deviceImageView.image = [UIImage imageNamed:@"人物-离线"];
-//                } else if (deviceInfoModel.icon == 2) {
-//                    image = [UIImage imageNamed: @"宠物-离线"];
-//                    self.deviceImageView.image = [UIImage imageNamed:@"宠物-离线"];
-//                } else if (deviceInfoModel.icon == 3) {
-//                    image = [UIImage imageNamed: @"单车-离线"];
-//                    self.deviceImageView.image = [UIImage imageNamed:@"单车-离线"];
-//                } else if (deviceInfoModel.icon == 4) {
-//                    image = [UIImage imageNamed: @"摩托车-离线"];
-//                    self.deviceImageView.image = [UIImage imageNamed:@"摩托车-离线"];
-//                } else if (deviceInfoModel.icon == 5) {
-//                    image = [UIImage imageNamed: @"小车-离线"];
-//                    self.deviceImageView.image = [UIImage imageNamed:@"小车-离线"];
-//                } else if (deviceInfoModel.icon == 6) {
-//                    image = [UIImage imageNamed: @"货车-离线"];
-//                    self.deviceImageView.image = [UIImage imageNamed:@"货车-离线"];
-//                } else if (deviceInfoModel.icon == 7) {
-//                    image = [UIImage imageNamed: @"行李箱-离线"];
-//                    self.deviceImageView.image = [UIImage imageNamed:@"行李箱-离线"];
-//                }
-//                [self.deviceImageView mas_updateConstraints:^(MASConstraintMaker *make) {
-//                    make.centerY.equalTo(self);
-//                    make.centerX.equalTo(self.mas_left).with.offset(20 * KFitWidthRate);
-//                    make.height.mas_equalTo(image.size.height * KFitHeightRate);
-//                    make.width.mas_equalTo(image.size.width * KFitWidthRate);
-//                }];
-//
-//            }
-//        }
-    }
+    NSDictionary *dic = @{
+        @"iconStr": @(_deviceInfoModel.icon).description,
+        @"onlineStr": @(_deviceInfoModel.online).description,
+        @"warmedStr": @(_deviceInfoModel.warmed).description,
+        @"devStatus": @"",
+    };
+    UIImage *image = [CBCommonTools returnDeveceListImageWithDic:dic];
+    self.deviceImageView.image = image;
+    [self.deviceImageView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.height.mas_equalTo(image.size.height);
+        make.width.mas_equalTo(image.size.width);
+    }];
+    
+    self.deviceCodeLabel.text = deviceInfoModel.name?:@"";
 }
 
 

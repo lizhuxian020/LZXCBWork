@@ -99,7 +99,8 @@
     [contentView addSubview: _pickerView];
     [_pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(contentView);
-        make.bottom.equalTo(contentView).with.offset(-TabPaddingBARHEIGHT);
+//        make.bottom.equalTo(contentView).with.offset(-TabPaddingBARHEIGHT);
+        make.bottom.equalTo(contentView).with.offset(-0);
         make.top.equalTo(titleView.mas_bottom);
     }];
 }

@@ -91,6 +91,10 @@
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.right.bottom.left.equalTo(self.view);
     }];
+    kWeakSelf(self);
+    self.tableView.mj_header = [MJRefreshStateHeader headerWithRefreshingBlock:^{
+        [weakself requestDataWithHud:nil];
+    }];
     
 }
 #pragma mark -- 获取设备列表
@@ -106,6 +110,7 @@
     [[NetWorkingManager shared]getWithUrl:@"personController/getMyDeviceList" params: dic succeed:^(id response,BOOL isSucceed) {
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [self.tableView.header endRefreshing];
         if (isSucceed) {
             if (response && [response[@"data"] isKindOfClass:[NSArray class]]) {
                 [weakSelf.dataArr removeAllObjects];
@@ -145,6 +150,7 @@
         //[hud hideAnimated:YES];
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [self.tableView.header endRefreshing];
     }];
 }
 #pragma mark -tableview
@@ -188,12 +194,12 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 50 * KFitHeightRate;
+    return 50;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 50 * KFitHeightRate;
+    return 50;;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -236,7 +242,9 @@
             if (sectionArr.count > 0) {
                 [MINUtils showProgressHudToView: weakSelf.view withText:Localized(@"请先将设备移到其他分组或删除分组设备")];
             }else {
-                [weakSelf deleteGroupWithSection: section];
+                [[CBCarAlertView viewWithAlertTips:Localized(@"确认删除?") title:Localized(@"提示") confrim:^(NSString * _Nonnull contentStr) {
+                    [weakSelf deleteGroupWithSection: section];
+                }] pop];
             }
         };
         [headerView setEditBtnClick:^(NSInteger section, DeviceHeaderView *headView) {
@@ -280,10 +288,11 @@
 }
 #pragma mark -- 编辑分组
 - (void)editGroupClick {
-    [self.inputPopView updateTitle:Localized(@"分组管理") placehold:Localized(@"请输入组名") isDigital:NO];
-    [self.inputPopView popView];
-    [self.inputPopView.inputTF limitTextFieldTextLength:6];
-    self.inputPopView.inputTF.keyboardType = UIKeyboardTypeASCIICapable;
+    kWeakSelf(self);
+    [[CBCarAlertView viewWithMultiInput:@[Localized(@"请输入组名")] title:Localized(@"分组管理") confirmCanDismiss:nil confrim:^(NSArray<NSString *> * _Nonnull contentStr) {
+        // 分组管理
+        [weakself editGroupNameRequestWithName:contentStr.firstObject section:weakself.selectHeaderView.section];
+    }] pop];
 }
 - (void)editGroupNameRequestWithName:(NSString *)groupName section:(NSInteger)section
 {
@@ -297,6 +306,7 @@
         [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
         if (isSucceed) {
             [weakSelf requestDataWithHud: nil];
+            [CBTopAlertView alertSuccess:Localized(@"操作成功")];
         }else {
             //[hud hideAnimated:YES];
         }
@@ -355,10 +365,11 @@
 #pragma mark -- 添加分组
 - (void)createGroupClick
 {
-    [self.inputPopView updateTitle:Localized(@"请输入组名") placehold:Localized(@"长度不能超过6") isDigital:NO];
-    [self.inputPopView popView];
-    [self.inputPopView.inputTF limitTextFieldTextLength:6];
-    self.inputPopView.inputTF.keyboardType = UIKeyboardTypeASCIICapable;
+    kWeakSelf(self);
+    [[CBCarAlertView viewWithMultiInput:@[Localized(@"长度不能超过6")] title:Localized(@"请输入组名") confirmCanDismiss:nil confrim:^(NSArray<NSString *> * _Nonnull contentStr) {
+        // 添加分组
+        [weakself addGroupRequestWithGroupName:contentStr.firstObject];
+    }] pop];
 }
 - (void)addGroupRequestWithGroupName:(NSString *)groupName
 {
@@ -371,6 +382,7 @@
         [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
         if (isSucceed) {
             [weakSelf requestDataWithHud: nil];
+            [CBTopAlertView alertSuccess:Localized(@"操作成功")];
         }else {
             //[hud hideAnimated:YES];
         }
@@ -406,8 +418,9 @@
             pickerView.delegate = self;
             [self.view addSubview: pickerView];
             [pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.left.right.top.equalTo(self.view);
-                make.bottom.equalTo(@(-TabBARHEIGHT));
+//                make.left.right.top.equalTo(self.view);
+//                make.bottom.equalTo(@(-TabBARHEIGHT));
+                make.edges.equalTo(@0);
             }];
             [pickerView showView];
         }
@@ -460,6 +473,7 @@
         [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
         if (isSucceed) {
             [weakSelf requestDataWithHud: nil];
+            [CBTopAlertView alertSuccess:Localized(@"操作成功")];
         }else {
             //[hud hideAnimated:YES];
         }
