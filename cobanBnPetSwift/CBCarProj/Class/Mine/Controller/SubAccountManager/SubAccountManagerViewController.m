@@ -12,6 +12,7 @@
 #import "AddSubAccountViewController.h"
 #import "SubAccountModel.h"
 #import "CBManagerAccountPopView.h"
+#import "CBSubAccountDetailController.h"
 
 @interface SubAccountManagerViewController () <UITableViewDelegate, UITableViewDataSource,CBManagerAccountPopViewDelegate>
 {
@@ -189,7 +190,10 @@
     if (cell.isEdit == YES) {
         [cell hideDeleteBtn];
     }else {
-        NSLog(@"jumpToNewVC");
+        CBSubAccountDetailController *vc = [CBSubAccountDetailController new];
+        SubAccountModel *model = self.dataArr[indexPath.row];
+        vc.accountModel = model;
+        [self.navigationController pushViewController:vc animated:YES];
 //        self.indexPath = indexPath;
 //        if (self.dataArr.count > indexPath.row) {
 //            SubAccountModel *model = self.dataArr[indexPath.row];

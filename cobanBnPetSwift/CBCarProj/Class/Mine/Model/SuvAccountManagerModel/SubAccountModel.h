@@ -17,6 +17,9 @@
 @property (nonatomic, copy) NSString *password;
 @property (nonatomic, copy) NSString *phone;
 @property (nonatomic, copy) NSArray *subDevice;
+@property (nonatomic, copy) NSString *status;
+@property (nonatomic, copy) NSString *create_time;
+
 @end
 
 

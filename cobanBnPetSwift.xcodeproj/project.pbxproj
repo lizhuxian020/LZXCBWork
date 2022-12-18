@@ -669,6 +669,8 @@
 		B101D4DE2927CF32007EA942 /* UIView+Badge.m in Sources */ = {isa = PBXBuildFile; fileRef = B101D4DD2927CF32007EA942 /* UIView+Badge.m */; };
 		B11EBFDF29294F790000DA24 /* CBCBCarMineHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = B11EBFDE29294F790000DA24 /* CBCBCarMineHeaderView.m */; };
 		B1212C642795CE8B0044E7CC /* CBPetSwitchPetAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1212C632795CE8B0044E7CC /* CBPetSwitchPetAlertView.swift */; };
+		B1396FED294F771D00EB917F /* CBSubAccountDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = B1396FEC294F771D00EB917F /* CBSubAccountDetailController.m */; };
+		B1396FF1294F7A0E00EB917F /* _CBSubAccountPopView.m in Sources */ = {isa = PBXBuildFile; fileRef = B1396FF0294F7A0E00EB917F /* _CBSubAccountPopView.m */; };
 		B13D8BD02935CB06005F3A61 /* CBControlMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = B13D8BCF2935CB06005F3A61 /* CBControlMenuController.m */; };
 		B13D8BD32935CD83005F3A61 /* _CBControlMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B13D8BD22935CD83005F3A61 /* _CBControlMenuCell.m */; };
 		B15F916F27A19F53000953B6 /* CBPetGMSMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B15F916E27A19F53000953B6 /* CBPetGMSMarker.swift */; };
@@ -1882,6 +1884,10 @@
 		B11EBFDD29294F790000DA24 /* CBCBCarMineHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBCBCarMineHeaderView.h; sourceTree = "<group>"; };
 		B11EBFDE29294F790000DA24 /* CBCBCarMineHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBCBCarMineHeaderView.m; sourceTree = "<group>"; };
 		B1212C632795CE8B0044E7CC /* CBPetSwitchPetAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetSwitchPetAlertView.swift; sourceTree = "<group>"; };
+		B1396FEB294F771D00EB917F /* CBSubAccountDetailController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBSubAccountDetailController.h; sourceTree = "<group>"; };
+		B1396FEC294F771D00EB917F /* CBSubAccountDetailController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBSubAccountDetailController.m; sourceTree = "<group>"; };
+		B1396FEF294F7A0E00EB917F /* _CBSubAccountPopView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBSubAccountPopView.h; sourceTree = "<group>"; };
+		B1396FF0294F7A0E00EB917F /* _CBSubAccountPopView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _CBSubAccountPopView.m; sourceTree = "<group>"; };
 		B13D8BCE2935CB06005F3A61 /* CBControlMenuController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBControlMenuController.h; sourceTree = "<group>"; };
 		B13D8BCF2935CB06005F3A61 /* CBControlMenuController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBControlMenuController.m; sourceTree = "<group>"; };
 		B13D8BD12935CD83005F3A61 /* _CBControlMenuCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBControlMenuCell.h; sourceTree = "<group>"; };
@@ -4129,6 +4135,7 @@
 		17CDAA2E24CEBE5400BB9F8B /* SubAccountManager */ = {
 			isa = PBXGroup;
 			children = (
+				B1396FE9294F76E800EB917F /* subAccountDetail */,
 				17CDAA3824CEBE5400BB9F8B /* SubAccountManagerViewController.h */,
 				17CDAA2F24CEBE5400BB9F8B /* SubAccountManagerViewController.m */,
 				17CDAA3024CEBE5400BB9F8B /* AddSubAccountViewController.h */,
@@ -5520,6 +5527,33 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		B1396FE9294F76E800EB917F /* subAccountDetail */ = {
+			isa = PBXGroup;
+			children = (
+				B1396FEE294F79FA00EB917F /* View */,
+				B1396FEA294F76FD00EB917F /* Controller */,
+			);
+			path = subAccountDetail;
+			sourceTree = "<group>";
+		};
+		B1396FEA294F76FD00EB917F /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				B1396FEB294F771D00EB917F /* CBSubAccountDetailController.h */,
+				B1396FEC294F771D00EB917F /* CBSubAccountDetailController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		B1396FEE294F79FA00EB917F /* View */ = {
+			isa = PBXGroup;
+			children = (
+				B1396FEF294F7A0E00EB917F /* _CBSubAccountPopView.h */,
+				B1396FF0294F7A0E00EB917F /* _CBSubAccountPopView.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		B13D8BCA2935CA90005F3A61 /* ControlMenu */ = {
 			isa = PBXGroup;
 			children = (
@@ -6196,6 +6230,7 @@
 				1782BF6624C0427E00544C36 /* TimingSwitchViewController.m in Sources */,
 				17F28DCB2488D298003C4010 /* CBPetMsgCterSystemMsgVC.swift in Sources */,
 				1753E1AF24AEFD6500F48816 /* CBPetNearPetPopView.swift in Sources */,
+				B1396FF1294F7A0E00EB917F /* _CBSubAccountPopView.m in Sources */,
 				17CDABE024CEBE5600BB9F8B /* CBNetworkRequestManager.m in Sources */,
 				1782BF3524C0427E00544C36 /* CBModifyPwdViewController.m in Sources */,
 				439E901B2475906A004ED9AD /* CBPetBaseView.swift in Sources */,
@@ -6293,6 +6328,7 @@
 				1782BF9824C0427E00544C36 /* CBGuardSliderView.m in Sources */,
 				1703419E240E644400634246 /* NSString+Extension.swift in Sources */,
 				1782BF7B24C0427E00544C36 /* WatchSettingViewController.m in Sources */,
+				B1396FED294F771D00EB917F /* CBSubAccountDetailController.m in Sources */,
 				17CDAC5024CEBE5600BB9F8B /* MultiplePhotoModel.m in Sources */,
 				17CDABC724CEBE5600BB9F8B /* lstring.c in Sources */,
 				17CDAB7924CEBE5500BB9F8B /* GGCircle.m in Sources */,
