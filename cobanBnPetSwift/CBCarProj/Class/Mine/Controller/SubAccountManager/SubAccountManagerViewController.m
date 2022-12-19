@@ -42,7 +42,7 @@
 }
 - (CBManagerAccountPopView *)accountPopView {
     if (!_accountPopView) {
-        _accountPopView = [[CBManagerAccountPopView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+        _accountPopView = [[CBManagerAccountPopView alloc] init];
         _accountPopView.delegate = self;
         kWeakSelf(self);
         _accountPopView.popViewBlock = ^(id  _Nonnull objc) {

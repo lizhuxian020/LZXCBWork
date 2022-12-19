@@ -687,6 +687,7 @@
 		B19D6A742932776F00D2420B /* CBCarAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = B19D6A732932776F00D2420B /* CBCarAlertView.m */; };
 		B1A363632950A0B300FF6A63 /* CBMQTTCarDeviceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B1A363622950A0B300FF6A63 /* CBMQTTCarDeviceModel.m */; };
 		B1A363672950BD9100FF6A63 /* CBGMSMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = B1A363662950BD9100FF6A63 /* CBGMSMarker.m */; };
+		B1A3636A2950CFF200FF6A63 /* _CBSubAccountDeivceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B1A363692950CFF200FF6A63 /* _CBSubAccountDeivceCell.m */; };
 		B1A4093329366DC3004B22E1 /* CBAlertSelectableView.m in Sources */ = {isa = PBXBuildFile; fileRef = B1A4093229366DC3004B22E1 /* CBAlertSelectableView.m */; };
 		B1C78285294D932F00CD0BB0 /* CBCarUserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B1C78284294D932F00CD0BB0 /* CBCarUserModel.m */; };
 		B1C78289294D998B00CD0BB0 /* CBCarPaoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B1C78288294D998B00CD0BB0 /* CBCarPaoModel.m */; };
@@ -1921,6 +1922,8 @@
 		B1A363622950A0B300FF6A63 /* CBMQTTCarDeviceModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBMQTTCarDeviceModel.m; sourceTree = "<group>"; };
 		B1A363652950BD9100FF6A63 /* CBGMSMarker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBGMSMarker.h; sourceTree = "<group>"; };
 		B1A363662950BD9100FF6A63 /* CBGMSMarker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBGMSMarker.m; sourceTree = "<group>"; };
+		B1A363682950CFF200FF6A63 /* _CBSubAccountDeivceCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBSubAccountDeivceCell.h; sourceTree = "<group>"; };
+		B1A363692950CFF200FF6A63 /* _CBSubAccountDeivceCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _CBSubAccountDeivceCell.m; sourceTree = "<group>"; };
 		B1A4092F293661AA004B22E1 /* CBCarControlConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBCarControlConfig.h; sourceTree = "<group>"; };
 		B1A4093129366DC3004B22E1 /* CBAlertSelectableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBAlertSelectableView.h; sourceTree = "<group>"; };
 		B1A4093229366DC3004B22E1 /* CBAlertSelectableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBAlertSelectableView.m; sourceTree = "<group>"; };
@@ -5584,6 +5587,8 @@
 			children = (
 				B1396FEF294F7A0E00EB917F /* _CBSubAccountPopView.h */,
 				B1396FF0294F7A0E00EB917F /* _CBSubAccountPopView.m */,
+				B1A363682950CFF200FF6A63 /* _CBSubAccountDeivceCell.h */,
+				B1A363692950CFF200FF6A63 /* _CBSubAccountDeivceCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -6472,6 +6477,7 @@
 				435B2535247D2362006CC6A1 /* CBPetFunctionPopView.swift in Sources */,
 				17CDABC424CEBE5600BB9F8B /* lfunc.c in Sources */,
 				17CDAC6624CEBE5600BB9F8B /* CBControlAlertPopView.m in Sources */,
+				B1A3636A2950CFF200FF6A63 /* _CBSubAccountDeivceCell.m in Sources */,
 				17CDAB5E24CEBE5500BB9F8B /* BarDataSet.m in Sources */,
 				1782BF2224C0427E00544C36 /* UIView+Animation.m in Sources */,
 				A2F9C508292B76A700715AF9 /* UIView+BlocksKit.m in Sources */,

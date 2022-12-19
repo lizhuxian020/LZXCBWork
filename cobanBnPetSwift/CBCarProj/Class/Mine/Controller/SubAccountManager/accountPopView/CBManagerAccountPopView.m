@@ -17,7 +17,7 @@ static NSString *AccountPopViewHeadViewIndentifer = @"AccountPopViewHeadViewInde
 @property (nonatomic,strong) UIView *bgmView;
 @property (nonatomic,strong) UILabel *titleTopLb;
 @property (nonatomic,strong) UILabel *titlePickDeviceLb;
-@property (nonatomic,strong) UITableView *deviceTableView;
+
 @property (nonatomic,strong) UILabel *titlePickedDeviceLb;
 @property (nonatomic,strong) UILabel *deviceLb;
 @property (nonatomic,strong) UIButton *certainBtn;

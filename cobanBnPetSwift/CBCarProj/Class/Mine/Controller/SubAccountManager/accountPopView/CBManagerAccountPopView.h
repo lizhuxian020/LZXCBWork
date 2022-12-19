@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @interface CBManagerAccountPopView : UIView
-
+@property (nonatomic,strong) UITableView *deviceTableView;
 @property (nonatomic,weak) id<CBManagerAccountPopViewDelegate> delegate;
 @property (nonatomic,copy) void(^popViewBlock)(id objc);
 - (void)popView:(SubAccountModel *)subDeviceModel;//弹出视图

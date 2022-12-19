@@ -8,6 +8,7 @@
 
 #import "CBSubAccountDetailController.h"
 #import "_CBSubAccountPopView.h"
+#import "_CBSubAccountDeivceCell.h"
 
 @interface CBSubAccountDetailController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -46,7 +47,8 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self.tableView registerClass:UITableViewCell.class forCellReuseIdentifier:@"asd"];
+    [self.tableView registerClass:UITableViewCell.class forCellReuseIdentifier:@"UITableViewCell"];
+    [self.tableView registerClass:_CBSubAccountDeivceCell.class forCellReuseIdentifier:@"_CBSubAccountDeivceCell"];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -54,9 +56,13 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"asd"];
+    if (indexPath.row == 5) {
+        _CBSubAccountDeivceCell *cell = [tableView dequeueReusableCellWithIdentifier:@"_CBSubAccountDeivceCell"];
+        cell.accountModel = self.accountModel;
+        return cell;
+    }
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell"];
     cell.textLabel.text = self.titleDataSource[indexPath.row];
-    cell.detailTextLabel.text = @"asd";
     UILabel *lbl = [cell viewWithTag:101];
     if (!lbl) {
         lbl = [MINUtils createLabelWithText:@"" size:14 alignment:NSTextAlignmentLeft textColor:kCellTextColor];
@@ -73,9 +79,9 @@
     indexPath.row == 2 ? self.accountModel.auth :
     indexPath.row == 3 ? self.accountModel.phone :
     indexPath.row == 4 ? self.accountModel.status :
-    indexPath.row == 5 ? self.accountModel.status :
     indexPath.row == 6 ? [MINUtils getTimeFromTimestamp:self.accountModel.create_time formatter:@"yyyy-MM-dd HH:mm:ss"] :
     @"";
+    
     
     
     return cell;
