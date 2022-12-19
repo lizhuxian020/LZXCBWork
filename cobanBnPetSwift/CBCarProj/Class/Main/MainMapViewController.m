@@ -55,6 +55,7 @@
 #import "CBPersonInfoController.h"
 #import "CBControlMenuController.h"
 #import "CBAppUpdateManager.h"
+#import "CBMQTTManager.h"
 
 @interface MainMapViewController ()
 <BMKMapViewDelegate, CLLocationManagerDelegate, GMSMapViewDelegate,
@@ -150,6 +151,8 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 @property (nonatomic, strong) _CBMyInfoPopView *infoPopView;
 
 @property (nonatomic, strong) GMSCoordinateBounds *gmsBounds; //Google可见范围
+
+@property (nonatomic, strong) CBMQTTManager *mqttManger;
 @end
 
 @implementation MainMapViewController
@@ -164,6 +167,15 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [self startTimer];
     [AppDelegate isShowGoogle];
     [self requestUserData];
+    [self checkNetWork];
+}
+- (void)checkNetWork {
+    kWeakSelf(self);
+    [[AFNetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+        if (status > 0 && weakself.mqttManger.eventCode != 0) {
+            [weakself.mqttManger startConnecet];
+        }
+    }];
 }
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear: animated];
@@ -218,7 +230,32 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         UITabBarController *tabViewController = (UITabBarController *)[[UIApplication sharedApplication] keyWindow].rootViewController;
         tabViewController.delegate = self;
     }
+    
+    [self createMQTT];
 }
+- (void)createMQTT {
+    CBPetLoginModel *userModel = [CBPetLoginModelTool getUser];
+    
+    MQTTClientModel *model = MQTTClientModel.new;
+    model.host = @"www.baanooliot.com";
+    model.port = 1883;
+    model.userName = @"admin";
+    model.password = @"admin";
+    model.clientId = [NSString stringWithFormat:@"bnios-%lf", NSDate.date.timeIntervalSince1970];
+    self.mqttManger = [CBMQTTManager new];
+    [self.mqttManger createMQTTClient:model];
+    NSString *topic = [NSString stringWithFormat:@"topic/car-pc/%@/+", userModel.uid];
+    self.mqttManger.topicArr = @[topic];
+    
+    [self.mqttManger startConnecet];
+    
+    kWeakSelf(self);
+    self.mqttManger.receivedMessageBlock = ^(NSDictionary *dataArr) {
+        NSLog(@"%s", __FUNCTION__);
+    };
+}
+
+
 - (void)initTrackLine {
     // 轨迹数组初始化
     sportNodes = [NSMutableArray array];
@@ -583,6 +620,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     _deviceInfoModelSelect = deviceInfoModelSelect;
     if (_deviceInfoModelSelect) {
         [CBDeviceTool.shareInstance didChooseDevice:_deviceInfoModelSelect];
+        [self requestFenceData];
     }
 }
 
@@ -1854,6 +1892,10 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 //        [MBProgressHUD hideHUDForView:self.view animated:YES];
 //    }];
 //}
+
+- (void)requestFenceData {
+    
+}
 #pragma mark -- 每20s刷新各设备详情
 - (void)getDeviceLocationInfoRequest {
     if (self.paopaoView.isAlertPaopaoView == YES) {

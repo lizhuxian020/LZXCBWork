@@ -130,6 +130,19 @@ static NSString *homeHeadViewIndentifer = @"homeHeadViewIndentifer";
         }
     }
 }
+- (NSUInteger)chooseFirOne {
+    for (int i = 0; i < self.arrayData.count; i++) {
+        CBHomeLeftMenuDeviceGroupModel *deveiceGroup = self.arrayData[i];
+        if (deveiceGroup.noGroup && deveiceGroup.noGroup.count > 0) {
+            return i;
+        } else {
+            if (deveiceGroup.device && deveiceGroup.device.count > 0) {
+                return i;
+            }
+        }
+    }
+    return NSNotFound;
+}
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 40*KFitHeightRate;
@@ -237,7 +250,11 @@ static NSString *homeHeadViewIndentifer = @"homeHeadViewIndentifer";
     for (MainMapViewController *vc in naviVC.viewControllers) {
         if ([vc isKindOfClass:MainMapViewController.class]) {
             if (vc.deviceInfoModelSelect == nil && self.needToChooseFirst) {
-                [self tableView:self didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+                NSUInteger section = [self chooseFirOne];
+                if (section == NSNotFound) {
+                    return;
+                }
+                [self tableView:self didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:section]];
             }
         }
     }

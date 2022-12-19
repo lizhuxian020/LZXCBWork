@@ -52,4 +52,6 @@ pod 'UMDevice'
 
 pod 'QFDatePicker'
 
+pod 'MQTTClient', '0.15.3'
+
 end
