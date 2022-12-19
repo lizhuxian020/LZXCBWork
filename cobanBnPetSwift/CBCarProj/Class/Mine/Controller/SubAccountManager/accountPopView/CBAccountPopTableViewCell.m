@@ -75,8 +75,8 @@
         [_deviceImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(self);
             make.left.equalTo(self.pickBtn.mas_right).with.offset(20 * KFitWidthRate);
-            make.height.mas_equalTo(image.size.height * KFitHeightRate);
-            make.width.mas_equalTo(image.size.width * KFitWidthRate);
+            make.height.mas_equalTo(image.size.height);
+            make.width.mas_equalTo(image.size.width);
         }];
     }
     return _deviceImageView;
@@ -87,7 +87,7 @@
         [self addSubview: _deviceNameLabel];
         [_deviceNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(self).with.offset(-9 * KFitHeightRate);
-            make.left.equalTo(self.deviceImageView.mas_right).with.offset(45 * KFitWidthRate);
+            make.left.equalTo(self.deviceImageView.mas_right).with.offset(15 * KFitWidthRate);
             make.height.mas_equalTo(15 * KFitHeightRate);
             make.width.mas_equalTo(85 * KFitWidthRate);
         }];
@@ -100,7 +100,7 @@
         [self addSubview: _deviceStatusLabel];
         [_deviceStatusLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(self).with.offset(9 * KFitHeightRate);
-            make.left.equalTo(self.deviceImageView.mas_right).with.offset(45 * KFitWidthRate);
+            make.left.equalTo(self.deviceImageView.mas_right).with.offset(15 * KFitWidthRate);
             make.height.mas_equalTo(15 * KFitHeightRate);
             make.width.mas_equalTo(110 * KFitWidthRate);
         }];
@@ -109,14 +109,14 @@
 }
 - (UIImageView *)rightBtnImageView {
     if (!_rightBtnImageView) {
-        UIImage *rightImage = [UIImage imageNamed:@"左边-三角"];
+        UIImage *rightImage = [UIImage imageNamed:@"查看"];
         _rightBtnImageView = [[UIImageView alloc] initWithImage: rightImage];
         [self addSubview: _rightBtnImageView];
         [_rightBtnImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(self);
             make.right.equalTo(self).with.offset(-10 * KFitWidthRate);
-            make.height.mas_equalTo(rightImage.size.height * KFitHeightRate);
-            make.width.mas_equalTo(rightImage.size.width * KFitHeightRate);
+            make.height.mas_equalTo(rightImage.size.height);
+            make.width.mas_equalTo(rightImage.size.width);
         }];
     }
     return _rightBtnImageView;
@@ -129,8 +129,8 @@
         [_warmedImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(self);
             make.right.mas_equalTo(self.rightBtnImageView.mas_left).offset(-15*KFitWidthRate);
-            make.height.mas_equalTo(rightImage.size.height * KFitHeightRate);
-            make.width.mas_equalTo(rightImage.size.width * KFitHeightRate);
+            make.height.mas_equalTo(rightImage.size.height);
+            make.width.mas_equalTo(rightImage.size.width);
         }];
         _warmedImageView.hidden = YES;
     }
@@ -147,56 +147,19 @@
     _deviceInfoModel = deviceInfoModel;
     if (deviceInfoModel) {
         UIImage *image = nil;
-        if ([deviceInfoModel.online isEqualToString:@"1"]) {
-            // 1 在线
-            if ([deviceInfoModel.warmed isEqualToString:@"1"]) {
-                // 1 报警
-                self.warmedImageView.hidden = NO;
-                image = [CBCommonTools returnDeveceListImageStr:deviceInfoModel.icon isOnline:deviceInfoModel.online isWarmed:deviceInfoModel.warmed];
-                self.deviceImageView.image = image;
-                [self.deviceImageView mas_updateConstraints:^(MASConstraintMaker *make) {
-                    make.centerY.equalTo(self);
-                    make.left.equalTo(self.pickBtn.mas_right).with.offset(20 * KFitWidthRate);
-                    make.height.mas_equalTo(image.size.height * KFitHeightRate);
-                    make.width.mas_equalTo(image.size.width * KFitWidthRate);
-                }];
-            } else {
-                // 0或nil 未报警
-                self.warmedImageView.hidden = YES;
-                image = [CBCommonTools returnDeveceListImageStr:deviceInfoModel.icon isOnline:deviceInfoModel.online isWarmed:deviceInfoModel.warmed];
-                self.deviceImageView.image = image;
-                [self.deviceImageView mas_updateConstraints:^(MASConstraintMaker *make) {
-                    make.centerY.equalTo(self);
-                    make.left.equalTo(self.pickBtn.mas_right).with.offset(20 * KFitWidthRate);
-                    make.height.mas_equalTo(image.size.height * KFitHeightRate);
-                    make.width.mas_equalTo(image.size.width * KFitWidthRate);
-                }];
-            }
-        } else {
-            // 0 离线
-            self.warmedImageView.hidden = YES;
-            if ([deviceInfoModel.warmed isEqualToString:@"1"]) {
-                // 1 报警
-                self.warmedImageView.hidden = NO;
-                image = [CBCommonTools returnDeveceListImageStr:deviceInfoModel.icon isOnline:deviceInfoModel.online isWarmed:deviceInfoModel.warmed];
-                self.deviceImageView.image = image;
-                [self.deviceImageView mas_updateConstraints:^(MASConstraintMaker *make) {
-                    make.centerY.equalTo(self);
-                    make.left.equalTo(self.pickBtn.mas_right).with.offset(20 * KFitWidthRate);
-                    make.height.mas_equalTo(image.size.height * KFitHeightRate);
-                    make.width.mas_equalTo(image.size.width * KFitWidthRate);
-                }];
-            } else {
-                image = [CBCommonTools returnDeveceListImageStr:deviceInfoModel.icon isOnline:deviceInfoModel.online isWarmed:deviceInfoModel.warmed];
-                self.deviceImageView.image = image;
-                [self.deviceImageView mas_updateConstraints:^(MASConstraintMaker *make) {
-                    make.centerY.equalTo(self);
-                    make.left.equalTo(self.pickBtn.mas_right).with.offset(20 * KFitWidthRate);
-                    make.height.mas_equalTo(image.size.height * KFitHeightRate);
-                    make.width.mas_equalTo(image.size.width * KFitWidthRate);
-                }];
-            }
+        self.warmedImageView.hidden = YES;
+        if ([deviceInfoModel.warmed isEqualToString:@"1"]) {
+            // 1 报警
+            self.warmedImageView.hidden = NO;
         }
+        image = [CBCommonTools returnDeveceListImageStr:deviceInfoModel.icon isOnline:deviceInfoModel.online isWarmed:deviceInfoModel.warmed];
+        self.deviceImageView.image = image;
+        [self.deviceImageView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(self);
+            make.left.equalTo(self.pickBtn.mas_right).with.offset(20 * KFitWidthRate);
+            make.height.mas_equalTo(image.size.height);
+            make.width.mas_equalTo(image.size.width);
+        }];
         
         _deviceNameLabel.text = deviceInfoModel.name?:@"";
         if ([deviceInfoModel.devStatus isEqualToString:@"0"]) {

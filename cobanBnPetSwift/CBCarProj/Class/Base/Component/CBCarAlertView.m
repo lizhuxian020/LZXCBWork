@@ -9,6 +9,7 @@
 #import "CBCarAlertView.h"
 #import "CBAlertSelectableView.h"
 #import "MINPickerView.h"
+#import "CBManagerAccountPopView.h"
 
 @interface __AlertDelegate : NSObject<UITextFieldDelegate>
 
@@ -317,6 +318,29 @@
         NSLog(@"---seleted: %@", arrayData[index]);
         confirmBlk(arrayData[index]);
         [wpopView dismiss];
+    }];
+    [alertView setDidClickCancel:^{
+        [wpopView dismiss];
+    }];
+    return popView;
+}
+
++ (CBBasePopView *)viewWithSubAccountAuthConfig:(UIView *)contentView
+                                        confrim:(void(^)(NSString *contentStr))confirmBlk {
+    
+    CBAlertBaseView *alertView = [[CBAlertBaseView alloc] initWithContentView:contentView title:Localized(@"权限设置")];
+    
+    [contentView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.height.equalTo(@400);
+    }];
+    
+    CBBasePopView *popView = [[CBBasePopView alloc] initWithContentView:alertView];
+    __weak CBBasePopView *wpopView = popView;
+    [alertView setDidClickConfirm:^{
+        [wpopView dismiss];
+        if (confirmBlk) {
+            confirmBlk(@"");
+        }
     }];
     [alertView setDidClickCancel:^{
         [wpopView dismiss];

@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CBAccountPopHeadView : UITableViewHeaderFooterView
 @property (nonatomic,strong) CBHomeLeftMenuDeviceGroupModel *deviceGoupModel;
-@property (nonatomic,copy) void(^headClickBlock)(id objc);
+@property (nonatomic,copy) void(^headClickBlock)(id __nullable objc);
 @end
 
 NS_ASSUME_NONNULL_END

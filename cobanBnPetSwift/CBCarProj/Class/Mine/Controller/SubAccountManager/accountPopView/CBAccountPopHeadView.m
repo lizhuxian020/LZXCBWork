@@ -143,7 +143,7 @@
     self.deviceGoupModel.isShow = !self.deviceGoupModel.isShow;
     self.btnArrow.selected = self.deviceGoupModel.isShow;
     if (self.headClickBlock) {
-        self.headClickBlock(@"");
+        self.headClickBlock(nil);
     }
 }
 - (void)setDeviceGoupModel:(CBHomeLeftMenuDeviceGroupModel *)deviceGoupModel {

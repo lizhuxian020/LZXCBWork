@@ -316,6 +316,10 @@
         if (weakSelf.dataArr.count > indexPath.row) {
             SubAccountModel *model = weakSelf.dataArr[indexPath.row];
             [weakSelf.accountPopView popView:model];
+            
+            [[CBCarAlertView viewWithSubAccountAuthConfig:weakSelf.accountPopView confrim:^(NSString * _Nonnull contentStr) {
+                [weakSelf.accountPopView certain];
+            }] pop];
         }
     }];
     if (self.dataArr.count > indexPath.row) {

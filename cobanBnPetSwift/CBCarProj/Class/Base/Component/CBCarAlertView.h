@@ -56,6 +56,8 @@ NS_ASSUME_NONNULL_BEGIN
                             initText:(NSString *)text
                              confrim:(void(^)(NSString *contentStr))confirmBlk;
 
++ (CBBasePopView *)viewWithSubAccountAuthConfig:(UIView *)contentView
+                                        confrim:(void(^)(NSString *contentStr))confirmBlk;
 
 @end
 

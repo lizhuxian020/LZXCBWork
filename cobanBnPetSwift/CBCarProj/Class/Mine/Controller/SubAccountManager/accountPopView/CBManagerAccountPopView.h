@@ -22,8 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,weak) id<CBManagerAccountPopViewDelegate> delegate;
 @property (nonatomic,copy) void(^popViewBlock)(id objc);
 - (void)popView:(SubAccountModel *)subDeviceModel;//弹出视图
-- (void)dismiss;//隐藏视图
-
+- (void)certain;
 @end
 
 NS_ASSUME_NONNULL_END

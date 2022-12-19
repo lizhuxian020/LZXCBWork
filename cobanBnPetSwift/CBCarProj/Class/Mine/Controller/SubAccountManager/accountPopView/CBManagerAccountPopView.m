@@ -48,52 +48,26 @@ static NSString *AccountPopViewHeadViewIndentifer = @"AccountPopViewHeadViewInde
     return self;
 }
 - (void)setupView {
-    self.backgroundColor = [UIColor colorWithHexString:@"#000000" alpha:0.5];
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(taphandle:)];
-    [self addGestureRecognizer:tap];
-    tap.delegate = self;
     
     [self bgmView];
-    [self titleTopLb];
     [self titlePickDeviceLb];
-
-    [self certainBtn];
     [self lookatBtn];
     [self controlBtn];
     [self deviceLb];
     [self titlePickedDeviceLb];
-    
+
     [self deviceTableView];
 }
 - (UIView *)bgmView {
     if (!_bgmView) {
         _bgmView = [UIView new];
         _bgmView.backgroundColor = [UIColor whiteColor];
-        _bgmView.layer.masksToBounds = YES;
-        _bgmView.layer.cornerRadius = 6*frameSizeRate;
         [self addSubview:_bgmView];
         [_bgmView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.mas_equalTo(30*frameSizeRate);
-            make.right.mas_equalTo(-30*frameSizeRate);
-            make.centerY.mas_equalTo(self.mas_centerY);
-            make.height.mas_equalTo(400);
+            make.edges.equalTo(@0);
         }];
     }
     return _bgmView;
-}
-- (UILabel *)titleTopLb {
-    if (!_titleTopLb) {
-        _titleTopLb = [MINUtils createLabelWithText:Localized(@"权限设置")size:18 alignment: NSTextAlignmentCenter textColor:kRGB(51, 51, 51)];
-        _titleTopLb.numberOfLines = 0;
-        _titleTopLb.textColor = UIColor.blackColor;
-        _titleTopLb.font = [UIFont systemFontOfSize:18];
-        [self.bgmView addSubview:_titleTopLb];
-        [_titleTopLb mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(self.bgmView.mas_top).offset(15*KFitHeightRate);
-            make.centerX.equalTo(self.bgmView);
-        }];
-    }
-    return _titleTopLb;
 }
 - (UILabel *)titlePickDeviceLb {
     if (!_titlePickDeviceLb) {
@@ -103,28 +77,11 @@ static NSString *AccountPopViewHeadViewIndentifer = @"AccountPopViewHeadViewInde
         _titlePickDeviceLb.font = [UIFont systemFontOfSize:16];
         [self.bgmView addSubview:_titlePickDeviceLb];
         [_titlePickDeviceLb mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(self.titleTopLb.mas_bottom).offset(20*KFitHeightRate);
+            make.top.equalTo(@(20*KFitHeightRate));
             make.left.mas_equalTo(self.bgmView.mas_left).offset(15*KFitWidthRate);
         }];
     }
     return _titlePickDeviceLb;
-}
-- (UIButton *)certainBtn {
-    if (!_certainBtn) {
-        _certainBtn = [MINUtils createNoBorderBtnWithTitle:Localized(@"确定") titleColor: [UIColor whiteColor] fontSize: 15 * KFitWidthRate backgroundColor: kBlueColor];
-        _certainBtn.layer.masksToBounds = YES;
-        _certainBtn.layer.cornerRadius = 4;
-        _certainBtn.titleLabel.font = [UIFont systemFontOfSize:15];
-        [_certainBtn addTarget:self action:@selector(certain) forControlEvents:UIControlEventTouchUpInside];
-        [self.bgmView addSubview:_certainBtn];
-        [_certainBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.bgmView.mas_left).offset(10);
-            make.right.equalTo(self.bgmView.mas_right).offset(-10);
-            make.bottom.mas_equalTo(self.bgmView.mas_bottom).offset(-10);
-            make.height.mas_equalTo(45);
-        }];
-    }
-    return _certainBtn;
 }
 - (UIButton *)lookatBtn {
     if (!_lookatBtn) {
@@ -146,7 +103,7 @@ static NSString *AccountPopViewHeadViewIndentifer = @"AccountPopViewHeadViewInde
         [self.bgmView addSubview:_lookatBtn];
         [_lookatBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.mas_equalTo(self.bgmView.mas_centerX).offset(-15*KFitWidthRate);
-            make.bottom.mas_equalTo(self.certainBtn.mas_top).offset(-10);
+            make.bottom.mas_equalTo(self.bgmView.mas_bottom).offset(-10);
             make.height.mas_equalTo(40);
             //make.size.mas_equalTo(CGSizeMake(75*KFitWidthRate, 40));
         }];
@@ -172,7 +129,7 @@ static NSString *AccountPopViewHeadViewIndentifer = @"AccountPopViewHeadViewInde
         [self.bgmView addSubview:_controlBtn];
         [_controlBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(self.bgmView.mas_centerX).offset(15*KFitWidthRate);
-            make.bottom.mas_equalTo(self.certainBtn.mas_top).offset(-10);
+            make.bottom.mas_equalTo(self.bgmView.mas_bottom).offset(-10);
             make.height.mas_equalTo(40);
             //make.size.mas_equalTo(CGSizeMake(75*KFitWidthRate, 40));
         }];
@@ -251,28 +208,12 @@ static NSString *AccountPopViewHeadViewIndentifer = @"AccountPopViewHeadViewInde
     return _arrayDataSection;
 }
 - (void)popView:(SubAccountModel *)subDeviceModel {
-    [[UIApplication sharedApplication].keyWindow addSubview:self];
     [self getDeviceListRequest:subDeviceModel];
-}
-- (void)dismiss {
-    [self removeFromSuperview];
 }
 - (void)certain {
     if (self.popViewBlock) {
         self.popViewBlock(self.arrayDataSection);
     }
-    [self removeFromSuperview];
-}
-#pragma mark -------------- 手势代理方法
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
-    if (CGRectContainsPoint(self.bgmView.frame, [gestureRecognizer locationInView:self]) ) {
-        return NO;
-    } else {
-        return YES;
-    }
-}
-- (void)taphandle:(UITapGestureRecognizer*)sender {
-    [self dismiss];
 }
 - (void)selectAuthBtnClick:(UIButton *)sender {
     if (sender == self.lookatBtn) {
@@ -321,34 +262,40 @@ static NSString *AccountPopViewHeadViewIndentifer = @"AccountPopViewHeadViewInde
             for (CBHomeLeftMenuDeviceGroupModel *deviceGoupModel in self.arrayDataSection) {
                 if (deviceGoupModel.noGroup) {
                     deviceGoupModel.isCheck = YES;
+                    BOOL hasCheck = NO;
                     for (CBHomeLeftMenuDeviceInfoModel *model in deviceGoupModel.noGroup) {
                         NSLog(@"设备列表设备ID%@  子账号设备ID%@",model.ids,modelSubDevice.deviceId);
                         if ([model.ids isEqualToString:modelSubDevice.deviceId]) {
                             model.isCheck = YES;
+                            hasCheck = YES;
                         }
-                        if (!model.isCheck) {
-                            deviceGoupModel.isCheck = NO;
-                        }
+//                        if (!model.isCheck) {
+//                            deviceGoupModel.isCheck = NO;
+//                        }
                     };
-                    // 分组下设备书为0，状态为不选中
-                    if (deviceGoupModel.noGroup.count == 0) {
-                        deviceGoupModel.isCheck = NO;
-                    }
+                    deviceGoupModel.isCheck = hasCheck;
+//                    // 分组下设备书为0，状态为不选中
+//                    if (deviceGoupModel.noGroup.count == 0) {
+//                        deviceGoupModel.isCheck = NO;
+//                    }
                 } else {
                     deviceGoupModel.isCheck = YES;
+                    BOOL hasCheck = NO;
                     for (CBHomeLeftMenuDeviceInfoModel *model in deviceGoupModel.device) {
                         NSLog(@"设备列表设备ID%@  子账号设备ID%@",model.ids,modelSubDevice.deviceId);
                         if ([model.ids isEqualToString:modelSubDevice.deviceId]) {
                             model.isCheck = YES;
+                            hasCheck = YES;
                         }
-                        if (!model.isCheck) {
-                            deviceGoupModel.isCheck = NO;
-                        }
+//                        if (!model.isCheck) {
+//                            deviceGoupModel.isCheck = NO;
+//                        }
                     };
-                    // 分组下设备书为0，状态为不选中
-                    if (deviceGoupModel.device.count == 0) {
-                        deviceGoupModel.isCheck = NO;
-                    }
+                    deviceGoupModel.isCheck = hasCheck;
+//                    // 分组下设备书为0，状态为不选中
+//                    if (deviceGoupModel.device.count == 0) {
+//                        deviceGoupModel.isCheck = NO;
+//                    }
                 }
             }
         }
@@ -405,18 +352,18 @@ static NSString *AccountPopViewHeadViewIndentifer = @"AccountPopViewHeadViewInde
         __block typeof(CBHomeLeftMenuDeviceGroupModel *) weakModel = deveiceGroup;
         kWeakSelf(self);
         cell.cellClickBlock = ^(id  _Nonnull objc) {
-            weakModel.isCheck = YES;
+            weakModel.isCheck = NO;
             kStrongSelf(self);
             if (deveiceGroup.noGroup) {
                 for (CBHomeLeftMenuDeviceInfoModel *model in deveiceGroup.noGroup) {
-                    if (!model.isCheck) {
-                        weakModel.isCheck = NO;
+                    if (model.isCheck) {
+                        weakModel.isCheck = YES;
                     }
                 };
             } else {
                 for (CBHomeLeftMenuDeviceInfoModel *model in deveiceGroup.device) {
-                    if (!model.isCheck) {
-                        weakModel.isCheck = NO;
+                    if (model.isCheck) {
+                        weakModel.isCheck = YES;
                     }
                 };
             }
@@ -457,8 +404,12 @@ static NSString *AccountPopViewHeadViewIndentifer = @"AccountPopViewHeadViewInde
         kWeakSelf(self);
         CBHomeLeftMenuDeviceGroupModel *deviceGoupModel = self.arrayDataSection[section];
         homeSectionHeadView.deviceGoupModel = deviceGoupModel;
-        homeSectionHeadView.headClickBlock = ^(id  _Nonnull objc) {
+        homeSectionHeadView.headClickBlock = ^(id  __nullable objc) {
             kStrongSelf(self);
+            if (!objc) {
+                [self.deviceTableView reloadData];
+                return;
+            }
             if (deviceGoupModel.noGroup) {
                 if (deviceGoupModel.noGroup.count > 0) {
                     for (CBHomeLeftMenuDeviceInfoModel *model in deviceGoupModel.noGroup) {
