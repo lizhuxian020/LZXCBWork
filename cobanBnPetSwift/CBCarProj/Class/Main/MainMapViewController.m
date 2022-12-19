@@ -169,6 +169,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [AppDelegate isShowGoogle];
     [self requestUserData];
     [self checkNetWork];
+    [CBCarDeviceManager.shared requestDeviceData];
 }
 - (void)checkNetWork {
     kWeakSelf(self);

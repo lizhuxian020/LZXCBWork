@@ -401,6 +401,8 @@
     
     model.deviceName = self.currentModel.name;
     model.dno = self.currentModel.dno;
+    //新围栏, sn默认是当前时间戳
+    model.sn = [NSString stringWithFormat:@"%.0lf", NSDate.date.timeIntervalSince1970];
     vc.model = model;
     vc.isNewFence = YES;
     [self.navigationController pushViewController:vc animated:YES];

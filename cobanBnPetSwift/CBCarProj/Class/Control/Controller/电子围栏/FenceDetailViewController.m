@@ -188,7 +188,8 @@
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         if (isSucceed) {
-            [weakself.navigationController popViewControllerAnimated: YES];
+            [CBTopAlertView alertSuccess:Localized(@"操作成功")];
+            [weakself.navigationController popToRootViewControllerAnimated:YES];
         } else {
         }
     } failed:^(NSError *error) {
