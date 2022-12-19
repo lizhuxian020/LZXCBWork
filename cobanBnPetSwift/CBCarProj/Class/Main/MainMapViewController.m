@@ -152,6 +152,8 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 @property (nonatomic, strong) GMSCoordinateBounds *gmsBounds; //Google可见范围
 
 @property (nonatomic, strong) CBMQTTManager *mqttManger;
+
+@property (nonatomic, strong) NSMutableArray *baiduVisibleCoordinateArr;
 @end
 
 @implementation MainMapViewController
@@ -383,12 +385,13 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 }
 // 使百度地图展示完整的内容，位置位置并处于地图中心
 - (void)baiduMapFitFence:(NSArray *)modelArr {
-    MINCoordinateObject *firstModel = modelArr.firstObject;
-    BMKMapPoint firstPoint = BMKMapPointForCoordinate( firstModel.coordinate);
+    
     CGFloat leftX, leftY, rightX, rightY; // 最左或右边的X、Y
-    rightX = leftX = firstPoint.x;
-    rightY = leftY = firstPoint.y;
-    for (int i = 1; i < modelArr.count; i++) {
+    leftX = CGFLOAT_MAX;
+    leftY = CGFLOAT_MAX;
+    rightX = CGFLOAT_MIN;
+    rightY = CGFLOAT_MIN;
+    for (int i = 0; i < modelArr.count; i++) {
         MINCoordinateObject *model = modelArr[i];
         BMKMapPoint modelPoint = BMKMapPointForCoordinate( model.coordinate);
         if (modelPoint.x < leftX) {
@@ -397,17 +400,19 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         if (modelPoint.x > rightX) {
             rightX = modelPoint.x;
         }
-        if (modelPoint.y > leftY) {
+        if (modelPoint.y < leftY) {
             leftY = modelPoint.y;
         }
-        if (modelPoint.y < rightY) {
+        if (modelPoint.y > rightY) {
             rightY = modelPoint.y;
         }
     }
     BMKMapRect fitRect;
+    double width = rightX - leftX;
+    double height = rightY - leftY;
     fitRect.origin = BMKMapPointMake(leftX, leftY);
-    fitRect.size = BMKMapSizeMake(rightX - leftX, rightY - leftY);
-    [_baiduMapView setVisibleMapRect: fitRect];
+    fitRect.size = BMKMapSizeMake(width, height);
+    [_baiduMapView setVisibleMapRect: fitRect animated:YES];
     _baiduMapView.zoomLevel = _baiduMapView.zoomLevel - 0.3;
 }
 - (void)googleMapFitFence:(NSArray *)modelArr {
@@ -1709,6 +1714,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [self.googleMapView clear];
     self.googleMapView.selectedMarker = nil;
     self.gmsBounds = [[GMSCoordinateBounds alloc] init];
+    self.baiduVisibleCoordinateArr = [NSMutableArray new];
     for (CBHomeLeftMenuDeviceInfoModel *model in deviceData) {
         if ([model.dno isEqualToString:self.deviceInfoModelSelect.dno]) {
             // 选中设备添加围栏,百度地图添加围栏中心点会变
@@ -2000,7 +2006,8 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
             self.polygonCoordinateArr = [self getModelArr:dataString];
             if (self.baiduView.hidden == NO) {
                 [self addBaiduPolygon];
-                [self baiduMapFitFence: self.polygonCoordinateArr];
+                [self.baiduVisibleCoordinateArr addObjectsFromArray:self.polygonCoordinateArr];
+//                [self baiduMapFitFence: self.polygonCoordinateArr];
             } else {
                 [self addGooglePolygon];
                 [self googleMapFitFence: self.polygonCoordinateArr];
@@ -2031,7 +2038,8 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
             self.rectangleCoordinateArr = [self getModelArr:dataString];
             if (self.baiduView.hidden == NO) {
                 [self addBaiduRectangle];
-                [self baiduMapFitFence: self.rectangleCoordinateArr];
+                [self.baiduVisibleCoordinateArr addObjectsFromArray:self.rectangleCoordinateArr];
+//                [self baiduMapFitFence: self.rectangleCoordinateArr];
             }else {
                 [self addGoogleRectangle];
                 [self googleMapFitFence: self.rectangleCoordinateArr];
@@ -2054,7 +2062,9 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     } else {
         //更新中心位置
         CLLocationCoordinate2D coorData = CLLocationCoordinate2DMake(self.deviceInfoModelSelect.lat.doubleValue, self.deviceInfoModelSelect.lng.doubleValue);
-        [self.baiduMapView setCenterCoordinate:coorData animated: YES];
+//        [self.baiduMapView setCenterCoordinate:coorData animated: YES];
+        [self.baiduVisibleCoordinateArr addObject:[self getCoorObj:coorData]];
+        [self baiduMapFitFence:self.baiduVisibleCoordinateArr];
     }
 }
 #pragma mark -- UITabBarViewController delegate
@@ -2119,17 +2129,27 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     circ.strokeColor = [UIColor clearColor];
     circ.map = _googleMapView;
 }
+
+- (MINCoordinateObject *)getCoorObj:(CLLocationCoordinate2D)coor {
+    MINCoordinateObject *model = [MINCoordinateObject new];
+    model.coordinate = coor;
+    return model;
+}
 // 百度圆
 - (void)baiduMapFitCircleFence:(MINCoordinateObject *)model radius:(double)radius {
-    // 一个点的长度是0.870096
-    BMKMapPoint circlePoint = BMKMapPointForCoordinate(model.coordinate);
-    BMKMapRect fitRect;
-    double pointRadius = radius / 0.6;//0.870096;
-    fitRect.origin = BMKMapPointMake(circlePoint.x - pointRadius, circlePoint.y - pointRadius);
-    fitRect.size = BMKMapSizeMake(pointRadius * 2, pointRadius * 2);
-    [_baiduMapView setVisibleMapRect: fitRect];
-    //_baiduMapView.zoomLevel = 16;////_baiduMapView.zoomLevel - 0.3;
-    [_baiduMapView setCenterCoordinate:model.coordinate];
+//    // 一个点的长度是0.870096
+//    BMKMapPoint circlePoint = BMKMapPointForCoordinate(model.coordinate);
+    [self.baiduVisibleCoordinateArr addObject:[self getCoorObj:GMSGeometryOffset(model.coordinate, radius, 0)]];
+    [self.baiduVisibleCoordinateArr addObject:[self getCoorObj:GMSGeometryOffset(model.coordinate, radius, 90)]];
+    [self.baiduVisibleCoordinateArr addObject:[self getCoorObj:GMSGeometryOffset(model.coordinate, radius, 180)]];
+    [self.baiduVisibleCoordinateArr addObject:[self getCoorObj:GMSGeometryOffset(model.coordinate, radius, 270)]];
+//    BMKMapRect fitRect;
+//    double pointRadius = radius / 0.6;//0.870096;
+//    fitRect.origin = BMKMapPointMake(circlePoint.x - pointRadius, circlePoint.y - pointRadius);
+//    fitRect.size = BMKMapSizeMake(pointRadius * 2, pointRadius * 2);
+//    [_baiduMapView setVisibleMapRect: fitRect];
+//    //_baiduMapView.zoomLevel = 16;////_baiduMapView.zoomLevel - 0.3;
+//    [_baiduMapView setCenterCoordinate:model.coordinate];
 }
 - (void)addGoogleRectangle {
     MINCoordinateObject *firstObj = self.rectangleCoordinateArr.firstObject;
