@@ -7,17 +7,22 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CBMQTTCarDeviceModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CBCarDeviceManager : NSObject
 
-@property (nonatomic, strong) NSArray *deviceList;
+@property (nonatomic, strong) NSArray<CBHomeLeftMenuDeviceInfoModel *> *deviceDatas;
+@property (nonatomic, copy) void (^didUpdateDeviceData)(NSArray<CBHomeLeftMenuDeviceInfoModel *> *deviceDatas);
 
 + (instancetype)shared;
+- (void)requestDeviceData;
+
 
 - (id)getDevicePaoInfo;
 
+- (void)didGetMQTTDeviceModel:(CBMQTTCarDeviceModel *)model;
 @end
 
 NS_ASSUME_NONNULL_END

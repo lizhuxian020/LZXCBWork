@@ -13,4 +13,5 @@
 @property (nonatomic,copy) NSString *speed;
 @property (nonatomic,copy) NSString *warmed;
 @property (nonatomic,assign) BOOL isSelect;
+@property(nonatomic, copy) NSString *dno;
 @end

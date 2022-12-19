@@ -98,6 +98,26 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSArray<CBHomeLeftMenuDeviceInfoModelFenceModel *> *listFence;
 @property (nonatomic, copy) NSString *productSpecId;
 @property (nonatomic, copy) NSString *proto;
+
+
+//--------------------paopaoView相关
+/* Acc状态*/
+@property (nonatomic, copy) NSString *acc;
+/* 门状态*/
+@property (nonatomic, copy) NSString *door;
+/* 撤防，布防*/
+@property (nonatomic, copy) NSString *cfbf;
+/* 油量*/
+@property (nonatomic, copy) NSString *oil;
+/* 油量百分比 */
+@property (nonatomic, copy) NSString *oil_prop;
+/* 休眠模式 */
+@property (nonatomic, copy) NSString *restMod;
+@property(nonatomic, copy) NSString *battery;
+@property (nonatomic, copy) NSString *gps;
+@property (nonatomic, copy) NSString *gsm;
+@property (nonatomic, copy) NSString *warmType;
+@property (nonatomic, copy) NSString *address;
 @end
 
 @interface CBHomeLeftMenuDeviceInfoModelFenceModel : NSObject

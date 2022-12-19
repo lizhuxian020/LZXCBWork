@@ -762,43 +762,29 @@
     self.isAlertPaopaoView = NO;
     [self removeFromSuperview];
 }
-- (void)setDeviceInfoModel:(DeviceDetailModel *)deviceInfoModel {
+- (void)setDeviceInfoModel:(CBHomeLeftMenuDeviceInfoModel *)deviceInfoModel {
     _deviceInfoModel = deviceInfoModel;
-    if (deviceInfoModel) {
-        _titleLabel.text = [NSString stringWithFormat:@"%@",kStringIsEmpty(deviceInfoModel.carNum)?Localized(@"未知"):deviceInfoModel.name];
+    if (_deviceInfoModel) {
+        _titleLabel.text = [NSString stringWithFormat:@"%@",kStringIsEmpty(_deviceInfoModel.carNum)?Localized(@"未知"):_deviceInfoModel.name];
         
-        _lngLb.attributedText = [self getAttStr:Localized(@"经纬度:") content:[NSString stringWithFormat:@"%@, %@", deviceInfoModel.lng, deviceInfoModel.lat]];
-        //TODO: LZXTODO由于首页只有getDevData，里面没有devStatus字段，只有getMyDeviceList接口才有这个字段
+        _lngLb.attributedText = [self getAttStr:Localized(@"经纬度:") content:[NSString stringWithFormat:@"%@, %@", _deviceInfoModel.lng, _deviceInfoModel.lat]];
+        
         _statusLb.attributedText = [self getAttStr:Localized(@"状态:")
                                            content:
-                                    deviceInfoModel.status.intValue==1?@"行驶中":
-                                    deviceInfoModel.status.intValue==2?@"静止":@"未知"];
-        if ([[self returnStatus:self.deviceInfoModel.cfbf] isEqualToString:Localized(@"关")] ||
-            [[self returnStatus:self.deviceInfoModel.cfbf] isEqualToString:Localized(@"未知")]) {
-//            _bfLb.text = [NSString stringWithFormat:@"%@:%@",Localized(@"布防"),Localized(@"关")];
-//            _cfLb.text = [NSString stringWithFormat:@"%@:%@",Localized(@"撤防"),Localized(@"开")];
-            _cfLb.attributedText = [self getAttStr:Localized(@"设备:") content:Localized(@"撤防")];
-        } else {
-//            _bfLb.text = [NSString stringWithFormat:@"%@:%@",Localized(@"布防"),Localized(@"开")];
-//            _cfLb.text = [NSString stringWithFormat:@"%@:%@",Localized(@"撤防"),Localized(@"关")];
-            _cfLb.attributedText = [self getAttStr:Localized(@"设备:") content:Localized(@"布防")];
-        }
-//        _accLb.text = [NSString stringWithFormat:@"%@%@",Localized(@"ACC状态:"),[self returnStatus:deviceInfoModel.acc]];
-        _accLb.attributedText = [self getAttStr:Localized(@"ACC状态:") content:[self returnStatus:deviceInfoModel.acc]];
-//        _doorLb.text = [NSString stringWithFormat:@"%@%@",Localized(@"门状态:"),[self returnStatus:deviceInfoModel.door]];
-        _doorLb.attributedText = [self getAttStr:Localized(@"门状态:") content:[self returnStatus:deviceInfoModel.door]];
-        _electriLb.attributedText = [self getAttStr:Localized(@"电量:") content:@"0"];
-//        _oilLb.text = [NSString stringWithFormat:@"%@%@L  %@%@",Localized(@"油量"),deviceInfoModel.oil,deviceInfoModel.oil_prop,@"%"];
-        _oilLb.attributedText = [self getAttStr:Localized(@"油量:") content:[NSString stringWithFormat:@"%@L %@%@",deviceInfoModel.oil,deviceInfoModel.oil_prop,@"%"]];
-//        _sleepModelLb.text = [NSString stringWithFormat:@"%@:%@",Localized(@"休眠模式"),[self returnSleepModel:deviceInfoModel.restMod]];
-        _sleepModelLb.attributedText = [self getAttStr:Localized(@"休眠模式:") content:[self returnSleepModel:deviceInfoModel.restMod]];
-//        _gsmNumberLb.text = [NSString stringWithFormat:@"GSM:%@",deviceInfoModel.gsm?:@"0"];
+                                    _deviceInfoModel.devStatus.intValue==1?@"行驶中":
+                                    _deviceInfoModel.devStatus.intValue==2?@"静止":@"未启用"];
+        _cfLb.attributedText = [self getAttStr:Localized(@"设备:")
+                                       content:
+                                _deviceInfoModel.cfbf.intValue == 0 ? Localized(@"撤防") : Localized(@"布防")];
+        _accLb.attributedText = [self getAttStr:Localized(@"ACC状态:") content:[self returnStatus:_deviceInfoModel.acc]];
+        _doorLb.attributedText = [self getAttStr:Localized(@"门状态:") content:[self returnStatus:_deviceInfoModel.door]];
+        _electriLb.attributedText = [self getAttStr:Localized(@"电量:") content:_deviceInfoModel.battery  ? [_deviceInfoModel.battery stringByAppendingString:@"%"] : @"0%"];
+        _oilLb.attributedText = [self getAttStr:Localized(@"油量:") content:[NSString stringWithFormat:@"%@L %@%@",_deviceInfoModel.oil,_deviceInfoModel.oil_prop,@"%"]];
+
+        _sleepModelLb.attributedText = [self getAttStr:Localized(@"休眠模式:") content:[self returnSleepModel:_deviceInfoModel.restMod]];
         _gsmNumberLb.attributedText = [self getAttStr:@"GSM:" content:deviceInfoModel.gsm.intValue >= 15 ? Localized(@"强") : Localized(@"弱")];
-//        _gpsNumberLb.text = [NSString stringWithFormat:@"GPS:%@%@",deviceInfoModel.gps?:@"",Localized(@"颗")];
         _gpsNumberLb.attributedText = [self getAttStr:@"GPS:" content:[NSString stringWithFormat:@"%@",(deviceInfoModel.gps.intValue >= 4 ? Localized(@"强") : Localized(@"弱"))]];
         _reportLb.attributedText = [self getAttStr:Localized(@"上报策略:") content:@"xxx"];
-//        _warmTypeLb.text = [NSString stringWithFormat: @"%@%@",Localized(@"报警类型:"), warmTypeStr];
-        
         NSArray *arrayWarmType = [deviceInfoModel.warmType componentsSeparatedByString:@","];
         NSMutableArray *arrTemp = [NSMutableArray array];
         if (arrayWarmType.count > 0) {
@@ -811,77 +797,9 @@
         NSString *warmTypeStr = [arrTemp componentsJoinedByString:@","];
         _warmTypeLb.attributedText = [self getAttStr:Localized(@"报警类型:") content:warmTypeStr contentColor:UIColor.redColor];
         
-//        _timeLb.text = [NSString stringWithFormat:@"%@%@",Localized(@"上报时间:"),createTimeStr];
-        
         NSString *createTimeStr = [Utils convertTimeWithTimeIntervalString:deviceInfoModel.createTime?:@"" timeZone:deviceInfoModel.timeZone?:@""];
         _timeLb.attributedText = [self getAttStr:Localized(@"上报时间:") content:createTimeStr];
-        
-//        _addressLabel.text = [NSString stringWithFormat:@"%@%@",Localized(@"地址:"),deviceInfoModel.address?:@"未知"];
         _addressLabel.attributedText = [self getAttStr:Localized(@"地址:") content:deviceInfoModel.address?:@"未知"];
-//        _latLb.text = [NSString stringWithFormat:@"%@%@",Localized(@"纬度:"),deviceInfoModel.lat];
-//        _speedLb.text = [NSString stringWithFormat:@"%@%@km/h",Localized(@"速度:"),deviceInfoModel.speed];
-//        if ([deviceInfoModel.online isEqualToString:@"1"]) {
-//            _offlineTimeLb.text = [NSString stringWithFormat: @"%@ %@",Localized(@"离线时长:"), @"0"];
-//        } else {
-//            NSString *createTimeStr = [Utils convertTimeWithTimeIntervalString:deviceInfoModel.createTime?:@"" timeZone:deviceInfoModel.timeZone?:@""];
-//            NSDateFormatter *formatter = [NSDateFormatter alloc].init;
-//            [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//            NSString *cTime = [CBCommonTools timeStrConvertTimeInteral:createTimeStr formatter:formatter];
-//
-//            double offLineTime = [CBCommonTools getCurrentTimeString].doubleValue - cTime.doubleValue;
-//            NSArray *timeArray = [CBCommonTools getDetailTimeWithTimestamp:offLineTime];
-//            NSNumber *dayStr = timeArray[0];
-//            NSNumber *hourStr = timeArray[1];
-//            NSNumber *minuteStr = timeArray[2];
-//            NSNumber *secondStr = timeArray[3];
-//            NSString *timeStr = @"";
-//            timeStr = [NSString stringWithFormat:@"%@ %@ %@ %@",dayStr.integerValue == 0?@"":[NSString stringWithFormat:@"%@%@",dayStr,Localized(@"天")],hourStr.integerValue == 0?@"":[NSString stringWithFormat:@"%@%@",hourStr,Localized(@"时")],minuteStr.integerValue == 0?@"":[NSString stringWithFormat:@"%@%@",minuteStr,Localized(@"分")],secondStr.integerValue == 0?@"":[NSString stringWithFormat:@"%@%@",secondStr,Localized(@"秒")]];
-//            _offlineTimeLb.text = [NSString stringWithFormat: @"%@ %@",Localized(@"离线时长:"), timeStr];
-//        }
-//
-//        _stayTimeLb.text = [NSString stringWithFormat: @"%@: %@",Localized(@"停留时间"), deviceInfoModel.remainTime?:@":0分"];
-//        _stayCountLb.text = [NSString stringWithFormat: @"%@: %@%@",Localized(@"停留次数"), deviceInfoModel.remainCount?:@"0",Localized(@"次")];
-        
-        
-        
-//        _mileageLb.text = [NSString stringWithFormat:@"%@%@km",Localized(@"当天里程:"),deviceInfoModel.mileage?:@"0"];
-//
-//        if ([[self returnStatus:self.deviceInfoModel.powerType] isEqualToString:Localized(@"关")] ||
-//            [[self returnStatus:self.deviceInfoModel.powerType] isEqualToString:Localized(@"未知")]) {
-//            _inElectriLb.text = [NSString stringWithFormat:@"%@%@",Localized(@"内电:"),Localized(@"关")];
-//            _outElectriLb.text = [NSString stringWithFormat:@"%@%@",Localized(@"外电:"),Localized(@"开")];
-//        } else {
-//            _inElectriLb.text = [NSString stringWithFormat:@"%@%@",Localized(@"内电:"),Localized(@"开")];
-//            _outElectriLb.text = [NSString stringWithFormat:@"%@%@",Localized(@"外电:"),Localized(@"关")];
-//        }
-//
-        
-//
-//        _lowElectricWarmLb.text = [NSString stringWithFormat:@"%@:%@",Localized(@"低电报警"),[self returnStatus:deviceInfoModel.warmDiDian]];
-//        _mqWarmLb.text = [NSString stringWithFormat:@"%@:%@",Localized(@"盲区报警"),[self returnStatus:deviceInfoModel.warnBlind]];
-//        _ddWarmLb.text = [NSString stringWithFormat:@"%@:%@",Localized(@"掉电报警"),[self returnStatus:deviceInfoModel.warmDiaoDian]];
-//        _overSpeedWarmLb.text = [NSString stringWithFormat:@"%@:%@",Localized(@"超速报警"),[self returnStatus:deviceInfoModel.warmSpeed]];
-//        _zdWarmLb.text = [NSString stringWithFormat:@"%@:%@",Localized(@"振动报警"),[self returnStatus:deviceInfoModel.warmZD]];
-//        _yljcWarmLb.text = [NSString stringWithFormat:@"%@:%@",Localized(@"油量检测报警"),[self returnStatus:deviceInfoModel.oilCheckWarn]];
-//        _gpsDriftLb.text = [NSString stringWithFormat:@"%@%@",Localized(@"GPS漂移抑制:"),[self returnStatus:deviceInfoModel.gpsFloat]];
-//
-//        _ydControlLb.text = [NSString stringWithFormat:@"%@%@",Localized(@"油电控制:"),[self returnDyddStatus:deviceInfoModel.dydd]];
-//        _vibrationLb.text = [NSString stringWithFormat:@"%@:%@",Localized(@"振动灵敏度"),[self returnSensitivity:deviceInfoModel.sensitivity]];
-//        _accNoticeLb.text = [NSString stringWithFormat:@"%@:%@",Localized(@"Acc工作通知"),[self returnStatus:deviceInfoModel.accNotice?:@""]];
-//        _timeZone.text = [NSString stringWithFormat:@"%@%@",Localized(@"终端时区:"),deviceInfoModel.timeZone];
-//
-
-        
-        
-//
-      
-        
-
-        
-//
-        
-        
-        
     }
 }
 
@@ -947,56 +865,38 @@
     } else if ([str isEqualToString:@"5"]) {
         return Localized(@"深度振动+定时报告休眠");
     }
-    return @"未知";
+    return Localized(@"未知");
 }
 - (NSString *)returnWarmDescriptionType:(NSString *)status {
-    switch (status.integerValue) {
-        case 0:
-            return Localized(@"sos");
-            break;
-        case 1:
-            return Localized(@"超速");
-            break;
-        case 2:
-            return Localized(@"疲劳");
-            break;
-        case 7:
-            return Localized(@"低电");
-            break;
-        case 8:
-            return Localized(@"掉电");
-            break;
-        case 12:
-            return Localized(@"振动");
-            break;
-        case 15:
-            return Localized(@"位移");
-            break;
-        case 16:
-            return Localized(@"点火");
-            break;
-        case 17:
-            return Localized(@"开门");
-            break;
-        case 20:
-            return @"";//Localized(@"进出区域");
-            break;
-        case 25:
-            return Localized(@"偷油漏油");
-            break;
-        case 27:
-            return Localized(@"碰撞");
-            break;
-        case 32:
-            return Localized(@"出围栏");
-            break;
-        case 33:
-            return Localized(@"进围栏");
-        break;
-        default:
-            return Localized(@"未知");
-            break;
-    }
+    NSDictionary *dic = @{
+    @"0":Localized(@"SOS报警"),
+    @"1":Localized(@"超速报警"),
+    @"2":Localized(@"疲劳驾驶"),
+    @"3":Localized(@"未按时到家"),
+    @"4":Localized(@"GNSS发生故障"),
+    @"5":Localized(@"GNSS天线被剪或未接"),
+    @"6":Localized(@"轮动报警"),
+    @"7":Localized(@"低电报警"),
+    @"8":Localized(@"外电断电报警"),
+    @"9":Localized(@"区域超速报警"),
+    @"10":Localized(@"拆除报警"),
+    @"11":Localized(@"摄像头故障"),
+    @"12":Localized(@"震动报警"),
+    @"13":Localized(@"超速报警"),
+    @"14":Localized(@"疲劳驾驶报警"),
+    @"15":Localized(@"非法移位报警"),
+    @"16":Localized(@"非法点火报警"),
+    @"17":Localized(@"非法开门报警"),
+    @"18":Localized(@"当天累计驾驶超时报警"),
+    @"25":Localized(@"偷油/漏油报警"),
+    @"26":Localized(@"温度异常报警"),
+    @"27":Localized(@"碰撞报警"),
+    @"28":Localized(@"侧翻报警"),
+    @"32":Localized(@"出围栏报警"),
+    @"33":Localized(@"入围栏报警"),
+    };
+
+    return dic[status] ?: Localized(@"未知");
 }
 //#pragma mark -- UIGestureRecognizer
 //- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {

@@ -11,4 +11,5 @@
 @property (nonatomic,strong) UIImage *icon;
 @property (nonatomic,copy) NSString *warmed;
 @property (nonatomic,assign) BOOL isSelect;
+@property(nonatomic, copy) NSString *dno;
 @end

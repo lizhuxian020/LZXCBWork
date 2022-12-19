@@ -9,6 +9,8 @@
 #import "CBMQTTManager.h"
 #import <MQTTClient/MQTTClient.h>
 
+
+
 @implementation MQTTClientModel
 
 @end
@@ -121,6 +123,7 @@
 - (void)newMessage:(MQTTSession *)session data:(NSData *)data onTopic:(NSString *)topic qos:(MQTTQosLevel)qos retained:(BOOL)retained mid:(unsigned int)mid {
     
     NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
+    NSLog(@"--lzx mqtt newMessage: %@", dic);
     if (self.receivedMessageBlock) {
         self.receivedMessageBlock(dic);
     }

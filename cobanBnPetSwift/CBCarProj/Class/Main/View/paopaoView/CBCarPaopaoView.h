@@ -33,7 +33,7 @@ typedef enum : NSInteger {
 
 @property (nonatomic,copy) void (^clickBlock)(CBCarPaopaoViewClickType type, id obj);
 @property (nonatomic, copy) void (^didClickMove)(NSString *moveStr);
-@property (nonatomic,strong) DeviceDetailModel *deviceInfoModel;
+@property (nonatomic,strong) CBHomeLeftMenuDeviceInfoModel *deviceInfoModel;
 @property (nonatomic, strong) CBCarPaoModel *paoModel;
 @property (nonatomic, copy) NSString *dno;
 /* 弹出框时，YES地图中心点不动 NO设置中心点*/
