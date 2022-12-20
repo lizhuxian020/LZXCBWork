@@ -96,6 +96,7 @@
             [tf limitTextFieldTextLength:maxLength];
         }
         tf.delegate = delegate;
+        tf.font = [UIFont systemFontOfSize:14];
         
         [tfArr addObject:tf];
         tf.placeholder = placeHolder;
@@ -104,9 +105,9 @@
             make.top.bottom.equalTo(@0);
             make.left.equalTo(@10);
             make.right.equalTo(@-10);
-            make.height.equalTo(@60);
+            make.height.equalTo(@40);
         }];
-        inputV.layer.cornerRadius = 15;
+        inputV.layer.cornerRadius = 20;
         [inputV.layer setMasksToBounds:YES];
         inputV.layer.borderColor = KCarLineColor.CGColor;
         inputV.layer.borderWidth = 1;
