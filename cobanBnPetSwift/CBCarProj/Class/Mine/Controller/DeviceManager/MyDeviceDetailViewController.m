@@ -62,7 +62,7 @@
 //        self.model.expireTime ?: @"",
     ];
     self.deviceInfoTitleArr = @[
-        Localized( @"设备IMEI"),
+        Localized(@"设备IMEI"),
         Localized(@"设备名称"),
         Localized(@"车牌号码"),
         Localized(@"电话号码"),
@@ -383,8 +383,7 @@
         if (self.isEdit == NO) {
             self.isEdit = YES;
             self.infoView.hidden = YES;
-            [rightBtn setTitle: Localized(@"完成") forState: UIControlStateNormal];
-            [rightBtn setTitle: Localized(@"完成") forState: UIControlStateHighlighted];
+            [self initBarRighBtnTitle: Localized(@"完成") target: self action: @selector(rightBtnClick:)];
         } else {
             self.rightBtn = sender;
             [self editDeviceRequest];

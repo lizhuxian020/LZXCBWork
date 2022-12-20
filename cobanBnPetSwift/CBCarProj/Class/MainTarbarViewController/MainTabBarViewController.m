@@ -160,7 +160,7 @@
     MineViewController *mineVC = [[MineViewController alloc] init];
     CBBaseNavigationController *mineNavControl = [[CBBaseNavigationController alloc] initWithRootViewController: mineVC];
     mineVC.tabBarItem = [self controller:mineVC
-                                   title:Localized(@"我的")
+                                   title:Localized(@"设备")
                                     size:12
                            selectedImage:@"设备管理-已点击"
                              normalImage:@"设备管理-未点击"];

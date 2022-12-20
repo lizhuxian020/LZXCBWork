@@ -183,7 +183,8 @@
     lbl.numberOfLines = 0;
     [c addSubview:lbl];
     [lbl mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(@0);
+        make.left.equalTo(@15);
+        make.right.equalTo(@-15);
         make.top.equalTo(@20);
         make.bottom.equalTo(@-20);
     }];

@@ -63,12 +63,12 @@
         make.height.equalTo(@50);
     }];
     
-    self.cancelLbl = [MINUtils createLabelWithText:@"取消" size:15 alignment:NSTextAlignmentCenter textColor:kCellTextColor];
+    self.cancelLbl = [MINUtils createLabelWithText:Localized(@"取消") size:15 alignment:NSTextAlignmentCenter textColor:kCellTextColor];
     self.cancelLbl.font = [UIFont systemFontOfSize:15 weight:UIFontWeightBold];
     [btnC addSubview:self.cancelLbl];
     self.cancelLbl.backgroundColor = kGreyColor;
     
-    self.confirmLbl = [MINUtils createLabelWithText:@"确定" size:15 alignment:NSTextAlignmentCenter textColor:kAppMainColor];
+    self.confirmLbl = [MINUtils createLabelWithText:Localized(@"确定") size:15 alignment:NSTextAlignmentCenter textColor:kAppMainColor];
     self.confirmLbl.font = [UIFont systemFontOfSize:15 weight:UIFontWeightBold];
     [btnC addSubview:self.confirmLbl];
     self.confirmLbl.backgroundColor = kGreyColor;

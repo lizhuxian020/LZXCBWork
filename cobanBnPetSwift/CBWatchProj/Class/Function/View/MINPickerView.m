@@ -175,7 +175,7 @@
 
 - (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
 {
-    UIView *pickView = [[UIView alloc] initWithFrame: CGRectMake(0, 0, SCREEN_WIDTH/4, 50*KFitWidthRate)];
+    UIView *pickView = [[UIView alloc] initWithFrame: CGRectMake(0, 0, SCREEN_WIDTH, 50*KFitWidthRate)];
     //pickView.backgroundColor = UIColor.blueColor;
     if (self.isPicturePickerView == YES) {
         UIImage *image = [UIImage imageNamed: self.dataArr[component][row]];

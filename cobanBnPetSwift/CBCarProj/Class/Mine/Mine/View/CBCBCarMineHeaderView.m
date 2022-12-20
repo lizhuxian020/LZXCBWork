@@ -88,7 +88,7 @@
     
     
     UILabel *addGroupLbl = [UILabel new];
-    addGroupLbl.text = @"添加组";
+    addGroupLbl.text = Localized(@"添加组");
     addGroupLbl.textColor = kAppMainColor;
     addGroupLbl.font = __CM_NormalFont;
     addGroupLbl.userInteractionEnabled  =YES;
@@ -96,7 +96,7 @@
     [addGroupLbl addGestureRecognizer:tap];
     
     UILabel *addSubAccountLbl = [UILabel new];
-    addSubAccountLbl.text = @"添加";
+    addSubAccountLbl.text = Localized(@"添加");
     addSubAccountLbl.textColor = kAppMainColor;
     addSubAccountLbl.font = __CM_NormalFont;
     addSubAccountLbl.userInteractionEnabled  =YES;

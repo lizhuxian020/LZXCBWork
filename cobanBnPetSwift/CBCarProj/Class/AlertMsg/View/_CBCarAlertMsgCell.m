@@ -46,7 +46,7 @@
     }];
     self.myContentView.layer.cornerRadius = 10;
     
-    self.nameT = [MINUtils createLabelWithText:Localized(@"名称设备") size:14 alignment:NSTextAlignmentCenter textColor:kCellTextColor];
+    self.nameT = [MINUtils createLabelWithText:Localized(@"设备名称") size:14 alignment:NSTextAlignmentCenter textColor:kCellTextColor];
     [self.myContentView addSubview:self.nameT];
     [self.nameT mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.equalTo(@10);

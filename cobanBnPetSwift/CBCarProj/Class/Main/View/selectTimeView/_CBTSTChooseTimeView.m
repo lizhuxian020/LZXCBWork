@@ -10,6 +10,8 @@
 
 @interface _CBTSTChooseTimeView ()
 
+@property(nonatomic, copy) NSString *title;
+
 @property (nonatomic, strong) UILabel *titleLbl;
 
 @property (nonatomic, strong) UILabel *contentLbl;
@@ -24,6 +26,7 @@
 - (instancetype)initWithTitle:(NSString *)title last:(int)lastDays{
     self = [super init];
     if (self) {
+        _title = title;
         _lastDays = lastDays;
         [self createUI];
     }
@@ -32,7 +35,7 @@
 
 - (void)createUI {
     
-    self.titleLbl = [MINUtils createLabelWithText:@"开始时间" size:17 alignment:NSTextAlignmentCenter textColor:kCellTextColor];
+    self.titleLbl = [MINUtils createLabelWithText:_title size:17 alignment:NSTextAlignmentCenter textColor:kCellTextColor];
     [self addSubview:self.titleLbl];
 
     [self.titleLbl mas_makeConstraints:^(MASConstraintMaker *make) {

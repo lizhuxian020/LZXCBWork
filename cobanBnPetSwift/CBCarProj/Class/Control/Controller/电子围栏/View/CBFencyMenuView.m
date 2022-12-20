@@ -74,7 +74,7 @@
         make.left.right.equalTo(@0);
     }];
     
-    UIView *outView = [self viewWithTitle:Localized(@"进围栏报警") subView:nil switchView:&switchView];
+    UIView *outView = [self viewWithTitle:Localized(@"出围栏报警") subView:nil switchView:&switchView];
     self.outSwitch = switchView;
     [self addSubview:outView];
     [outView mas_makeConstraints:^(MASConstraintMaker *make) {

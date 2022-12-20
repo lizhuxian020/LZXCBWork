@@ -39,7 +39,9 @@
     [lbl mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(@-10);
         make.left.equalTo(@20);
+        make.right.equalTo(@-20);
     }];
+    lbl.numberOfLines = 2;
 }
 
 - (void)pop {

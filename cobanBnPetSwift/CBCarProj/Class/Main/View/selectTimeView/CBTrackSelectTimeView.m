@@ -75,7 +75,7 @@
         lastBtn = btn;
     }
     
-    self.startView = [[_CBTSTChooseTimeView alloc] initWithTitle:@"开始时间" last:7];
+    self.startView = [[_CBTSTChooseTimeView alloc] initWithTitle:Localized(@"开始时间") last:7];
     [self addSubview:self.startView];
     [self.startView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(@15);
@@ -83,7 +83,7 @@
         make.top.equalTo(lastBtn.mas_bottom).mas_offset(15);
     }];
     
-    self.endView = [[_CBTSTChooseTimeView alloc] initWithTitle:@"开始时间" last:0];
+    self.endView = [[_CBTSTChooseTimeView alloc] initWithTitle:Localized(@"结束时间") last:0];
     [self addSubview:self.endView];
     [self.endView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(@15);

@@ -221,7 +221,7 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    ElectronicFenceHeaderView *headView = [[ElectronicFenceHeaderView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, 62.5 * KFitHeightRate)];
+    ElectronicFenceHeaderView *headView = [[ElectronicFenceHeaderView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, 45 * KFitHeightRate)];
     return headView;
 }
 

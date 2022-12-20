@@ -98,7 +98,7 @@
     ];
     
     
-    UILabel *lbl = [MINUtils createLabelWithText:@"解绑设备" size:14];
+    UILabel *lbl = [MINUtils createLabelWithText:Localized(@"解绑设备") size:14];
     lbl.layer.cornerRadius = 20;
     [lbl.layer setMasksToBounds:YES];
     lbl.layer.borderColor = KCarLineColor.CGColor;

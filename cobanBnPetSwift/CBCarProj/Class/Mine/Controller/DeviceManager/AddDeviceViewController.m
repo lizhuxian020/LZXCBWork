@@ -168,9 +168,9 @@
     [_deviceInputView addSubview: _deviceTextField];
     [_deviceTextField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.centerY.equalTo(_deviceInputView);
-        make.size.mas_equalTo(CGSizeMake(200 * KFitWidthRate,  30 * KFitHeightRate));
+//        make.size.mas_equalTo(CGSizeMake(200 * KFitWidthRate,  30 * KFitHeightRate));
     }];
-    _deviceTextField.text = Localized(@"请对准设备的二维码");
+    _deviceTextField.text = Localized(@"请对准需要识别设备的二维码");
     _deviceTextField.userInteractionEnabled = NO;
     _deviceTextField.textColor = KCarLineColor;
 }
