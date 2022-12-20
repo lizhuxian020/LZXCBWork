@@ -79,45 +79,6 @@
         make.right.equalTo(@0);
     }];
     
-//    _fenceNameLabel = [self createLabelWithText: @"超级围栏A"];
-//    [self.contentView addSubview: _fenceNameLabel];
-//    [_fenceNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.equalTo(self.contentView).with.offset(0);
-//        make.top.bottom.equalTo(self.contentView);
-//        make.width.mas_equalTo(90 * KFitWidthRate);
-//    }];
-//    UIImage *image = [UIImage imageNamed: @"多边形-1"];
-//    _fenceTypeImageBtn = [[UIButton alloc] init];
-//    [_fenceTypeImageBtn setImage: image forState: UIControlStateNormal];
-//    _fenceTypeImageBtn.enabled = NO;
-//    [self.contentView addSubview: _fenceTypeImageBtn];
-//    [_fenceTypeImageBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.equalTo(_fenceNameLabel.mas_right);
-//        make.top.bottom.equalTo(self.contentView);
-//        make.width.mas_equalTo(65 * KFitWidthRate);
-//    }];
-//    _speedLabel = [self createLabelWithText: @"100KM/h"];
-//    [self.contentView addSubview: _speedLabel];
-//    [_speedLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.equalTo(_fenceTypeImageBtn.mas_right);
-//        make.top.bottom.equalTo(self.contentView);
-//        make.width.mas_equalTo(65 * KFitWidthRate);
-//    }];
-//    _alarmTypeLabel = [self createLabelWithText: @"入围栏报警"];
-//    [self.contentView addSubview: _alarmTypeLabel];
-//    [_alarmTypeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.equalTo(_speedLabel.mas_right);
-//        make.top.bottom.equalTo(self.contentView);
-//        make.width.mas_equalTo(125 * KFitWidthRate);
-//    }];
-//    UIImage *detailImage = [UIImage imageNamed: @"右边"];
-//    UIImageView *detailImageView = [[UIImageView alloc] initWithImage: detailImage];
-//    [self.contentView addSubview: detailImageView];
-//    [detailImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.centerY.equalTo(self.contentView);
-//        make.right.equalTo(self.contentView).with.offset(-12.5 * KFitWidthRate);
-//        make.size.mas_equalTo(CGSizeMake(detailImage.size.width * KFitHeightRate, detailImage.size.height * KFitHeightRate));
-//    }];
 }
 
 - (void)addFenceName:(UIView *)view {
@@ -127,7 +88,7 @@
     _fenceTypeImageBtn.enabled = NO;
     [view addSubview:_fenceTypeImageBtn];
     [_fenceTypeImageBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(@0);
+        make.left.equalTo(@5);
         make.top.equalTo(@15);
         make.bottom.equalTo(@-15);
     }];
@@ -137,7 +98,7 @@
     _fenceNameLabel = [self createLabelWithText: @"超级围栏A"];
     [view addSubview:_fenceNameLabel];
     [_fenceNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(_fenceTypeImageBtn.mas_right);
+        make.left.equalTo(_fenceTypeImageBtn.mas_right).mas_offset(10);
         make.right.equalTo(@0);
         make.centerY.equalTo(@0);
     }];
@@ -187,7 +148,7 @@
 
 - (UILabel *)createLabelWithText:(NSString *)text
 {
-    UILabel *label = [MINUtils createLabelWithText: text size:12 * KFitHeightRate alignment: NSTextAlignmentLeft textColor: k137Color];
+    UILabel *label = [MINUtils createLabelWithText: text size:14 alignment: NSTextAlignmentLeft textColor: kCellTextColor];
     return label;
 }
 

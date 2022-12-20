@@ -69,7 +69,7 @@
 
 - (UILabel *)createLabelWithText:(NSString *)text
 {
-    UILabel *label = [MINUtils createLabelWithText: text size:12 * KFitHeightRate alignment: NSTextAlignmentLeft textColor: kRGB(73, 73, 73)];
+    UILabel *label = [MINUtils createLabelWithText: text size:14 alignment: NSTextAlignmentLeft textColor: kCellTextColor];
     return label;
 }
 

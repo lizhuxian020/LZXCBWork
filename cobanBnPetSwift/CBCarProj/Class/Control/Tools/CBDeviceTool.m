@@ -544,6 +544,6 @@
             [waitToRemoveArr addObject:arrayData[i]];
         }
     }
-    [arrayData removeObjectsInArray:waitToRemoveArr];
+//    [arrayData removeObjectsInArray:waitToRemoveArr];
 }
 @end

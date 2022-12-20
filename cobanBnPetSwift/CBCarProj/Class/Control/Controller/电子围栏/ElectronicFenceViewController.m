@@ -44,7 +44,7 @@
 {
     [self initBarWithTitle:Localized(@"电子围栏") isBack: YES];
     [self showBackGround];
-    [self initBarRighBtnTitle:Localized(@"新增") target: self action: @selector(rightBtnClick)];
+    [self initBarRightImageName:@"添加" target:self action:@selector(rightBtnClick)];
     [self createTableView];
 }
 
@@ -232,7 +232,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 62.5 * KFitHeightRate;
+    return 45 * KFitHeightRate;
 }
 
 #pragma mark - PickerViewDelegate
