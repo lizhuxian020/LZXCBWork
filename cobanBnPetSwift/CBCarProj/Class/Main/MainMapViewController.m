@@ -1314,7 +1314,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
                         
                         CGFloat second = (CGFloat)sportModel.distance / (CGFloat)sportModel.speed;
                         weakSelf.totalTime += second;
-                        NSLog(@"----距离：%.f------速度:%.f------点到点需要的时间------%.f------",sportModel.distance,sportModel.speed,second);
+                        NSLog(@"----距离：%lf------速度:%lf------点到点需要的时间------%lf------",sportModel.distance,sportModel.speed,second);
                         [weakSelf.currentTimeArr addObject: [NSNumber numberWithFloat: weakSelf.totalTime]];
                     }
                     lastSportModel = sportModel;
@@ -1385,6 +1385,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
             }
         };
         playBackView.speedSlideBlock = ^(CGFloat currentSpeed) {
+            NSLog(@"--lzx: speed: %lf", currentSpeed);
             weakSelf.speed = currentSpeed;
         };
     }
