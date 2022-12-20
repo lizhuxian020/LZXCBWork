@@ -45,7 +45,7 @@
     [titleC mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(@0);
     }];
-    titleC.backgroundColor = UIColor.blackColor;
+    titleC.backgroundColor = kCellTextColor;
     
     
     [self addSubview:self.contentView];
@@ -63,7 +63,7 @@
         make.height.equalTo(@50);
     }];
     
-    self.cancelLbl = [MINUtils createLabelWithText:@"取消" size:15 alignment:NSTextAlignmentCenter textColor:UIColor.blackColor];
+    self.cancelLbl = [MINUtils createLabelWithText:@"取消" size:15 alignment:NSTextAlignmentCenter textColor:kCellTextColor];
     self.cancelLbl.font = [UIFont systemFontOfSize:15 weight:UIFontWeightBold];
     [btnC addSubview:self.cancelLbl];
     self.cancelLbl.backgroundColor = kGreyColor;
@@ -98,6 +98,14 @@
         make.left.equalTo(self.cancelLbl.mas_right);
     }];
     
+    UIView *centerLine = [MINUtils createLineView];
+    [btnC addSubview:centerLine];
+    [centerLine mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.bottom.equalTo(@0);
+        make.centerX.equalTo(@0);
+        make.width.equalTo(@1);
+    }];
+    
     self.cancelLbl.userInteractionEnabled = YES;
     self.confirmLbl.userInteractionEnabled = YES;
     
@@ -115,6 +123,9 @@
             weakself.didClickConfirm();
         }
     }];
+    
+    self.layer.cornerRadius = 10;
+    self.layer.masksToBounds = YES;
 }
 
 @end

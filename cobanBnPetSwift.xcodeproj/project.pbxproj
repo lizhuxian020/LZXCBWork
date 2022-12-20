@@ -661,6 +661,7 @@
 		6D032D9B1335E2208C8FB6B3 /* libPods-cobanBnPetSwift.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A1F41BDFD0FBDF918826F4E /* libPods-cobanBnPetSwift.a */; };
 		A2555D4A29503F00005F5963 /* CBMQTTManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A2555D4929503F00005F5963 /* CBMQTTManager.m */; };
 		A2555D4E29505FDC005F5963 /* CBCarDeviceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A2555D4D29505FDC005F5963 /* CBCarDeviceManager.m */; };
+		A2555D5529515DBF005F5963 /* _CBSubAccountEditView.m in Sources */ = {isa = PBXBuildFile; fileRef = A2555D5429515DBF005F5963 /* _CBSubAccountEditView.m */; };
 		A2BCA2D8294311F700CD4B08 /* CBFencyMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BCA2D7294311F700CD4B08 /* CBFencyMenuView.m */; };
 		A2BCA2DF2943242300CD4B08 /* CBDeviceTool.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BCA2DE2943242300CD4B08 /* CBDeviceTool.m */; };
 		A2BCA2E72943410900CD4B08 /* CBDoubleTimePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BCA2E52943410900CD4B08 /* CBDoubleTimePicker.m */; };
@@ -1876,6 +1877,8 @@
 		A2555D4929503F00005F5963 /* CBMQTTManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBMQTTManager.m; sourceTree = "<group>"; };
 		A2555D4C29505FDC005F5963 /* CBCarDeviceManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBCarDeviceManager.h; sourceTree = "<group>"; };
 		A2555D4D29505FDC005F5963 /* CBCarDeviceManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBCarDeviceManager.m; sourceTree = "<group>"; };
+		A2555D5329515DBF005F5963 /* _CBSubAccountEditView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBSubAccountEditView.h; sourceTree = "<group>"; };
+		A2555D5429515DBF005F5963 /* _CBSubAccountEditView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _CBSubAccountEditView.m; sourceTree = "<group>"; };
 		A2BCA2D6294311F700CD4B08 /* CBFencyMenuView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBFencyMenuView.h; sourceTree = "<group>"; };
 		A2BCA2D7294311F700CD4B08 /* CBFencyMenuView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBFencyMenuView.m; sourceTree = "<group>"; };
 		A2BCA2DD2943242300CD4B08 /* CBDeviceTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBDeviceTool.h; sourceTree = "<group>"; };
@@ -5589,6 +5592,8 @@
 				B1396FF0294F7A0E00EB917F /* _CBSubAccountPopView.m */,
 				B1A363682950CFF200FF6A63 /* _CBSubAccountDeivceCell.h */,
 				B1A363692950CFF200FF6A63 /* _CBSubAccountDeivceCell.m */,
+				A2555D5329515DBF005F5963 /* _CBSubAccountEditView.h */,
+				A2555D5429515DBF005F5963 /* _CBSubAccountEditView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -6648,6 +6653,7 @@
 				17CDAB5C24CEBE5500BB9F8B /* LineData.m in Sources */,
 				17CDAC5E24CEBE5600BB9F8B /* ElectronicFenceHeaderView.m in Sources */,
 				179F136824865E44004DB559 /* CBPetPeronalPageCollectsCell.swift in Sources */,
+				A2555D5529515DBF005F5963 /* _CBSubAccountEditView.m in Sources */,
 				17F28DDE2488D578003C4010 /* CBPetMsgCterFenceDymicView.swift in Sources */,
 				17CDAC5C24CEBE5600BB9F8B /* CBShareFenceHeadView.m in Sources */,
 				17CDAC1F24CEBE5600BB9F8B /* MINNormalAnnotation.m in Sources */,

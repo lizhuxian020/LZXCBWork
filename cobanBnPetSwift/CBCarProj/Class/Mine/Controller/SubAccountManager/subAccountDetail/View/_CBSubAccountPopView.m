@@ -62,6 +62,7 @@
         }];
         lastView = view;
         [view bk_whenTapped:^{
+            [weakself clickBtn:i];
             [weakself dismiss];
         }];
     }
@@ -116,5 +117,9 @@
         [self removeFromSuperview];
     }];
     
+}
+
+- (void)clickBtn:(int)index {
+    _didClick(index);
 }
 @end

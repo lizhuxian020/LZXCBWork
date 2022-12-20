@@ -12,9 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface _CBSubAccountPopView : UIView
 
-@property (nonatomic, copy) void (^didClick)(void);
-
-@property (nonatomic, copy) void (^didClickCheck)(void);
+@property (nonatomic, copy) void (^didClick)(int index);
 
 - (void)pop;
 - (void)dismiss;

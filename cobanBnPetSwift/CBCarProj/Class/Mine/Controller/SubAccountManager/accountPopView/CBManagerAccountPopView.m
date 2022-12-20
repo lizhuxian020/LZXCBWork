@@ -209,6 +209,7 @@ static NSString *AccountPopViewHeadViewIndentifer = @"AccountPopViewHeadViewInde
 }
 - (void)popView:(SubAccountModel *)subDeviceModel {
     [self getDeviceListRequest:subDeviceModel];
+    [self selectAuthBtnClick:[subDeviceModel.auth isEqualToString:@"1"] ? _controlBtn : _lookatBtn];
 }
 - (void)certain {
     if (self.popViewBlock) {

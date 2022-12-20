@@ -66,6 +66,7 @@
             make.height.mas_equalTo(selectImg.size.height);
             make.width.mas_equalTo(selectImg.size.width);
         }];
+        _pickBtn.userInteractionEnabled = NO;
     }
     return _pickBtn;
 }

@@ -137,6 +137,7 @@
         [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
         if (isSucceed) {
             //[hud hideAnimated:YES];
+            [CBTopAlertView alertSuccess:Localized(@"操作成功")];
             [weakSelf requestDataWithHud:nil];
         }else {
             //[hud hideAnimated:YES];
