@@ -20,6 +20,9 @@
 @property (nonatomic, copy) NSString *status;
 @property (nonatomic, copy) NSString *create_time;
 
+@property (nonatomic, copy) NSString *email;
+@property (nonatomic, copy) NSString *comment;
+@property (nonatomic, copy) NSString *address;
 @end
 
 

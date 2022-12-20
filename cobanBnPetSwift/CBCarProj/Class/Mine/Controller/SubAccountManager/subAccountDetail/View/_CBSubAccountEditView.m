@@ -10,15 +10,7 @@
 
 @interface _CBSubAccountEditView ()
 
-@property (nonatomic, strong) UITextField *accountTF;
-@property (nonatomic, strong) UITextField *nameTF;
-@property (nonatomic, strong) UITextField *phoneTF;
-@property (nonatomic, strong) UITextField *emailTF;
-@property (nonatomic, strong) UITextField *hiddenTF;
-@property (nonatomic,strong) UIButton *lookatBtn;
-@property (nonatomic,strong) UIButton *controlBtn;
-@property (nonatomic, strong) UITextField *markTF;
-@property (nonatomic, strong) UITextField *addressTF;
+
 @end
 
 @implementation _CBSubAccountEditView
@@ -87,6 +79,17 @@
     [self controlBtn];
 }
 
+- (void)setAccountModel:(SubAccountModel *)accountModel {
+    _accountModel = accountModel;
+    self.accountTF.text = _accountModel.account;
+    self.nameTF.text = _accountModel.name;
+    self.phoneTF.text = _accountModel.phone;
+    self.emailTF.text = _accountModel.email;
+    [self selectAuthBtnClick: _accountModel.auth.intValue == 1 ? _controlBtn : _lookatBtn];
+    self.markTF.text = _accountModel.comment;
+    self.addressTF.text = _accountModel.address;
+}
+
 - (UITextField *)createTF:(NSDictionary *)data {
     UITextField *tf = [UITextField new];
     tf.placeholder = data[@"pl"];
@@ -148,5 +151,16 @@
         }];
     }
     return _controlBtn;
+}
+- (void)selectAuthBtnClick:(UIButton *)sender {
+    if (sender == self.lookatBtn) {
+        self.lookatBtn.selected = YES;
+        self.controlBtn.selected = NO;
+        self.authStr = @"0";
+    } else {
+        self.lookatBtn.selected = NO;
+        self.controlBtn.selected = YES;
+        self.authStr = @"1";
+    }
 }
 @end

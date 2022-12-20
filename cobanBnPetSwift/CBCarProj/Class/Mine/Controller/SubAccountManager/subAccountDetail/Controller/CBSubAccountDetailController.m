@@ -62,6 +62,7 @@
     [self.tableView registerClass:_CBSubAccountDeivceCell.class forCellReuseIdentifier:@"_CBSubAccountDeivceCell"];
     
     self.editView = [_CBSubAccountEditView new];
+    self.editView.accountModel = self.accountModel;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -166,6 +167,43 @@
 
 - (void)didFinishEdit {
     NSLog(@"%@", self.editView);
+    NSString *account = self.editView.accountTF.text;
+    NSString *address = self.editView.addressTF.text;
+    NSString *comment = self.editView.markTF.text;
+    NSString *email = self.editView.emailTF.text;
+    NSString *name = self.editView.nameTF.text;
+    NSString *phone = self.editView.phoneTF.text;
+    if (kStringIsEmpty(account) || kStringIsEmpty(address) || kStringIsEmpty(comment) || kStringIsEmpty(email) || kStringIsEmpty(name) || kStringIsEmpty(phone) ) {
+        [HUD showHUDWithText:Localized(@"任何一项不能为空")];
+        return;
+    }
+    __weak __typeof__(self) weakSelf = self;
+    SubAccountModel *model = _accountModel;
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    dic[@"sid"] = model.accountId;
+    [dic addEntriesFromDictionary:@{
+        @"account": account,
+        @"address": address,
+        @"comment": comment,
+        @"email": email,
+        @"name": name,
+        @"phone": phone,
+        @"status": @0
+    }];
+    [MBProgressHUD showHUDIcon:self.view animated:YES];
+    [[NetWorkingManager shared] postWithUrl:@"personController/editSubUserAuto" params: dic succeed:^(id response,BOOL isSucceed) {
+        [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
+        if (isSucceed) {
+            //[hud hideAnimated:YES];
+            [CBTopAlertView alertSuccess:Localized(@"操作成功")];
+            [weakSelf.navigationController popToRootViewControllerAnimated:YES];
+        }else {
+            //[hud hideAnimated:YES];
+        }
+    } failed:^(NSError *error) {
+        //[hud hideAnimated:YES];
+        [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
+    }];
 }
 
 - (CBManagerAccountPopView *)accountPopView {
