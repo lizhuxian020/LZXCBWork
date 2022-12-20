@@ -50,11 +50,15 @@
         [self.btnArr addObject:btn];
         btn.tag = 100 + i;
         [btn setTitle:self.arrayTitle[i] forState:UIControlStateNormal];
+        [btn setTitle:self.arrayTitle[i] forState:UIControlStateSelected];
         [btn setTitleColor:__TrackSelectTimeView_NormalColor forState:UIControlStateNormal];
         [btn setTitleColor:__TrackSelectTimeView_SelectedColor forState:UIControlStateSelected];
-        btn.titleLabel.font = [UIFont systemFontOfSize:16];
         [btn setImage:[UIImage imageNamed:@"未选中2"] forState:UIControlStateNormal];
         [btn setImage:[UIImage imageNamed:@"已选中2"] forState:UIControlStateSelected];
+        [btn horizontalCenterImageAndTitle:20];
+        btn.titleLabel.font = [UIFont systemFontOfSize:16];
+        btn.adjustsImageWhenHighlighted = NO;
+        btn.adjustsImageWhenDisabled = NO;
         [self addSubview:btn];
         [btn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(@15);

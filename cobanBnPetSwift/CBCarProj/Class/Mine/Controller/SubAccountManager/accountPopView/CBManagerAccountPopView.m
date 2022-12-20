@@ -87,8 +87,8 @@ static NSString *AccountPopViewHeadViewIndentifer = @"AccountPopViewHeadViewInde
     if (!_lookatBtn) {
         _lookatBtn = [MINUtils createNoBorderBtnWithTitle:Localized(@"确定") titleColor: [UIColor whiteColor] fontSize: 15 * KFitWidthRate backgroundColor: UIColor.whiteColor];
         _lookatBtn.selected = YES;
-        [_lookatBtn setImage: [UIImage imageNamed:@"单选-选中"] forState: UIControlStateSelected];
-        [_lookatBtn setImage: [UIImage imageNamed:@"单选-没选中"] forState: UIControlStateNormal];
+        [_lookatBtn setImage: [UIImage imageNamed:@"已选中2"] forState: UIControlStateSelected];
+        [_lookatBtn setImage: [UIImage imageNamed:@"未选中2"] forState: UIControlStateNormal];
 //        [_lookatBtn setImageEdgeInsets: UIEdgeInsetsMake(0, 0, 0, 10 * KFitWidthRate)];
 //        [_lookatBtn setTitleEdgeInsets: UIEdgeInsetsMake(0, 10 * KFitWidthRate, 0, 0)];
         [_lookatBtn horizontalCenterImageAndTitle:10];
@@ -113,8 +113,8 @@ static NSString *AccountPopViewHeadViewIndentifer = @"AccountPopViewHeadViewInde
 - (UIButton *)controlBtn {
     if (!_controlBtn) {
         _controlBtn = [MINUtils createNoBorderBtnWithTitle:Localized(@"确定") titleColor: [UIColor whiteColor] fontSize: 15 * KFitWidthRate backgroundColor: UIColor.whiteColor];
-        [_controlBtn setImage: [UIImage imageNamed:@"单选-选中"] forState: UIControlStateSelected];
-        [_controlBtn setImage: [UIImage imageNamed:@"单选-没选中"] forState: UIControlStateNormal];
+        [_controlBtn setImage: [UIImage imageNamed:@"已选中2"] forState: UIControlStateSelected];
+        [_controlBtn setImage: [UIImage imageNamed:@"未选中2"] forState: UIControlStateNormal];
         [_controlBtn setTitle: Localized(@"控制") forState: UIControlStateNormal];
         [_controlBtn setTitle: Localized(@"控制") forState: UIControlStateSelected];
 //        [_controlBtn setImageEdgeInsets: UIEdgeInsetsMake(0, 0, 0, 10 * KFitWidthRate)];
