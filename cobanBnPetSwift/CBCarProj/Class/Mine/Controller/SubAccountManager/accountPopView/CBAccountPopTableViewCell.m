@@ -44,6 +44,10 @@
     [self deviceStatusLabel];
     [self rightBtnImageView];
     [self warmedImageView];
+    kWeakSelf(self);
+    [self.contentView bk_whenTapped:^{
+        [weakself cellSelectClick];
+    }];
 }
 #pragma mark -- getting && setting methods
 - (UIButton *)pickBtn {
@@ -53,7 +57,7 @@
         _pickBtn = [[UIButton alloc] init];
         [_pickBtn setImage: [UIImage imageNamed:@"单选-没选中"] forState: UIControlStateNormal];
         [_pickBtn setImage: [UIImage imageNamed:@"单选-选中"] forState: UIControlStateSelected];
-        [_pickBtn addTarget:self action:@selector(cellSelectClick:) forControlEvents:UIControlEventTouchUpInside];
+//        [_pickBtn addTarget:self action:@selector(cellSelectClick:) forControlEvents:UIControlEventTouchUpInside];
         [_pickBtn setEnlargeEdgeWithTop:10 right:10 bottom:10 left:20];
         [self addSubview:_pickBtn];
         [_pickBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -136,7 +140,7 @@
     }
     return _warmedImageView;
 }
-- (void)cellSelectClick:(UIButton *)sender {
+- (void)cellSelectClick {
     self.deviceInfoModel.isCheck = !self.deviceInfoModel.isCheck;
     self.pickBtn.selected = self.deviceInfoModel.isCheck;
     if (self.cellClickBlock) {

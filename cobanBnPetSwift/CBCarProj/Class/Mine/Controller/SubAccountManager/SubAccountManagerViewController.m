@@ -408,8 +408,104 @@
 #pragma mark - Action
 - (void)rightBtnClick
 {
-    AddSubAccountViewController *addAcountVC = [[AddSubAccountViewController alloc] init];
-    [self.navigationController pushViewController: addAcountVC animated: YES];
+//    AddSubAccountViewController *addAcountVC = [[AddSubAccountViewController alloc] init];
+//    [self.navigationController pushViewController: addAcountVC animated: YES];
+    kWeakSelf(self);
+    [[CBCarAlertView viewWithMultiInput:@[
+            Localized(@"请输入子用户名"), Localized(@"请输入姓名"), Localized(@"请输入密码"), Localized(@"请再次输入密码"), Localized(@"请输入电话号码")
+    ] title:Localized(@"添加子用户") isDigitalBlk:^BOOL(int index) {
+        return index == 4;
+    } maxLengthBlk:^int(int index) {
+        return 11;
+    } securityBLk:^BOOL(int index) {
+        return index == 2 || index == 3;
+    } confirmCanDismiss:^(NSArray<NSString *> *contentStr){
+        NSString *accountName = contentStr[0];
+        NSString *name = contentStr[1];
+        NSString *pwd1 = contentStr[2];
+        NSString *pwd2 = contentStr[3];
+        NSString *phone = contentStr[4];
+        
+        if ([accountName isValidAlphaNumberPassword] == NO ) {
+            [HUD showHUDWithText:Localized(@"请输入4位以上的字母数字组合") withDelay:2.0f];
+            return NO;
+        } else if (accountName.length < 4) {
+            [HUD showHUDWithText:Localized(@"请输入4位以上的字母数字组合") withDelay:2.0f];
+            return NO;
+        }
+        if (kStringIsEmpty(name)) { // 子用户姓名
+            [HUD showHUDWithText:Localized(@"请输入姓名") withDelay:2.0f];
+            return NO;
+        }
+        
+        if ([pwd1 isValidAlphaNumberPassword] == NO ) {
+            [HUD showHUDWithText:Localized(@"请输入6位以上的字母数字组合密码") withDelay:2.0f];
+            return NO;
+        } else if (pwd1.length < 6) {
+            [HUD showHUDWithText:Localized(@"请输入6位以上的字母数字组合密码") withDelay:2.0f];
+            return NO;
+        }
+        
+        if (kStringIsEmpty(pwd2)) { // 确认密码
+            [HUD showHUDWithText:Localized(@"请输入确认密码") withDelay:2.0f];
+            return NO;
+        }else if ([pwd1 isEqualToString:pwd2] == NO ) {
+            [HUD showHUDWithText:Localized(@"两次输入的密码不相同") withDelay:2.0f];
+            return NO;
+        }else if (kStringIsEmpty(phone)) { // 电话号码
+            [HUD showHUDWithText:Localized(@"请输入电话号码") withDelay:2.0f];
+            return NO;
+        }
+
+        
+        return YES;
+    } confrim:^(NSArray<NSString *> * _Nonnull contentStr,CBBasePopView *popView) {
+        
+        [weakself didClickAddAccount:contentStr finishBlk:^{
+            [popView dismiss];
+        }];
+    }] pop];
+}
+
+- (void)didClickAddAccount:(NSArray<NSString *> *)contentStr finishBlk:(void(^)(void))finishBlk {
+    finishBlk();
+    NSString *accountName = contentStr[0];
+    NSString *name = contentStr[1];
+    NSString *pwd1 = contentStr[2];
+    NSString *pwd2 = contentStr[3];
+    NSString *phone = contentStr[4];
+    
+    NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
+    [paramters setObject:accountName forKey:@"account"];
+    [paramters setObject:name forKey:@"name"];
+    [paramters setObject:pwd1 forKey:@"pwd"];
+    [paramters setObject:pwd2 forKey:@"pwdConfirm"];
+    [paramters setObject:phone forKey:@"phone"];
+    
+    kWeakSelf(self);
+    [MBProgressHUD showHUDIcon:self.view animated:YES];
+    [[NetWorkingManager shared]postWithUrl:@"userController/valideAccount" params:@{
+        @"account": accountName
+    } succeed:^(id response,BOOL isSucceed) {
+        kStrongSelf(self);
+        if (isSucceed) {
+            [[NetWorkingManager shared]postWithUrl:@"personController/addSubUser" params:paramters succeed:^(id response,BOOL isSucceed) {
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                if (isSucceed) {
+                    [CBTopAlertView alertSuccess:Localized(@"操作成功")];
+                    [self.navigationController popViewControllerAnimated: YES];
+                } else {
+                }
+            } failed:^(NSError *error) {
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+            }];
+        } else {
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+        }
+    } failed:^(NSError *error) {
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    }];
 }
 
 #pragma mark - Other Method

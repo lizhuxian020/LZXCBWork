@@ -13,22 +13,22 @@
 
 + (void)showHUDWithText:(NSString *)text{
     //[SVProgressHUD setMinimumSize:CGSizeMake(280, 120)];
-    [SVProgressHUD setCornerRadius:5];
-    [SVProgressHUD setDefaultStyle:SVProgressHUDStyleCustom];
-    [SVProgressHUD setFont:[UIFont systemFontOfSize:15]];
-    [SVProgressHUD setForegroundColor:[UIColor colorWithHexString:@"666666"]];
-    [SVProgressHUD setBackgroundColor:[UIColor whiteColor]];
+//    [SVProgressHUD setCornerRadius:5];
+//    [SVProgressHUD setDefaultStyle:SVProgressHUDStyleCustom];
+//    [SVProgressHUD setFont:[UIFont systemFontOfSize:15]];
+//    [SVProgressHUD setForegroundColor:[UIColor colorWithHexString:@"666666"]];
+//    [SVProgressHUD setBackgroundColor:[UIColor whiteColor]];
     [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
     [SVProgressHUD showImage:nil status:text];
     [SVProgressHUD dismissWithDelay:1.2];
 }
 + (void)showHUDWithText:(NSString*)text withDelay:(CGFloat)delay {
-    [SVProgressHUD setMinimumSize:CGSizeMake(280, 120)];
-    [SVProgressHUD setCornerRadius:5];
-    [SVProgressHUD setDefaultStyle:SVProgressHUDStyleCustom];
-    [SVProgressHUD setFont:[UIFont systemFontOfSize:15]];
-    [SVProgressHUD setForegroundColor:[UIColor colorWithHexString:@"666666"]];
-    [SVProgressHUD setBackgroundColor:[UIColor whiteColor]];
+//    [SVProgressHUD setMinimumSize:CGSizeMake(280, 120)];
+//    [SVProgressHUD setCornerRadius:5];
+//    [SVProgressHUD setDefaultStyle:SVProgressHUDStyleCustom];
+//    [SVProgressHUD setFont:[UIFont systemFontOfSize:15]];
+//    [SVProgressHUD setForegroundColor:[UIColor colorWithHexString:@"666666"]];
+//    [SVProgressHUD setBackgroundColor:[UIColor whiteColor]];
     [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
     [SVProgressHUD showImage:nil status:text];
     [SVProgressHUD dismissWithDelay:delay == 0?1.2:delay];

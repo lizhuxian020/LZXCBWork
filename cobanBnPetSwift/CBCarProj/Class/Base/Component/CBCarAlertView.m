@@ -53,17 +53,44 @@
                             maxLength:(int)maxLength
                     confirmCanDismiss:(nullable BOOL(^)(NSArray<NSString *> *contentStr))confirmCanDismiss
                               confrim:(void(^)(NSArray<NSString *> *contentStr))confirmBlk {
+    return [self viewWithMultiInput:placeHolderArr title:title isDigitalBlk:^BOOL(int index) {
+        return isDigital;
+    } maxLengthBlk:^int(int index) {
+        return maxLength;
+    } securityBLk:nil confirmCanDismiss:confirmCanDismiss confrim:^(NSArray<NSString *> *contentStr, CBBasePopView *popView){
+        [popView dismiss];
+        confirmBlk(contentStr);
+    }];
+}
+
++ (CBBasePopView *)viewWithMultiInput:(NSArray<NSString *> *)placeHolderArr
+                                title:(NSString *)title
+                         isDigitalBlk:(BOOL(^)(int index))isDigitalBLK
+                         maxLengthBlk:(int(^)(int index))maxLengthBlk
+                          securityBLk:(BOOL(^)(int index))securityBLK
+                    confirmCanDismiss:(nullable BOOL(^)(NSArray<NSString *> *contentStr))confirmCanDismiss
+                              confrim:(void(^)(NSArray<NSString *> *contentStr, CBBasePopView *popView))confirmBlk {
     UIView *c = [UIView new];
     
     NSMutableArray *tfArr = [NSMutableArray array];
     UIView *lastView = nil;
     
-    __AlertDelegate *delegate = [__AlertDelegate new];
-    delegate.isDigital = isDigital;
+    NSMutableArray *delegateArr = [NSMutableArray new];
     
-    for (NSString *placeHolder in placeHolderArr) {
+    
+    for (int i = 0; i < placeHolderArr.count; i++) {
+        NSString *placeHolder = placeHolderArr[i];
+        __AlertDelegate *delegate = [__AlertDelegate new];
+        BOOL isDigital = isDigitalBLK(i);
+        int maxLength = maxLengthBlk(i);
+        delegate.isDigital = isDigital;
+        [delegateArr addObject:delegate];
+        
         UIView *inputV = [UIView new];
         UITextField *tf = [UITextField new];
+        if (securityBLK) {
+            tf.secureTextEntry = securityBLK(i);
+        }
         if (isDigital) {
             tf.keyboardType = UIKeyboardTypeNumberPad;
             [tf limitTextFieldTextLength:maxLength];
@@ -110,7 +137,7 @@
     CBBasePopView *popView = [[CBBasePopView alloc] initWithContentView:alertView];
     __weak CBBasePopView *wpopView = popView;
     [alertView setDidClickConfirm:^{
-        delegate;//不能去掉=.=
+        delegateArr;//不能去掉=.=
         NSArray<NSString *> *resultArr = [tfArr valueForKey:@"text"];
         if (!confirmCanDismiss) {
             for (NSString *text in resultArr) {
@@ -123,8 +150,7 @@
         if (confirmCanDismiss && !confirmCanDismiss([tfArr valueForKey:@"text"])) {
             return;
         }
-        [wpopView dismiss];
-        confirmBlk([tfArr valueForKey:@"text"]);
+        confirmBlk([tfArr valueForKey:@"text"], wpopView);
     }];
     [alertView setDidClickCancel:^{
         [wpopView dismiss];

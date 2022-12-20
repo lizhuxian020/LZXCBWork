@@ -31,6 +31,14 @@ NS_ASSUME_NONNULL_BEGIN
                     confirmCanDismiss:(nullable BOOL(^)(NSArray<NSString *> *contentStr))confirmCanDismiss
                               confrim:(void(^)(NSArray<NSString *> *contentStr))confirmBlk;
 
++ (CBBasePopView *)viewWithMultiInput:(NSArray<NSString *> *)placeHolderArr
+                                title:(NSString *)title
+                         isDigitalBlk:(BOOL(^)(int index))isDigitalBLK
+                         maxLengthBlk:(int(^)(int index))maxLengthBlk
+                          securityBLk:(BOOL(^)(int index))securityBLK
+                    confirmCanDismiss:(nullable BOOL(^)(NSArray<NSString *> *contentStr))confirmCanDismiss
+                              confrim:(void(^)(NSArray<NSString *> *contentStr, CBBasePopView *popView))confirmBlk;
+
 + (CBBasePopView *)viewWithAlertTips:(NSString *)tips
                                title:(NSString *)title
                              confrim:(void(^)(NSString *contentStr))confirmBlk;
