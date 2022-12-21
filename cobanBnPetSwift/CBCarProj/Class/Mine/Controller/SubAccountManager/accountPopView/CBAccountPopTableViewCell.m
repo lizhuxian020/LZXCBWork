@@ -157,7 +157,7 @@
             // 1 报警
             self.warmedImageView.hidden = NO;
         }
-        image = [CBCommonTools returnDeveceListImageStr:deviceInfoModel.icon isOnline:deviceInfoModel.online isWarmed:deviceInfoModel.warmed];
+        image = [CBCommonTools returnDeveceListImageStr:deviceInfoModel.icon isOnline:deviceInfoModel.online isWarmed:deviceInfoModel.warmed ];
         self.deviceImageView.image = image;
         [self.deviceImageView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(self);

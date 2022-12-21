@@ -81,7 +81,12 @@ NS_ASSUME_NONNULL_BEGIN
 + (UIImage *)returnDeveceListImageStr:(NSString *)iconStr isOnline:(NSString *)onlineStr isWarmed:(NSString *)warmedStr;
 
 // 返回定位设备的icon
-+ (UIImage *)returnDeveceLocationImageStr:(NSString *)iconStr isOnline:(NSString *)onlineStr isWarmed:(NSString *)warmedStr;
++ (UIImage *)returnDeveceLocationImageStr:(NSString *)iconStr
+                                 isOnline:(NSString *)onlineStr
+                                 isWarmed:(NSString *)warmedStr
+                                 mqttCode:(int)mqttCode
+                          devStatusInMqtt:(NSString *)devStatusInMqtt;
+
 + (UIImage *)returnDeveceListImageWithDic:(NSDictionary *)dic;
 
 #pragma mark 获取当前屏幕显示的viewcontroller

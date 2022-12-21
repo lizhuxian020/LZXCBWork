@@ -50,7 +50,4 @@
 
 @interface MainMapViewController : MINBaseViewController
 
-/** 选中的设备  */
-@property (nonatomic, strong) CBHomeLeftMenuDeviceInfoModel *deviceInfoModelSelect;
-
 @end

@@ -31,8 +31,8 @@ typedef enum : NSInteger {
 
 @interface CBCarPaopaoView : UIView
 
-@property (nonatomic,copy) void (^clickBlock)(CBCarPaopaoViewClickType type, id obj);
-@property (nonatomic, copy) void (^didClickMove)(NSString *moveStr);
+@property (nonatomic,copy) void (^clickBlock)(CBCarPaopaoViewClickType type, CBHomeLeftMenuDeviceInfoModel *deviceModel);
+@property (nonatomic, copy) void (^didClickMove)(NSString *moveStr, CBHomeLeftMenuDeviceInfoModel *deviceModel);
 @property (nonatomic,strong) CBHomeLeftMenuDeviceInfoModel *deviceInfoModel;
 @property (nonatomic, strong) CBCarPaoModel *paoModel;
 @property (nonatomic, copy) NSString *dno;

@@ -1028,7 +1028,7 @@
     if ([self showBaidu]) {
         // 小车定位图标
         MINNormalAnnotation *normalAnnotation = [[MINNormalAnnotation alloc] init];
-        normalAnnotation.icon = [CBCommonTools returnDeveceLocationImageStr:deviceInfoModel.icon isOnline:deviceInfoModel.online isWarmed:deviceInfoModel.warmed];
+        normalAnnotation.icon = [CBCommonTools returnDeveceLocationImageStr:deviceInfoModel.icon isOnline:deviceInfoModel.online isWarmed:deviceInfoModel.warmed mqttCode:deviceInfoModel.mqttCode devStatusInMqtt:deviceInfoModel.devStatusInMQTT];
         normalAnnotation.warmed = deviceInfoModel.warmed;
         normalAnnotation.coordinate = coor;
         normalAnnotation.isSelect = YES;// 选中设备显示最前
@@ -1049,7 +1049,7 @@
         GMSMarker *normalMarker = [[GMSMarker alloc] init];
         normalMarker.appearAnimation = kGMSMarkerAnimationNone;
         normalMarker.position = coor;
-        UIImage *icon = [CBCommonTools returnDeveceLocationImageStr:deviceInfoModel.icon isOnline:deviceInfoModel.online isWarmed:deviceInfoModel.warmed];
+        UIImage *icon = [CBCommonTools returnDeveceLocationImageStr:deviceInfoModel.icon isOnline:deviceInfoModel.online isWarmed:deviceInfoModel.warmed mqttCode:deviceInfoModel.mqttCode devStatusInMqtt:deviceInfoModel.devStatusInMQTT];
         UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, icon.size.width, icon.size.height)];
         imageView.image = icon;
         normalMarker.iconView = imageView;

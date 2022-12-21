@@ -249,7 +249,7 @@ static NSString *homeHeadViewIndentifer = @"homeHeadViewIndentifer";
     }
     for (MainMapViewController *vc in naviVC.viewControllers) {
         if ([vc isKindOfClass:MainMapViewController.class]) {
-            if (vc.deviceInfoModelSelect == nil && self.needToChooseFirst) {
+            if (CarDeviceManager.deviceInfoModelSelect == nil && self.needToChooseFirst) {
                 NSUInteger section = [self chooseFirOne];
                 if (section == NSNotFound) {
                     return;

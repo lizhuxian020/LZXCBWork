@@ -112,7 +112,8 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 @property (nonatomic, assign) CGFloat totalTime;
 @property (nonatomic, strong) NSMutableArray *currentTimeArr; //记录当前播放轨迹每段动画的开始时间。
 
-@property (nonatomic, strong) DeviceDetailModel *selectDeviceDetailModel;
+/// 当前点击地图选择的设备Model
+@property (nonatomic, strong, readonly) CBHomeLeftMenuDeviceInfoModel *selectDeviceDetailModel;
 @property (nonatomic, strong) GMSMarker *marker;
 @property (nonatomic, assign) BOOL isListViewShow;
 
@@ -257,6 +258,9 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     self.mqttManger.receivedMessageBlock = ^(NSDictionary *dataArr) {
         if (dataArr && dataArr[@"data"]) {
             CBMQTTCarDeviceModel *model = [CBMQTTCarDeviceModel mj_objectWithKeyValues:dataArr[@"data"]];
+            if (dataArr[@"code"]) {
+                model.code = [dataArr[@"code"] intValue];
+            }
             [CBCarDeviceManager.shared didGetMQTTDeviceModel:model];
         }
     };
@@ -313,7 +317,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
             kStrongSelf(self);
             CBHomeLeftMenuDeviceInfoModel *model = (CBHomeLeftMenuDeviceInfoModel *)objc;
             // 刷新本地存储的 选中设备
-            self.deviceInfoModelSelect = model;
+            [CarDeviceManager setCurrentChooseDevice:model];
             // 左侧菜单隐藏
             [self hideListView];
             // 20s刷新轨迹数组,初始化
@@ -595,21 +599,11 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 #pragma mark - CreateUI
 - (void)createUI {
     
-    self.deviceInfoModelSelect = [CBCommonTools CBdeviceInfo];
     [self baiduMap];
     [self googleMap];
 //    [self switchMapType];
     [self createBtns];
     [self setupInfoPopView];
-}
-
-- (void)setDeviceInfoModelSelect:(CBHomeLeftMenuDeviceInfoModel *)deviceInfoModelSelect {
-    _deviceInfoModelSelect = deviceInfoModelSelect;
-    if (_deviceInfoModelSelect) {
-        [CBDeviceTool.shareInstance didChooseDevice:_deviceInfoModelSelect];
-        [CBCarDeviceManager.shared requestDeviceData];
-        [CBCommonTools saveCBdeviceInfo:_deviceInfoModelSelect];
-    }
 }
 
 - (void)setupInfoPopView {
@@ -796,28 +790,21 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     }
     
     kWeakSelf(self);
-    [self.paopaoView setDidClickMove:^(NSString * _Nonnull moveStr) {
-        [weakself sendMoveRequest:moveStr];
+    [self.paopaoView setDidClickMove:^(NSString * _Nonnull moveStr, CBHomeLeftMenuDeviceInfoModel *deviceModel) {
+        [weakself sendMoveRequest:moveStr deviceModel:deviceModel];
     }];
-    self.paopaoView.clickBlock = ^(CBCarPaopaoViewClickType type, id  _Nonnull obj) {
+    self.paopaoView.clickBlock = ^(CBCarPaopaoViewClickType type, CBHomeLeftMenuDeviceInfoModel *deviceModel) {
         kStrongSelf(self);
         switch (type) {
             case CBCarPaopaoViewClickTypePlayBack:
             {
                 [self.paopaoView dismiss];
-                [self requestTrackDataWithModel: obj];
+                [self requestTrackDataWithModel: deviceModel.dno];
             }
                 break;
             case CBCarPaopaoViewClickTypeClose:
             {
                 //
-            }
-                break;
-            case CBCarPaopaoViewClickTypeNavigationClick:
-            {
-                [self.paopaoView dismiss];
-                // 导航
-                [self navigationClick];
             }
                 break;
             case CBCarPaopaoViewClickTypeTrack: {
@@ -831,7 +818,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
             case CBCarPaopaoViewClickTypeTitle: {
                 [self.paopaoView dismiss];
                 CBControlMenuController *vc = CBControlMenuController.new;
-                vc.deviceInfoModelSelect = self.deviceInfoModelSelect;
+                vc.deviceInfoModelSelect = deviceModel;
                 [self.navigationController pushViewController:vc animated:YES];
             }
                 break;
@@ -1005,7 +992,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         // 轨迹车头
         sportAnnotationView = [[SportAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"sportsAnnotation"];
         sportAnnotationView.draggable = NO;
-        sportAnnotationView.iconImage = [CBCommonTools returnDeveceLocationImageStr:self.selectDeviceDetailModel.icon isOnline:self.selectDeviceDetailModel.online isWarmed:self.selectDeviceDetailModel.warmed];
+        sportAnnotationView.iconImage = [CBCommonTools returnDeveceLocationImageStr:self.selectDeviceDetailModel.icon isOnline:self.selectDeviceDetailModel.online isWarmed:self.selectDeviceDetailModel.warmed mqttCode:self.selectDeviceDetailModel.mqttCode devStatusInMqtt:self.selectDeviceDetailModel.devStatusInMQTT];
         BMKSportNode *node = [sportNodes firstObject];
         sportAnnotationView.imageView.transform = CGAffineTransformMakeRotation(node.angle);
         return sportAnnotationView;
@@ -1022,6 +1009,9 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         return sportPointAnnotationView;
     }
     return nil;
+}
+- (CBHomeLeftMenuDeviceInfoModel *)selectDeviceDetailModel {
+    return self.paopaoView.deviceInfoModel;
 }
 //*当点击annotation view弹出的泡泡时，调用此接口
 - (void)mapView:(BMKMapView *)mapView annotationViewForBubble:(BMKAnnotationView *)view {
@@ -1064,7 +1054,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         BMKCircleView* circleView = [[BMKCircleView alloc] initWithOverlay:overlay];
         circleView.fillColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
         circleView.strokeColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
-        if ([self.deviceInfoModelSelect.warmed isEqualToString:@"1"]) {
+        if ([CarDeviceManager.deviceInfoModelSelect.warmed isEqualToString:@"1"]) {
             circleView.fillColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
             circleView.strokeColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
         }
@@ -1094,28 +1084,21 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 - (void)clickPopAlertviewShowDeviceInfo:(BMKAnnotationView *)view {
     
     kWeakSelf(self);
-    [self.paopaoView setDidClickMove:^(NSString * _Nonnull moveStr) {
-        [weakself sendMoveRequest:moveStr];
+    [self.paopaoView setDidClickMove:^(NSString * _Nonnull moveStr, CBHomeLeftMenuDeviceInfoModel *deviceModel) {
+        [weakself sendMoveRequest:moveStr deviceModel:deviceModel];
     }];
-    self.paopaoView.clickBlock = ^(CBCarPaopaoViewClickType type, id  _Nonnull obj) {
+    self.paopaoView.clickBlock = ^(CBCarPaopaoViewClickType type, CBHomeLeftMenuDeviceInfoModel *deviceModel) {
         kStrongSelf(self);
         switch (type) {
             case CBCarPaopaoViewClickTypePlayBack:
             {
                 [self.paopaoView dismiss];
-                [self requestTrackDataWithModel: obj];
+                [self requestTrackDataWithModel: deviceModel.dno];
             }
                 break;
             case CBCarPaopaoViewClickTypeClose:
             {
                 //
-            }
-                break;
-            case CBCarPaopaoViewClickTypeNavigationClick:
-            {
-                [self.paopaoView dismiss];
-                // 导航
-                [self navigationClick];
             }
                 break;
             case CBCarPaopaoViewClickTypeTrack: {
@@ -1129,7 +1112,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
             case CBCarPaopaoViewClickTypeTitle: {
                 [self.paopaoView dismiss];
                 CBControlMenuController *vc = CBControlMenuController.new;
-                vc.deviceInfoModelSelect = self.deviceInfoModelSelect;
+                vc.deviceInfoModelSelect = deviceModel;
                 [self.navigationController pushViewController:vc animated:YES];
             }
                 break;
@@ -1210,12 +1193,12 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 
 #pragma mark ------------paoViewActions------------
 #pragma mark --位移
-- (void)sendMoveRequest:(NSString *)moveStr {
+- (void)sendMoveRequest:(NSString *)moveStr deviceModel:(CBHomeLeftMenuDeviceInfoModel *)deviceModel {
     NSDictionary *param = @{
-        @"dno": self.deviceInfoModelSelect.dno,
-        @"data": [NSString stringWithFormat:@"%@,%@,%@", self.deviceInfoModelSelect.lat,self.deviceInfoModelSelect.lng, moveStr],
-        @"shape": self.deviceInfoModelSelect.listFence.firstObject.shape?:@"",
-        @"warmType": self.deviceInfoModelSelect.listFence.firstObject.warmType?:@"",
+        @"dno": deviceModel.dno,
+        @"data": [NSString stringWithFormat:@"%@,%@,%@", deviceModel.lat,deviceModel.lng, moveStr],
+        @"shape": deviceModel.listFence.firstObject.shape?:@"",
+        @"warmType": deviceModel.listFence.firstObject.warmType?:@"",
     };
     [[NetWorkingManager shared] postWithUrl:@"/devControlController/saveFence" params:param succeed:^(id response, BOOL isSucceed) {
         if (isSucceed) {
@@ -1240,17 +1223,6 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     self.polyline_realTime = [[GMSPolyline alloc] init];
     self.linePath_realTime = [GMSMutablePath path];
     [self.linePath_realTime removeAllCoordinates];
-}
-#pragma mark --导航
-- (void)navigationClick {
-    MKMapItem *myLocation = [MKMapItem mapItemForCurrentLocation];
-    CLLocationCoordinate2D coor = CLLocationCoordinate2DMake(self.deviceInfoModelSelect.lat.doubleValue,self.deviceInfoModelSelect.lng.doubleValue);
-    MKMapItem *toLocation = [[MKMapItem alloc]initWithPlacemark:[[MKPlacemark alloc]initWithCoordinate:coor]];
-    
-    //toLocation.name = @"Car location"
-    NSArray *items = @[myLocation,toLocation];
-    NSDictionary *options = @{ MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeWalking, MKLaunchOptionsMapTypeKey: [NSNumber numberWithInteger:MKMapTypeStandard], MKLaunchOptionsShowsTrafficKey:@YES };
-    [MKMapItem openMapsWithItems:items launchOptions:options];
 }
 #pragma mark --获取设备轨迹
 - (void)requestTrackDataWithModel:(NSString *)dno {
@@ -1477,7 +1449,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         self.polyline.map = self.googleMapView;
 
         self.marker = [GMSMarker markerWithPosition:[self.linePath coordinateAtIndex:0]];
-        self.marker.icon = [CBCommonTools returnDeveceLocationImageStr:self.selectDeviceDetailModel.icon isOnline:self.selectDeviceDetailModel.online isWarmed:self.selectDeviceDetailModel.warmed];
+        self.marker.icon = [CBCommonTools returnDeveceLocationImageStr:self.selectDeviceDetailModel.icon isOnline:self.selectDeviceDetailModel.online isWarmed:self.selectDeviceDetailModel.warmed mqttCode:self.selectDeviceDetailModel.mqttCode devStatusInMqtt:self.selectDeviceDetailModel.devStatusInMQTT];
         self.marker.groundAnchor = CGPointMake(0.5f, 0.5f);
         self.marker.flat = YES;
         self.marker.map = _googleMapView;
@@ -1669,7 +1641,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 
 - (void)requestDeviceSingleLocation {
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:3];
-    dic[@"dno"] = self.deviceInfoModelSelect.dno?:@"";
+    dic[@"dno"] = CarDeviceManager.deviceInfoModelSelect.dno?:@"";
     __weak __typeof__(self) weakSelf = self;
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     kWeakSelf(self);
@@ -1718,7 +1690,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     self.gmsBounds = [[GMSCoordinateBounds alloc] init];
     self.baiduVisibleCoordinateArr = [NSMutableArray new];
     for (CBHomeLeftMenuDeviceInfoModel *model in deviceData) {
-        if ([model.dno isEqualToString:self.deviceInfoModelSelect.dno]) {
+        if ([model.dno isEqualToString:CarDeviceManager.deviceInfoModelSelect.dno]) {
             // 选中设备添加围栏,百度地图添加围栏中心点会变
             [self createFenceMethod:model];
         }
@@ -1770,7 +1742,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         CBHomeLeftMenuDeviceInfoModel *deviceInfoModel;
         for (NSDictionary *dic in response[@"data"]) {
             CBHomeLeftMenuDeviceInfoModel *model = [CBHomeLeftMenuDeviceInfoModel mj_objectWithKeyValues:dic];
-            if ([model.dno isEqualToString:self.deviceInfoModelSelect.dno]) {
+            if ([model.dno isEqualToString:CarDeviceManager.deviceInfoModelSelect.dno]) {
                 deviceInfoModel = model;
             };
         }
@@ -1794,8 +1766,8 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
             [self startTrack:deviceInfoModel];
         }
         
-        self.navigationItem.title = self.deviceInfoModelSelect.name?:@"";
-        if (self.deviceInfoModelSelect.dno == nil) {
+        self.navigationItem.title = CarDeviceManager.deviceInfoModelSelect.name?:@"";
+        if (CarDeviceManager.deviceInfoModelSelect.dno == nil) {
             return;
         }
         NSArray *deviceArr = [CBHomeLeftMenuDeviceInfoModel mj_objectArrayWithKeyValuesArray:response[@"data"]];
@@ -1826,7 +1798,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         // google地图
         sportModel.coordinate = coor;
         //[sportNodes_realTime addObject:sportModel];
-        if (!(deviceInfoModel.lat.doubleValue == self.deviceInfoModelSelect.lat.doubleValue && deviceInfoModel.lng.doubleValue == self.deviceInfoModelSelect.lng.doubleValue)) {
+        if (!(deviceInfoModel.lat.doubleValue == CarDeviceManager.deviceInfoModelSelect.lat.doubleValue && deviceInfoModel.lng.doubleValue == CarDeviceManager.deviceInfoModelSelect.lng.doubleValue)) {
             // 位置不变
             //CGFloat distance = [_googleMapView getd];
             // 第二个点有距离的时候再打点
@@ -1865,11 +1837,11 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
             self.polyline_realTime.map = _googleMapView;
         }
         //更新中心位置
-        [self.googleMapView setCamera:[GMSCameraPosition cameraWithLatitude:self.deviceInfoModelSelect.lat.doubleValue longitude:self.deviceInfoModelSelect.lng.doubleValue zoom:self.deviceInfoModelSelect.zoomLevel.integerValue]];
+        [self.googleMapView setCamera:[GMSCameraPosition cameraWithLatitude:CarDeviceManager.deviceInfoModelSelect.lat.doubleValue longitude:CarDeviceManager.deviceInfoModelSelect.lng.doubleValue zoom:CarDeviceManager.deviceInfoModelSelect.zoomLevel.integerValue]];
     } else {
         // 百度地图
         sportModel.coordinate = coor;
-        if (!(deviceInfoModel.lat.doubleValue == self.deviceInfoModelSelect.lat.doubleValue && deviceInfoModel.lng.doubleValue == self.deviceInfoModelSelect.lng.doubleValue)) {
+        if (!(deviceInfoModel.lat.doubleValue == CarDeviceManager.deviceInfoModelSelect.lat.doubleValue && deviceInfoModel.lng.doubleValue == CarDeviceManager.deviceInfoModelSelect.lng.doubleValue)) {
             // 位置不变 不打点
             [sportNodes_realTime addObject:sportModel];
         }
@@ -1893,7 +1865,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
             [self.baiduMapView addOverlay:pathPloyline_realTime];
         }
         //更新中心位置
-        CLLocationCoordinate2D coorData = CLLocationCoordinate2DMake(self.deviceInfoModelSelect.lat.doubleValue, self.deviceInfoModelSelect.lng.doubleValue);
+        CLLocationCoordinate2D coorData = CLLocationCoordinate2DMake(CarDeviceManager.deviceInfoModelSelect.lat.doubleValue, CarDeviceManager.deviceInfoModelSelect.lng.doubleValue);
         [self.baiduMapView setCenterCoordinate:coorData animated: YES];
     }
 }
@@ -1925,11 +1897,11 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     CLLocationCoordinate2D coor = CLLocationCoordinate2DMake(deviceInfoModel.lat.doubleValue,  deviceInfoModel.lng.doubleValue);
     // 小车定位图标
     MINNormalAnnotation *normalAnnotation = [[MINNormalAnnotation alloc] init];
-    normalAnnotation.icon = [CBCommonTools returnDeveceLocationImageStr:deviceInfoModel.icon isOnline:deviceInfoModel.online isWarmed:deviceInfoModel.warmed];
+    normalAnnotation.icon = [CBCommonTools returnDeveceLocationImageStr:deviceInfoModel.icon isOnline:deviceInfoModel.online isWarmed:deviceInfoModel.warmed mqttCode:deviceInfoModel.mqttCode devStatusInMqtt:deviceInfoModel.devStatusInMQTT];
     normalAnnotation.warmed = deviceInfoModel.warmed;
     normalAnnotation.coordinate = coor;
     normalAnnotation.dno = deviceInfoModel.dno;
-    if ([deviceInfoModel.dno isEqualToString:self.deviceInfoModelSelect.dno]) {
+    if ([deviceInfoModel.dno isEqualToString:CarDeviceManager.deviceInfoModelSelect.dno]) {
         normalAnnotation.isSelect = YES;// 选中设备显示最前
     }
     [self.baiduMapView addAnnotation: normalAnnotation];
@@ -1941,7 +1913,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     normalInfoAnnotation.warmed = deviceInfoModel.warmed;
     normalInfoAnnotation.coordinate = coor;
     normalInfoAnnotation.dno = deviceInfoModel.dno;
-    if ([deviceInfoModel.dno isEqualToString:self.deviceInfoModelSelect.dno]) {
+    if ([deviceInfoModel.dno isEqualToString:CarDeviceManager.deviceInfoModelSelect.dno]) {
         normalInfoAnnotation.isSelect = YES;// 选中设备显示最前
     }
     [self.baiduMapView addAnnotation: normalInfoAnnotation];
@@ -1952,13 +1924,13 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     normalMarker.position = coor;
     normalMarker.dno = deviceInfoModel.dno;
     
-    UIImage *icon = [CBCommonTools returnDeveceLocationImageStr:deviceInfoModel.icon isOnline:deviceInfoModel.online isWarmed:deviceInfoModel.warmed];
+    UIImage *icon = [CBCommonTools returnDeveceLocationImageStr:deviceInfoModel.icon isOnline:deviceInfoModel.online isWarmed:deviceInfoModel.warmed mqttCode:deviceInfoModel.mqttCode devStatusInMqtt:deviceInfoModel.devStatusInMQTT];
     UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, icon.size.width, icon.size.height)];
     imageView.image = icon;
     normalMarker.iconView = imageView;
     normalMarker.groundAnchor = CGPointMake(0.5, 0.5);
     normalMarker.map = self.googleMapView;
-    if ([deviceInfoModel.dno isEqualToString:self.deviceInfoModelSelect.dno]) {
+    if ([deviceInfoModel.dno isEqualToString:CarDeviceManager.deviceInfoModelSelect.dno]) {
         // 选中设备显示最前
         self.googleMapView.selectedMarker = normalMarker;
     }
@@ -1974,7 +1946,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     lbl.backgroundColor = [UIColor colorWithWhite:1 alpha:0.8];
     normalInfoMarker.iconView = lbl;
     normalInfoMarker.map = self.googleMapView;
-    if ([deviceInfoModel.dno isEqualToString:self.deviceInfoModelSelect.dno]) {
+    if ([deviceInfoModel.dno isEqualToString:CarDeviceManager.deviceInfoModelSelect.dno]) {
         // 选中设备显示最前
         self.googleMapView.selectedMarker = normalMarker;
     }
@@ -2053,19 +2025,20 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     }
 }
 - (void)updateMapCenter {
-    if (!self.deviceInfoModelSelect) {
-        return;
-    }
     if ([AppDelegate shareInstance].IsShowGoogleMap) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.gmsBounds includingCoordinate:CLLocationCoordinate2DMake(self.deviceInfoModelSelect.lat.doubleValue, self.deviceInfoModelSelect.lng.doubleValue)];
+            if (CarDeviceManager.deviceInfoModelSelect) {
+                [self.gmsBounds includingCoordinate:CLLocationCoordinate2DMake(CarDeviceManager.deviceInfoModelSelect.lat.doubleValue, CarDeviceManager.deviceInfoModelSelect.lng.doubleValue)];
+            }
             [self.googleMapView animateWithCameraUpdate:[GMSCameraUpdate fitBounds:self.gmsBounds withPadding:30.f]];
         });
     } else {
-        //更新中心位置
-        CLLocationCoordinate2D coorData = CLLocationCoordinate2DMake(self.deviceInfoModelSelect.lat.doubleValue, self.deviceInfoModelSelect.lng.doubleValue);
-//        [self.baiduMapView setCenterCoordinate:coorData animated: YES];
-        [self.baiduVisibleCoordinateArr addObject:[self getCoorObj:coorData]];
+        if (CarDeviceManager.deviceInfoModelSelect) {
+            //更新中心位置
+            CLLocationCoordinate2D coorData = CLLocationCoordinate2DMake(CarDeviceManager.deviceInfoModelSelect.lat.doubleValue, CarDeviceManager.deviceInfoModelSelect.lng.doubleValue);
+            //        [self.baiduMapView setCenterCoordinate:coorData animated: YES];
+            [self.baiduVisibleCoordinateArr addObject:[self getCoorObj:coorData]];
+        }
         [self baiduMapFitFence:self.baiduVisibleCoordinateArr];
     }
 }
@@ -2078,7 +2051,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     // 未选中设备时，控制模块和报表模块不能点击
     if ([viewController.tabBarItem.title isEqualToString:Localized(@"电子围栏")] || [viewController.tabBarItem.title isEqualToString:Localized(@"报表")]) {
         CBPetLoginModel *userLogin = [CBPetLoginModelTool getUser];
-        CBHomeLeftMenuDeviceInfoModel *deviceModelInfo = self.deviceInfoModelSelect;
+        CBHomeLeftMenuDeviceInfoModel *deviceModelInfo = CarDeviceManager.deviceInfoModelSelect;
         // 没有选中
         if (deviceModelInfo == nil) {
             [HUD showHUDWithText:Localized(@"请在左上角菜单选择设备") withDelay:2.0];

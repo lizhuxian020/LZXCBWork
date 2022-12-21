@@ -36,10 +36,8 @@ const NSString *cbGetCallChargeParamters           = @"/personController/getDevi
                              failure:(FailureBlock)failure {
     NSString *url = [NSString stringWithFormat:@"%@",bdtGetMyDeviceList];
     [[NetWorkingManager shared] getWithUrl:url params:paramters succeed:^(id response, BOOL isSucceed) {
-        if (isSucceed) {
-            CBBaseNetworkModel *baseModel = [CBBaseNetworkModel mj_objectWithKeyValues:response];
-            !success?:success(baseModel);
-        }
+        CBBaseNetworkModel *baseModel = [CBBaseNetworkModel mj_objectWithKeyValues:response];
+        !success?:success(baseModel);
         } failed:^(NSError *error) {
             !failure?:failure(error);
         }];

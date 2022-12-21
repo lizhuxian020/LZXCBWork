@@ -40,7 +40,14 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @interface CBMQTTCarDeviceModel : NSObject
-/**  使用状态：0-未启用，1-行驶，2-静止 */
+/*
+"code":1 设备离线     //此时需改设备状态为绿色
+"code": 2 下发指令应答
+"code":6设备上线    //此时需改设备状态为蓝色
+"code":21设备推送定位数据，当code为21根据对象内容获取结果定位数据，更新到地图上
+ */
+@property (nonatomic, assign) int code;
+//设备状态    0：未启用 1静止 2行驶 3报警 4停留（各状态对应不同图标）
 @property (nonatomic, copy) NSString *devStatus;
 @property(nonatomic, copy) NSString *dno;
 @property (nonatomic, strong) CBMQTTCarDeviceLocationModel *location;

@@ -84,8 +84,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *uid;
 /** 报警状态 0 未报警 1 报警  */
 @property (nonatomic, copy) NSString *warmed;
-/**  使用状态：0-未启用，1-行驶，2-静止 */
+
+//设备列表接口里的 status 0：离线 其他：静止(来自设备列表, 如果MQTT没有值, 就判断这个)
 @property (nonatomic, copy) NSString *devStatus;
+//设备状态    0：未启用 1静止 2行驶 3报警 4停留（各状态对应不同图标）
+@property (nonatomic, copy) NSString *devStatusInMQTT;
 /**   */
 @property (nonatomic, copy) NSString *devPhone;
 /** 地图比例  */
@@ -118,6 +121,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *gsm;
 @property (nonatomic, copy) NSString *warmType;
 @property (nonatomic, copy) NSString *address;
+/** 停止时间 **/
+@property (nonatomic, copy) NSString *stopTime ;
 
 @property (nonatomic, copy) NSString *disQs;//运动汇报时间间隔
 @property (nonatomic, copy) NSString *disRest;
@@ -126,6 +131,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *timeQs; //运动汇报时间间隔   
 @property (nonatomic, copy) NSString *timeRest; //静止汇报时间间隔
 @property (nonatomic, copy) NSString *timeSos;
+
+/// 详见CBMQTTCarDeviceModel的code
+@property (nonatomic, assign) int mqttCode ;
 @end
 
 @interface CBHomeLeftMenuDeviceInfoModelFenceModel : NSObject

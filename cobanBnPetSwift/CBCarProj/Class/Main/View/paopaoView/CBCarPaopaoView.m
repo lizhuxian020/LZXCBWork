@@ -630,17 +630,17 @@
     NSLog(@"%@", title);
     if ([title isEqualToString:__CarPaoTitle_Title]) {
         if (self.clickBlock) {
-            self.clickBlock(CBCarPaopaoViewClickTypeTitle, self.dno);
+            self.clickBlock(CBCarPaopaoViewClickTypeTitle, self.deviceInfoModel);
         }
     }
     if ([title isEqualToString:__CarPaoTitle_Track]) {
         if (self.clickBlock) {
-            self.clickBlock(CBCarPaopaoViewClickTypeTrack, self.dno);
+            self.clickBlock(CBCarPaopaoViewClickTypeTrack, self.deviceInfoModel);
         }
     }
     if ([title isEqualToString:__CarPaoTitle_PlayBack]) {
         if (self.clickBlock) {
-            self.clickBlock(CBCarPaopaoViewClickTypePlayBack, self.dno);
+            self.clickBlock(CBCarPaopaoViewClickTypePlayBack, self.deviceInfoModel);
         }
     }
     if ([title isEqualToString:__CarPaoTitle_Move]) {
@@ -653,17 +653,17 @@
     NSLog(@"%@", title);
     if ([title containsString:@"200"]) {
         if (self.didClickMove) {
-            self.didClickMove(@"200");
+            self.didClickMove(@"200", self.deviceInfoModel);
         }
     }
     if ([title containsString:@"500"]) {
         if (self.didClickMove) {
-            self.didClickMove(@"500");
+            self.didClickMove(@"500", self.deviceInfoModel);
         }
     }
     if ([title containsString:@"1000"]) {
         if (self.didClickMove) {
-            self.didClickMove(@"1000");
+            self.didClickMove(@"1000", self.deviceInfoModel);
         }
     }
     [self hideMovePopView];
@@ -739,9 +739,7 @@
         _lngLb.attributedText = [self getAttStr:Localized(@"经纬度:") content:[NSString stringWithFormat:@"%@, %@", _deviceInfoModel.lng, _deviceInfoModel.lat]];
         
         _statusLb.attributedText = [self getAttStr:Localized(@"状态:")
-                                           content:
-                                    _deviceInfoModel.devStatus.intValue==1?@"行驶中":
-                                    _deviceInfoModel.devStatus.intValue==2?@"静止":@"未启用"];
+                                           content:[self getStatusString:_deviceInfoModel]];
         _cfLb.attributedText = [self getAttStr:Localized(@"设备:")
                                        content:
                                 _deviceInfoModel.cfbf.intValue == 0 ? Localized(@"撤防") : Localized(@"布防")];
@@ -770,6 +768,39 @@
         _timeLb.attributedText = [self getAttStr:Localized(@"上报时间:") content:createTimeStr];
         _addressLabel.attributedText = [self getAttStr:Localized(@"地址:") content:deviceInfoModel.address?:@"未知"];
     }
+}
+
+
+/*
+ 只有上线后才会收到code=21的推送
+ 一个完整的流程就是 先上线 然后上报位置（其中会产生不同的设备状态） 最后离线
+
+ 先收到code=6的推送 把图标和状态由离线更新成在线（静止类型图标）
+ 之后会到code=21的推送 把图标和状态由离线更新根据devstats判断展示（判断展示类型图标）
+ 最后会到code=1的推送代表设备离线状态更改为离线（离线类型图标）
+ */
+- (NSString *)getStatusString:(CBHomeLeftMenuDeviceInfoModel *)model {
+    if (model.mqttCode > 0) {
+        if (model.mqttCode == 1) {
+            return Localized(@"离线");
+        }
+        if (model.mqttCode == 6) {
+            return Localized(@"静止");
+        }
+        if (model.mqttCode == 21) {
+            return
+            model.devStatusInMQTT.intValue==0?Localized(@"未启用"):
+            model.devStatusInMQTT.intValue==1?Localized(@"静止"):
+            model.devStatusInMQTT.intValue==2?Localized(@"行驶中"):
+            model.devStatusInMQTT.intValue==3?Localized(@"报警"):
+            model.devStatusInMQTT.intValue==4?Localized(@"停留"):
+            Localized(@"未知");
+        }
+    } else if (!kStringIsEmpty(model.devStatus)) {
+        return
+        model.devStatus.intValue==0?Localized(@"离线"):Localized(@"静止");
+    }
+    return Localized(@"未知");
 }
 
 - (NSString *)getReportString:(CBHomeLeftMenuDeviceInfoModel *)model {

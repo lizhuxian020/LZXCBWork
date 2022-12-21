@@ -10,6 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/// 主要处理设备对应的功能菜单显示数据
 @interface CBDeviceTool : NSObject
 + (instancetype)shareInstance;
 
