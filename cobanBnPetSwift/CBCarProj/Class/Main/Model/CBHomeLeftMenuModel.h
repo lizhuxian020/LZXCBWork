@@ -118,6 +118,14 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *gsm;
 @property (nonatomic, copy) NSString *warmType;
 @property (nonatomic, copy) NSString *address;
+
+@property (nonatomic, copy) NSString *disQs;//运动汇报时间间隔
+@property (nonatomic, copy) NSString *disRest;
+@property (nonatomic, copy) NSString *disSos;
+@property (nonatomic, copy) NSString *reportWay; //定位策略  0：定时汇报 1定距汇报 2定时定距汇报
+@property (nonatomic, copy) NSString *timeQs; //运动汇报时间间隔   
+@property (nonatomic, copy) NSString *timeRest; //静止汇报时间间隔
+@property (nonatomic, copy) NSString *timeSos;
 @end
 
 @interface CBHomeLeftMenuDeviceInfoModelFenceModel : NSObject

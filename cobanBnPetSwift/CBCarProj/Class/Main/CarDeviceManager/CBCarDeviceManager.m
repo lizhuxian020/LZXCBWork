@@ -32,9 +32,35 @@
             return;
         }
         self.deviceDatas = [CBHomeLeftMenuDeviceInfoModel mj_objectArrayWithKeyValuesArray:response[@"data"]];
+        for (CBHomeLeftMenuDeviceInfoModel *deviceModel in self.deviceDatas) {
+            [self updateParamList:deviceModel];
+        }
         if (self.didUpdateDeviceData) {
             self.didUpdateDeviceData(self.deviceDatas);
         }
+    } failed:^(NSError *error) {
+        
+    }];
+}
+
+- (void)updateParamList:(CBHomeLeftMenuDeviceInfoModel *)model {
+    if (kStringIsEmpty(model.dno)) {
+        return;
+    }
+    [[NetWorkingManager shared] getWithUrl:@"/devControlController/getParamList" params:@{
+        @"dno": model.dno
+    } succeed:^(id response, BOOL isSucceed) {
+        if (!isSucceed || !response || !response[@"data"]) {
+            return;
+        }
+        CBHomeLeftMenuDeviceInfoModel *deviceModel = [CBHomeLeftMenuDeviceInfoModel mj_objectWithKeyValues:response[@"data"]];
+        model.disQs = deviceModel.disQs;
+        model.disRest = deviceModel.disRest;
+        model.disSos = deviceModel.disSos;
+        model.reportWay = deviceModel.reportWay;
+        model.timeQs = deviceModel.timeQs;
+        model.timeRest = deviceModel.timeRest;
+        model.timeSos = deviceModel.timeSos;
     } failed:^(NSError *error) {
         
     }];

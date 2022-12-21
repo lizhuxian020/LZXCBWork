@@ -414,7 +414,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     fitRect.origin = BMKMapPointMake(leftX, leftY);
     fitRect.size = BMKMapSizeMake(width, height);
     [_baiduMapView setVisibleMapRect: fitRect animated:YES];
-    _baiduMapView.zoomLevel = _baiduMapView.zoomLevel - 0.3;
+    _baiduMapView.zoomLevel = _baiduMapView.zoomLevel - 0.5;
 }
 - (void)googleMapFitFence:(NSArray *)modelArr {
     GMSCoordinateBounds *bounds = self.gmsBounds;

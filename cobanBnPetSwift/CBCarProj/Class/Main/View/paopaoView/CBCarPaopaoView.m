@@ -210,6 +210,8 @@
 - (UIScrollView *)middleView {
     if (!_middleView) {
         _middleView = [[UIScrollView alloc]init];
+        _middleView.alwaysBounceHorizontal = NO;
+        _middleView.bounces = NO;
         _middleView.delegate = self;
         [self.bgmView addSubview:_middleView];
         [_middleView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -455,45 +457,9 @@
     _warmTypeLb = [self createLbTitle:@"报警类型:8"];
     _timeLb = [self createLbTitle:@"上报时间:2020-05-18 13:35:32"];
     _addressLabel = [self createLbTitle:@"四川省成都市高新区长虹科技大厦"];
-//    _latLb = [self createLbTitle:@"维度:"];
-//    _speedLb = [self createLbTitle:@"速度:"];
-//    _offlineTimeLb = [self createLbTitle:@"离线时长:0分"];
-//    _stayTimeLb = [self createLbTitle:@"停留时长:0分"];
-//    _stayCountLb = [self createLbTitle:@"停留次数:0分"];
-
-    
-//    _inElectriLb = [self createLbTitle:@"内电:关"];
-//    _outElectriLb = [self createLbTitle:@"外电:开"];
-    
-//    _mileageLb = [self createLbTitle:@"当天里程:0km"];
-//    _bfLb = [self createLbTitle:@"布防:开"];
-    
-//
-//    _lowElectricWarmLb = [self createLbTitle:@"低电报警:开"];
-//    _mqWarmLb = [self createLbTitle:@"盲区报警:开"];
-//    _ddWarmLb = [self createLbTitle:@"掉电报警:开"];
-//    _overSpeedWarmLb = [self createLbTitle:@"超速报警:开"];
-//    _zdWarmLb = [self createLbTitle:@"振动报警:开"];
-//    _yljcWarmLb = [self createLbTitle:@"油量检测报警:开"];
-//    _gpsDriftLb = [self createLbTitle:@"GPS漂移抑制:开"];
-//
-//    _ydControlLb = [self createLbTitle:@"油电控制:开"];
-//    _vibrationLb = [self createLbTitle:@"振动灵敏度:高"];
-//    _accNoticeLb = [self createLbTitle:@"ACC工作通知:开"];
-//    _timeZone = [self createLbTitle:@"终端时区:8"];
-//
-
     
     
-  
-    
-    
-    
-    NSArray *arrLb = @[_lngLb,_statusLb,_cfLb,_accLb,_doorLb,_electriLb,_oilLb,_sleepModelLb,_gsmNumberLb,_gpsNumberLb,_reportLb,_warmTypeLb,_timeLb,_addressLabel
-//                       _latLb,_speedLb,_offlineTimeLb,_stayTimeLb,_stayCountLb,_doorLb,_accLb,_oilLb,_mileageLb,_inElectriLb,
-//        _outElectriLb,_bfLb,_cfLb,_lowElectricWarmLb,_mqWarmLb,_ddWarmLb,_overSpeedWarmLb,_zdWarmLb,_yljcWarmLb,
-//                             _gpsDriftLb,_ydControlLb,_vibrationLb,_accNoticeLb,_timeZone,_sleepModelLb,_gpsNumberLb,_gsmNumberLb,_timeLb,_addressLabel
-    ];//_warmTypeLb
+    NSArray *arrLb = @[_lngLb,_statusLb,_cfLb,_accLb,_doorLb,_electriLb,_oilLb,_sleepModelLb,_gsmNumberLb,_gpsNumberLb,_reportLb,_warmTypeLb,_timeLb,_addressLabel];
     [self restMutableArray:self.arrayLb addFromArray:arrLb];
     
     //同一行的放里面(不换行）
@@ -538,8 +504,11 @@
 //        lb.frame = CGRectMake(20*KFitWidthRate + rate_x*CGRectGetWidth(self.middleView.frame)/2, rate_y, 340*KFitWidthRate, 20*KFitHeightRate);
     }
     [lastLbl mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(@0);
+        make.bottom.equalTo(@-20);
         make.width.equalTo(self.middleView).mas_offset(-20);
+    }];
+    [_lngLb mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(@-5);
     }];
 }
 - (void)insertArrLbAndArrTitle:(NSInteger)index {
@@ -784,7 +753,7 @@
         _sleepModelLb.attributedText = [self getAttStr:Localized(@"休眠模式:") content:[self returnSleepModel:_deviceInfoModel.restMod]];
         _gsmNumberLb.attributedText = [self getAttStr:@"GSM:" content:deviceInfoModel.gsm.intValue >= 15 ? Localized(@"强") : Localized(@"弱")];
         _gpsNumberLb.attributedText = [self getAttStr:@"GPS:" content:[NSString stringWithFormat:@"%@",(deviceInfoModel.gps.intValue >= 4 ? Localized(@"强") : Localized(@"弱"))]];
-        _reportLb.attributedText = [self getAttStr:Localized(@"上报策略:") content:@"xxx"];
+        _reportLb.attributedText = [self getAttStr:Localized(@"上报策略:") content:[self getReportString:deviceInfoModel]];
         NSArray *arrayWarmType = [deviceInfoModel.warmType componentsSeparatedByString:@","];
         NSMutableArray *arrTemp = [NSMutableArray array];
         if (arrayWarmType.count > 0) {
@@ -803,6 +772,36 @@
     }
 }
 
+- (NSString *)getReportString:(CBHomeLeftMenuDeviceInfoModel *)model {
+    if (!kStringIsEmpty(model.reportWay)) {
+        if (model.reportWay.intValue == 0) {
+            return [NSString stringWithFormat:@"%@ %@, %@ %@", Localized(@"静止"), [self getTime:model.timeRest.intValue], Localized(@"运动"), [self getTime:model.timeQs.intValue]];
+        }
+        if (model.reportWay.intValue == 2) {
+            return [NSString stringWithFormat:@"%@ %@, %@ %@%@", Localized(@"静止"), [self getTime:model.timeRest.intValue], Localized(@"运动"), model.disQs, Localized(@"米")];
+        }
+    }
+    return Localized(@"未知");
+}
+
+- (NSString *)getTime:(int)sec {
+    NSArray *secData= @[@"s", @"min", @"h", @"d"];
+    int num, uidx;
+    if (sec >= (60 * 60 * 24)) {
+        uidx = 3;
+        num = sec / (60 * 60 * 24);
+    } else if (sec >= (60 * 60)) {
+        uidx = 2;
+        num = sec / (60 * 60);
+    } else if (sec >= (60)) {
+        uidx = 1;
+        num = sec / (60 );
+    } else {
+        uidx = 0;
+        num = sec;
+    }
+    return [NSString stringWithFormat:@"%d%@", num, secData[uidx]];
+}
 
 - (NSAttributedString *)getAttStr:(NSString *)title
                           content:(NSString *)content {
