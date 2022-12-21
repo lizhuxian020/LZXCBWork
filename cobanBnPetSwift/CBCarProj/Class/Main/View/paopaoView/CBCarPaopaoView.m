@@ -185,7 +185,7 @@
         [_bgmView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.mas_equalTo(self.mas_centerY);
             make.centerX.mas_equalTo(self.mas_centerX);
-            make.size.mas_equalTo(CGSizeMake(340*KFitWidthRate, 378*KFitHeightRate));
+            make.size.mas_equalTo(CGSizeMake(340, 378));
         }];
     }
     return _bgmView;
@@ -218,7 +218,7 @@
             make.left.equalTo(self.bgmView).with.offset(13 * KFitWidthRate);
             make.right.equalTo(self.bgmView).with.offset(-12 * KFitWidthRate);
             make.top.equalTo(self.titleView.mas_bottom).offset(0);
-            make.height.mas_equalTo((245)*KFitHeightRate);
+//            make.height.mas_equalTo((245)*KFitHeightRate);
         }];
         _middleContentView = [UIView new];
         [_middleView addSubview:_middleContentView];
@@ -237,17 +237,21 @@
     if (!_bottomView) {
         _bottomView = [[UIView alloc]init];
         [self.bgmView addSubview:_bottomView];
+        _bottomView.backgroundColor = kRGB(247,247,247);
         [_bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.right.equalTo(_titleView);
+            make.left.equalTo(@6);
+            make.right.equalTo(@-5);
             make.height.mas_equalTo(50 * KFitHeightRate);
             make.top.equalTo(_middleView.mas_bottom);
+            make.bottom.equalTo(@-20);
         }];
     }
     return _bottomView;
 }
 - (UILabel *)titleLabel {
     if (!_titleLabel) {
-        _titleLabel = [MINUtils createLabelWithText: @"2345" size:15*KFitHeightRate alignment: NSTextAlignmentLeft textColor: [UIColor whiteColor]];
+        _titleLabel = [MINUtils createLabelWithText: @"2345" size:16 alignment: NSTextAlignmentLeft textColor: kCellTextColor];
+        _titleLabel.font = [UIFont systemFontOfSize:15 weight:UIFontWeightBold];
         [self.titleView addSubview:_titleLabel];
         [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(_titleView).with.offset(15*KFitWidthRate);

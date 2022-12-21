@@ -649,7 +649,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [self.alertBtn addTarget:self action:@selector(didClickAlertBtn) forControlEvents:UIControlEventTouchUpInside];
 //    self.alertBtn.BadgeValue = @"99";
     
-    self.personBtn = [self createBtn:@"个人资料"];
+    self.personBtn = [self createBtn:@"默认头像-首页"];
     [self.personBtn.layer setMasksToBounds:YES];
     [self.personBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.width.height.equalTo(self.deviceListBtn);

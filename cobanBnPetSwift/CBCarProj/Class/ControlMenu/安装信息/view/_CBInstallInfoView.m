@@ -177,10 +177,12 @@
         [img mas_makeConstraints:^(MASConstraintMaker *make) {
             
             make.right.equalTo(arrow.mas_left).mas_offset(-10);
-            make.width.height.equalTo(@50);
+            make.width.height.equalTo(@60);
             make.top.equalTo(@15);
             make.bottom.equalTo(@-15);
         }];
+        img.layer.cornerRadius = 4;
+        img.layer.masksToBounds = YES;
         *lbl = img;
     }
     
@@ -202,7 +204,7 @@
     [self setLbl:self.engineLbl text:_model.engineNumber placeHolder:Localized(@"请输入")];
     [self setLbl:self.brandLbl text:_model.vehicleBrand placeHolder:Localized(@"请输入")];
     
-    [self.imgView sd_setImageWithURL:[NSURL URLWithString:model.installPicture] placeholderImage:[UIImage imageNamed:@"选项-选中"]];
+    [self.imgView sd_setImageWithURL:[NSURL URLWithString:model.installPicture] placeholderImage:[UIImage imageNamed:@"添加图片"]];
 }
 
 - (void)setLbl:(UILabel *)lbl text:(NSString *)text placeHolder:(NSString *)placeHolder{
