@@ -87,12 +87,27 @@
             make.centerY.equalTo(@0);
         }];
     }
+    
+    NSString *authString = @"";
+    if (!kStringIsEmpty(self.accountModel.auth)) {
+        authString =
+        self.accountModel.auth.intValue == 0 ? Localized(@"所有权限") :
+        self.accountModel.auth.intValue == 1 ? Localized(@"查看权限") :
+        self.accountModel.auth.intValue == 2 ? Localized(@"控制权限") : @"";
+    }
+    NSString *statusString = @"";
+    if (!kStringIsEmpty(self.accountModel.status)) {
+        statusString =
+        self.accountModel.status.intValue == 0 ? Localized(@"正常") :
+        self.accountModel.status.intValue == 1 ? Localized(@"冻结") : @"";
+    }
+    
     lbl.text =
     indexPath.row == 0 ? self.accountModel.account :
     indexPath.row == 1 ? self.accountModel.name :
-    indexPath.row == 2 ? self.accountModel.auth :
+    indexPath.row == 2 ? authString :
     indexPath.row == 3 ? self.accountModel.phone :
-    indexPath.row == 4 ? self.accountModel.status :
+    indexPath.row == 4 ? statusString :
     indexPath.row == 6 ? [MINUtils getTimeFromTimestamp:self.accountModel.create_time formatter:@"yyyy-MM-dd HH:mm:ss"] :
     @"";
     

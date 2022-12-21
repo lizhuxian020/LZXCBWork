@@ -1445,3 +1445,9 @@
 "确认删除?" = "confirm deletion?";
 "添加组" = "Add group";
 
+"所有权限" = "All permissions";
+"查看权限" = "Check permissions";
+"控制权限" = "Control permissions";
+
+"正常" = "Normal";
+"冻结" = "Freeze";
