@@ -782,6 +782,16 @@
  先收到code=6的推送 把图标和状态由离线更新成在线（静止类型图标）
  之后会到code=21的推送 把图标和状态由离线更新根据devstats判断展示（判断展示类型图标）
  最后会到code=1的推送代表设备离线状态更改为离线（离线类型图标）
+ 
+ 停留时间=当前时间戳-stopTime  再把停留时间显示成天 时 分
+ 例如  当前时间戳=1671589173000（ms）  stopTime=1671587742000(ms)
+
+      把结果再转成天时分，先判断天 如果有天就显示几天 例如： 7天+
+      不够1天 就显示小时  例如8小时
+       不够1时 就显示分  例如8分
+       不够1分 就显示秒  例如8秒
+ 停留时间 =1671589173000-1671587742000=1431000ms =1431s =23.85分有小数点就显示显示+       这个的话就是23分+
+
  */
 - (NSString *)getStatusString:(CBHomeLeftMenuDeviceInfoModel *)model {
     if (model.mqttCode > 0) {
@@ -792,12 +802,22 @@
             return Localized(@"静止");
         }
         if (model.mqttCode == 21) {
+            NSString *appendTime = @"";
+            if (!kStringIsEmpty(model.stopTime)) {
+                NSTimeInterval currentTime = NSDate.date.timeIntervalSince1970 * 1000;
+                NSTimeInterval stopTime = model.stopTime.doubleValue;
+                if (currentTime > stopTime) {
+                    NSTimeInterval duringTime = currentTime - stopTime;
+                    appendTime = [self getTime:(duringTime / 1000) needAdd:YES];
+                }
+            }
             return
             model.devStatusInMQTT.intValue==0?Localized(@"未启用"):
             model.devStatusInMQTT.intValue==1?Localized(@"静止"):
             model.devStatusInMQTT.intValue==2?Localized(@"行驶中"):
             model.devStatusInMQTT.intValue==3?Localized(@"报警"):
-            model.devStatusInMQTT.intValue==4?Localized(@"停留"):
+            model.devStatusInMQTT.intValue==4?
+            [Localized(@"停留") stringByAppendingFormat:@" %@", appendTime]:
             Localized(@"未知");
         }
     } else if (!kStringIsEmpty(model.devStatus)) {
@@ -810,32 +830,39 @@
 - (NSString *)getReportString:(CBHomeLeftMenuDeviceInfoModel *)model {
     if (!kStringIsEmpty(model.reportWay)) {
         if (model.reportWay.intValue == 0) {
-            return [NSString stringWithFormat:@"%@ %@, %@ %@", Localized(@"静止"), [self getTime:model.timeRest.intValue], Localized(@"运动"), [self getTime:model.timeQs.intValue]];
+            return [NSString stringWithFormat:@"%@ %@, %@ %@", Localized(@"静止"), [self getTime:model.timeRest.intValue needAdd:NO], Localized(@"运动"), [self getTime:model.timeQs.intValue needAdd:NO]];
         }
         if (model.reportWay.intValue == 2) {
-            return [NSString stringWithFormat:@"%@ %@, %@ %@%@", Localized(@"静止"), [self getTime:model.timeRest.intValue], Localized(@"运动"), model.disQs, Localized(@"米")];
+            return [NSString stringWithFormat:@"%@ %@, %@ %@%@", Localized(@"静止"), [self getTime:model.timeRest.intValue needAdd:NO], Localized(@"运动"), model.disQs, Localized(@"米")];
         }
     }
     return Localized(@"未知");
 }
 
-- (NSString *)getTime:(int)sec {
+- (NSString *)getTime:(int)sec needAdd:(BOOL)needAdd{
     NSArray *secData= @[@"s", @"min", @"h", @"d"];
     int num, uidx;
+    BOOL isHasAdd = NO;
     if (sec >= (60 * 60 * 24)) {
         uidx = 3;
         num = sec / (60 * 60 * 24);
+        double pointValue = sec * 1.0f / (60.0f * 60 * 24.0f);
+        isHasAdd = pointValue > num;
     } else if (sec >= (60 * 60)) {
         uidx = 2;
         num = sec / (60 * 60);
+        double pointValue = sec * 1.0f / (60.0f * 60);
+        isHasAdd = pointValue > num;
     } else if (sec >= (60)) {
         uidx = 1;
         num = sec / (60 );
+        double pointValue = sec * 1.0f / (60.0f);
+        isHasAdd = pointValue > num;
     } else {
         uidx = 0;
         num = sec;
     }
-    return [NSString stringWithFormat:@"%d%@", num, secData[uidx]];
+    return [NSString stringWithFormat:@"%d%@%@", num, secData[uidx], isHasAdd && needAdd ? @"+" : @""];
 }
 
 - (NSAttributedString *)getAttStr:(NSString *)title
