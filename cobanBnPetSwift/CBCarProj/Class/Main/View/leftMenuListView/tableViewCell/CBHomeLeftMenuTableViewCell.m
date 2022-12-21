@@ -145,20 +145,27 @@
 //    }
     _deviceNameLabel.text = deviceInfoModel.name?:@"";
     if ([deviceInfoModel.devStatus isEqualToString:@"0"]) {
-        self.deviceStatusLabel.text = Localized(@"未使用");
-        self.deviceStatusLabel.textColor = [UIColor redColor];
-    } else if (![deviceInfoModel.online isEqualToString:@"1"]) {
         self.deviceStatusLabel.text = Localized(@"离线");
         self.deviceStatusLabel.textColor = kRGB(137 , 137, 137);
-    } else if ([deviceInfoModel.devStatus isEqualToString:@"1"]) {
-        self.deviceStatusLabel.text = Localized(@"行驶中");
-        self.deviceStatusLabel.textColor = kRGB(26, 151, 251);
-    } else if ([deviceInfoModel.devStatus isEqualToString:@"2"]) {
-        self.deviceStatusLabel.text = Localized(@"静止");
-        self.deviceStatusLabel.textColor = [UIColor redColor];
     } else {
-        self.deviceStatusLabel.text = Localized(@"未使用");
+        self.deviceStatusLabel.text = Localized(@"静止");
+        self.deviceStatusLabel.textColor = kRGB(137 , 137, 137);
     }
+//    if ([deviceInfoModel.devStatus isEqualToString:@"0"]) {
+//        self.deviceStatusLabel.text = Localized(@"未使用");
+//        self.deviceStatusLabel.textColor = [UIColor redColor];
+//    } else if (![deviceInfoModel.online isEqualToString:@"1"]) {
+//        self.deviceStatusLabel.text = Localized(@"离线");
+//        self.deviceStatusLabel.textColor = kRGB(137 , 137, 137);
+//    } else if ([deviceInfoModel.devStatus isEqualToString:@"1"]) {
+//        self.deviceStatusLabel.text = Localized(@"行驶中");
+//        self.deviceStatusLabel.textColor = kRGB(26, 151, 251);
+//    } else if ([deviceInfoModel.devStatus isEqualToString:@"2"]) {
+//        self.deviceStatusLabel.text = Localized(@"静止");
+//        self.deviceStatusLabel.textColor = [UIColor redColor];
+//    } else {
+//        self.deviceStatusLabel.text = Localized(@"未使用");
+//    }
 }
 - (void)layoutSubviews {
     [super layoutSubviews];
