@@ -142,6 +142,7 @@
     if (self.didUpdateDeviceData) {
         self.didUpdateDeviceData(self.deviceDatas);
     }
+    [NSNotificationCenter.defaultCenter postNotificationName:@"CBCAR_NOTFICIATION_GETMQTT" object:nil userInfo:nil];
 }
 
 - (void)setCurrentChooseDevice:(CBHomeLeftMenuDeviceInfoModel *)model {

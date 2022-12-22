@@ -118,6 +118,7 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
+        [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(didGetMQTT) name:@"CBCAR_NOTFICIATION_GETMQTT" object:nil];
         [self setupView];
     }
     return self;
@@ -734,6 +735,11 @@
     }
     self.isAlertPaopaoView = NO;
     [self removeFromSuperview];
+}
+- (void)didGetMQTT {
+    if (_deviceInfoModel) {
+        [self setDeviceInfoModel:_deviceInfoModel];
+    }
 }
 - (void)setDeviceInfoModel:(CBHomeLeftMenuDeviceInfoModel *)deviceInfoModel {
     _deviceInfoModel = deviceInfoModel;
