@@ -136,7 +136,8 @@ static AFHTTPSessionManager *afManager = nil;
                     //[HUD showHUDWithText:[Utils getSafeString: responseObject[@"resmsg"]] withDelay:1.2];
 //                }
                 
-                [CBTopAlertView alertFail:[Utils getSafeString: responseObject[@"resmsg"]]];
+//                [CBTopAlertView alertFail:[Utils getSafeString: responseObject[@"resmsg"]]];
+//                [HUD showHUDWithText:[Utils getSafeString: responseObject[@"resmsg"]]];
             }
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {

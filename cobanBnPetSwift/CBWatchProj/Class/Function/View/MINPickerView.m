@@ -114,21 +114,21 @@
         make.top.left.right.equalTo(contentView);
         make.height.mas_equalTo(40 * KFitHeightRate);
     }];
-    _cancelBtn = [CBWtMINUtils createNoBorderBtnWithTitle:Localized(@"取消") titleColor: KWtRGB(0, 69, 255) fontSize: 18 * KFitWidthRate];
+    _cancelBtn = [CBWtMINUtils createNoBorderBtnWithTitle:Localized(@"取消") titleColor: kAppMainColor fontSize: 18 * KFitWidthRate];
     [titleView addSubview: _cancelBtn];
     [_cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.equalTo(titleView);
         //make.width.mas_equalTo(50 * KFitWidthRate);
         make.left.mas_equalTo(15*KFitHeightRate);
     }];
-    _titleLabel = [CBWtMINUtils createLabelWithText:Localized(@"标题") size: 15 * KFitHeightRate alignment: NSTextAlignmentCenter textColor: KWtRGB(0, 69, 255)];
-    [titleView addSubview: _titleLabel];
-    [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.bottom.equalTo(titleView);
-        make.width.mas_equalTo(200 * KFitWidthRate);
-        make.centerX.equalTo(titleView);
-    }];
-    _confirmBtn = [CBWtMINUtils createNoBorderBtnWithTitle:Localized(@"确定") titleColor: KWtRGB(0, 69, 255) fontSize: 18 * KFitWidthRate];
+//    _titleLabel = [CBWtMINUtils createLabelWithText:Localized(@"标题") size: 15 * KFitHeightRate alignment: NSTextAlignmentCenter textColor: kAppMainColor];
+//    [titleView addSubview: _titleLabel];
+//    [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.bottom.equalTo(titleView);
+//        make.width.mas_equalTo(200 * KFitWidthRate);
+//        make.centerX.equalTo(titleView);
+//    }];
+    _confirmBtn = [CBWtMINUtils createNoBorderBtnWithTitle:Localized(@"确定") titleColor: kAppMainColor fontSize: 18 * KFitWidthRate];
     [titleView addSubview: _confirmBtn];
     [_confirmBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.equalTo(titleView);

@@ -31,7 +31,7 @@
 
 - (void)createUI {
     self.frame = CGRectMake(0, -PPNavigationBarHeight, SCREEN_WIDTH, PPNavigationBarHeight);
-    self.backgroundColor = _isSuccess ? UIColor.blueColor : UIColor.redColor;
+    self.backgroundColor = _isSuccess ? [UIColor colorWithHexString:@"0195ff"] : [UIColor colorWithHexString:@"fc5550"];
     
     UILabel *lbl = [MINUtils createLabelWithText:_title size:20 alignment:NSTextAlignmentLeft textColor:UIColor.whiteColor];
     lbl.font = [UIFont systemFontOfSize:20 weight:UIFontWeightBold];

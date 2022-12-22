@@ -173,12 +173,12 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [self requestUserData];
     [self checkNetWork];
     [CBCarDeviceManager.shared requestDeviceData];
-    if ([[self getCurrentVC] isKindOfClass:[MainMapViewController class]]) {
-        [[CBPetTopSwitchBtnView share] showCtrlPanelWithResultBlock:^{
-        }];
-        [[CBPetBottomSwitchBtnView share] showCtrlPanelWithResultBlock:^{
-        }];
-    }
+//    if ([[self getCurrentVC] isKindOfClass:[MainMapViewController class]]) {
+    [[CBPetTopSwitchBtnView share] showCtrlPanelWithResultBlock:^{
+    }];
+    [[CBPetBottomSwitchBtnView share] showCtrlPanelWithResultBlock:^{
+    }];
+//    }
 }
 - (void)checkNetWork {
     kWeakSelf(self);
@@ -200,8 +200,8 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     
     [self endTimer];
     
-//    [[CBPetTopSwitchBtnView share] removeView];
-//    [[CBPetBottomSwitchBtnView share] removeView];
+    [[CBPetTopSwitchBtnView share] removeView];
+    [[CBPetBottomSwitchBtnView share] removeView];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {

@@ -106,8 +106,8 @@
 {
 //    self.tabBar.backgroundColor = kRGB(255, 255, 255);
     self.tabBar.translucent = NO;
-    self.tabBar.backgroundColor = UIColor.blackColor;
-    self.tabBar.backgroundImage = [UIImage imageWithColor:UIColor.blackColor];
+    self.tabBar.backgroundColor = [UIColor colorWithHexString:@"#333333"];
+    self.tabBar.backgroundImage = [UIImage imageWithColor:[UIColor colorWithHexString:@"#333333"]];
 }
 
 - (void)loadViewControllers {
@@ -207,7 +207,7 @@
                    normalColor:(UIColor *)normalColor {
     if (@available(iOS 13.0, *)) {
         UITabBarAppearance *appearance = [[UITabBarAppearance alloc] init];
-        appearance.backgroundColor = UIColor.blackColor;
+        appearance.backgroundColor = [UIColor colorWithHexString:@"#333333"];
         // 未选中时候标题颜色
         appearance.stackedLayoutAppearance.normal.titleTextAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:10],NSForegroundColorAttributeName:normalColor};
         // 选中时候标题的颜色
@@ -219,7 +219,7 @@
         // Fallback on earlier versions
         [controller.tabBarItem setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:10],NSForegroundColorAttributeName:selectedColor} forState:UIControlStateSelected];
         [controller.tabBarItem setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:10],NSForegroundColorAttributeName:normalColor} forState:UIControlStateNormal];
-        [[UITabBar appearance] setBarTintColor:UIColor.blackColor];
+        [[UITabBar appearance] setBarTintColor:[UIColor colorWithHexString:@"#333333"]];
     }
 }
 - (void)didReceiveMemoryWarning {
