@@ -1659,7 +1659,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         if (isSucceed) {
-            [MINUtils showProgressHudToView: weakSelf.view withText:Localized(@"单次定位成功")];
+            [MINUtils showProgressHudToView: UIApplication.sharedApplication.keyWindow withText:Localized(@"操作成功")];
         } else {
         }
     } failed:^(NSError *error) {

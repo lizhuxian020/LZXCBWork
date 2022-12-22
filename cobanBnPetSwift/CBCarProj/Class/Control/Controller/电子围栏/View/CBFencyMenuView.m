@@ -349,7 +349,7 @@
     self.inSwitch.on = model.warmType == 1 || model.warmType == 2;
     self.outSwitch.on = model.warmType == 0 || model.warmType == 2;
     
-    if (model.speed) {
+    if (model.speed && model.speed.intValue > 0) {
         self.overTF.text = model.speed;
         self.overSwitch.on = YES;
     } else {

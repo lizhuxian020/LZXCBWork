@@ -58,7 +58,10 @@
 
 - (void)createUI
 {
-    self.queryBtn = [CBWtMINUtils createNoBorderBtnWithTitle:Localized(@"查询话费") titleColor: [UIColor whiteColor] fontSize: 15 * KFitWidthRate backgroundColor: KWtBlueColor];
+    self.queryBtn = [CBWtMINUtils createNoBorderBtnWithTitle:Localized(@"查询话费") titleColor: kAppMainColor fontSize: 15 * KFitWidthRate backgroundColor: KWtBlueColor];
+    self.queryBtn.backgroundColor = UIColor.whiteColor;
+    self.queryBtn.layer.borderColor = KCarLineColor.CGColor;
+    self.queryBtn.layer.borderWidth = 1;
     self.queryBtn.layer.cornerRadius = 20;
     [self addSubview: self.queryBtn];
     [self.queryBtn mas_makeConstraints:^(MASConstraintMaker *make) {

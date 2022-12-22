@@ -274,6 +274,8 @@
     UITextField *cBView = [UITextField new];
     cBView.textAlignment = NSTextAlignmentCenter;
     cBView.text = @"200";
+    cBView.font = [UIFont systemFontOfSize:14];
+    cBView.textColor = kCellTextColor;
     self.bTF = cBView;
     
     [view addSubview:cBView];

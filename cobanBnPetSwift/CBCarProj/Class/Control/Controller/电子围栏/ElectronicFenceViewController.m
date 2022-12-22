@@ -213,7 +213,7 @@
     cell.deviceLbl.text = model.deviceName;
     cell.speedLabel.text = [NSString stringWithFormat: @"%@KM/h", model.speed];
     cell.alarmTypeLabel.text = self.alramTypeArr[0][model.warmType];
-    cell.isOver = model.speed && model.speed.length > 0;
+    cell.isOver = model.speed && model.speed.intValue > 0;
     cell.isIn = model.warmType == 1 || model.warmType == 2;
     cell.isOut = model.warmType == 0 || model.warmType == 2;
     return cell;
