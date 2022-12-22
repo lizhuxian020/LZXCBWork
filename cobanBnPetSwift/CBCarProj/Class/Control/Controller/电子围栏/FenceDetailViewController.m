@@ -593,8 +593,8 @@
     
     if (!self.gmsRectPolygon) {
         GMSPolygon *polygon = [GMSPolygon polygonWithPath:rect];
-        polygon.fillColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
-        polygon.strokeColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+        polygon.fillColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
+        polygon.strokeColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
         polygon.strokeWidth = 0;//2;
         polygon.map = _googleMapView;
         self.gmsRectPolygon = polygon;
@@ -659,7 +659,7 @@
 - (void)addGoogleCircleMarkerWithRadius:(CLLocationDistance)radius {
     GMSCircle *circ = [GMSCircle circleWithPosition:self.roundCoordinateArr.firstObject.coordinate
                                              radius:radius];
-    circ.fillColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+    circ.fillColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
     circ.strokeWidth = 0;
     circ.map = _googleMapView;
     self.gmsCircle = circ;
@@ -725,8 +725,8 @@
     }
     if (!self.gmsPolygon) {
         GMSPolygon *polygon = [GMSPolygon polygonWithPath: path];
-        polygon.fillColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
-        polygon.strokeColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+        polygon.fillColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
+        polygon.strokeColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
         polygon.strokeWidth = 0;//2;
         polygon.map = _googleMapView;
         self.gmsPolygon = polygon;
@@ -1081,13 +1081,13 @@
 - (BMKOverlayView *)mapView:(BMKMapView *)mapView viewForOverlay:(id <BMKOverlay>)overlay{
     if ([overlay isKindOfClass:[BMKCircle class]]){
         BMKCircleView* circleView = [[BMKCircleView alloc] initWithOverlay:overlay];
-        circleView.fillColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
-        circleView.strokeColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+        circleView.fillColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
+        circleView.strokeColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
         return circleView;
     }else if ([overlay isKindOfClass:[BMKPolygon class]]){
         BMKPolygonView* polygonView = [[BMKPolygonView alloc] initWithOverlay:overlay];
-        polygonView.strokeColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
-        polygonView.fillColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+        polygonView.strokeColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
+        polygonView.fillColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
         return polygonView;
     }else if ([overlay isKindOfClass:[BMKPolyline class]]){
         BMKPolylineView* polylineView = [[BMKPolylineView alloc] initWithOverlay:overlay];

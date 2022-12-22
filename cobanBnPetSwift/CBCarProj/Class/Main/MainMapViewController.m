@@ -155,6 +155,8 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 @property (nonatomic, strong) CBMQTTManager *mqttManger;
 
 @property (nonatomic, strong) NSMutableArray *baiduVisibleCoordinateArr;
+
+@property (nonatomic, assign) double currentZoom;
 @end
 
 @implementation MainMapViewController
@@ -171,6 +173,12 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [self requestUserData];
     [self checkNetWork];
     [CBCarDeviceManager.shared requestDeviceData];
+    if ([[self getCurrentVC] isKindOfClass:[MainMapViewController class]]) {
+        [[CBPetTopSwitchBtnView share] showCtrlPanelWithResultBlock:^{
+        }];
+        [[CBPetBottomSwitchBtnView share] showCtrlPanelWithResultBlock:^{
+        }];
+    }
 }
 - (void)checkNetWork {
     kWeakSelf(self);
@@ -192,8 +200,8 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     
     [self endTimer];
     
-    [[CBPetTopSwitchBtnView share] removeView];
-    [[CBPetBottomSwitchBtnView share] removeView];
+//    [[CBPetTopSwitchBtnView share] removeView];
+//    [[CBPetBottomSwitchBtnView share] removeView];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -586,14 +594,14 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     self.isListViewShow = YES;
     [self.view bringSubviewToFront:self.sliderView];
     [UIView animateWithDuration: 0.3 animations:^{
-        self.sliderView.frame = CGRectMake(HomeLeftMenu_LeftMargin, kNavAndStatusHeight, HomeLeftMenu_Width, HomeLeftMenu_Height);
+        self.sliderView.frame = CGRectMake(HomeLeftMenu_LeftMargin, kNavAndStatusHeight + 30, HomeLeftMenu_Width, HomeLeftMenu_Height);
     }];
     [self.sliderView requestData];
 }
 - (void)hideListView {
     self.isListViewShow = NO;
     [UIView animateWithDuration: 0.3 animations:^{
-        self.sliderView.frame = CGRectMake(HomeLeftMenu_LeftMargin, -HomeLeftMenu_Height, HomeLeftMenu_Width, HomeLeftMenu_Height);
+        self.sliderView.frame = CGRectMake(HomeLeftMenu_LeftMargin, -HomeLeftMenu_Height - 30, HomeLeftMenu_Width, HomeLeftMenu_Height);
     }];
 }
 #pragma mark - CreateUI
@@ -867,7 +875,8 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 }
 //刷帧方法是这个：
 - (void)mapView:(GMSMapView *)mapView didChangeCameraPosition:(GMSCameraPosition *)position {
-//    // 本地保存地显示比例
+    // 本地保存地显示比例
+    self.currentZoom = mapView.camera.zoom;
 //    if (self.deviceInfoModelSelect) {
 //        self.deviceInfoModelSelect.zoomLevel = [NSString stringWithFormat:@"%ld",(long)mapView.camera.zoom];
 //        [CBCommonTools saveCBdeviceInfo:self.deviceInfoModelSelect];
@@ -972,7 +981,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 //       UIImage *annotationImage = [self getImageFromView:imageView];
        annotationView.userInteractionEnabled = YES;
 //       annotationView.image = annotationImage;
-       annotationView.centerOffset = CGPointMake(0, -20*KFitHeightRate);//CGPointMake(0, -70 * KFitHeightRate); -40 * KFitHeightRate
+       annotationView.centerOffset = CGPointMake(0, -30*KFitHeightRate);//CGPointMake(0, -70 * KFitHeightRate); -40 * KFitHeightRate
        annotationView.textLbl.text = model.deviceName?:@"";
        annotationView.frame = CGRectMake(0, 0, 70 * KFitWidthRate,  30 * KFitWidthRate);
        if (model.isSelect) {
@@ -1022,7 +1031,8 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 }
 //地图区域改变完成后会调用此接口
 - (void)mapView:(BMKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
-//    NSLog(@"---地图比例---%f-----------",mapView.zoomLevel);
+    NSLog(@"---地图比例---%f-----------",mapView.zoomLevel);
+    self.currentZoom = mapView.zoomLevel;
 //    // 本地保存地显示比例
 //    if (self.deviceInfoModelSelect) {
 //        self.deviceInfoModelSelect.zoomLevel = [NSString stringWithFormat:@"%ld",(long)mapView.zoomLevel];
@@ -1052,17 +1062,17 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         return polygonView;
     } else if ([overlay isKindOfClass:[BMKCircle class]]){
         BMKCircleView* circleView = [[BMKCircleView alloc] initWithOverlay:overlay];
-        circleView.fillColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
-        circleView.strokeColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
-        if ([CarDeviceManager.deviceInfoModelSelect.warmed isEqualToString:@"1"]) {
-            circleView.fillColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
-            circleView.strokeColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
-        }
+        circleView.fillColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
+        circleView.strokeColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
+//        if ([CarDeviceManager.deviceInfoModelSelect.warmed isEqualToString:@"1"]) {
+//            circleView.fillColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
+//            circleView.strokeColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
+//        }
         return circleView;
     }else if ([overlay isKindOfClass:[BMKPolygon class]]){
         BMKPolygonView* polygonView = [[BMKPolygonView alloc] initWithOverlay:overlay];
-        polygonView.strokeColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
-        polygonView.fillColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+        polygonView.strokeColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
+        polygonView.fillColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
         return polygonView;
     }else if ([overlay isKindOfClass:[BMKPolyline class]]){
         BMKPolylineView* polylineView = [[BMKPolylineView alloc] initWithOverlay:overlay];
@@ -2027,19 +2037,24 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 - (void)updateMapCenter {
     if ([AppDelegate shareInstance].IsShowGoogleMap) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (CarDeviceManager.deviceInfoModelSelect) {
-                [self.gmsBounds includingCoordinate:CLLocationCoordinate2DMake(CarDeviceManager.deviceInfoModelSelect.lat.doubleValue, CarDeviceManager.deviceInfoModelSelect.lng.doubleValue)];
-            }
-            [self.googleMapView animateWithCameraUpdate:[GMSCameraUpdate fitBounds:self.gmsBounds withPadding:30.f]];
+//            if (CarDeviceManager.deviceInfoModelSelect) {
+//                [self.gmsBounds includingCoordinate:CLLocationCoordinate2DMake(CarDeviceManager.deviceInfoModelSelect.lat.doubleValue, CarDeviceManager.deviceInfoModelSelect.lng.doubleValue)];
+//            }
+//            [self.googleMapView animateWithCameraUpdate:[GMSCameraUpdate fitBounds:self.gmsBounds withPadding:30.f]];
+            self.googleMapView.camera = [GMSCameraPosition cameraWithLatitude:CarDeviceManager.deviceInfoModelSelect.lat.doubleValue longitude:CarDeviceManager.deviceInfoModelSelect.lng.doubleValue zoom: _currentZoom > 0 ? _currentZoom : 14];
         });
     } else {
-        if (CarDeviceManager.deviceInfoModelSelect) {
-            //更新中心位置
-            CLLocationCoordinate2D coorData = CLLocationCoordinate2DMake(CarDeviceManager.deviceInfoModelSelect.lat.doubleValue, CarDeviceManager.deviceInfoModelSelect.lng.doubleValue);
-            //        [self.baiduMapView setCenterCoordinate:coorData animated: YES];
-            [self.baiduVisibleCoordinateArr addObject:[self getCoorObj:coorData]];
-        }
-        [self baiduMapFitFence:self.baiduVisibleCoordinateArr];
+//        if (CarDeviceManager.deviceInfoModelSelect) {
+//            //更新中心位置
+//            CLLocationCoordinate2D coorData = CLLocationCoordinate2DMake(CarDeviceManager.deviceInfoModelSelect.lat.doubleValue, CarDeviceManager.deviceInfoModelSelect.lng.doubleValue);
+//            //        [self.baiduMapView setCenterCoordinate:coorData animated: YES];
+//            [self.baiduVisibleCoordinateArr addObject:[self getCoorObj:coorData]];
+//        }
+//        [self baiduMapFitFence:self.baiduVisibleCoordinateArr];
+        //更新中心位置
+        CLLocationCoordinate2D coorData = CLLocationCoordinate2DMake(CarDeviceManager.deviceInfoModelSelect.lat.doubleValue, CarDeviceManager.deviceInfoModelSelect.lng.doubleValue);
+        [self.baiduMapView setCenterCoordinate:coorData animated: YES];
+        self.baiduMapView.zoomLevel = _currentZoom > 0 ? _currentZoom : 14;
     }
 }
 #pragma mark -- UITabBarViewController delegate
@@ -2086,8 +2101,8 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         [path addLatitude: obj.coordinate.latitude longitude: obj.coordinate.longitude];
     }
     GMSPolygon *polygon = [GMSPolygon polygonWithPath: path];
-    polygon.fillColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
-    polygon.strokeColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+    polygon.fillColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
+    polygon.strokeColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
     polygon.strokeWidth = 0;//2;
     polygon.map = _googleMapView;
 }
@@ -2100,7 +2115,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     CGFloat radiusNum = [radius floatValue];
     GMSCircle *circ = [GMSCircle circleWithPosition:self.circleCoordinate
                                              radius:radiusNum];
-    circ.fillColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+    circ.fillColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
     circ.strokeColor = [UIColor clearColor];
     circ.map = _googleMapView;
 }
@@ -2171,8 +2186,8 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [rect addCoordinate: leftBottom];
 
     GMSPolygon *polygon = [GMSPolygon polygonWithPath:rect];
-    polygon.fillColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
-    polygon.strokeColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+    polygon.fillColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
+    polygon.strokeColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
     polygon.strokeWidth = 0;//2;
     polygon.map = _googleMapView;
 }

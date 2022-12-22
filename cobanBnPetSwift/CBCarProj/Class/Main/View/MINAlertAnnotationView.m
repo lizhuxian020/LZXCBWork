@@ -7,8 +7,11 @@
 //
 
 #import "MINAlertAnnotationView.h"
+#import "UIImage+Category.h"
 
 @interface MINAlertAnnotationView ()
+
+@property (nonatomic, strong) UIImageView *bgImgView;
 
 @end
 
@@ -19,8 +22,20 @@
     if (self) {
         UIView *contentView = [UIView new];
         [self addSubview:contentView];
-        contentView.backgroundColor = [UIColor colorWithWhite:1 alpha:0.8];
+//        contentView.backgroundColor = [UIColor colorWithWhite:1 alpha:0.8];
         [contentView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.edges.equalTo(@0);
+        }];
+        
+        UIImage *img = [UIImage imageNamed:@"话框"];
+        self.bgImgView = [[UIImageView alloc] init];
+        [contentView addSubview:self.bgImgView];
+        CGFloat imgW = img.size.width;
+        CGFloat imgH = img.size.height;
+//        self.bgImgView.image = [img resizableImageWithCapInsets:UIEdgeInsetsMake(imgH*0.18, imgW*0.45, imgH*0.2, imgW*0.45) resizingMode:UIImageResizingModeTile];
+        self.bgImgView.image = img;
+        
+        [self.bgImgView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.equalTo(@0);
         }];
         
@@ -29,6 +44,7 @@
         [self.textLbl mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.centerY.equalTo(@0);
         }];
+        
         
         //CGRectMake(0, 0, 339 * KFitWidthRate, 377.5 * KFitHeightRate);
         //[self setFrame:CGRectMake(0, 0, 339 * KFitWidthRate, 377.5 * KFitHeightRate)];

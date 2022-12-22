@@ -185,7 +185,7 @@
         [_bgmView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.mas_equalTo(self.mas_centerY);
             make.centerX.mas_equalTo(self.mas_centerX);
-            make.size.mas_equalTo(CGSizeMake(340, 378));
+            make.size.mas_equalTo(CGSizeMake(300, 378));
         }];
     }
     return _bgmView;
@@ -197,7 +197,7 @@
         [_titleView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.bgmView).with.offset(13 * KFitWidthRate);
             make.top.equalTo(self.bgmView).with.offset(6 * KFitHeightRate);
-            make.height.mas_equalTo(50 * KFitHeightRate);
+            make.height.mas_equalTo(50);
             make.right.equalTo(self.bgmView).with.offset(-12 * KFitWidthRate);
         }];
         kWeakSelf(self);
@@ -241,7 +241,7 @@
         [_bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(@6);
             make.right.equalTo(@-5);
-            make.height.mas_equalTo(50 * KFitHeightRate);
+            make.height.mas_equalTo(50);
             make.top.equalTo(_middleView.mas_bottom);
             make.bottom.equalTo(@-20);
         }];
@@ -738,7 +738,8 @@
 - (void)setDeviceInfoModel:(CBHomeLeftMenuDeviceInfoModel *)deviceInfoModel {
     _deviceInfoModel = deviceInfoModel;
     if (_deviceInfoModel) {
-        _titleLabel.text = [NSString stringWithFormat:@"%@",kStringIsEmpty(_deviceInfoModel.carNum)?Localized(@"未知"):_deviceInfoModel.name];
+        _titleLabel.text = [NSString stringWithFormat:@"%@",kStringIsEmpty(_deviceInfoModel.carNum)?Localized(@"未知"):
+                            [_deviceInfoModel.name stringByAppendingFormat:@"(%@)", [CBDeviceTool.shareInstance getProductSpec:deviceInfoModel]]];
         
         _lngLb.attributedText = [self getAttStr:Localized(@"经纬度:") content:[NSString stringWithFormat:@"%@, %@", _deviceInfoModel.lng, _deviceInfoModel.lat]];
         
@@ -820,9 +821,9 @@
             [Localized(@"停留") stringByAppendingFormat:@" %@", appendTime]:
             Localized(@"未知");
         }
-    } else if (!kStringIsEmpty(model.devStatus)) {
+    } else if (!kStringIsEmpty(model.online)) {
         return
-        model.devStatus.intValue==0?Localized(@"离线"):Localized(@"静止");
+        model.online.intValue==0?Localized(@"离线"):Localized(@"静止");
     }
     return Localized(@"未知");
 }

@@ -546,4 +546,18 @@
     }
     [arrayData removeObjectsInArray:waitToRemoveArr];
 }
+
+- (NSString *)getProductSpec:(CBHomeLeftMenuDeviceInfoModel *)devModel {
+    CBProductSpecModel *defaultModel = nil;
+    for (CBProductSpecModel *model in self.productSpecData) {
+        if ([model.tbDevModelId isEqualToString:@"70"] && [model.proto isEqualToString:@"0"]) {
+            defaultModel = model;
+        }
+        if ([devModel.proto isEqualToString:model.proto] && [devModel.productSpecId isEqualToString:model.tbDevModelId]) {
+            return model.name;
+        }
+    }
+        
+    return defaultModel ? defaultModel.name : Localized(@"未知");
+}
 @end

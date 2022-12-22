@@ -32,6 +32,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)getXiumianData:(CBHomeLeftMenuDeviceInfoModel *)deviceModel blk:(void(^)(NSArray *arrayTitle, NSArray *arrayId))blk;
 
 - (void)getReportData:(CBHomeLeftMenuDeviceInfoModel *)deviceModel blk:(void(^)(NSArray *sectionArr, NSArray *sectionTitleArr, NSArray *sectionImageTitleArr, NSArray *oilTitleArr, NSArray *oilImageArr, NSArray *warnTitleArr, NSArray *warnImageArr, NSArray *electronicTitleArr, NSArray *electronicImageArr))blk;
+
+- (NSString *)getProductSpec:(CBHomeLeftMenuDeviceInfoModel *)model;
 @end
 
 NS_ASSUME_NONNULL_END

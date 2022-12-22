@@ -30,6 +30,7 @@
     self = [super init];
     if (self) {
         self.deviceInfoModelSelect = [CBCommonTools CBdeviceInfo];
+        [self didSetCurrentDeviceModel];
     }
     return self;
 }
@@ -159,7 +160,7 @@
 - (void)didSetCurrentDeviceModel {
     if (_deviceInfoModelSelect) {
         [CBDeviceTool.shareInstance didChooseDevice:_deviceInfoModelSelect];
-        [CBCarDeviceManager.shared requestDeviceData];
+        [self requestDeviceData];
     }
 }
 @end

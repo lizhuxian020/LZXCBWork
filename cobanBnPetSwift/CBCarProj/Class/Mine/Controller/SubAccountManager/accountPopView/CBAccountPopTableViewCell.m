@@ -167,7 +167,7 @@
         }];
         
         _deviceNameLabel.text = deviceInfoModel.name?:@"";
-        if ([deviceInfoModel.devStatus isEqualToString:@"0"]) {
+        if ([deviceInfoModel.online isEqualToString:@"0"]) {
             self.deviceStatusLabel.text = Localized(@"离线");
             self.deviceStatusLabel.textColor = kRGB(137 , 137, 137);
         } else {
