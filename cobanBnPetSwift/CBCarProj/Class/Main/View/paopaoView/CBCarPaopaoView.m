@@ -751,7 +751,7 @@
 - (void)setDeviceInfoModel:(CBHomeLeftMenuDeviceInfoModel *)deviceInfoModel {
     _deviceInfoModel = deviceInfoModel;
     if (_deviceInfoModel) {
-        _followImgView.image = deviceInfoModel.isTracking ? [UIImage imageNamed:@"回放"] : [UIImage imageNamed:@"单次定位"];
+        _followImgView.image = deviceInfoModel.isTracking ? [UIImage imageNamed:@"跟踪-选中"] : [UIImage imageNamed:@"单次定位"];
         _followLbl.text = deviceInfoModel.isTracking ? __CarPaoTitle_EndTrack : __CarPaoTitle_Track;
         _titleLabel.text = [NSString stringWithFormat:@"%@",kStringIsEmpty(_deviceInfoModel.carNum)?Localized(@"未知"):
                             [_deviceInfoModel.name stringByAppendingFormat:@"(%@)", [CBDeviceTool.shareInstance getProductSpec:deviceInfoModel]]];

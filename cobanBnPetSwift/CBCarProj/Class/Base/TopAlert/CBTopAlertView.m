@@ -33,14 +33,23 @@
     self.frame = CGRectMake(0, -PPNavigationBarHeight, SCREEN_WIDTH, PPNavigationBarHeight);
     self.backgroundColor = _isSuccess ? [UIColor colorWithHexString:@"0195ff"] : [UIColor colorWithHexString:@"fc5550"];
     
+    UIImageView *imgV = [UIImageView new];
+    imgV.image = [UIImage imageNamed:@"提示"];
+    [self addSubview:imgV];
+    [imgV mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(@20);
+        make.bottom.equalTo(@-10);
+    }];
+    
     UILabel *lbl = [MINUtils createLabelWithText:_title size:20 alignment:NSTextAlignmentLeft textColor:UIColor.whiteColor];
     lbl.font = [UIFont systemFontOfSize:20 weight:UIFontWeightBold];
     [self addSubview:lbl];
     [lbl mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(@-10);
-        make.left.equalTo(@20);
+        make.centerY.equalTo(imgV);
+        make.left.equalTo(imgV.mas_right).mas_offset(10);
         make.right.equalTo(@-20);
     }];
+    
     lbl.numberOfLines = 2;
 }
 
