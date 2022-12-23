@@ -174,6 +174,8 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [AppDelegate isShowGoogle];
     [self requestUserData];
     [self checkNetWork];
+    //请求闹钟数量
+    [self reqeustAlertNum];
     [CBCarDeviceManager.shared requestDeviceData];
 //    if ([[self getCurrentVC] isKindOfClass:[MainMapViewController class]]) {
     [[CBPetTopSwitchBtnView share] showCtrlPanelWithResultBlock:^{
@@ -225,6 +227,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [self createUI];
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(hidePlayBackView) name: @"kHidePlayBackView" object: nil];
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(requestDeviceSingleLocation) name: @"SingleLocationNoti" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(reqeustAlertNum) name: @"CBCAR_NOTFICIATION_UPDATE_ALARM_NUM" object: nil];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(taphandle:)];
     [self.view addGestureRecognizer:tap];
@@ -235,8 +238,6 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     // 获取左侧菜单设备列表
     [self requestListData];
     [self startTimer];
-    //请求闹钟数量
-    [self reqeustAlertNum];
     
     if ([[[UIApplication sharedApplication] keyWindow].rootViewController isKindOfClass:[UITabBarController class]]) {
         UITabBarController *tabViewController = (UITabBarController *)[[UIApplication sharedApplication] keyWindow].rootViewController;
