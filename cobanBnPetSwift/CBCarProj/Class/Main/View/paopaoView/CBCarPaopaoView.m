@@ -10,6 +10,7 @@
 
 #define __CarPaoTitle_Title @"标题"
 #define __CarPaoTitle_Track Localized(@"跟踪")
+#define __CarPaoTitle_EndTrack Localized(@"停止跟踪")
 #define __CarPaoTitle_PlayBack Localized(@"回放")
 #define __CarPaoTitle_Move Localized(@"位移")
 
@@ -25,6 +26,8 @@
 @property (nonatomic, strong) UIImageView *arrowView;
 
 @property (nonatomic, strong) UIView *followBtn;
+@property (nonatomic, strong) UIImageView *followImgView;
+@property (nonatomic, strong) UILabel *followLbl;
 @property (nonatomic, strong) UIView *playBackBtn;
 @property (nonatomic, strong) UIView *moveBtn;
 //@property (nonatomic, strong) UIButton *deleteWarmBtn;
@@ -306,6 +309,10 @@
     [containV bk_whenTapped:^{
         [weakself didClickBtn:title];
     }];
+    if ([imgName isEqualToString:@"单次定位"]) {
+        self.followImgView = imgv;
+        self.followLbl = lbl;
+    }
     return containV;
 }
 //- (UIButton *)playBackBtn {
@@ -744,6 +751,8 @@
 - (void)setDeviceInfoModel:(CBHomeLeftMenuDeviceInfoModel *)deviceInfoModel {
     _deviceInfoModel = deviceInfoModel;
     if (_deviceInfoModel) {
+        _followImgView.image = deviceInfoModel.isTracking ? [UIImage imageNamed:@"回放"] : [UIImage imageNamed:@"单次定位"];
+        _followLbl.text = deviceInfoModel.isTracking ? __CarPaoTitle_EndTrack : __CarPaoTitle_Track;
         _titleLabel.text = [NSString stringWithFormat:@"%@",kStringIsEmpty(_deviceInfoModel.carNum)?Localized(@"未知"):
                             [_deviceInfoModel.name stringByAppendingFormat:@"(%@)", [CBDeviceTool.shareInstance getProductSpec:deviceInfoModel]]];
         

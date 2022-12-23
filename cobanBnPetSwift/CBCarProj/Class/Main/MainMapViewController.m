@@ -817,8 +817,10 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
                 break;
             case CBCarPaopaoViewClickTypeTrack: {
                 if (self.isStartTrack) {
+                    deviceModel.isTracking = NO;
                     [self setEndTrack];
                 } else {
+                    deviceModel.isTracking = YES;
                     [self setCanStartTrack];
                 }
             }
@@ -1113,10 +1115,13 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
                 break;
             case CBCarPaopaoViewClickTypeTrack: {
                 if (self.isStartTrack) {
+                    deviceModel.isTracking = NO;
                     [self setEndTrack];
                 } else {
+                    deviceModel.isTracking = YES;
                     [self setCanStartTrack];
                 }
+                self.paopaoView.deviceInfoModel = deviceModel;
             }
                 break;
             case CBCarPaopaoViewClickTypeTitle: {
@@ -1221,12 +1226,12 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 #pragma mark --跟踪
 - (void)setCanStartTrack {
     self.isStartTrack = YES;
-//    [HUD showHUDWithText:Localized(@"开始跟踪") withDelay:2.0];
+    [HUD showHUDWithText:Localized(@"开始跟踪") withDelay:2.0];
     [self getDeviceLocationInfoRequest];
 }
 - (void)setEndTrack {
     self.isStartTrack = NO;
-//    [HUD showHUDWithText:Localized(@"停止跟踪") withDelay:2.0];
+    [HUD showHUDWithText:Localized(@"停止跟踪") withDelay:2.0];
     // 20s刷新轨迹数组,初始化
     [self initTrackLine];
     // 20s刷新的轨迹的line和路径

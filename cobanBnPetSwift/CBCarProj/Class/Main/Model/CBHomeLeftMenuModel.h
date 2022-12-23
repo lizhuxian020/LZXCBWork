@@ -104,6 +104,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 //--------------------paopaoView相关
+//--------------------paopaoViewUI相关
+@property (nonatomic, assign) BOOL isTracking; //这个是UI相关, 决定是否显示跟踪中
+//--------------------paopaoView接口数据
 /* Acc状态*/
 @property (nonatomic, copy) NSString *acc;
 /* 门状态*/
