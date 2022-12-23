@@ -157,6 +157,8 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 @property (nonatomic, strong) NSMutableArray *baiduVisibleCoordinateArr;
 
 @property (nonatomic, assign) double currentZoom;
+
+@property (nonatomic, strong) NSMutableArray *bmkFenceColorData; //@[ @[fence, color], @[fence, color] ]
 @end
 
 @implementation MainMapViewController
@@ -214,6 +216,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    self.bmkFenceColorData = [NSMutableArray new];
     [CBAppUpdateManager.shared check];
     
     //更新一下值
@@ -1064,17 +1067,13 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         return polygonView;
     } else if ([overlay isKindOfClass:[BMKCircle class]]){
         BMKCircleView* circleView = [[BMKCircleView alloc] initWithOverlay:overlay];
-        circleView.fillColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
-        circleView.strokeColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
-//        if ([CarDeviceManager.deviceInfoModelSelect.warmed isEqualToString:@"1"]) {
-//            circleView.fillColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
-//            circleView.strokeColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
-//        }
+        circleView.strokeColor = [self getBMKFenceColor:overlay];
+        circleView.fillColor = [self getBMKFenceColor:overlay];
         return circleView;
     }else if ([overlay isKindOfClass:[BMKPolygon class]]){
         BMKPolygonView* polygonView = [[BMKPolygonView alloc] initWithOverlay:overlay];
-        polygonView.strokeColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
-        polygonView.fillColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
+        polygonView.strokeColor = [self getBMKFenceColor:overlay];
+        polygonView.fillColor = [self getBMKFenceColor:overlay];
         return polygonView;
     }else if ([overlay isKindOfClass:[BMKPolyline class]]){
         BMKPolylineView* polylineView = [[BMKPolylineView alloc] initWithOverlay:overlay];
@@ -1083,6 +1082,14 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         return polylineView;
     }
     return nil;
+}
+- (UIColor *)getBMKFenceColor:(id)fence {
+    for (NSArray *data in self.bmkFenceColorData) {
+        if (data.firstObject == fence) {
+            return data.lastObject;
+        }
+    }
+    return [UIColor colorWithRed:0 green:0 blue:1 alpha:0.3];
 }
 #pragma mark - 添加完线图
 - (void)mapView:(BMKMapView *)mapView didAddOverlayViews:(NSArray *)overlayViews {
@@ -1687,11 +1694,6 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 }
 
 - (void)addMarkAndCreateFence:(NSArray<CBHomeLeftMenuDeviceInfoModel *> *)deviceData {
-    if (self.paopaoView.isAlertPaopaoView == YES) {
-        // 打开设备详情窗口时候，bu刷新数据,即不重置标注导致标注移动
-        NSLog(@"弹出弹框时，不刷新不刷新不刷新不刷新不刷新不刷新");
-        return;
-    }
     
     if ([AppDelegate shareInstance].isShowPlayBackView == YES) {
         // 回放轨迹的时候 不刷新设备位置
@@ -1699,20 +1701,30 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         return;
     }
     // 清除地图标注和轨迹
+    [self.bmkFenceColorData removeAllObjects];
     [self clearBaiduMap];
     [self.googleMapView clear];
     self.googleMapView.selectedMarker = nil;
     self.gmsBounds = [[GMSCoordinateBounds alloc] init];
     self.baiduVisibleCoordinateArr = [NSMutableArray new];
     for (CBHomeLeftMenuDeviceInfoModel *model in deviceData) {
+        
         if ([model.dno isEqualToString:CarDeviceManager.deviceInfoModelSelect.dno]) {
-            // 选中设备添加围栏,百度地图添加围栏中心点会变
-            [self createFenceMethod:model];
+            if ([CarDeviceManager.greedFenceDevice.dno isEqualToString:CarDeviceManager.deviceInfoModelSelect.dno]) {
+                [self createFenceMethod:model color:[UIColor colorWithRed:0 green:1 blue:0 alpha:0.3]];
+            } else {
+                [self createFenceMethod:model color:[UIColor colorWithRed:1 green:0 blue:0 alpha:0.3]];
+                [self createFenceMethod:CarDeviceManager.greedFenceDevice color:[UIColor colorWithRed:0 green:1 blue:0 alpha:0.3]];
+            }
         }
         // 添加地图标注
         [self filterAnnotation:model];
     }
     
+    if (self.paopaoView.isAlertPaopaoView == YES) {
+        // 打开设备详情窗口时候，不移动地图, 但要画围栏
+        return;
+    }
     //更新中心位置
     [self updateMapCenter];
 }
@@ -1967,10 +1979,10 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     }
 }
 #pragma mark -- 创建围栏
-- (void)createFenceMethod:(CBHomeLeftMenuDeviceInfoModel*)deviceInfoModel {
+- (void)createFenceMethod:(CBHomeLeftMenuDeviceInfoModel*)deviceInfoModel color:(UIColor *)color{
     if (deviceInfoModel.listFence.count > 0) {
         for (CBHomeLeftMenuDeviceInfoModelFenceModel *model in deviceInfoModel.listFence) {
-            [self createFence:model];
+            [self createFence:model color:color];
         }
     }
 }
@@ -1987,18 +1999,18 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     }
     return modelArr;
 }
-- (void)createFence:(CBHomeLeftMenuDeviceInfoModelFenceModel *)model {
+- (void)createFence:(CBHomeLeftMenuDeviceInfoModelFenceModel *)model color:(UIColor *)color {
     NSString *dataString = model.data;
     switch (model.shape.integerValue) {
         case 0:
         {// 多边形
             self.polygonCoordinateArr = [self getModelArr:dataString];
             if (self.baiduView.hidden == NO) {
-                [self addBaiduPolygon];
+                [self addBaiduPolygon:color];
                 [self.baiduVisibleCoordinateArr addObjectsFromArray:self.polygonCoordinateArr];
 //                [self baiduMapFitFence: self.polygonCoordinateArr];
             } else {
-                [self addGooglePolygon];
+                [self addGooglePolygon:color];
                 [self googleMapFitFence: self.polygonCoordinateArr];
             }
         }
@@ -2013,10 +2025,10 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
                 self.circleCoordinate = coordinate;
                 if (self.baiduView.hidden == NO) {
                     //[self addAnnotation_baidu:coordinate];
-                    [self addBaiduCircleMarkerWithRadius: dataArr.lastObject];
+                    [self addBaiduCircleMarkerWithRadius: dataArr.lastObject color:color];
                     [self baiduMapFitCircleFence: circleModel radius: [dataArr[2] doubleValue]];
                 }else {
-                    [self addGoogleCircleMarkerWithRadius: dataArr.lastObject];
+                    [self addGoogleCircleMarkerWithRadius: dataArr.lastObject color:color];
                     [self googleMapFitCircleFence: circleModel radius: [dataArr[2] doubleValue]];
                 }
             }
@@ -2026,11 +2038,11 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         {// 矩形
             self.rectangleCoordinateArr = [self getModelArr:dataString];
             if (self.baiduView.hidden == NO) {
-                [self addBaiduRectangle];
+                [self addBaiduRectangle:color];
                 [self.baiduVisibleCoordinateArr addObjectsFromArray:self.rectangleCoordinateArr];
 //                [self baiduMapFitFence: self.rectangleCoordinateArr];
             }else {
-                [self addGoogleRectangle];
+                [self addGoogleRectangle:color];
                 [self googleMapFitFence: self.rectangleCoordinateArr];
             }
         }
@@ -2090,37 +2102,42 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     }
 }
 #pragma mark - Other Method
-- (void)addBaiduPolygon {
+- (void)addBaiduPolygon:(UIColor *)color {
     CLLocationCoordinate2D coords[self.polygonCoordinateArr.count];
     for (int i = 0; i < self.polygonCoordinateArr.count; i++) {
         MINCoordinateObject *obj = self.polygonCoordinateArr[i];
         coords[i] = obj.coordinate;
     }
     BMKPolygon *polygon = [BMKPolygon polygonWithCoordinates:coords count: self.polygonCoordinateArr.count];
+    NSArray *data = @[polygon, color];
+    [self.bmkFenceColorData addObject:data];
+//    polygon.color = color;
     [_baiduMapView addOverlay:polygon];
 }
-- (void)addGooglePolygon {
+- (void)addGooglePolygon:(UIColor *)color {
     GMSMutablePath *path = [GMSMutablePath path];
     for (int i = 0; i < self.polygonCoordinateArr.count; i++) {
         MINCoordinateObject *obj = self.polygonCoordinateArr[i];
         [path addLatitude: obj.coordinate.latitude longitude: obj.coordinate.longitude];
     }
     GMSPolygon *polygon = [GMSPolygon polygonWithPath: path];
-    polygon.fillColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
-    polygon.strokeColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
+    polygon.fillColor = color;
+    polygon.strokeColor = color;
     polygon.strokeWidth = 0;//2;
     polygon.map = _googleMapView;
 }
-- (void)addBaiduCircleMarkerWithRadius:(NSString *)radius {
+- (void)addBaiduCircleMarkerWithRadius:(NSString *)radius color:(UIColor *)color{
     CGFloat radiusNum = [radius floatValue];
     BMKCircle *circle = [BMKCircle circleWithCenterCoordinate: self.circleCoordinate radius: radiusNum];
+    NSArray *data = @[circle, color];
+    [self.bmkFenceColorData addObject:data];
     [_baiduMapView addOverlay: circle];
 }
-- (void)addGoogleCircleMarkerWithRadius:(NSString *)radius {
+- (void)addGoogleCircleMarkerWithRadius:(NSString *)radius color:(UIColor *)color{
     CGFloat radiusNum = [radius floatValue];
     GMSCircle *circ = [GMSCircle circleWithPosition:self.circleCoordinate
                                              radius:radiusNum];
-    circ.fillColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
+    circ.fillColor = color;
     circ.strokeColor = [UIColor clearColor];
     circ.map = _googleMapView;
 }
@@ -2146,7 +2163,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 //    //_baiduMapView.zoomLevel = 16;////_baiduMapView.zoomLevel - 0.3;
 //    [_baiduMapView setCenterCoordinate:model.coordinate];
 }
-- (void)addGoogleRectangle {
+- (void)addGoogleRectangle:(UIColor *)color {
     MINCoordinateObject *firstObj = self.rectangleCoordinateArr.firstObject;
     MINCoordinateObject *lastObj = self.rectangleCoordinateArr.lastObject;
     CLLocationCoordinate2D firstCoor = firstObj.coordinate;
@@ -2191,13 +2208,13 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [rect addCoordinate: leftBottom];
 
     GMSPolygon *polygon = [GMSPolygon polygonWithPath:rect];
-    polygon.fillColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
-    polygon.strokeColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
+    polygon.fillColor = color;
+    polygon.strokeColor = color;
     polygon.strokeWidth = 0;//2;
     polygon.map = _googleMapView;
 }
 
-- (void)addBaiduRectangle {
+- (void)addBaiduRectangle:(UIColor *)color {
     //[self clearMap];
     MINCoordinateObject *firstObj = self.rectangleCoordinateArr.firstObject;
     MINCoordinateObject *lastObj = self.rectangleCoordinateArr.lastObject;
@@ -2242,6 +2259,8 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     coords[2] = rightBottom;
     coords[3] = leftBottom;
     BMKPolygon *polygon = [BMKPolygon polygonWithCoordinates:coords count:4];
+    NSArray *data = @[polygon, color];
+    [self.bmkFenceColorData addObject:data];
     [_baiduMapView addOverlay:polygon];
 }
 

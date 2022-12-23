@@ -782,7 +782,7 @@
             }
         }
         NSString *warmTypeStr = [arrTemp componentsJoinedByString:@","];
-        _warmTypeLb.attributedText = [self getAttStr:Localized(@"报警类型:") content:warmTypeStr contentColor:UIColor.redColor];
+        _warmTypeLb.attributedText = [self getAttStr:Localized(@"报警类型:") content:kStringIsEmpty(warmTypeStr) ? Localized(@"无报警") : warmTypeStr contentColor:UIColor.redColor];
         
         NSString *createTimeStr = [Utils convertTimeWithTimeIntervalString:deviceInfoModel.createTime?:@"" timeZone:deviceInfoModel.timeZone?:@""];
         _timeLb.attributedText = [self getAttStr:Localized(@"上报时间:") content:createTimeStr];

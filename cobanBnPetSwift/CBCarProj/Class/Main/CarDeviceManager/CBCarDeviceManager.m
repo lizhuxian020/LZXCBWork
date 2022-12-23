@@ -71,11 +71,13 @@
         if (!isSucceed || !response || !response[@"data"]) {
             return;
         }
+        //把接口DeviceList的devStatus, online数据, 更新到getDevData之后的模型里
         NSArray<CBHomeLeftMenuDeviceInfoModel*> *modelArr = [CBHomeLeftMenuDeviceInfoModel mj_objectArrayWithKeyValuesArray:response[@"data"]];
         for (CBHomeLeftMenuDeviceInfoModel *modelInDevice in self.deviceDatas) {
             for (CBHomeLeftMenuDeviceInfoModel *model in modelArr) {
                 if ([modelInDevice.dno isEqualToString:model.dno]) {
                     model.devStatus = modelInDevice.devStatus;
+                    model.online = modelInDevice.online;
                 }
             }
         }
@@ -119,8 +121,10 @@
 }
 
 - (void)didGetMQTTDeviceModel:(CBMQTTCarDeviceModel *)model {
+    CBHomeLeftMenuDeviceInfoModel *targetDeviceModel = nil;
     for (CBHomeLeftMenuDeviceInfoModel *deviceModel in self.deviceDatas) {
         if ([deviceModel.dno isEqualToString:model.dno]) {
+            targetDeviceModel = deviceModel;
             deviceModel.lat = model.location.lat;
             deviceModel.lng = model.location.lng;
             deviceModel.devStatusInMQTT = model.devStatus;
@@ -136,13 +140,45 @@
             deviceModel.gsm = model.location.gsm;
             
             deviceModel.mqttCode = model.code;
-            return;
         }
+    }
+    _greedFenceDevice = targetDeviceModel;
+    if (targetDeviceModel.mqttCode == 2) { //2时, 更新围栏, 使用绿色围栏
+        [self updateFence:^{
+            if (self.didUpdateDeviceData) {
+                self.didUpdateDeviceData(self.deviceDatas);
+            }
+            [NSNotificationCenter.defaultCenter postNotificationName:@"CBCAR_NOTFICIATION_GETMQTT" object:nil userInfo:nil];
+        }];
+        return;
     }
     if (self.didUpdateDeviceData) {
         self.didUpdateDeviceData(self.deviceDatas);
     }
     [NSNotificationCenter.defaultCenter postNotificationName:@"CBCAR_NOTFICIATION_GETMQTT" object:nil userInfo:nil];
+}
+
+- (void)updateFence:(void(^)(void))finishBlk {
+    [[NetWorkingManager shared] getWithUrl:@"/personController/getDevData" params:@{} succeed:^(id response, BOOL isSucceed) {
+        if (!isSucceed || !response || !response[@"data"]) {
+            return;
+        }
+        
+        //把getDevData里fence的数据更新到当前模型
+        NSArray<CBHomeLeftMenuDeviceInfoModel*> *modelArr = [CBHomeLeftMenuDeviceInfoModel mj_objectArrayWithKeyValuesArray:response[@"data"]];
+        for (CBHomeLeftMenuDeviceInfoModel *modelInDevice in self.deviceDatas) {
+            for (CBHomeLeftMenuDeviceInfoModel *model in modelArr) {
+                if ([modelInDevice.dno isEqualToString:model.dno]) {
+                    modelInDevice.listFence = model.listFence;
+                }
+            }
+        }
+        
+        finishBlk();
+        
+        } failed:^(NSError *error) {
+            finishBlk();
+        }];
 }
 
 - (void)setCurrentChooseDevice:(CBHomeLeftMenuDeviceInfoModel *)model {
