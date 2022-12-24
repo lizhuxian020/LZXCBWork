@@ -436,9 +436,11 @@
     }
     if (row == 6) {
         self.devModel = self.devModelArray[[selectRow intValue]];
+        self.model.devModel = self.devModel;
     }
     if (row == 7) {
         self.groupName = self.groupNameArray[[selectRow intValue]];
+        self.model.groupNameStr = self.groupName;
     }
 //        else if (self.selectIndexPath.row == 6) {
 //            MyDeviceModel *deviceModelIcon = self.arrayData[6];

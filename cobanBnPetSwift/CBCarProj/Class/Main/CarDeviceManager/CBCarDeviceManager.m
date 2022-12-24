@@ -35,6 +35,12 @@
     return self;
 }
 
+- (void)refreashData:(void(^)(void))finishBlk {
+    [self generalInitData:^{
+        [self requestDeviceDataBlk:finishBlk];
+    }];
+}
+
 - (void)generalInitData:(void(^)(void))finishBlk {
     [[NetWorkingManager shared] getWithUrl:@"/personController/getMyDeviceList" params:@{} succeed:^(id response, BOOL isSucceed) {
         if (!isSucceed || !response || !response[@"data"]) {
@@ -78,6 +84,7 @@
                 if ([modelInDevice.dno isEqualToString:model.dno]) {
                     model.devStatus = modelInDevice.devStatus;
                     model.online = modelInDevice.online;
+                    model.devModel = modelInDevice.devModel;
                 }
             }
         }

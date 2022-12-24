@@ -176,7 +176,9 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [self checkNetWork];
     //请求闹钟数量
     [self reqeustAlertNum];
-    [CBCarDeviceManager.shared requestDeviceData];
+//    [CBCarDeviceManager.shared requestDeviceData];
+    [CBCarDeviceManager.shared refreashData:nil];
+    [CBDeviceTool.shareInstance didChooseDevice:CBCarDeviceManager.shared.deviceInfoModelSelect];
 //    if ([[self getCurrentVC] isKindOfClass:[MainMapViewController class]]) {
     [[CBPetTopSwitchBtnView share] showCtrlPanelWithResultBlock:^{
     }];

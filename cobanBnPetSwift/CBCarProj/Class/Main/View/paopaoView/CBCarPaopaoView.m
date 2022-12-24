@@ -753,8 +753,9 @@
     if (_deviceInfoModel) {
         _followImgView.image = deviceInfoModel.isTracking ? [UIImage imageNamed:@"跟踪-选中"] : [UIImage imageNamed:@"单次定位"];
         _followLbl.text = deviceInfoModel.isTracking ? __CarPaoTitle_EndTrack : __CarPaoTitle_Track;
+        NSString *devModel = ([deviceInfoModel.devModel isEqualToString:@"(null)"] || kStringIsEmpty(deviceInfoModel.devModel)) ? [CBDeviceTool.shareInstance getProductSpec:deviceInfoModel] : deviceInfoModel.devModel;
         _titleLabel.text = [NSString stringWithFormat:@"%@",kStringIsEmpty(_deviceInfoModel.carNum)?Localized(@"未知"):
-                            [_deviceInfoModel.name stringByAppendingFormat:@"(%@)", [CBDeviceTool.shareInstance getProductSpec:deviceInfoModel]]];
+                            [_deviceInfoModel.name stringByAppendingFormat:@"(%@)", devModel]];
         
         _lngLb.attributedText = [self getAttStr:Localized(@"经纬度:") content:[NSString stringWithFormat:@"%@, %@", _deviceInfoModel.lng, _deviceInfoModel.lat]];
         

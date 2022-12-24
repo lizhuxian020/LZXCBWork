@@ -137,6 +137,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 详见CBMQTTCarDeviceModel的code
 @property (nonatomic, assign) int mqttCode ;
+
+/// 来自getMyDeviceLIst
+@property(nonatomic, copy) NSString *devModel;
 @end
 
 @interface CBHomeLeftMenuDeviceInfoModelFenceModel : NSObject

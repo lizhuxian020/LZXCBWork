@@ -39,6 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setCurrentChooseDevice:(CBHomeLeftMenuDeviceInfoModel *)model;
 
+- (void)refreashData:(void(^)(void))finishBlk;
 @end
 
 NS_ASSUME_NONNULL_END
