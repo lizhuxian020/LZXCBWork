@@ -90,9 +90,9 @@
         }
         
         self.deviceDatas = modelArr;
-        for (CBHomeLeftMenuDeviceInfoModel *deviceModel in self.deviceDatas) {
-            [self updateParamList:deviceModel];
-        }
+        [self updateAllDeviceParamList:^{
+            NSLog(@"%s", __FUNCTION__);
+        }];
         if (self.didUpdateDeviceData) {
             self.didUpdateDeviceData(self.deviceDatas);
         }
@@ -104,7 +104,21 @@
     }];
 }
 
-- (void)updateParamList:(CBHomeLeftMenuDeviceInfoModel *)model {
+- (void)updateAllDeviceParamList:(void(^)(void))finishBlk {
+    __block int time = 0;
+    for (CBHomeLeftMenuDeviceInfoModel *deviceModel in self.deviceDatas) {
+        [self updateParamList:deviceModel finish:^{
+            if (finishBlk) {
+                time++;
+                if (time == self.deviceDatas.count) {
+                    finishBlk();
+                }
+            }
+        }];
+    }
+}
+
+- (void)updateParamList:(CBHomeLeftMenuDeviceInfoModel *)model finish:(void(^)(void))finishBLk {
     if (kStringIsEmpty(model.dno)) {
         return;
     }
@@ -122,8 +136,13 @@
         model.timeQs = deviceModel.timeQs;
         model.timeRest = deviceModel.timeRest;
         model.timeSos = deviceModel.timeSos;
+        if (finishBLk) {
+            finishBLk();
+        }
     } failed:^(NSError *error) {
-        
+        if (finishBLk) {
+            finishBLk();
+        }
     }];
 }
 
@@ -155,10 +174,11 @@
     }
     if (targetDeviceModel.mqttCode == 2) { //2时, 更新围栏, 使用绿色围栏
         [self updateFence:^{
-            if (self.didUpdateDeviceData) {
-                self.didUpdateDeviceData(self.deviceDatas);
-            }
-            
+            [self updateAllDeviceParamList:^{
+                if (self.didUpdateDeviceData) {
+                    self.didUpdateDeviceData(self.deviceDatas);
+                }
+            }];
         }];
         return;
     }
