@@ -854,30 +854,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     self.paopaoView.dno = didClickModel.dno;
     self.paopaoView.deviceInfoModel = didClickModel;
     [self.paopaoView popView];
-    
-    // 更新选中设备在地图中居中位置
-    // 目标点到屏幕顶部距离
-    CGFloat wholeHeight = SCREEN_HEIGHT;
-    CGFloat targetPt_y = (wholeHeight -377.5*KFitWidthRate)/2 + 377.5*KFitWidthRate;
-    // 经纬度 转为坐标
-    CLLocationCoordinate2D coorData = CLLocationCoordinate2DMake(didClickModel.lat.doubleValue, didClickModel.lng.doubleValue);
-    CGPoint ppt = [_googleMapView.projection pointForCoordinate:coorData];
-    
-    // 调整后的坐标转为经纬度
-    CLLocationCoordinate2D coor = [_googleMapView.projection coordinateForPoint:CGPointMake(ppt.x, ppt.y + wholeHeight/2 - targetPt_y - TabBARHEIGHT)];
-    [_googleMapView setCamera:[GMSCameraPosition cameraWithLatitude:coor.latitude longitude:coor.longitude zoom:_googleMapView.camera.zoom]];
-    
-    // 谷歌地图反向地理编码
-    GMSGeocoder *geocoder = [[GMSGeocoder alloc]init];
-    [geocoder reverseGeocodeCoordinate:CLLocationCoordinate2DMake(didClickModel.lat.doubleValue,didClickModel.lng.doubleValue) completionHandler:^(GMSReverseGeocodeResponse *response, NSError *error) {
-        kStrongSelf(self);
-        if (response.results.count > 0) {
-            GMSAddress *address = response.results[0];
-            NSString *addressStr = [NSString stringWithFormat:@"%@%@%@%@%@",address.country,address.administrativeArea,address.locality,address.subLocality,address.thoroughfare];
-            didClickModel.address = addressStr;
-            self.paopaoView.deviceInfoModel = didClickModel;
-        }
-    }];
+    [self updateMapLocationWhenPaoView];
     
     return YES;
 }
@@ -1165,28 +1142,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     self.paopaoView.deviceInfoModel = didClickModel;
     [self.paopaoView popView];
     
-    // 更新选中设备在地图中居中位置
-    // 目标点到屏幕顶部距离
-    CGFloat targetPt_y = (SCREEN_HEIGHT -377.5*KFitWidthRate)/2 + 377.5*KFitWidthRate;
-    
-    CGPoint ppt = [self.baiduMapView convertCoordinate:CLLocationCoordinate2DMake(didClickModel.lat.doubleValue, didClickModel.lng.doubleValue) toPointToView:self.baiduView];
-    
-    CLLocationCoordinate2D coorData = CLLocationCoordinate2DMake(didClickModel.lat.doubleValue, didClickModel.lng.doubleValue);
-    if ([AppDelegate shareInstance].IsShowGoogleMap == NO) {
-        ppt = [self.baiduMapView convertCoordinate:coorData toPointToView:self.baiduView];
-    }
-    CLLocationCoordinate2D coor = [self.baiduMapView convertPoint:CGPointMake(ppt.x, (SCREEN_HEIGHT)/2 - (targetPt_y - ppt.y) - TabBARHEIGHT/2) toCoordinateFromView:self.baiduView];
-    [self.baiduMapView setCenterCoordinate:coor animated:YES];
-    
-    // 地理位置反编码
-    BMKReverseGeoCodeSearchOption *reverseGeoCodeOpetion = [[BMKReverseGeoCodeSearchOption alloc]init];
-    reverseGeoCodeOpetion.location = coorData;
-    BOOL flag = [self.searcher reverseGeoCode: reverseGeoCodeOpetion];
-    if (flag) {
-        NSLog(@"反geo检索发送成功");
-    } else {
-        NSLog(@"反geo检索发送失败");
-    }
+    [self updateMapLocationWhenPaoView];
 }
 
 #pragma mark --获取用户信息
@@ -1726,10 +1682,63 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     
     if (self.paopaoView.isAlertPaopaoView == YES) {
         // 打开设备详情窗口时候，不移动地图, 但要画围栏
+        [self updateMapLocationWhenPaoView];
         return;
     }
     //更新中心位置
     [self updateMapCenter];
+}
+- (void)updateMapLocationWhenPaoView {
+    kWeakSelf(self);
+    CBHomeLeftMenuDeviceInfoModel *didClickModel = _paopaoView.deviceInfoModel;
+    if (self.baiduView.hidden == NO) {
+        // 更新选中设备在地图中居中位置
+        // 目标点到屏幕顶部距离
+        CGFloat targetPt_y = (SCREEN_HEIGHT -377.5*KFitWidthRate)/2 + 377.5*KFitWidthRate;
+        
+        CGPoint ppt = [self.baiduMapView convertCoordinate:CLLocationCoordinate2DMake(didClickModel.lat.doubleValue, didClickModel.lng.doubleValue) toPointToView:self.baiduView];
+        
+        CLLocationCoordinate2D coorData = CLLocationCoordinate2DMake(didClickModel.lat.doubleValue, didClickModel.lng.doubleValue);
+        if ([AppDelegate shareInstance].IsShowGoogleMap == NO) {
+            ppt = [self.baiduMapView convertCoordinate:coorData toPointToView:self.baiduView];
+        }
+        CLLocationCoordinate2D coor = [self.baiduMapView convertPoint:CGPointMake(ppt.x, (SCREEN_HEIGHT)/2 - (targetPt_y - ppt.y) - TabBARHEIGHT/2) toCoordinateFromView:self.baiduView];
+        [self.baiduMapView setCenterCoordinate:coor animated:YES];
+        
+        // 地理位置反编码
+        BMKReverseGeoCodeSearchOption *reverseGeoCodeOpetion = [[BMKReverseGeoCodeSearchOption alloc]init];
+        reverseGeoCodeOpetion.location = coorData;
+        BOOL flag = [self.searcher reverseGeoCode: reverseGeoCodeOpetion];
+        if (flag) {
+            NSLog(@"反geo检索发送成功");
+        } else {
+            NSLog(@"反geo检索发送失败");
+        }
+        return;
+    }
+    // 更新选中设备在地图中居中位置
+    // 目标点到屏幕顶部距离
+    CGFloat wholeHeight = SCREEN_HEIGHT;
+    CGFloat targetPt_y = (wholeHeight -377.5*KFitWidthRate)/2 + 377.5*KFitWidthRate;
+    // 经纬度 转为坐标
+    CLLocationCoordinate2D coorData = CLLocationCoordinate2DMake(didClickModel.lat.doubleValue, didClickModel.lng.doubleValue);
+    CGPoint ppt = [_googleMapView.projection pointForCoordinate:coorData];
+    
+    // 调整后的坐标转为经纬度
+    CLLocationCoordinate2D coor = [_googleMapView.projection coordinateForPoint:CGPointMake(ppt.x, ppt.y + wholeHeight/2 - targetPt_y - TabBARHEIGHT)];
+    [_googleMapView setCamera:[GMSCameraPosition cameraWithLatitude:coor.latitude longitude:coor.longitude zoom:_googleMapView.camera.zoom]];
+    
+    // 谷歌地图反向地理编码
+    GMSGeocoder *geocoder = [[GMSGeocoder alloc]init];
+    [geocoder reverseGeocodeCoordinate:CLLocationCoordinate2DMake(didClickModel.lat.doubleValue,didClickModel.lng.doubleValue) completionHandler:^(GMSReverseGeocodeResponse *response, NSError *error) {
+        kStrongSelf(self);
+        if (response.results.count > 0) {
+            GMSAddress *address = response.results[0];
+            NSString *addressStr = [NSString stringWithFormat:@"%@%@%@%@%@",address.country,address.administrativeArea,address.locality,address.subLocality,address.thoroughfare];
+            didClickModel.address = addressStr;
+            self.paopaoView.deviceInfoModel = didClickModel;
+        }
+    }];
 }
 - (void)requestHeartBeat {
     [[NetWorkingManager shared] getWithUrl:@"/userController/heartbeat" params:@{} succeed:^(id response, BOOL isSucceed) {
