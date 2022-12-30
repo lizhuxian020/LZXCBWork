@@ -131,10 +131,13 @@
     UILabel *tLbl = [MINUtils createLabelWithText:title size:16 alignment:NSTextAlignmentLeft textColor:kCellTextColor];
     [view addSubview:tLbl];
     [tLbl mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(@15);
+        make.top.greaterThanOrEqualTo(@15);
         make.left.equalTo(@15);
-        make.bottom.equalTo(@-15);
+        make.bottom.lessThanOrEqualTo(@-15);
+        make.centerY.equalTo(@0);
     }];
+    [tLbl setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
+    [tLbl setContentHuggingPriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
     
     if (img) {
         UIImageView *imgView = [UIImageView new];
@@ -146,10 +149,15 @@
         }];
     } else {
         UILabel *cLbl = [MINUtils createLabelWithText:content size:16 alignment:NSTextAlignmentLeft textColor:kCellTextColor];
+        cLbl.numberOfLines = 0;
+        cLbl.textAlignment = NSTextAlignmentRight;
         [view addSubview:cLbl];
         [cLbl mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerY.equalTo(@0);
+            make.top.greaterThanOrEqualTo(@15);
+            make.bottom.lessThanOrEqualTo(@-15);
             make.right.equalTo(@-15);
+            make.left.equalTo(tLbl.mas_right).mas_offset(15);
+            make.centerY.equalTo(@0);
         }];
     }
     
