@@ -764,8 +764,8 @@
         _cfLb.attributedText = [self getAttStr:Localized(@"设备:")
                                        content:
                                 _deviceInfoModel.cfbf.intValue == 0 ? Localized(@"撤防") : Localized(@"布防")];
-        _accLb.attributedText = [self getAttStr:Localized(@"ACC状态:") content:[self returnStatus:_deviceInfoModel.acc]];
-        _doorLb.attributedText = [self getAttStr:Localized(@"门状态:") content:[self returnStatus:_deviceInfoModel.door]];
+        _accLb.attributedText = [self getAttStr:Localized(@"ACC:") content:[self returnStatus:_deviceInfoModel.acc]];
+        _doorLb.attributedText = [self getAttStr:Localized(@"门:") content:[self returnStatus:_deviceInfoModel.door]];
         _electriLb.attributedText = [self getAttStr:Localized(@"电量:") content:_deviceInfoModel.battery  ? [_deviceInfoModel.battery stringByAppendingString:@"%"] : @"0%"];
         _oilLb.attributedText = [self getAttStr:Localized(@"油量:") content:[NSString stringWithFormat:@"%@L %@%@",_deviceInfoModel.oil,_deviceInfoModel.oil_prop,@"%"]];
 

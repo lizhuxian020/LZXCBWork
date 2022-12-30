@@ -367,7 +367,7 @@
 "进出区域" = "Area";
 "进围栏" = "Into the fence";
 "出围栏" = "Out of the fence";
-"门状态:" = "Door:";
+"门:" = "Door:";
 "当天里程:" = "Mileage of the day:";
 "内电:" = "Internal power:";
 "外电:" = "Foreign Telecom:";
@@ -697,7 +697,7 @@
 "起始时间" = "Start time";
 "怠速时长" = "Idle time";
 "停留时间" = "Residence time";
-"ACC状态" = "ACC";
+"ACC" = "ACC";
 "油量 (升)" = "Oil quantity (liter)";
 "所有报警" = "All alarms";
 "SOS报警" = "SOS alarm";
