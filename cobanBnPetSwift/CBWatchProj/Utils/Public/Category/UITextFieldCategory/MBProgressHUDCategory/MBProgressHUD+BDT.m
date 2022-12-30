@@ -46,6 +46,7 @@
 }
 + (void)showHUDIcon:(UIView *)view animated:(BOOL)animated {
     MBProgressHUD * hud = [MBProgressHUD showHUDAddedTo:view animated:animated];
+    hud.graceTime = 20;
     hud.mode = MBProgressHUDModeIndeterminate;
     //hud.offset = offset;
     

@@ -228,7 +228,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     
     [self createUI];
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(hidePlayBackView) name: @"kHidePlayBackView" object: nil];
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(requestDeviceSingleLocation) name: @"SingleLocationNoti" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(didGetSingleLocationNoti:) name: @"SingleLocationNoti" object: nil];
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(reqeustAlertNum) name: @"CBCAR_NOTFICIATION_UPDATE_ALARM_NUM" object: nil];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(taphandle:)];
@@ -768,7 +768,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 }
 
 - (void)didClickLocateBtn {
-    [self requestDeviceSingleLocation];
+    [self requestDeviceSingleLocation:CarDeviceManager.deviceInfoModelSelect];
 }
 
 - (void)reqeustAlertNum {
@@ -1620,9 +1620,16 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     return image;
 }
 
-- (void)requestDeviceSingleLocation {
+- (void)didGetSingleLocationNoti:(NSNotification *)notify {
+    CBHomeLeftMenuDeviceInfoModel *deviceModel = notify.userInfo[@"deviceModel"];
+    if (deviceModel) {
+        [self requestDeviceSingleLocation:deviceModel];
+    }
+}
+
+- (void)requestDeviceSingleLocation:(CBHomeLeftMenuDeviceInfoModel *)deviceModel {
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:3];
-    dic[@"dno"] = CarDeviceManager.deviceInfoModelSelect.dno?:@"";
+    dic[@"dno"] = deviceModel.dno?:@"";
     __weak __typeof__(self) weakSelf = self;
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     kWeakSelf(self);
@@ -1630,7 +1637,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         if (isSucceed) {
-            [MINUtils showProgressHudToView: UIApplication.sharedApplication.keyWindow withText:Localized(@"操作成功")];
+            [HUD showHUDWithText:Localized(@"操作成功")];
         } else {
         }
     } failed:^(NSError *error) {

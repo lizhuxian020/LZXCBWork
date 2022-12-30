@@ -757,7 +757,7 @@
         _titleLabel.text = [NSString stringWithFormat:@"%@",kStringIsEmpty(_deviceInfoModel.carNum)?Localized(@"未知"):
                             [_deviceInfoModel.name stringByAppendingFormat:@"(%@)", devModel]];
         
-        _lngLb.attributedText = [self getAttStr:Localized(@"经纬度:") content:[NSString stringWithFormat:@"%@, %@", _deviceInfoModel.lng, _deviceInfoModel.lat]];
+        _lngLb.attributedText = [self getAttStr:Localized(@"经纬度:") content:[NSString stringWithFormat:@"%.6f, %.6f", _deviceInfoModel.lng.doubleValue, _deviceInfoModel.lat.doubleValue]];
         
         _statusLb.attributedText = [self getAttStr:Localized(@"状态:")
                                            content:[self getStatusString:_deviceInfoModel]];

@@ -232,8 +232,7 @@
     if (self.arrayData.count > indexPath.row) {
         CBControlModel *model = self.arrayData[indexPath.row];
         if ([model.titleStr isEqualToString:_ControlConfigTitle_DCJW]) {
-//            self.tabBarController.selectedViewController = [self.tabBarController.viewControllers objectAtIndex:0];
-            [[NSNotificationCenter defaultCenter] postNotificationName: @"SingleLocationNoti" object: nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName: @"SingleLocationNoti" object: nil userInfo:@{@"deviceModel": _deviceInfoModelSelect}];
         } else if ([model.titleStr isEqualToString:_ControlConfigTitle_XMJWCL]) {
 //            if (cell.switchView.isON == !self.listModel.dcdd) { // 取反是因为UI的结构导致的
             //休眠定位策略
