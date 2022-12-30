@@ -363,7 +363,7 @@
 // 锁电机
 - (void)showSDJ {
     kWeakSelf(self);
-    [[CBCarAlertView viewWithChooseData:@[Localized(@"解锁"),  Localized(@"上锁")] selectedIndex:0 title:_ControlConfigTitle_SDJ didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
+    [[CBCarAlertView viewWithChooseData:@[Localized(@"解锁"),  Localized(@"上锁")] selectedIndex:self.listModel.sdj title:_ControlConfigTitle_SDJ didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
         
     } confrim:^(NSString * _Nonnull contentStr, NSInteger index) {
         NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
@@ -375,7 +375,7 @@
 // 远程控制
 - (void)showYCKZ {
     kWeakSelf(self);
-    [[CBCarAlertView viewWithChooseData:@[Localized(@"远程点火"), Localized(@"远程熄火")] selectedIndex:0 title:_ControlConfigTitle_SDJ didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
+    [[CBCarAlertView viewWithChooseData:@[Localized(@"远程点火"), Localized(@"远程熄火")] selectedIndex:self.listModel.ycqd title:_ControlConfigTitle_SDJ didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
         
     } confrim:^(NSString * _Nonnull contentStr, NSInteger index) {
         NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
