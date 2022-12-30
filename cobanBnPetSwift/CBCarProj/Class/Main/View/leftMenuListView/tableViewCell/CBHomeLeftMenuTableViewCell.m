@@ -53,7 +53,8 @@
         [self addSubview: _deviceImageView];
         [_deviceImageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(self);
-            make.centerX.equalTo(self.mas_left).with.offset(20 * KFitWidthRate);
+//            make.centerX.equalTo(self.mas_left).with.offset(20 * KFitWidthRate);
+            make.left.equalTo(@(25*KFitWidthRate));
             make.height.mas_equalTo(image.size.height * KFitHeightRate);
             make.width.mas_equalTo(image.size.width * KFitWidthRate);
             //make.size.mas_equalTo(CGSizeMake(20*KFitWidthRate, 20*KFitHeightRate));
@@ -67,7 +68,7 @@
         [self addSubview: _deviceNameLabel];
         [_deviceNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(self).with.offset(-9 * KFitHeightRate);
-            make.left.equalTo(self).with.offset(45 * KFitWidthRate);
+            make.left.equalTo(self.deviceImageView.mas_right).with.offset(10 * KFitWidthRate);
             make.height.mas_equalTo(15 * KFitHeightRate);
             make.width.mas_equalTo(85 * KFitWidthRate);
         }];
@@ -80,7 +81,7 @@
         [self addSubview: _deviceStatusLabel];
         [_deviceStatusLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(self).with.offset(9 * KFitHeightRate);
-            make.left.equalTo(self).with.offset(45 * KFitWidthRate);
+            make.left.equalTo(self.deviceNameLabel);
             make.height.mas_equalTo(15 * KFitHeightRate);
             make.width.mas_equalTo(110 * KFitWidthRate);
         }];
@@ -138,7 +139,7 @@
         self.deviceImageView.image = image;
         [self.deviceImageView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(self);
-            make.centerX.equalTo(self.mas_left).with.offset(20 * KFitWidthRate);
+            make.left.equalTo(@(25*KFitWidthRate));
             make.height.mas_equalTo(image.size.height * KFitHeightRate);
             make.width.mas_equalTo(image.size.width * KFitWidthRate);
         }];

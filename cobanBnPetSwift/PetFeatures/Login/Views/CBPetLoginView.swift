@@ -232,7 +232,7 @@ class CBPetLoginView: CBPetBaseView {
         
         if let user = CBPetLoginModelTool.getUser() {
             self.phoneEmailView.textTF.text =
-            user.phone != nil && user.phone!.isValidatePhoneNumber() ? user.phone :
+            user.account != nil && user.account!.isValidatePhoneNumber() ? user.account :
             user.email != nil && user.email!.isValidateEmail() ? user.email : ""
         }
     }
