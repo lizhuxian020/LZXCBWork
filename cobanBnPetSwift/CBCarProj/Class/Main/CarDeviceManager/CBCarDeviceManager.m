@@ -166,13 +166,16 @@
             deviceModel.gsm = model.location.gsm;
             
             deviceModel.mqttCode = model.code;
+            
+            deviceModel.timeZone = model.location.timeZone;
+            deviceModel.createTime = model.location.updateTime;
         }
     }
-    _greedFenceDevice = targetDeviceModel;
     if (model.code == 21 && model.devStatus.intValue == 3) { //收到报警时, 更新首页的报警数量
         [NSNotificationCenter.defaultCenter postNotificationName:@"CBCAR_NOTFICIATION_UPDATE_ALARM_NUM" object:nil userInfo:nil];
     }
     if (targetDeviceModel.mqttCode == 2) { //2时, 更新围栏, 使用绿色围栏
+        _greedFenceDevice = targetDeviceModel;
         [self updateFence:^{
             [self updateAllDeviceParamList:^{
                 if (self.didUpdateDeviceData) {
@@ -182,6 +185,7 @@
         }];
         return;
     }
+    _greedFenceDevice = nil;
     if (self.didUpdateDeviceData) {
         self.didUpdateDeviceData(self.deviceDatas);
     }
