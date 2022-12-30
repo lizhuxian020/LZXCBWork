@@ -120,7 +120,7 @@ class CBPetLoginInputView: UIView {
         
         self.textTF.snp_makeConstraints { make in
             make.top.bottom.equalTo(0)
-            make.left.equalTo(10*KFitWidthRate)
+            make.left.equalTo(20*KFitWidthRate)
             make.right.equalTo(
                 self.rightView().snp_left
             ).offset(-5*KFitWidthRate)
@@ -138,7 +138,7 @@ class CBPetLoginInputView: UIView {
             self.showClear = false
             self.textBtn.setTitle(text, for: .normal)
             self.textBtn.snp_makeConstraints { make in
-                make.right.equalTo(-10*KFitWidthRate)
+                make.right.equalTo(-20*KFitWidthRate)
                 make.centerY.equalTo(self.contentView)
             }
         } else {
@@ -148,7 +148,7 @@ class CBPetLoginInputView: UIView {
     
     private func setupClearBtn() {
         self.clearBtn.snp_makeConstraints { make in
-            make.right.equalTo(-10*KFitWidthRate)
+            make.right.equalTo(-20*KFitWidthRate)
             make.centerY.equalTo(self.contentView)
             make.width.height.equalTo(contentHeight*2/3)
         }
@@ -168,7 +168,7 @@ class CBPetLoginInputView: UIView {
         self.showPwdBtn = true
         self.showClear = false
         self.pwdBtn.snp_makeConstraints { make in
-            make.right.equalTo(-10*KFitWidthRate)
+            make.right.equalTo(-20*KFitWidthRate)
             make.centerY.equalTo(self.contentView)
             make.width.height.equalTo(contentHeight*2/3)
         }
