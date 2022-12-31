@@ -44,16 +44,18 @@
      // 设置代理 回调信息
     self.session.delegate = self;
      // 设置用户名称
-//    self.session.userName = model.userName;
+    self.session.userName = model.userName;
 //     // 设置用户密码
-//    self.session.password = model.password;
-//    self.session.clientId = model.clientId;
+    self.session.password = model.password;
+    self.session.clientId = model.clientId;
      // 设置会话链接超时时间
 //     [self.session connectAndWaitTimeout:3];
 }
 
 - (void)startConnecet {
-    [self.session connect];
+    if (self.session.status != MQTTSessionStatusConnecting && self.session.status != MQTTSessionStatusConnected) {
+        [self.session connect];
+    }
 }
 
 - (void)disConnecet {

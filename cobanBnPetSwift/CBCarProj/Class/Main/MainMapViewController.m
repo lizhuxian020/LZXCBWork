@@ -170,6 +170,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 //    _baiduMapView.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放
 //    _baiduLocationService.delegate = self;
     
+    [self.mqttManger startConnecet];
     [self startTimer];
     [AppDelegate isShowGoogle];
     [self requestUserData];
@@ -267,8 +268,6 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [self.mqttManger createMQTTClient:model];
     NSString *topic = [NSString stringWithFormat:@"topic/car-pc/%@/+", userModel.uid];
     self.mqttManger.topicArr = @[topic];
-    
-    [self.mqttManger startConnecet];
     
     kWeakSelf(self);
     self.mqttManger.receivedMessageBlock = ^(NSDictionary *dataArr) {
