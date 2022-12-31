@@ -354,6 +354,11 @@
 - (void)showSZZWBBJD {
     kWeakSelf(self);
     [[CBCarAlertView viewWithMultiInput:@[Localized(@"输入转弯补报角度°")] title:_ControlConfigTitle_SZZWBBJD isDigital:YES confirmCanDismiss:nil confrim:^(NSArray<NSString *> * _Nonnull contentStr) {
+        if (contentStr.firstObject.intValue < 5) {
+            //TODO: LZXTODO 英文文案
+            [CBTopAlertView alertFail:Localized(@"设置转弯补报角度最低不能小于5度")];
+            return;
+        }
         NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
             @"angle": contentStr.firstObject,
         }];
