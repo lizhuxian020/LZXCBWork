@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSMutableArray *productSepcArr;
 @property (nonatomic, strong) NSMutableArray *productSepcIdArr;
 
+- (void)getProductSpecData:(void(^)(NSArray *productSepcArr, NSArray *productSepcIdArr))productSpecBlk;
+
 - (void)getDeviceNames:(void(^)(NSArray<NSString *> *deviceNames))blk;
 
 - (void)getGroupName:(void(^)(NSArray<NSString *> *groupNames))blk;

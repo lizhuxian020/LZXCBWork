@@ -70,6 +70,36 @@
     }];
 }
 
+- (void)getProductSpecData:(void(^)(NSArray *productSepcArr, NSArray *productSepcIdArr))productSpecBlk {
+    if (self.productSepcArr && self.productSepcArr.count > 0 &&
+        self.productSepcIdArr && self.productSepcIdArr.count > 0) {
+        productSpecBlk(self.productSepcArr, self.productSepcIdArr);
+        return;
+    }
+    UIWindow *window = [UIApplication.sharedApplication keyWindow];
+    [MBProgressHUD showHUDIcon:window animated:YES];
+    kWeakSelf(self);
+    [[NetWorkingManager shared]postWithUrl:@"/productSpec/getInfo" params:@{} succeed:^(id response, BOOL isSucceed) {
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:window animated:YES];
+        if (isSucceed) {
+            if (response && [response[@"data"] isKindOfClass:[NSArray class]]) {
+                NSArray<CBProductSpecModel *> *modelArr = [CBProductSpecModel mj_objectArrayWithKeyValuesArray:response[@"data"]];
+                self.productSpecData = modelArr;
+                for (CBProductSpecModel *model in modelArr) {
+                    if (![self.productSepcArr containsObject:model.name]) {
+                        [self.productSepcArr addObject:model.name];
+                        [self.productSepcIdArr addObject:model.pId];
+                    }
+                }
+                productSpecBlk(self.productSepcArr, self.productSepcIdArr);
+            }
+        }
+    } failed:^(NSError *error) {
+        [MBProgressHUD hideHUDForView:window animated:YES];
+    }];
+}
+
 - (void)getGroupName:(void(^)(NSArray<NSString *> *groupNames))blk {
     UIWindow *window = [UIApplication.sharedApplication keyWindow];
     [MBProgressHUD showHUDIcon:window animated:YES];
@@ -107,7 +137,7 @@
     [self.productSepcArr removeAllObjects];
     [self.productSepcIdArr removeAllObjects];
     UIWindow *window = [UIApplication.sharedApplication keyWindow];
-    [MBProgressHUD showHUDIcon:window animated:YES];
+//    [MBProgressHUD showHUDIcon:window animated:YES];
     
     [[NetWorkingManager shared]postWithUrl:@"/productSpec/getInfo" params:@{} succeed:^(id response, BOOL isSucceed) {
         kStrongSelf(self);

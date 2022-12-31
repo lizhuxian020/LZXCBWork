@@ -244,17 +244,28 @@
             }];
             return;
         }
+        if (row == 6) {
+            [[CBDeviceTool shareInstance] getProductSpecData:^(NSArray * _Nonnull productSepcArr, NSArray * _Nonnull productSepcIdArr) {
+                self.devModelArray = productSepcArr;
+                self.devModelIdArray = productSepcIdArr;
+                MINPickerView *pickerView = [[MINPickerView alloc] init];
+                pickerView.titleLabel.text = self.deviceInfoTitleArr[row];
+                pickerView.dataArr = @[self.devModelArray];
+                pickerView.delegate = self;
+                [self.view addSubview: pickerView];
+                [pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.left.right.top.equalTo(self.view);
+                    make.height.mas_equalTo(SCREEN_HEIGHT);
+                }];
+                [pickerView showView];
+            }];
+            return;
+        }
         MINPickerView *pickerView = [[MINPickerView alloc] init];
         pickerView.titleLabel.text = self.deviceInfoTitleArr[row];
         if (row == 4) {
             pickerView.dataArr = @[self.carColorArr];
         }
-        if (row == 6) {
-            pickerView.dataArr = @[self.devModelArray];
-        }
-//        if (row == 7) {
-//            pickerView.dataArr = @[self.groupNameArray];
-//        }
         pickerView.delegate = self;
         [self.view addSubview: pickerView];
         [pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
