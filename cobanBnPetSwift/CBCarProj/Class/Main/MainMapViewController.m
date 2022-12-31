@@ -147,7 +147,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 @property (nonatomic, strong) UIButton *locateBtn;
 
 //是否开始跟踪
-@property (nonatomic, assign) BOOL isStartTrack;
+@property (nonatomic, strong) CBHomeLeftMenuDeviceInfoModel *trackingDeviceModel;
 @property (nonatomic, strong) _CBMyInfoPopView *infoPopView;
 
 @property (nonatomic, strong) GMSCoordinateBounds *gmsBounds; //Google可见范围
@@ -250,6 +250,8 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     kWeakSelf(self);
     [CBCarDeviceManager.shared setDidUpdateDeviceData:^(NSArray<CBHomeLeftMenuDeviceInfoModel *> * _Nonnull deviceDatas) {
         [weakself addMarkAndCreateFence:deviceDatas];
+        [weakself processTrack:deviceDatas];
+        [weakself processMapLocation];
     }];
 }
 - (void)createMQTT {
@@ -822,13 +824,19 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
             }
                 break;
             case CBCarPaopaoViewClickTypeTrack: {
-                if (self.isStartTrack) {
-                    deviceModel.isTracking = NO;
+                if (self.trackingDeviceModel && [self.trackingDeviceModel.dno isEqualToString:deviceModel.dno]) {
                     [self setEndTrack];
+                    [HUD showHUDWithText:Localized(@"停止跟踪") withDelay:2.0];
                 } else {
-                    deviceModel.isTracking = YES;
+                    if (self.trackingDeviceModel) {
+                        [self setEndTrack];
+                    }
+                    self.trackingDeviceModel = deviceModel;
                     [self setCanStartTrack];
+                    [self startTrack:self.trackingDeviceModel];
+                    [HUD showHUDWithText:Localized(@"开始跟踪") withDelay:2.0];
                 }
+                self.paopaoView.deviceInfoModel = deviceModel;
             }
                 break;
             case CBCarPaopaoViewClickTypeTitle: {
@@ -1042,7 +1050,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     } else if (overlay == pathPloyline_realTime) {
         // 20s刷新轨迹线
         BMKPolylineView* polygonView = [[BMKPolylineView alloc] initWithOverlay:overlay];
-        polygonView.strokeColor = kRGB(128, 189, 86);
+        polygonView.strokeColor = [UIColor colorWithHexString:@"#1FC8A9"];
         polygonView.lineWidth = 2.0f;//4.0;
         return polygonView;
     } else if ([overlay isKindOfClass:[BMKCircle class]]){
@@ -1101,12 +1109,17 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
             }
                 break;
             case CBCarPaopaoViewClickTypeTrack: {
-                if (self.isStartTrack) {
-                    deviceModel.isTracking = NO;
+                if (self.trackingDeviceModel && [self.trackingDeviceModel.dno isEqualToString:deviceModel.dno]) {
                     [self setEndTrack];
+                    [HUD showHUDWithText:Localized(@"停止跟踪") withDelay:2.0];
                 } else {
-                    deviceModel.isTracking = YES;
+                    if (self.trackingDeviceModel) {
+                        [self setEndTrack];
+                    }
+                    self.trackingDeviceModel = deviceModel;
                     [self setCanStartTrack];
+                    [self startTrack:self.trackingDeviceModel];
+                    [HUD showHUDWithText:Localized(@"开始跟踪") withDelay:2.0];
                 }
                 self.paopaoView.deviceInfoModel = deviceModel;
             }
@@ -1191,19 +1204,36 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 }
 #pragma mark --跟踪
 - (void)setCanStartTrack {
-    self.isStartTrack = YES;
-    [HUD showHUDWithText:Localized(@"开始跟踪") withDelay:2.0];
-    [self getDeviceLocationInfoRequest];
+    self.trackingDeviceModel.isTracking = YES;
 }
 - (void)setEndTrack {
-    self.isStartTrack = NO;
-    [HUD showHUDWithText:Localized(@"停止跟踪") withDelay:2.0];
+    self.trackingDeviceModel.isTracking = NO;
+    self.trackingDeviceModel = nil;
     // 20s刷新轨迹数组,初始化
     [self initTrackLine];
     // 20s刷新的轨迹的line和路径
     self.polyline_realTime = [[GMSPolyline alloc] init];
     self.linePath_realTime = [GMSMutablePath path];
     [self.linePath_realTime removeAllCoordinates];
+    
+    [self removeAllAboutTrack];
+}
+- (void)removeAllAboutTrack {
+    NSMutableArray *waitToRemove = [NSMutableArray new];
+    for (id<BMKOverlay> polyline in self.baiduMapView.overlays) {
+        if ([polyline isKindOfClass:BMKPolyline.class]) {
+            [waitToRemove addObject:polyline];
+        }
+    }
+    [self.baiduMapView removeOverlays:waitToRemove];
+    
+    [waitToRemove removeAllObjects];
+    for (id <BMKAnnotation> annotation in self.baiduMapView.annotations) {
+        if ([annotation isKindOfClass:CBSportAnnotation.class]) {
+            [waitToRemove addObject:annotation];
+        }
+    }
+    [self.baiduMapView removeAnnotations:waitToRemove];
 }
 #pragma mark --获取设备轨迹
 - (void)requestTrackDataWithModel:(NSString *)dno {
@@ -1659,6 +1689,14 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [self hideListView];
 }
 
+- (void)processTrack:(NSArray<CBHomeLeftMenuDeviceInfoModel *> *)deviceData {
+    for (CBHomeLeftMenuDeviceInfoModel *deviceModel in deviceData) {
+        if (deviceModel.isTracking) {
+            [self startTrack:deviceModel];
+        }
+    }
+}
+
 - (void)addMarkAndCreateFence:(NSArray<CBHomeLeftMenuDeviceInfoModel *> *)deviceData {
     
     if ([AppDelegate shareInstance].isShowPlayBackView == YES) {
@@ -1687,13 +1725,16 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         [self filterAnnotation:model];
     }
     
+}
+- (void)processMapLocation {
+    
     if (self.paopaoView.isAlertPaopaoView == YES) {
         // 打开设备详情窗口时候，不移动地图, 但要画围栏
         [self updateMapLocationWhenPaoView];
         return;
     }
     //更新中心位置
-    [self updateMapCenter];
+    [self updateMapCenter:self.trackingDeviceModel ?: CarDeviceManager.deviceInfoModelSelect];
 }
 - (void)updateMapLocationWhenPaoView {
     kWeakSelf(self);
@@ -1808,9 +1849,9 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
             [self.navigationController pushViewController:bindVC animated:YES];
         };
         
-        if (self.isStartTrack) {
-            [self startTrack:deviceInfoModel];
-        }
+//        if (self.isStartTrack) {
+//            [self startTrack:deviceInfoModel];
+//        }
         
         self.navigationItem.title = CarDeviceManager.deviceInfoModelSelect.name?:@"";
         if (CarDeviceManager.deviceInfoModelSelect.dno == nil) {
@@ -1844,17 +1885,18 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         // google地图
         sportModel.coordinate = coor;
         //[sportNodes_realTime addObject:sportModel];
-        if (!(deviceInfoModel.lat.doubleValue == CarDeviceManager.deviceInfoModelSelect.lat.doubleValue && deviceInfoModel.lng.doubleValue == CarDeviceManager.deviceInfoModelSelect.lng.doubleValue)) {
-            // 位置不变
-            //CGFloat distance = [_googleMapView getd];
-            // 第二个点有距离的时候再打点
-            [self->sportNodes_realTime addObject:sportModel];
-        }
+//        if (!(deviceInfoModel.lat.doubleValue == CarDeviceManager.deviceInfoModelSelect.lat.doubleValue && deviceInfoModel.lng.doubleValue == CarDeviceManager.deviceInfoModelSelect.lng.doubleValue)) {
+//            // 位置不变
+//            //CGFloat distance = [_googleMapView getd];
+//            // 第二个点有距离的时候再打点
+//            [self->sportNodes_realTime addObject:sportModel];
+//        }
+        [self->sportNodes_realTime addObject:sportModel];
         sportNodeNum_realTime = sportNodes_realTime.count;
 
         // 有两点时，创建轨迹
         if (sportNodes_realTime.count > 1) {
-            self.polyline_realTime.strokeColor = kRGB(128, 189, 86);
+            self.polyline_realTime.strokeColor = [UIColor colorWithHexString:@"#1FC8A9"];
             self.polyline_realTime.strokeWidth = 2*KFitWidthRate;
             for(int idx = 0; idx < sportNodes_realTime.count; idx++)
             {
@@ -1872,6 +1914,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
                     mark_point.iconView = iconView;
                     mark_point.groundAnchor = CGPointMake(0.5, 0.5);
                     mark_point.map = self.googleMapView;
+                    //TODO: LZXTODO 收集marker, 到时候好一起remove
                 }
             }
 //            BMKSportNode *firstNode = [sportNodes_realTime objectAtIndex:0];
@@ -1883,14 +1926,15 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
             self.polyline_realTime.map = _googleMapView;
         }
         //更新中心位置
-        [self.googleMapView setCamera:[GMSCameraPosition cameraWithLatitude:CarDeviceManager.deviceInfoModelSelect.lat.doubleValue longitude:CarDeviceManager.deviceInfoModelSelect.lng.doubleValue zoom:CarDeviceManager.deviceInfoModelSelect.zoomLevel.integerValue]];
+//        [self.googleMapView setCamera:[GMSCameraPosition cameraWithLatitude:CarDeviceManager.deviceInfoModelSelect.lat.doubleValue longitude:CarDeviceManager.deviceInfoModelSelect.lng.doubleValue zoom:CarDeviceManager.deviceInfoModelSelect.zoomLevel.integerValue]];
     } else {
         // 百度地图
         sportModel.coordinate = coor;
-        if (!(deviceInfoModel.lat.doubleValue == CarDeviceManager.deviceInfoModelSelect.lat.doubleValue && deviceInfoModel.lng.doubleValue == CarDeviceManager.deviceInfoModelSelect.lng.doubleValue)) {
-            // 位置不变 不打点
-            [sportNodes_realTime addObject:sportModel];
-        }
+//        if (!(deviceInfoModel.lat.doubleValue == CarDeviceManager.deviceInfoModelSelect.lat.doubleValue && deviceInfoModel.lng.doubleValue == CarDeviceManager.deviceInfoModelSelect.lng.doubleValue)) {
+//            // 位置不变 不打点
+//            [sportNodes_realTime addObject:sportModel];
+//        }
+        [sportNodes_realTime addObject:sportModel];
         sportNodeNum_realTime = sportNodes_realTime.count;
 
         // 有两点时，创建轨迹
@@ -1910,9 +1954,9 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
             pathPloyline_realTime = [BMKPolyline polylineWithCoordinates: paths count:sportNodeNum_realTime];
             [self.baiduMapView addOverlay:pathPloyline_realTime];
         }
-        //更新中心位置
-        CLLocationCoordinate2D coorData = CLLocationCoordinate2DMake(CarDeviceManager.deviceInfoModelSelect.lat.doubleValue, CarDeviceManager.deviceInfoModelSelect.lng.doubleValue);
-        [self.baiduMapView setCenterCoordinate:coorData animated: YES];
+//        //更新中心位置
+//        CLLocationCoordinate2D coorData = CLLocationCoordinate2DMake(CarDeviceManager.deviceInfoModelSelect.lat.doubleValue, CarDeviceManager.deviceInfoModelSelect.lng.doubleValue);
+//        [self.baiduMapView setCenterCoordinate:coorData animated: YES];
     }
 }
 - (void)startTimer {
@@ -2070,14 +2114,14 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
             break;
     }
 }
-- (void)updateMapCenter {
+- (void)updateMapCenter:(CBHomeLeftMenuDeviceInfoModel *)deviceModel {
     if ([AppDelegate shareInstance].IsShowGoogleMap) {
         dispatch_async(dispatch_get_main_queue(), ^{
 //            if (CarDeviceManager.deviceInfoModelSelect) {
 //                [self.gmsBounds includingCoordinate:CLLocationCoordinate2DMake(CarDeviceManager.deviceInfoModelSelect.lat.doubleValue, CarDeviceManager.deviceInfoModelSelect.lng.doubleValue)];
 //            }
 //            [self.googleMapView animateWithCameraUpdate:[GMSCameraUpdate fitBounds:self.gmsBounds withPadding:30.f]];
-            self.googleMapView.camera = [GMSCameraPosition cameraWithLatitude:CarDeviceManager.deviceInfoModelSelect.lat.doubleValue longitude:CarDeviceManager.deviceInfoModelSelect.lng.doubleValue zoom: _currentZoom > 0 ? _currentZoom : 14];
+            self.googleMapView.camera = [GMSCameraPosition cameraWithLatitude:deviceModel.lat.doubleValue longitude:deviceModel.lng.doubleValue zoom: self->_currentZoom > 0 ? self->_currentZoom : 14];
         });
     } else {
 //        if (CarDeviceManager.deviceInfoModelSelect) {
@@ -2088,7 +2132,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 //        }
 //        [self baiduMapFitFence:self.baiduVisibleCoordinateArr];
         //更新中心位置
-        CLLocationCoordinate2D coorData = CLLocationCoordinate2DMake(CarDeviceManager.deviceInfoModelSelect.lat.doubleValue, CarDeviceManager.deviceInfoModelSelect.lng.doubleValue);
+        CLLocationCoordinate2D coorData = CLLocationCoordinate2DMake(deviceModel.lat.doubleValue, deviceModel.lng.doubleValue);
         [self.baiduMapView setCenterCoordinate:coorData animated: YES];
         self.baiduMapView.zoomLevel = _currentZoom > 0 ? _currentZoom : 14;
     }

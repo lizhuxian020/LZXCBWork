@@ -148,6 +148,21 @@
 
 - (void)didGetMQTTDeviceModel:(CBMQTTCarDeviceModel *)model {
     CBHomeLeftMenuDeviceInfoModel *targetDeviceModel = nil;
+//    static int i = 1;
+//    static double lat = 22.55143761870045;
+//    static double lng = 113.9088315586976;
+//
+//    if (i++ % 2 == 0) {
+//        static int k = 1;
+//        lat = lat + k++ * 0.00100000070045;
+//        model.dno = @"864180032876083";
+//    } else {
+//        static int j = 1;
+//        lng = lng + j++ * 0.0010000006976;
+//        model.dno = @"863584040008426";
+//    }
+//    model.location.lng = @(lng).description;
+//    model.location.lat = @(lat).description;
     for (CBHomeLeftMenuDeviceInfoModel *deviceModel in self.deviceDatas) {
         if ([deviceModel.dno isEqualToString:model.dno]) {
             targetDeviceModel = deviceModel;
