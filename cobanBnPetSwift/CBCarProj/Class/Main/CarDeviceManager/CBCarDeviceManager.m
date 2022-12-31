@@ -198,6 +198,7 @@
                 }
             }];
         }];
+        [NSNotificationCenter.defaultCenter postNotificationName:@"CBCAR_NOTFICIATION_GETMQTT" object:nil userInfo:nil];
         return;
     }
     _greedFenceDevice = nil;
