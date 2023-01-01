@@ -1713,11 +1713,9 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     for (CBHomeLeftMenuDeviceInfoModel *model in deviceData) {
         
         if ([model.dno isEqualToString:CarDeviceManager.deviceInfoModelSelect.dno]) {
-            if ([CarDeviceManager.greedFenceDevice.dno isEqualToString:CarDeviceManager.deviceInfoModelSelect.dno]) {
-                [self createFenceMethod:model color:[UIColor colorWithRed:0 green:1 blue:0 alpha:0.3]];
-            } else {
-                [self createFenceMethod:model color:[UIColor colorWithRed:1 green:0 blue:0 alpha:0.3]];
-                [self createFenceMethod:CarDeviceManager.greedFenceDevice color:[UIColor colorWithRed:0 green:1 blue:0 alpha:0.3]];
+            [self createFenceMethod:model color:[UIColor colorWithRed:1 green:0 blue:0 alpha:0.3] indicateShape:nil];
+            if (CarDeviceManager.greedFenceDevice) {
+                [self createFenceMethod:CarDeviceManager.greedFenceDevice color:[UIColor colorWithRed:0 green:1 blue:0 alpha:0.3] indicateShape:@[@"3"]];
             }
         }
         // 添加地图标注
@@ -2041,10 +2039,12 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     }
 }
 #pragma mark -- 创建围栏
-- (void)createFenceMethod:(CBHomeLeftMenuDeviceInfoModel*)deviceInfoModel color:(UIColor *)color{
+- (void)createFenceMethod:(CBHomeLeftMenuDeviceInfoModel*)deviceInfoModel color:(UIColor *)color indicateShape:(NSArray *)shapeArr{
     if (deviceInfoModel.listFence.count > 0) {
         for (CBHomeLeftMenuDeviceInfoModelFenceModel *model in deviceInfoModel.listFence) {
-            [self createFence:model color:color];
+            if (!shapeArr || [shapeArr containsObject:model.shape]) {
+                [self createFence:model color:color];
+            }
         }
     }
 }
@@ -2077,6 +2077,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
             }
         }
             break;
+        case 3:
         case 1:
         {// 圆
             NSArray *dataArr = [dataString componentsSeparatedByString: @","];
