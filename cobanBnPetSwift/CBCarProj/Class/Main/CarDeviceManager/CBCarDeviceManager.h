@@ -18,8 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 /** 选中的设备  */
 @property (nonatomic, strong, readonly) CBHomeLeftMenuDeviceInfoModel *deviceInfoModelSelect;
 
-/// 需要画绿色围栏的设备
-@property (nonatomic, strong, readonly) CBHomeLeftMenuDeviceInfoModel *greedFenceDevice;
+///// 需要画绿色围栏的设备
+//@property (nonatomic, strong, readonly) CBHomeLeftMenuDeviceInfoModel *greedFenceDevice;
 
 /// 用于点击地图时显示(数据来源于getDevData, getParamList)
 /// 应该先请求DeviceList,

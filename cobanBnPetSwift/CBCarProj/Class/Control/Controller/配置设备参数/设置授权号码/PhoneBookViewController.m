@@ -50,7 +50,7 @@
     self.dataArr = [NSMutableArray array];
 //    self.editArr = [NSMutableArray array];
 //    self.addArr = [NSMutableArray array];
-    self.phoneTypeArr = @[@[Localized(@"允许呼入"), Localized(@"允许呼出"), Localized(@"允许呼入/呼出"), Localized(@"第一授权号码"), Localized(@"授权号码"), Localized(@"短信监控中心号码"), Localized(@"复位设备号码"), Localized(@"恢复出厂设置号码")]];
+    self.phoneTypeArr = @[@[Localized(@"允许呼入"), Localized(@"允许呼出"), Localized(@"允许呼入/呼出"), Localized(@"第一授权号码"), Localized(@"授权号码"), Localized(@"平台短信中心号码"), Localized(@"复位设备号码"), Localized(@"恢复出厂设置号码")]];
     [self requestDataWithHud:nil];
 }
 - (CBControlAlertPopView *)alertPopView {
@@ -62,7 +62,7 @@
 }
 - (void)setupView {
     [self initBarWithTitle:Localized(@"设置电话本") isBack: YES];
-    [self initBarRightImageName:@"设备重启" target:self action:@selector(didClickAddPhone)];
+    [self initBarRightImageName:@"添加" target:self action:@selector(didClickAddPhone)];
     self.view.backgroundColor = kRGB(247, 247, 247);
     
     [self.view addSubview: self.tableView];
@@ -254,6 +254,7 @@
     [[NetWorkingManager shared]postWithUrl:@"devParamController/delDevParamAuth" params: dic succeed:^(id response,BOOL isSucceed) {
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [CBTopAlertView alertSuccess:Localized(@"操作成功")];
         if (isSucceed) {
             [weakSelf requestDataWithHud:nil];
         }

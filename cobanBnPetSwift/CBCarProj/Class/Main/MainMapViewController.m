@@ -1714,9 +1714,6 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         
         if ([model.dno isEqualToString:CarDeviceManager.deviceInfoModelSelect.dno]) {
             [self createFenceMethod:model color:[UIColor colorWithRed:1 green:0 blue:0 alpha:0.3] indicateShape:nil];
-            if (CarDeviceManager.greedFenceDevice) {
-                [self createFenceMethod:CarDeviceManager.greedFenceDevice color:[UIColor colorWithRed:0 green:1 blue:0 alpha:0.3] indicateShape:@[@"3"]];
-            }
         }
         // 添加地图标注
         [self filterAnnotation:model];
@@ -2078,6 +2075,25 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         }
             break;
         case 3:
+        {// 圆
+            color = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.3];
+            NSArray *dataArr = [dataString componentsSeparatedByString: @","];
+            if (dataArr.count == 3) {
+                CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake( [dataArr[0] doubleValue], [dataArr[1] doubleValue]);
+                MINCoordinateObject *circleModel = [[MINCoordinateObject alloc] init];
+                circleModel.coordinate = coordinate;
+                self.circleCoordinate = coordinate;
+                if (self.baiduView.hidden == NO) {
+                    //[self addAnnotation_baidu:coordinate];
+                    [self addBaiduCircleMarkerWithRadius: dataArr.lastObject color:color];
+                    [self baiduMapFitCircleFence: circleModel radius: [dataArr[2] doubleValue]];
+                }else {
+                    [self addGoogleCircleMarkerWithRadius: dataArr.lastObject color:color];
+                    [self googleMapFitCircleFence: circleModel radius: [dataArr[2] doubleValue]];
+                }
+            }
+        }
+            break;
         case 1:
         {// 圆
             NSArray *dataArr = [dataString componentsSeparatedByString: @","];

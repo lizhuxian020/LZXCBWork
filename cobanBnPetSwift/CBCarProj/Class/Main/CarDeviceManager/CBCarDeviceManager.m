@@ -190,7 +190,7 @@
         [NSNotificationCenter.defaultCenter postNotificationName:@"CBCAR_NOTFICIATION_UPDATE_ALARM_NUM" object:nil userInfo:nil];
     }
     if (targetDeviceModel.mqttCode == 2) { //2时, 更新围栏, 使用绿色围栏
-        _greedFenceDevice = targetDeviceModel;
+//        _greedFenceDevice = targetDeviceModel;
         [self updateFence:^{
             [self updateAllDeviceParamList:^{
                 if (self.didUpdateDeviceData) {
@@ -201,7 +201,7 @@
         [NSNotificationCenter.defaultCenter postNotificationName:@"CBCAR_NOTFICIATION_GETMQTT" object:nil userInfo:nil];
         return;
     }
-    _greedFenceDevice = nil;
+//    _greedFenceDevice = nil;
     if (self.didUpdateDeviceData) {
         self.didUpdateDeviceData(self.deviceDatas);
     }

@@ -117,6 +117,11 @@
                              };
     NSLog(@"--lzx mtqq eventCode:%@",events[@(eventCode)]);
     self.eventCode = eventCode;
+    if(eventCode == MQTTSessionEventConnected) {
+        [self subscribeAllTopic];
+    } else {
+        [self startConnecet];
+    }
 }
 
 /**

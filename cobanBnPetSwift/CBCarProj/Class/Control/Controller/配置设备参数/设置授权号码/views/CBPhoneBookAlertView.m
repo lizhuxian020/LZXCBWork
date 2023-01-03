@@ -55,7 +55,7 @@
         make.left.equalTo(phoneView);
     }];
     
-    NSArray *chooseData = @[Localized(@"授权号码"),Localized(@"短信监控中心号码")];
+    NSArray *chooseData = @[Localized(@"授权号码"),Localized(@"平台短信中心号码")];
     
     UIView *lastBtn = self.titleLbl;
     NSMutableArray *btnArr = [NSMutableArray new];
