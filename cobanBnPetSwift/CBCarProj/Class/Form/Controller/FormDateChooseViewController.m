@@ -132,7 +132,7 @@
                 [weakSelf.dataArr removeAllObjects];
                 NSArray *dataArr = response[@"data"];
                 for (NSDictionary *dic in dataArr) {
-                    FormInfoModel *model = [FormInfoModel yy_modelWithDictionary: dic];
+                    FormInfoModel *model = [FormInfoModel mj_objectWithKeyValues: dic];
                     model.formType = weakSelf.type;
                     [weakSelf.dataArr addObject: model];
                 }

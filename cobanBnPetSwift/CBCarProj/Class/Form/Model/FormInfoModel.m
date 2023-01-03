@@ -17,7 +17,15 @@
 @end
 @implementation FormInfoModel
 
-+ (NSDictionary *)modelCustomPropertyMapper {
+- (instancetype)mj_setKeyValues:(id)keyValues {
+    [super mj_setKeyValues:keyValues];
+    if (![_startTime containsString:@"-"]) {
+        _startTime = [MINUtils getTimeFromTimestamp:_startTime formatter:@"yyyy-MM-dd HH:mm:ss"];
+    }
+    return self;
+}
+
++ (NSDictionary *)mj_replacedKeyFromPropertyName {
     return @{@"ids" : @"id",
              };
 }

@@ -112,9 +112,11 @@
         }
         switch (formModel.formType) {
             case FormTypeIdling:
+            {
                 //怠速报表
                 self.middleLabel.text = formModel.startTime?:@"";
                 self.rightLabel.text = [self getTimeStr:formModel.time];
+            }
                 break;
             case FormTypeStay:
                 //停留统计

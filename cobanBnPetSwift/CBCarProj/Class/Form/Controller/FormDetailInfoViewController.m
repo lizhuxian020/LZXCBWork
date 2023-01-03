@@ -89,6 +89,9 @@
     }
     [cell hideRightImage];
     cell.nameLabel.text = self.dataArr[indexPath.row];
+    [cell.imgView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.width.height.equalTo(@0);
+    }];
     return cell;
 }
 
