@@ -665,6 +665,7 @@
 		A2BCA2D8294311F700CD4B08 /* CBFencyMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BCA2D7294311F700CD4B08 /* CBFencyMenuView.m */; };
 		A2BCA2DF2943242300CD4B08 /* CBDeviceTool.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BCA2DE2943242300CD4B08 /* CBDeviceTool.m */; };
 		A2BCA2E72943410900CD4B08 /* CBDoubleTimePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BCA2E52943410900CD4B08 /* CBDoubleTimePicker.m */; };
+		A2E3A0A42963D21700E2C27B /* CBPhoneBookHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E3A0A32963D21700E2C27B /* CBPhoneBookHeaderView.m */; };
 		A2F9C5002925D1C400715AF9 /* CBPetLoginInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F9C4FF2925D1C400715AF9 /* CBPetLoginInputView.swift */; };
 		A2F9C5032926135E00715AF9 /* CBLoginLayoutMarco.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F9C5022926135E00715AF9 /* CBLoginLayoutMarco.swift */; };
 		A2F9C508292B76A700715AF9 /* UIView+BlocksKit.m in Sources */ = {isa = PBXBuildFile; fileRef = A2F9C505292B76A600715AF9 /* UIView+BlocksKit.m */; };
@@ -1885,6 +1886,8 @@
 		A2BCA2DE2943242300CD4B08 /* CBDeviceTool.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBDeviceTool.m; sourceTree = "<group>"; };
 		A2BCA2E52943410900CD4B08 /* CBDoubleTimePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBDoubleTimePicker.m; sourceTree = "<group>"; };
 		A2BCA2E62943410900CD4B08 /* CBDoubleTimePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBDoubleTimePicker.h; sourceTree = "<group>"; };
+		A2E3A0A22963D21700E2C27B /* CBPhoneBookHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBPhoneBookHeaderView.h; sourceTree = "<group>"; };
+		A2E3A0A32963D21700E2C27B /* CBPhoneBookHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBPhoneBookHeaderView.m; sourceTree = "<group>"; };
 		A2F9C4FF2925D1C400715AF9 /* CBPetLoginInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetLoginInputView.swift; sourceTree = "<group>"; };
 		A2F9C5022926135E00715AF9 /* CBLoginLayoutMarco.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBLoginLayoutMarco.swift; sourceTree = "<group>"; };
 		A2F9C504292B76A500715AF9 /* UIGestureRecognizer+BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIGestureRecognizer+BlocksKit.h"; sourceTree = "<group>"; };
@@ -4457,6 +4460,7 @@
 		17CDAAA124CEBE5500BB9F8B /* 设置授权号码 */ = {
 			isa = PBXGroup;
 			children = (
+				A2E3A0A12963D20A00E2C27B /* views */,
 				17CDAAA224CEBE5500BB9F8B /* PhoneBookViewController.h */,
 				17CDAAA324CEBE5500BB9F8B /* PhoneBookViewController.m */,
 			);
@@ -5517,6 +5521,15 @@
 				A2BCA2E62943410900CD4B08 /* CBDoubleTimePicker.h */,
 			);
 			path = TimePicker;
+			sourceTree = "<group>";
+		};
+		A2E3A0A12963D20A00E2C27B /* views */ = {
+			isa = PBXGroup;
+			children = (
+				A2E3A0A22963D21700E2C27B /* CBPhoneBookHeaderView.h */,
+				A2E3A0A32963D21700E2C27B /* CBPhoneBookHeaderView.m */,
+			);
+			path = views;
 			sourceTree = "<group>";
 		};
 		A2F9C5012926134600715AF9 /* LoginLayoutMarco */ = {
@@ -6813,6 +6826,7 @@
 				17CDAC6424CEBE5600BB9F8B /* CBControlSetRestPopView.m in Sources */,
 				177E20D3241B566B00E4321F /* CBPetNetworkingManager.swift in Sources */,
 				17CDABDB24CEBE5600BB9F8B /* ltm.c in Sources */,
+				A2E3A0A42963D21700E2C27B /* CBPhoneBookHeaderView.m in Sources */,
 				4389AA4D2482B72400C4BDC3 /* CBPetFuncUserManagerCell.swift in Sources */,
 				175FF8A32487899000475849 /* CBPetPsnalCterPrivcSettingView.swift in Sources */,
 				17CDAB6B24CEBE5500BB9F8B /* LineBarQuery.m in Sources */,

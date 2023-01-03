@@ -13,6 +13,7 @@
 #import "MINAlertView.h"
 #import "CBAddAddressBKView.h"
 #import "CBControlAlertPopView.h"
+#import "CBPhoneBookHeaderView.h"
 
 @interface PhoneBookViewController () <UITableViewDelegate, UITableViewDataSource, MINPickerViewDelegate, PhoneBookTableViewCellDelegate>
 {
@@ -314,6 +315,15 @@
     [self editPhoneReqeust];
 }
 #pragma mark - tableView delegate & dataSource
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 45 * KFitHeightRate;
+}
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    CBPhoneBookHeaderView *headView = [[CBPhoneBookHeaderView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, 45 * KFitHeightRate)];
+    return headView;
+}
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 62.5 * KFitHeightRate;
@@ -331,9 +341,16 @@
     if (cell == nil) {
         cell = [[PhoneBookTableViewCell alloc] initWithStyle: UITableViewCellStyleDefault reuseIdentifier: cellIndentify];
     }
+    [cell addLeftSwipeGesture];
+    [cell hideDeleteBtn];
+    __weak typeof(self) weakSelf = self;
+    [cell setDeleteBtnClick:^(NSIndexPath *indexPath) {
+        
+    }];
+    [cell setEditBtnClick:^(NSIndexPath *indexPath) {
+    }];
     cell.cellDelegate = self;
     cell.indexPath = indexPath;
-    __weak __typeof__(self) weakSelf = self;
     if (indexPath.row < self.dataArr.count) {
         PhoneBookModel *model = self.dataArr[indexPath.row];
         cell.nameTextFeild.text = model.name;
