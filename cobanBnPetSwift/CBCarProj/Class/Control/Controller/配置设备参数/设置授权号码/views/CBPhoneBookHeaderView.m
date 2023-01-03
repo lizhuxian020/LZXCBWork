@@ -48,13 +48,13 @@
                 make.left.equalTo(@0);
             }
             if (i == 0) {
-                make.width.equalTo(backView).multipliedBy(0.4);
+                make.width.equalTo(backView).multipliedBy(0.3);
             }
             if (i == 1) {
                 make.width.equalTo(backView).multipliedBy(0.3);
             }
             if (i == 2) {
-                make.width.equalTo(lastView);
+                make.width.equalTo(backView).multipliedBy(0.4);
             }
         }];
         lastView = lbl;

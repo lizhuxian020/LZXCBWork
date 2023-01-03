@@ -212,6 +212,7 @@
         [self showSZDXMM];
     } else if ([title isEqualToString:_ControlConfigTitle_SZSQHM]) {//设置授权号码
         PhoneBookViewController *phoneBookVC = [[PhoneBookViewController alloc] init];
+        phoneBookVC.deviceInfoModelSelect = self.deviceInfoModelSelect;
         [self.navigationController pushViewController: phoneBookVC animated: YES];
     } else if ([title isEqualToString:_ControlConfigTitle_SZYXRJ]) {//设置油箱容积(L)
         //        [self.inputPopView updateTitle:Localized(@"设置油箱容积(L)") placehold:Localized(@"输入油箱容积(L)") isDigital:YES];

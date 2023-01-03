@@ -83,7 +83,7 @@
     [_nameTextFeild mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(backView).with.offset(0 * KFitWidthRate);
         make.centerY.equalTo(backView);
-        make.width.equalTo(backView).multipliedBy(0.4);
+        make.width.equalTo(backView).multipliedBy(0.3);
         make.height.equalTo(@(30 * KFitHeightRate));
     }];
     _phoneTextFeild = [MINUtils createTextFieldWithHoldText: @"电话号码" fontSize: 14];
@@ -112,15 +112,15 @@
     [_phoneTypeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_phoneTextFeild.mas_right).with.offset(0 * KFitWidthRate);
         make.centerY.equalTo(backView);
-        make.width.equalTo(backView).multipliedBy(0.3);
+        make.width.equalTo(backView).multipliedBy(0.4);
         make.height.equalTo(@(30 * KFitHeightRate));
     }];
     _phoneTypeTitleLabel = [MINUtils createLabelWithText: @"恢复原厂设置号码" size: 14 alignment: NSTextAlignmentLeft textColor: kCellTextColor];
     [_phoneTypeBtn addSubview: _phoneTypeTitleLabel];
     [_phoneTypeTitleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(_phoneTypeBtn).with.offset(12.5 * KFitWidthRate);
+        make.left.equalTo(_phoneTypeBtn).with.offset(0 * KFitWidthRate);
         make.top.bottom.equalTo(_phoneTypeBtn);
-        make.right.equalTo(_phoneTypeBtn).with.offset(-30 * KFitWidthRate);
+        make.right.equalTo(_phoneTypeBtn).with.offset(0 * KFitWidthRate);
     }];
    
     _nameTextFeild.enabled = NO;

@@ -666,6 +666,7 @@
 		A2BCA2DF2943242300CD4B08 /* CBDeviceTool.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BCA2DE2943242300CD4B08 /* CBDeviceTool.m */; };
 		A2BCA2E72943410900CD4B08 /* CBDoubleTimePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BCA2E52943410900CD4B08 /* CBDoubleTimePicker.m */; };
 		A2E3A0A42963D21700E2C27B /* CBPhoneBookHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E3A0A32963D21700E2C27B /* CBPhoneBookHeaderView.m */; };
+		A2E3A0A72963FDE500E2C27B /* CBPhoneBookAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E3A0A62963FDE500E2C27B /* CBPhoneBookAlertView.m */; };
 		A2F9C5002925D1C400715AF9 /* CBPetLoginInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F9C4FF2925D1C400715AF9 /* CBPetLoginInputView.swift */; };
 		A2F9C5032926135E00715AF9 /* CBLoginLayoutMarco.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F9C5022926135E00715AF9 /* CBLoginLayoutMarco.swift */; };
 		A2F9C508292B76A700715AF9 /* UIView+BlocksKit.m in Sources */ = {isa = PBXBuildFile; fileRef = A2F9C505292B76A600715AF9 /* UIView+BlocksKit.m */; };
@@ -1888,6 +1889,8 @@
 		A2BCA2E62943410900CD4B08 /* CBDoubleTimePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBDoubleTimePicker.h; sourceTree = "<group>"; };
 		A2E3A0A22963D21700E2C27B /* CBPhoneBookHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBPhoneBookHeaderView.h; sourceTree = "<group>"; };
 		A2E3A0A32963D21700E2C27B /* CBPhoneBookHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBPhoneBookHeaderView.m; sourceTree = "<group>"; };
+		A2E3A0A52963FDE500E2C27B /* CBPhoneBookAlertView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBPhoneBookAlertView.h; sourceTree = "<group>"; };
+		A2E3A0A62963FDE500E2C27B /* CBPhoneBookAlertView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBPhoneBookAlertView.m; sourceTree = "<group>"; };
 		A2F9C4FF2925D1C400715AF9 /* CBPetLoginInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetLoginInputView.swift; sourceTree = "<group>"; };
 		A2F9C5022926135E00715AF9 /* CBLoginLayoutMarco.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBLoginLayoutMarco.swift; sourceTree = "<group>"; };
 		A2F9C504292B76A500715AF9 /* UIGestureRecognizer+BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIGestureRecognizer+BlocksKit.h"; sourceTree = "<group>"; };
@@ -5528,6 +5531,8 @@
 			children = (
 				A2E3A0A22963D21700E2C27B /* CBPhoneBookHeaderView.h */,
 				A2E3A0A32963D21700E2C27B /* CBPhoneBookHeaderView.m */,
+				A2E3A0A52963FDE500E2C27B /* CBPhoneBookAlertView.h */,
+				A2E3A0A62963FDE500E2C27B /* CBPhoneBookAlertView.m */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -6577,6 +6582,7 @@
 				1782BF0A24C0427D00544C36 /* CBWtConstStr.m in Sources */,
 				1751949F2484958C00D7D415 /* CBPetFuncCvsationView.swift in Sources */,
 				1782BF1E24C0427E00544C36 /* NSData+md5.m in Sources */,
+				A2E3A0A72963FDE500E2C27B /* CBPhoneBookAlertView.m in Sources */,
 				1782BF1724C0427D00544C36 /* CBWtNetworkRequestManager.m in Sources */,
 				17CDAB5824CEBE5500BB9F8B /* BaseChart.m in Sources */,
 				17CDAB6224CEBE5500BB9F8B /* OutSideLable.m in Sources */,

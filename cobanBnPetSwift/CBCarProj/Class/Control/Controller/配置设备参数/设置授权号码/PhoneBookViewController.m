@@ -14,14 +14,15 @@
 #import "CBAddAddressBKView.h"
 #import "CBControlAlertPopView.h"
 #import "CBPhoneBookHeaderView.h"
+#import "CBPhoneBookAlertView.h"
 
 @interface PhoneBookViewController () <UITableViewDelegate, UITableViewDataSource, MINPickerViewDelegate, PhoneBookTableViewCellDelegate>
 {
     BOOL keyboardIsShown;
 }
 @property (nonatomic, strong) NSMutableArray *dataArr;
-@property (nonatomic, strong) NSMutableArray *editArr;
-@property (nonatomic, strong) NSMutableArray *addArr;
+//@property (nonatomic, strong) NSMutableArray *editArr;
+//@property (nonatomic, strong) NSMutableArray *addArr;
 @property (nonatomic, copy) NSArray *phoneTypeArr;
 @property (nonatomic, strong) NSIndexPath *currentIndexPath;
 
@@ -47,9 +48,9 @@
     [self setupView];
     
     self.dataArr = [NSMutableArray array];
-    self.editArr = [NSMutableArray array];
-    self.addArr = [NSMutableArray array];
-    self.phoneTypeArr = @[@[Localized(@"允许呼入"), Localized(@"允许呼出"), Localized(@"允许呼入/呼出"), Localized(@"第一授权号码"), Localized(@"授权号码"), Localized(@"平台短信中心号码"), Localized(@"复位设备号码"), Localized(@"恢复出厂设置号码")]];
+//    self.editArr = [NSMutableArray array];
+//    self.addArr = [NSMutableArray array];
+    self.phoneTypeArr = @[@[Localized(@"允许呼入"), Localized(@"允许呼出"), Localized(@"允许呼入/呼出"), Localized(@"第一授权号码"), Localized(@"授权号码"), Localized(@"短信监控中心号码"), Localized(@"复位设备号码"), Localized(@"恢复出厂设置号码")]];
     [self requestDataWithHud:nil];
 }
 - (CBControlAlertPopView *)alertPopView {
@@ -61,7 +62,7 @@
 }
 - (void)setupView {
     [self initBarWithTitle:Localized(@"设置电话本") isBack: YES];
-    [self initBarRighWhiteBackBtnTitle:Localized(@"发送") target: self action: @selector(addNewPhoneBookRequest)];
+    [self initBarRightImageName:@"设备重启" target:self action:@selector(didClickAddPhone)];
     self.view.backgroundColor = kRGB(247, 247, 247);
     
     [self.view addSubview: self.tableView];
@@ -70,19 +71,11 @@
     }];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, 100 * KFitHeightRate)];
-    UIButton *addCellBtn = [MINUtils createNoBorderBtnWithTitle:[NSString stringWithFormat:@"+ %@",Localized(@"新增")] titleColor: kRGB(73, 73, 73) fontSize: 12 * KFitHeightRate backgroundColor:nil];
-    addCellBtn.layer.cornerRadius = 5 * KFitWidthRate;
-    addCellBtn.layer.borderColor = kRGB(210, 210, 210).CGColor;
-    addCellBtn.layer.borderWidth = 0.5;
-    [addCellBtn addTarget: self action: @selector(addCellBtnClick) forControlEvents: UIControlEventTouchUpInside];
-    [view addSubview: addCellBtn];
-    [addCellBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.centerY.equalTo(view);
-        make.size.mas_equalTo(CGSizeMake(100 * KFitWidthRate, 40 * KFitHeightRate));
+    kWeakSelf(self);
+    self.tableView.mj_header = [MJRefreshStateHeader headerWithRefreshingBlock:^{
+        [weakself requestDataWithHud:nil];
     }];
-    self.tableView.tableFooterView = view;
+    
 }
 #pragma mark -- 根据设备号获取设备授权号码列表
 - (void)requestDataWithHud:(MBProgressHUD *)hud {
@@ -93,6 +86,7 @@
     [[NetWorkingManager shared]getWithUrl:@"devParamController/getDevParamAuthList" params: dic succeed:^(id response,BOOL isSucceed) {
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [self.tableView.mj_header endRefreshing];
         if (isSucceed) {
             if (response && [response[@"data"] isKindOfClass:[NSArray class]]) {
                 [self.dataArr removeAllObjects];
@@ -101,84 +95,80 @@
                     [self.dataArr addObject: model];
                 }
                 [self.tableView reloadData];
-                [self.addArr removeAllObjects];
-                [self.editArr removeAllObjects];
+//                [self.addArr removeAllObjects];
+//                [self.editArr removeAllObjects];
             }
+        }
+    } failed:^(NSError *error) {
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [self.tableView.mj_header endRefreshing];
+    }];
+}
+- (void)didClickAddPhone {
+    [self showPhonePopView:nil];
+}
+- (void)showPhonePopView:(PhoneBookModel *)phoneModel {
+    
+    CBPhoneBookAlertView *contentView = [CBPhoneBookAlertView new];
+    contentView.phoneModel = phoneModel;
+    
+    CBAlertBaseView *alertView = [[CBAlertBaseView alloc] initWithContentView:contentView title:Localized(phoneModel ? @"编辑": @"添加")];
+    
+    __weak CBPhoneBookAlertView *wContentView = contentView;
+    CBBasePopView *popView = [[CBBasePopView alloc] initWithContentView:alertView];
+    __weak CBBasePopView *wpopView = popView;
+    kWeakSelf(self);
+    [alertView setDidClickConfirm:^{
+        if ([wContentView canDismiss]) {
+            [wpopView dismiss];
+            NSDictionary *param = [wContentView getRequestParam];
+            if (phoneModel) {
+                [weakself editPhoneReqeust:param];
+            } else {
+                [weakself addNewPhoneBookRequest:param];
+            }
+            
+        }
+    }];
+    [alertView setDidClickCancel:^{
+        [wpopView dismiss];
+    }];
+    
+    [popView pop];
+}
+#pragma mark -- 新增电话本request
+- (void)addNewPhoneBookRequest:(NSDictionary *)param {
+    NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:1];
+    [dic addEntriesFromDictionary:param];
+    dic[@"dno"] = self.deviceInfoModelSelect.dno?:@"";
+    [MBProgressHUD showHUDIcon:self.view animated:YES];
+    kWeakSelf(self);
+    [[NetWorkingManager shared]postWithUrl:@"devParamController/sendDevParamAuth" params: dic succeed:^(id response,BOOL isSucceed) {
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [CBTopAlertView alertSuccess:Localized(@"操作成功")];
+        if (isSucceed) {
+            [self requestDataWithHud:nil];
+//            [self.addArr removeAllObjects];
+//            [self.editArr removeAllObjects];
         }
     } failed:^(NSError *error) {
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
     }];
 }
-#pragma mark -- 新增电话本request
-- (void)addNewPhoneBookRequest {
-    if (self.addArr.count == 0 && self.editArr.count == 0) {
-        [MINUtils showProgressHudToView: self.view withText:Localized(@"请先添加")];//请先新增或编辑号码再进行发送
-        return;
-    }
-    if (self.addArr.count > 0) {
-        PhoneBookModel *modelFirst = self.addArr[0];
-        if (modelFirst.name.length < 1) {
-            [MINUtils showProgressHudToView: self.view withText:Localized(@"请输入姓名")];
-            return;
-        }
-        if (modelFirst.phone.length < 1) {
-            [MINUtils showProgressHudToView: self.view withText:Localized(@"请输入电话号码")];
-            return;
-        }
-        NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:1];
-        PhoneBookModel *model = nil;
-        model = self.addArr[0];
-        if (model.name.length < 1) {
-            [MINUtils showProgressHudToView: self.view withText:Localized(@"请输入姓名")];
-            return;
-        }
-        if (model.phone.length < 1) {
-            [MINUtils showProgressHudToView: self.view withText:Localized(@"请输入电话号码")];
-            return;
-        }
-        dic[@"dno"] = [CBCommonTools CBdeviceInfo].dno?:@"";//[CBCommonTools CBdeviceInfo].dno?:@"";
-        dic[@"name"] = model.name;
-        dic[@"phone"] = model.phone;
-        dic[@"type"] = [NSString stringWithFormat: @"%d", model.type];
-        [MBProgressHUD showHUDIcon:self.view animated:YES];
-        kWeakSelf(self);
-        [[NetWorkingManager shared]postWithUrl:@"devParamController/sendDevParamAuth" params: dic succeed:^(id response,BOOL isSucceed) {
-            kStrongSelf(self);
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
-            if (isSucceed) {
-                [self requestDataWithHud:nil];
-                [self.addArr removeAllObjects];
-                [self.editArr removeAllObjects];
-            }
-        } failed:^(NSError *error) {
-            kStrongSelf(self);
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
-        }];
-    }
-}
 #pragma mark -- 编辑电话本request
-- (void)editPhoneReqeust {
+- (void)editPhoneReqeust:(NSDictionary *)param {
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:1];
-    PhoneBookModel *model = self.editArr[0];
-    if (model.name.length < 1) {
-        [MINUtils showProgressHudToView: self.view withText:Localized(@"请输入姓名")];
-        return;
-    }
-    if (model.phone.length < 1) {
-        [MINUtils showProgressHudToView: self.view withText:Localized(@"请输入电话号码")];
-        return;
-    }
-    dic[@"aid"] = model.phoneId;
-    dic[@"name"] = model.name;
-    dic[@"phone"] = model.phone;
-    dic[@"type"] = [NSString stringWithFormat: @"%d", model.type];
-    dic[@"dno"] = [CBCommonTools CBdeviceInfo].dno?:@"";
+    [dic addEntriesFromDictionary:param];
+    dic[@"dno"] = self.deviceInfoModelSelect.dno?:@"";
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     kWeakSelf(self);
     [[NetWorkingManager shared]postWithUrl:@"devParamController/editDevParamAuth" params: dic succeed:^(id response,BOOL isSucceed) {
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [CBTopAlertView alertSuccess:Localized(@"操作成功")];
         [self requestDataWithHud:nil];
     } failed:^(NSError *error) {
         kStrongSelf(self);
@@ -187,133 +177,7 @@
     }];
 }
 #pragma mark -- 编辑或新增弹框
-- (void)phoneBookPopView:(PhoneBookModel *)model {
-    [self.addArr removeAllObjects];
-    [self.editArr removeAllObjects];
-    
-    __weak __typeof__(self) weakSelf = self;
-    MINAlertView *alertView = [[MINAlertView alloc] init];
-    __weak MINAlertView *weakAlertView = alertView;
-    if (model) {
-        alertView.titleLabel.text = Localized(@"编辑");
-    } else {
-        alertView.titleLabel.text = Localized(@"添加");
-    }
-    [weakSelf.view addSubview: alertView];
-    [alertView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.bottom.right.equalTo(weakSelf.view);
-        make.height.mas_equalTo(SCREEN_HEIGHT);
-    }];
-    // 重置高度
-    [alertView setContentViewHeight:160];
-    
-    CBAddAddressBKView *newView = [[CBAddAddressBKView alloc] init];
-    self.addAddresBKView = newView;
-    newView.alramTypeBtnClickBlock = ^{
-        MINPickerView *pickerView = [[MINPickerView alloc] init];
-        pickerView.titleLabel.text = @"";
-        pickerView.dataArr = weakSelf.phoneTypeArr;
-        pickerView.delegate = weakSelf;
-        [weakSelf.view addSubview: pickerView];
-        [pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.right.top.equalTo(weakSelf.view);
-            make.height.mas_equalTo(SCREEN_HEIGHT);
-        }];
-        [pickerView showView];
-    };
-    [weakAlertView.contentView addSubview: newView];
-    [newView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.bottom.equalTo(weakAlertView.contentView);
-    }];
-    newView.nameTextField.text = model.name?:@"";
-    newView.mobileTextField.text = model.phone?:@"";
-    [newView.alramTypeBtn setTitle:self.phoneTypeArr[0][model.type] forState:UIControlStateNormal];
-    [newView.alramTypeBtn setTitle:self.phoneTypeArr[0][model.type] forState:UIControlStateHighlighted];
-    if (model) {
-        newView.mobileTextField.enabled = NO;
-    } else {
-        newView.mobileTextField.enabled = YES;
-    }
-    alertView.rightBtnClick = ^{
-        [weakAlertView hideView];
-        if (model) {
-            // 编辑
-            [weakSelf addAddressBKModel_edit:model];
-        } else {
-            // 新增
-            //[weakSelf addAddressBKModel_new];
-            [weakSelf checkPhoneRequestPhoneStr:weakSelf.addAddresBKView.mobileTextField.text];
-        }
-    };
-    alertView.leftBtnClick = ^{
-        [weakAlertView hideView];
-    };
-}
-#pragma mark -- 验证授权号码
-- (void)checkPhoneRequestPhoneStr:(NSString *)phone {
-    NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
-    paramters[@"phone"] = phone;
-    paramters[@"dno"] = [CBCommonTools CBdeviceInfo].dno?:@"";
-    //[MBProgressHUD showHUDIcon:self.view animated:YES];
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    kWeakSelf(self);
-    [[NetWorkingManager shared]postWithUrl:@"devParamController/isExistAuthPhone" params:paramters succeed:^(id response,BOOL isSucceed) {
-        kStrongSelf(self);
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
-        NSString *statusStr = [NSString stringWithFormat:@"%@",response[@"status"]];
-        if ([statusStr isEqualToString:@"1"]) {
-            // 已存在，不允许添加
-            [HUD showHUDWithText:[Utils getSafeString:Localized(@"号码已存在")] withDelay:2.0];
-        } else {
-            [self addAddressBKModel_new];
-        }
-    } failed:^(NSError *error) {
-        kStrongSelf(self);
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
-    }];
-}
-#pragma mark -- 新增
-- (void)addCellBtnClick {
-    if (self.dataArr.count >= 5) {
-        [MINUtils showProgressHudToView: self.view withText:Localized(@"授权号码已满")];
-        return;
-    }
-    [self phoneBookPopView:nil];
-}
-- (void)addAddressBKModel_new {
-    PhoneBookModel *model_new = [[PhoneBookModel alloc]init];//self.dataArr[self.currentIndexPath.row];
-    model_new.name = self.addAddresBKView.nameTextField.text;
-    model_new.phone = self.addAddresBKView.mobileTextField.text;
-    NSArray *arr = self.phoneTypeArr[0];
-    for (int i = 0; i < arr.count;  i++) {
-        if ([arr[i] isEqualToString:self.addAddresBKView.alramTypeBtn.titleLabel.text]) {
-            model_new.type = i;
-        }
-    }
-    [self.addArr addObject:model_new];
-}
-#pragma mark -- 编辑
-- (void)addAddressBKModel_edit:(PhoneBookModel *)model {
-    if (self.addAddresBKView.nameTextField.text.length < 1) {
-        [MINUtils showProgressHudToView: self.view withText:Localized(@"请输入姓名")];
-        return ;
-    }
-    if (self.addAddresBKView.mobileTextField.text.length < 1) {
-        [MINUtils showProgressHudToView: self.view withText:Localized(@"请输入电话号码")];
-        return ;
-    }
-    PhoneBookModel *modelSelect = self.dataArr[self.currentIndexPath.row];
-    modelSelect.name = self.addAddresBKView.nameTextField.text;
-    modelSelect.phone = self.addAddresBKView.mobileTextField.text;
-    NSArray *arr = self.phoneTypeArr[0];
-    for (int i = 0; i < arr.count;  i++) {
-        if ([arr[i] isEqualToString:self.addAddresBKView.alramTypeBtn.titleLabel.text]) {
-            modelSelect.type = i;
-        }
-    }
-    [self.editArr addObject:modelSelect];
-    [self editPhoneReqeust];
-}
+
 #pragma mark - tableView delegate & dataSource
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
@@ -345,9 +209,10 @@
     [cell hideDeleteBtn];
     __weak typeof(self) weakSelf = self;
     [cell setDeleteBtnClick:^(NSIndexPath *indexPath) {
-        
+        [weakSelf deleteAlertPopClick:indexPath];
     }];
     [cell setEditBtnClick:^(NSIndexPath *indexPath) {
+        [weakSelf showPhonePopView:self.dataArr[indexPath.row]];
     }];
     cell.cellDelegate = self;
     cell.indexPath = indexPath;
@@ -362,13 +227,6 @@
         [weakSelf deleteAlertPopClick:indexPath];
     };
     return cell;
-}
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row < self.dataArr.count) {
-        PhoneBookModel *model = self.dataArr[indexPath.row];
-        self.currentIndexPath = indexPath;
-        [self phoneBookPopView:model];
-    }
 }
 #pragma mark -- 删除
 - (void)deleteAlertPopClick:(NSIndexPath *)indexPath {
@@ -385,10 +243,7 @@
 }
 #pragma mark -- 删除电话本request
 - (void)deletePhoneBookReqeust {
-    if (self.editArr.count > 0) {
-        [MINUtils showProgressHudToView: self.view withText: @"请先发送当前编辑的电话号码"];
-        return ;
-    }
+    
     __weak __typeof__(self) weakSelf = self;
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:1];
     PhoneBookModel *model = self.dataArr[self.deleteIndexPath.row];//self.dataArr[indexPath.row];
@@ -406,16 +261,6 @@
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
     }];
-}
-#pragma mark - PhoneBookDelegate
-- (BOOL)shouldEditCellWithIndexPath:(NSIndexPath *)indexPath {   
-    return YES;
-}
-
-#pragma mark - PickerViewDelegate
-- (void)minPickerView:(MINPickerView *)pickerView didSelectWithDic:(NSDictionary *)dic {
-    NSNumber *number = dic[@"0"];
-    [self.addAddresBKView.alramTypeBtn setTitle:self.phoneTypeArr[0][[number integerValue]] forState:UIControlStateNormal];
 }
 
 #pragma mark - Other Method
