@@ -95,12 +95,16 @@
     [self subscribeAllTopic];
     NSLog(@"---lzx: mqttConnectSuccess");
 }
+
+- (void)connectionClosed:(MQTTSession *)session {
+    [self startConnecet];
+}
 /**
  订阅主题失败
  */
 - (void)connectionError:(MQTTSession *)session error:(NSError *)error {
     NSLog(@"---lzx: mqttError: %@", error);
-
+    [self startConnecet];
 }
 /**
  连接状态回调
