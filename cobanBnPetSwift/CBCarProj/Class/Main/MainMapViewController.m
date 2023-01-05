@@ -271,8 +271,11 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     
     kWeakSelf(self);
     self.mqttManger.receivedMessageBlock = ^(NSDictionary *dataArr) {
-        if (dataArr && dataArr[@"data"]) {
+        if (dataArr) {
             CBMQTTCarDeviceModel *model = [CBMQTTCarDeviceModel mj_objectWithKeyValues:dataArr[@"data"]];
+            if (!model) {
+                model = [CBMQTTCarDeviceModel new];
+            }
             if (dataArr[@"code"]) {
                 model.code = [dataArr[@"code"] intValue];
             }
