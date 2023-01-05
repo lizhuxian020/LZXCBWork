@@ -52,6 +52,8 @@
 //    self.addArr = [NSMutableArray array];
     self.phoneTypeArr = @[@[Localized(@"允许呼入"), Localized(@"允许呼出"), Localized(@"允许呼入/呼出"), Localized(@"第一授权号码"), Localized(@"授权号码"), Localized(@"平台短信中心号码"), Localized(@"复位设备号码"), Localized(@"恢复出厂设置号码")]];
     [self requestDataWithHud:nil];
+    
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(requestDataWithHud:) name:@"CBCAR_NOTFICIATION_GETMQTT_CODE2" object:nil];
 }
 - (CBControlAlertPopView *)alertPopView {
     if (!_alertPopView) {

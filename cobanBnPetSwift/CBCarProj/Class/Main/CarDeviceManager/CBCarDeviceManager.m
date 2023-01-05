@@ -165,6 +165,7 @@
             }];
         }];
         [NSNotificationCenter.defaultCenter postNotificationName:@"CBCAR_NOTFICIATION_GETMQTT" object:nil userInfo:nil];
+        [NSNotificationCenter.defaultCenter postNotificationName:@"CBCAR_NOTFICIATION_GETMQTT_CODE2" object:nil userInfo:nil];
         return;
     }
     CBHomeLeftMenuDeviceInfoModel *targetDeviceModel = nil;
