@@ -417,7 +417,7 @@
     } else if ([iconStr isEqualToString:@"4"]) {
         image = [UIImage imageNamed: @"摩托车-静止"];
     } else if ([iconStr isEqualToString:@"5"]) {
-        image = [UIImage imageNamed: @"汽车-静止"];
+        image = [UIImage imageNamed: @"小车-静止"];
     } else if ([iconStr isEqualToString:@"6"]) {
         image = [UIImage imageNamed: @"货车-静止"];
     } else if ([iconStr isEqualToString:@"7"]) {

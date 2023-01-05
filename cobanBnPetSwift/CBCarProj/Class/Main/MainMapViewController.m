@@ -1984,7 +1984,8 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     CLLocationCoordinate2D coor = CLLocationCoordinate2DMake(deviceInfoModel.lat.doubleValue,  deviceInfoModel.lng.doubleValue);
     // 小车定位图标
     MINNormalAnnotation *normalAnnotation = [[MINNormalAnnotation alloc] init];
-    normalAnnotation.icon = [CBCommonTools returnDeveceLocationImageStr:deviceInfoModel.icon isOnline:deviceInfoModel.online isWarmed:deviceInfoModel.warmed mqttCode:deviceInfoModel.mqttCode devStatusInMqtt:deviceInfoModel.devStatusInMQTT];
+    UIImage *iconicon = [CBCommonTools returnDeveceLocationImageStr:deviceInfoModel.icon isOnline:deviceInfoModel.online isWarmed:deviceInfoModel.warmed mqttCode:deviceInfoModel.mqttCode devStatusInMqtt:deviceInfoModel.devStatusInMQTT];
+    normalAnnotation.icon = iconicon;
     normalAnnotation.warmed = deviceInfoModel.warmed;
     normalAnnotation.coordinate = coor;
     normalAnnotation.dno = deviceInfoModel.dno;
