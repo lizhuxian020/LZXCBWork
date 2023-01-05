@@ -21,12 +21,14 @@
 
 - (void)createUI
 {
-    self.backgroundColor = kBackColor;
+    self.backgroundColor = kRGB(238, 238, 238);
     UIView *backView = [[UIView alloc] init];
     backView.backgroundColor = kRGB(238, 238, 238);
     [self addSubview: backView];
     [backView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(@0);
+//        make.edges.equalTo(@0);
+        make.top.bottom.right.equalTo(@0);
+        make.left.equalTo(@10);
     }];
     
     NSArray *titleArr = @[

@@ -72,8 +72,9 @@
     backView.userInteractionEnabled = YES;
     [self addSubview: backView];
     [backView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(self);
-        make.top.bottom.equalTo(self).with.offset(0 * KFitHeightRate);
+        make.left.equalTo(@10);
+        
+        make.right.top.bottom.equalTo(self);
         
     }];
     _nameTextFeild = [MINUtils createTextFieldWithHoldText: @"姓名" fontSize: 14];
