@@ -171,7 +171,7 @@
     CBCarUserModel *userModel = CBCarUserInstance.shared.userModel;
     NSString *url = userModel.photo;
     [self.arrowView sd_setImageWithURL:[NSURL URLWithString:userModel.photo ?: @""] placeholderImage:[UIImage imageNamed:@"默认头像-首页1"]];
-    self.phoneLbl.text = userModel.phone ?: userModel.email ?: @"";
+    self.phoneLbl.text = userModel.account ?: userModel.email ?: @"";
     
     [UIApplication.sharedApplication.keyWindow addSubview:self];
     [self.contentView mas_updateConstraints:^(MASConstraintMaker *make) {

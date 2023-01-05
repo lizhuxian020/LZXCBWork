@@ -36,9 +36,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL reportDispatch;// 0,//reportDispatch
 @property (nonatomic, assign) BOOL reportMedia;// 0,//媒体报表
 @property (nonatomic, assign) BOOL createTime;// 1657850342000,
-@property (nonatomic, assign) BOOL proto;// 0,//协议类型 0：新协议 1：老协议
+@property(nonatomic, copy) NSString *proto;// 0,//协议类型 0：新协议 1：老协议
 @property (nonatomic, assign) BOOL productSpecId;// 35,//无意义
-@property (nonatomic, assign) BOOL tbDevModelId;// 35,
+@property(nonatomic, copy) NSString *tbDevModelId;// 35,
 @property (nonatomic, assign) BOOL reportXc;// 1//行程报表
 @end
 

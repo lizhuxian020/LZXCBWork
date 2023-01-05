@@ -1079,7 +1079,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
             return data.lastObject;
         }
     }
-    return [UIColor colorWithRed:0 green:0 blue:1 alpha:0.3];
+    return [UIColor colorWithRed:1 green:0 blue:0 alpha:0.3];
 }
 #pragma mark - 添加完线图
 - (void)mapView:(BMKMapView *)mapView didAddOverlayViews:(NSArray *)overlayViews {
@@ -2079,7 +2079,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
             break;
         case 3:
         {// 圆
-            color = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.3];
+            color = [UIColor colorWithHexString:@"#1FC8A9" alpha:0.3];
             NSArray *dataArr = [dataString componentsSeparatedByString: @","];
             if (dataArr.count == 3) {
                 CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake( [dataArr[0] doubleValue], [dataArr[1] doubleValue]);

@@ -85,6 +85,9 @@
                     model.devStatus = modelInDevice.devStatus;
                     model.online = modelInDevice.online;
                     model.devModel = modelInDevice.devModel;
+                    //记得要加这个, 因为只有DeviceList里才有这个字段
+                    model.productSpecId = modelInDevice.productSpecId;
+                    model.proto = modelInDevice.proto;
                 }
             }
         }
