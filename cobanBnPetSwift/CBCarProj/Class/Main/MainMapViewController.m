@@ -159,6 +159,8 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 @property (nonatomic, assign) double currentZoom;
 
 @property (nonatomic, strong) NSMutableArray *bmkFenceColorData; //@[ @[fence, color], @[fence, color] ]
+
+@property (nonatomic, assign) BOOL isSelectFromDeviceList ; /** <##> **/
 @end
 
 @implementation MainMapViewController
@@ -334,6 +336,8 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         _sliderView.leftMenuBlock = ^(id  _Nonnull objc) {
             kStrongSelf(self);
             CBHomeLeftMenuDeviceInfoModel *model = (CBHomeLeftMenuDeviceInfoModel *)objc;
+            
+            self.isSelectFromDeviceList = true;
             // 刷新本地存储的 选中设备
             [CarDeviceManager setCurrentChooseDevice:model];
             // 左侧菜单隐藏
@@ -952,7 +956,10 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
        annotationView.model = model;
        if (model.isSelect) {
            annotationView.displayPriority = BMKFeatureDisplayPriorityDefaultHigh;
-           [self mapView:self.baiduMapView didSelectAnnotationView:annotationView];
+           if (self.isSelectFromDeviceList) {
+               [self mapView:self.baiduMapView didSelectAnnotationView:annotationView];
+               self.isSelectFromDeviceList = NO;
+           }
        }
        return annotationView;
    } else if ([annotation isKindOfClass: [MINNormalInfoAnnotation class]]) {
@@ -2023,7 +2030,11 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     if ([deviceInfoModel.dno isEqualToString:CarDeviceManager.deviceInfoModelSelect.dno]) {
         // 选中设备显示最前
         self.googleMapView.selectedMarker = normalMarker;
-        [self mapView:self.googleMapView didTapMarker:normalMarker];
+        if (self.isSelectFromDeviceList) {
+            [self mapView:self.googleMapView didTapMarker:normalMarker];
+            self.isSelectFromDeviceList = NO;
+        }
+        
     }
 
     // 小车定位上方信息
