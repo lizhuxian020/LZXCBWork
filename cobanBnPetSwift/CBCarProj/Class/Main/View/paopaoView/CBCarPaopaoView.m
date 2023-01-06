@@ -678,6 +678,11 @@
             self.didClickMove(@"1000", self.deviceInfoModel);
         }
     }
+    if ([title containsString:Localized(@"取消")]) {
+        if (self.didClickMove) {
+            self.didClickMove(@"0", self.deviceInfoModel);
+        }
+    }
     [self hideMovePopView];
 }
 - (void)btnClickType:(UIButton *)sender {

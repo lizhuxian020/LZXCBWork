@@ -1199,6 +1199,19 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 #pragma mark ------------paoViewActions------------
 #pragma mark --位移
 - (void)sendMoveRequest:(NSString *)moveStr deviceModel:(CBHomeLeftMenuDeviceInfoModel *)deviceModel {
+    if ([moveStr isEqualToString:@"0"]) {
+        [[NetWorkingManager shared] postWithUrl:@"/devControlController/editSwitchParam" params:@{
+            @"dno": deviceModel.dno,
+            @"wyFence": @1,
+        } succeed:^(id response, BOOL isSucceed) {
+            if (isSucceed) {
+                [HUD showHUDWithText:@"成功"];
+            }
+        } failed:^(NSError *error) {
+            
+        }];
+        return;
+    }
     NSDictionary *param = @{
         @"dno": deviceModel.dno,
         @"data": [NSString stringWithFormat:@"%@,%@,%@", deviceModel.lat,deviceModel.lng, moveStr],
