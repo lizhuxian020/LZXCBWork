@@ -362,8 +362,8 @@
     NSDictionary *param = @{
         @"dno": self.model.dno ?: @"",
         @"speed": @(self.overTF.text.intValue).description,
-        @"userTimes": [self.alarm1TimeLbl.text stringByReplacingOccurrencesOfString:@" - " withString:@","],
-        @"userTimes2": [self.alarm2TimeLbl.text stringByReplacingOccurrencesOfString:@" - " withString:@","],
+        @"useTimes": [self.alarm1TimeLbl.text stringByReplacingOccurrencesOfString:@" - " withString:@","],
+        @"useTimes2": [self.alarm2TimeLbl.text stringByReplacingOccurrencesOfString:@" - " withString:@","],
         @"warmType": (self.inSwitch.isOn && self.outSwitch.isOn) ? @"2" : self.inSwitch.on ? @"1": @"0",
     };
     

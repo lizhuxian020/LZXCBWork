@@ -45,6 +45,9 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    [self requestData];
+}
+- (void)requestData {
     [self terminalGetControlStatusRequest];
     [self getTerminalSettingReqeust];
 }
@@ -53,6 +56,7 @@
     // Do any additional setup after loading the view.
     
     [self setupView];
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(requestData) name:@"CBCAR_NOTFICIATION_GETMQTT_CODE2" object:nil];
 }
 - (void)setupView {
     [self initBarWithTitle:Localized(@"终端设置") isBack: YES];

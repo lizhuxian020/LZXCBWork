@@ -38,6 +38,7 @@
     // Do any additional setup after loading the view.
     
     [self setupView];
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(getControlStatusRequest) name:@"CBCAR_NOTFICIATION_GETMQTT_CODE2" object:nil];
 }
 - (void)setupView {
     [self initBarWithTitle:Localized(@"报警设置") isBack: YES];

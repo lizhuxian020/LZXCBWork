@@ -38,6 +38,7 @@
     [self addGesture];
     self.alramTypeArr = @[@[Localized(@"出围栏报警"),Localized(@"入围栏报警"), Localized(@"出入围栏报警"),Localized(@"位移报警")]];
     self.fenceShapeTypeImageStrArr = @[@"电子围栏-多边形", @"电子围栏-圆形", @"电子围栏-正方形", @"路线"];
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(requestData) name:@"CBCAR_NOTFICIATION_GETMQTT_CODE2" object:nil];
 }
 #pragma mark - CreateUI
 - (void)createUI
