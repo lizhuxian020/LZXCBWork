@@ -947,10 +947,12 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         if (!annotationView) {
             annotationView = [[MINAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
         }
+       annotationView.annotation = annotation;
        annotationView.image = nil;
        annotationView.model = model;
        if (model.isSelect) {
            annotationView.displayPriority = BMKFeatureDisplayPriorityDefaultHigh;
+           [self mapView:self.baiduMapView didSelectAnnotationView:annotationView];
        }
        return annotationView;
    } else if ([annotation isKindOfClass: [MINNormalInfoAnnotation class]]) {
@@ -2021,6 +2023,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     if ([deviceInfoModel.dno isEqualToString:CarDeviceManager.deviceInfoModelSelect.dno]) {
         // 选中设备显示最前
         self.googleMapView.selectedMarker = normalMarker;
+        [self mapView:self.googleMapView didTapMarker:normalMarker];
     }
 
     // 小车定位上方信息
