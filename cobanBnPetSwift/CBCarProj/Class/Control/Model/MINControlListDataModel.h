@@ -25,7 +25,7 @@
 @property (nonatomic, assign) NSInteger warmWy;       // 位移报警，0-关闭；1-开启
 @property (nonatomic, assign) NSInteger warmZd;       // 震动报警，0-关闭；1-开
 @property (nonatomic, assign) NSInteger warmSpeed;    // 超速报警 0-关闭；1-开
-@property (nonatomic, assign) NSInteger monitorMode ; // 听听 0-听听模式；1-定位模式
+@property (nonatomic, assign) NSInteger monitorMode ; // 听听 1-听听模式；0-定位模式
 @property (nonatomic, assign) NSInteger sdj;          // 锁电机
 @property (nonatomic, assign) NSInteger ycqd;          // 远程控制
 

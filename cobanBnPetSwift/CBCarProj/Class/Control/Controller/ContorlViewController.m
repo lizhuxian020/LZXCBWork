@@ -321,7 +321,7 @@
 }
 - (void)showTT {
     kWeakSelf(self);
-    [[CBCarAlertView viewWithChooseData:@[Localized(@"听听模式"),Localized(@"定位模式"),] selectedIndex:self.listModel.monitorMode title:_ControlConfigTitle_TT didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
+    [[CBCarAlertView viewWithChooseData:@[Localized(@"听听模式"),Localized(@"定位模式"),] selectedIndex:(self.listModel.monitorMode == 1) ? 0 : 1 title:_ControlConfigTitle_TT didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
         NSLog(@"%s: %@", __FUNCTION__, contentStr);
     } confrim:^(NSString * _Nonnull contentStr, NSInteger index) {
         NSMutableDictionary *paramters = [NSMutableDictionary dictionaryWithDictionary:@{

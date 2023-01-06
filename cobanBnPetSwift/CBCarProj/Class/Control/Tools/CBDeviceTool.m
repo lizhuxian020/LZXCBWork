@@ -246,7 +246,7 @@
         @(targetSpecModel.callBack),
         @(targetSpecModel.oilElectricityControl),
         @(targetSpecModel.oilElectricityControl),
-        @(targetSpecModel.arm),
+        @(1), //停止报警是一直都在
         @(targetSpecModel.motorControl),
         @(targetSpecModel.remoteStart),
         @(targetSpecModel.arm),
