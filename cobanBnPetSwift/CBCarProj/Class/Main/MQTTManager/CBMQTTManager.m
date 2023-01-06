@@ -32,6 +32,14 @@
     return manager;
 }
 
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(startConnecet) name:UIApplicationWillEnterForegroundNotification object:nil];
+    }
+    return self;
+}
+
 
 - (void)createMQTTClient:(MQTTClientModel *)model {
     self.session = MQTTSession.new;
