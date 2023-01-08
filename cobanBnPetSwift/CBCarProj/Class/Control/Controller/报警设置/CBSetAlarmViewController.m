@@ -149,29 +149,42 @@
 }
 #pragma mark -- 开关
 - (void)switchClick:(NSString *)titleStr status:(NSString *)status {
+    kWeakSelf(self);
     NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
     [paramters setObject:_deviceInfoModelSelect.dno?:@"" forKey:@"dno"];
     if ([titleStr isEqualToString:Localized(@"掉电报警")]) {
         [paramters setObject:status forKey:@"warm_diaodian"];
-        [self alarmEditControlSwitchRequest:paramters];
+        [self alarmEditControlSwitchRequest:paramters succcess:^{
+            weakself.controlStatusModel.warmDiaodan = status.intValue;
+        }];
     } else if ([titleStr isEqualToString:Localized(@"低电报警")]) {
         [paramters setObject:status forKey:@"warm_didian"];
-        [self alarmEditControlSwitchRequest:paramters];
+        [self alarmEditControlSwitchRequest:paramters succcess:^{
+            weakself.controlStatusModel.warmDidian = status.intValue;
+        }];
     } else if ([titleStr isEqualToString:Localized(@"盲区报警")]) {
         [paramters setObject:status forKey:@"warnBlind"];
-        [self alarmEditControlSwitchRequest:paramters];
+        [self alarmEditControlSwitchRequest:paramters succcess:^{
+            weakself.controlStatusModel.warnBlind = status.intValue;
+        }];
     } else if ([titleStr isEqualToString:Localized(@"紧急报警")]) {
         [paramters setObject:status forKey:@"urgentWarn"];
         [self alarmEditControlNewRequest:paramters];
     } else if ([titleStr isEqualToString:Localized(@"超速报警")]) {
         [paramters setObject:status forKey:@"warm_speed"];
-        [self alarmEditControlSwitchRequest:paramters];
+        [self alarmEditControlSwitchRequest:paramters succcess:^{
+            weakself.controlStatusModel.warmSpeed = status.intValue;
+        }];
     } else if ([titleStr isEqualToString:Localized(@"振动报警")]) {
         [paramters setObject:status forKey:@"warm_zd"];
-        [self alarmEditControlSwitchRequest:paramters];
+        [self alarmEditControlSwitchRequest:paramters succcess:^{
+            weakself.controlStatusModel.warmZd = status.intValue;
+        }];
     } else if ([titleStr isEqualToString:Localized(@"油量检测报警")]) {
         [paramters setObject:status forKey:@"oilCheckWarn"];
-        [self alarmEditControlSwitchRequest:paramters];
+        [self alarmEditControlSwitchRequest:paramters succcess:^{
+            weakself.controlStatusModel.oilCheckWarn = status.intValue;
+        }];
     } else if ([titleStr isEqualToString:Localized(@"保养通知")]) {
         [paramters setObject:status forKey:@"serviceFlag"];
         [self alarmEditControlNewRequest:paramters];
@@ -209,16 +222,21 @@
     [self alarmEditControlNewRequest:paramters];
 }
 #pragma mark -- 终端设备开关设置
-- (void)alarmEditControlSwitchRequest:(NSMutableDictionary *)paramters {
+- (void)alarmEditControlSwitchRequest:(NSMutableDictionary *)paramters succcess:(void(^)(void))successBLK{
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     kWeakSelf(self);
     [[NetWorkingManager shared] postWithUrl:@"devControlController/editSwitchParam" params: paramters succeed:^(id response, BOOL isSucceed) {
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
-        [self getControlStatusRequest];
+        [CBTopAlertView alertSuccess:Localized(@"操作成功")];
+        if (successBLK) {
+            successBLK();
+        }
+        [self.tableView reloadData];
     } failed:^(NSError *error) {
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [self getControlStatusRequest];
     }];
 }
 #pragma mark -- 终端设备参数设置
