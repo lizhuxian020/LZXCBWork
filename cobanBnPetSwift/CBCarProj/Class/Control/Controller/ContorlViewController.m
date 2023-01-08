@@ -327,7 +327,9 @@
         NSMutableDictionary *paramters = [NSMutableDictionary dictionaryWithDictionary:@{
             @"monitorMode": @(index == 0 ? 1 :0),
         }];
-        [weakself editControlNewRequest:paramters];
+        [weakself editControlNewRequest:paramters success:^{
+            weakself.listModel.monitorMode = @(index == 0 ? 1 :0).intValue;
+        }];
     }] pop];
 }
 
@@ -345,7 +347,9 @@
             @"dydd": @(1),
             @"oil": @(index)
         }];
-        [weakself editControlSwitchRequest:paramters];
+        [weakself editControlSwitchRequest:paramters success:^{
+            weakself.listModel.oil = index;
+        }];
     }] pop];
 }
 
@@ -356,7 +360,7 @@
         NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
             @"dydd": @0,
         }];
-        [weakself editControlSwitchRequest:param];
+        [weakself editControlSwitchRequest:param success:nil];
     }] pop];
 }
 
@@ -369,7 +373,9 @@
         NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
             @"sdj": @(index),
         }];
-        [weakself editControlSwitchRequest:param];
+        [weakself editControlSwitchRequest:param success:^{
+            weakself.listModel.sdj = index;
+        }];
     }] pop];
 }
 // 远程控制
@@ -381,7 +387,9 @@
         NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
             @"ycqd": @(index == 0 ? 1 : 0),
         }];
-        [weakself editControlSwitchRequest:param];
+        [weakself editControlSwitchRequest:param success:^{
+            weakself.listModel.ycqd = @(index == 0 ? 1 : 0).intValue;
+        }];
     }] pop];
 }
 - (void)showCSBJ {
@@ -391,7 +399,10 @@
             @"over_warm": @(contentStr.intValue),
             @"warm_speed": @(isOpen),
         }];
-        [weakself editControlSwitchRequest:param];
+        [weakself editControlSwitchRequest:param success:^{
+            weakself.listModel.warmSpeed = isOpen;
+            weakself.listModel.overWarm = contentStr;
+        }];
     }] pop];
    
 }
@@ -532,7 +543,7 @@
         NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
         [paramters setObject:_deviceInfoModelSelect.dno?:@"" forKey:@"dno"];
         [paramters setObject:inputStr?:@"" forKey:@"phone"];
-        [self editControlSwitchRequest:paramters];
+        [self editControlSwitchRequest:paramters success:nil];
     } else if ([title isEqualToString:Localized(@"电话唤醒")]) {
         //拨打电话
         if (inputStr.length > 0) {
@@ -555,7 +566,9 @@
 - (void)clickType {
     NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
     [paramters setObject:@"0" forKey:@"warnStop"];
-    [self editControlNewRequest:paramters];
+    [self editControlNewRequest:paramters success:^{
+        
+    }];
 }
 #pragma mark -- 布防/撤防
 - (void)arming_disarmingClick {
@@ -582,13 +595,17 @@
             NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
                 @"silentArm": @(1)
             }];
-            [weakself editControlNewRequest:param];
+            [weakself editControlNewRequest:param success:^{
+                weakself.listModel.silentArm = @"1";
+            }];
             return;
         }
         NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
             @"cfbf": @(index == 0 ? 1 : 0)
         }];
-        [weakself editControlSwitchRequest:param];
+        [weakself editControlSwitchRequest:param success:^{
+            weakself.listModel.cfbf = @(index == 0 ? 1 : 0).intValue;
+        }];
     }] pop];
 //    [self.armingAlertView popView];
 //    NSArray *array = @[Localized(@"布防"),Localized(@"撤防"),Localized(@"静音布防")];
@@ -615,7 +632,7 @@
             NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
             [paramters setObject:_deviceInfoModelSelect.dno?:@"" forKey:@"dno"];
             [paramters setObject:@"1" forKey:@"cfbf"];
-            [self editControlSwitchRequest:paramters];
+            [self editControlSwitchRequest:paramters success:nil];
         }
             break;
         case 101:
@@ -623,14 +640,14 @@
             NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
             [paramters setObject:_deviceInfoModelSelect.dno?:@"" forKey:@"dno"];
             [paramters setObject:@"0" forKey:@"cfbf"];
-            [self editControlSwitchRequest:paramters];
+            [self editControlSwitchRequest:paramters success:nil];
         }
             break;
         case 102:
         {
             NSMutableDictionary *paramters = [NSMutableDictionary dictionaryWithObject:@"1" forKey:@"silentArm"];
             [paramters setObject:_deviceInfoModelSelect.dno?:@"" forKey:@"dno"];
-            [self editControlNewRequest:paramters];
+            [self editControlNewRequest:paramters success:nil];
         }
             break;
         default:
@@ -638,7 +655,7 @@
     }
 }
 #pragma mark -- 终端设备开关设置
-- (void)editControlSwitchRequest:(NSMutableDictionary *)paramters {
+- (void)editControlSwitchRequest:(NSMutableDictionary *)paramters success:(void(^)(void))successBlk{
     [paramters setObject:_deviceInfoModelSelect.dno?:@"" forKey:@"dno"];
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     kWeakSelf(self);
@@ -647,15 +664,19 @@
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         if (isSucceed) {
             [CBTopAlertView alertSuccess:Localized(@"操作成功")];
-            [self requestListDataWithHud:nil];
+            if (successBlk) {
+                successBlk();
+            }
+            [self.tableView reloadData];
         }
     } failed:^(NSError *error) {
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [self requestListDataWithHud:nil];
     }];
 }
 #pragma mark -- 终端设备参数设置 -- 新增
-- (void)editControlNewRequest:(NSMutableDictionary *)paramters {
+- (void)editControlNewRequest:(NSMutableDictionary *)paramters success:(void(^)(void))successBlk{
     [paramters setObject:_deviceInfoModelSelect.dno?:@"" forKey:@"dno"];
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     kWeakSelf(self);
@@ -664,10 +685,14 @@
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         if (isSucceed) {
             [CBTopAlertView alertSuccess:Localized(@"操作成功")];
-            [self requestListDataWithHud:nil];
+            if (successBlk) {
+                successBlk();
+            }
+            [self.tableView reloadData];
         }
     } failed:^(NSError *error) {
         kStrongSelf(self);
+        [self requestListDataWithHud:nil];
         [MBProgressHUD hideHUDForView:self.view animated:YES];
     }];
 }
