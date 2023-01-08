@@ -298,7 +298,9 @@
         NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
             @"timeZone": contentStr,
         }];
-        [weakself terminalEditControlNewRequest:param];
+        [weakself terminalEditControlNewRequest:param success:^{
+            weakself.termialControlStatusModel.timeZone = contentStr;
+        }];
     }] pop];
 }
 
@@ -323,7 +325,9 @@
         NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
             @"password": contentStr.firstObject,
         }];
-        [weakself terminalEditControlNewRequest:param];
+        [weakself terminalEditControlNewRequest:param success:^{
+            weakself.configurationModel.password = contentStr.firstObject;
+        }];
     }] pop];
 }
 - (void)showSZYXRJ {
@@ -332,7 +336,9 @@
         NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
             @"volume": contentStr.firstObject,
         }];
-        [weakself terminalEditControlNewRequest:param];
+        [weakself terminalEditControlNewRequest:param success:^{
+            weakself.configurationModel.volume = contentStr.firstObject.intValue;
+        }];
     }] pop];
 }
 
@@ -344,7 +350,9 @@
         NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
             @"oil_validate": @(index),
         }];
-        [weakself terminalEditControlNewRequest:param];
+        [weakself terminalEditControlNewRequest:param success:^{
+            weakself.configurationModel.oilValidate = index;
+        }];
     }] pop];
 }
 - (void)showSZLCCSZ {
@@ -353,7 +361,9 @@
         NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
             @"mileage": contentStr.firstObject,
         }];
-        [weakself terminalEditControlNewRequest:param];
+        [weakself terminalEditControlNewRequest:param success:^{
+            weakself.configurationModel.mileage = contentStr.firstObject.intValue;
+        }];
     }] pop];
 }
 - (void)showSZZWBBJD {
@@ -367,7 +377,9 @@
         NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
             @"angle": contentStr.firstObject,
         }];
-        [weakself terminalEditControlNewRequest:param];
+        [weakself terminalEditControlNewRequest:param success:^{
+            weakself.configurationModel.angle = contentStr.firstObject.intValue;
+        }];
     }] pop];
 }
 - (void)showSZBJDXFSCS {
@@ -376,7 +388,9 @@
         NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
             @"send_msg_limit": contentStr.firstObject,
         }];
-        [weakself terminalEditControlNewRequest:param];
+        [weakself terminalEditControlNewRequest:param success:^{
+            weakself.configurationModel.sendMsgLimit = contentStr.firstObject.intValue;
+        }];
     }] pop];
 }
 - (void)showSZXTJG {
@@ -395,7 +409,9 @@
         NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
             @"heartbeat_Interval": contentStr.firstObject,
         }];
-        [weakself terminalEditControlNewRequest:param];
+        [weakself terminalEditControlNewRequest:param success:^{
+            weakself.configurationModel.heartbeatInterval = contentStr.firstObject;
+        }];
     }] pop];
 }
 - (void)showZDLMD {
@@ -407,7 +423,9 @@
         NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:@{
             @"sensitivity": @(index+1),
         }];
-        [weakself terminalEditControlNewRequest:param];
+        [weakself terminalEditControlNewRequest:param success:^{
+            weakself.termialControlStatusModel.sensitivity = index + 1;
+        }];
     }] pop];
 }
 - (void)showCSHSZ {
@@ -433,7 +451,15 @@
     } else if ([titleStr isEqualToString:_ControlConfigTitle_PYYZ]) {
         [paramters setObject:status forKey:@"gpsFloat"];
     }
-    [self terminalEditControlNewRequest:paramters];
+    kWeakSelf(self);
+    [self terminalEditControlNewRequest:paramters success:^{
+        if ([titleStr isEqualToString:_ControlConfigTitle_ACCGZTZ]) {
+            weakself.termialControlStatusModel.accNotice = status.intValue;
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_PYYZ]) {
+            weakself.termialControlStatusModel.gpsFloat = status.intValue;
+        }
+        
+    }];
 }
 #pragma mark -- 终端设备开关设置
 - (void)terminalEditControlSwitchRequest:(NSMutableDictionary *)paramters {
@@ -467,16 +493,21 @@
     }];
 }
 #pragma mark -- 终端设备参数设置 -- 新增
-- (void)terminalEditControlNewRequest:(NSMutableDictionary *)paramters {
+- (void)terminalEditControlNewRequest:(NSMutableDictionary *)paramters success:(void(^)(void))successBLK{
     [paramters setObject:_deviceInfoModelSelect.dno?:@"" forKey:@"dno"];
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     kWeakSelf(self);
     [[NetWorkingManager shared] postWithUrl:@"/devControlController/updateDeviceStatus" params:paramters succeed:^(id response, BOOL isSucceed) {
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
-        [self terminalGetControlStatusRequest];
+        [CBTopAlertView alertSuccess:Localized(@"操作成功")];
+        if (successBLK) {
+            successBLK();
+        }
+        [self.tableView reloadData];
     } failed:^(NSError *error) {
         kStrongSelf(self);
+        [self terminalGetControlStatusRequest];
         [MBProgressHUD hideHUDForView:self.view animated:YES];
     }];
 }
