@@ -833,10 +833,10 @@
                     appendTime = [self getTime:(duringTime / 1000) needAdd:YES];
                 }
             }
-            return
-            model.devStatusInMQTT.intValue==0?Localized(@"未启用"):
+            NSString *movingString = [NSString stringWithFormat:@"%@(%@km/h),%@(%@°)", Localized(@"速度"),model.speedInMqtt, Localized(@"方向"), model.directInMqtt];
+            return model.devStatusInMQTT.intValue==0?Localized(@"未启用"):
             model.devStatusInMQTT.intValue==1?Localized(@"静止"):
-            model.devStatusInMQTT.intValue==2?Localized(@"行驶中"):
+            model.devStatusInMQTT.intValue==2?movingString:
             model.devStatusInMQTT.intValue==3?Localized(@"报警"):
             model.devStatusInMQTT.intValue==4?
             [Localized(@"停留") stringByAppendingFormat:@" %@", appendTime]:

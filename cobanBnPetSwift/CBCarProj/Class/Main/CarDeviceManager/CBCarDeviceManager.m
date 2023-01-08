@@ -205,6 +205,9 @@
             
             deviceModel.timeZone = model.location.timeZone;
             deviceModel.createTime = model.location.updateTime;
+            
+            deviceModel.speedInMqtt = model.location.speed;
+            deviceModel.directInMqtt = model.location.direct;
         }
     }
     if (model.code == 21 && model.devStatus.intValue == 3) { //收到报警时, 更新首页的报警数量

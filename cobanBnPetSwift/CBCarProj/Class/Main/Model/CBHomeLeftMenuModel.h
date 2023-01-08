@@ -135,6 +135,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *timeRest; //静止汇报时间间隔
 @property (nonatomic, copy) NSString *timeSos;
 
+@property(nonatomic, copy) NSString *speedInMqtt; //mqtt里的速度
+@property(nonatomic, copy) NSString *directInMqtt; //mqtt里的方向
 /// 详见CBMQTTCarDeviceModel的code
 @property (nonatomic, assign) int mqttCode ;
 
