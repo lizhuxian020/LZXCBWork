@@ -261,4 +261,13 @@
         [self requestDeviceData];
     }
 }
+
+- (CBHomeLeftMenuDeviceInfoModel *)deviceInfoModelSelect {
+    for (CBHomeLeftMenuDeviceInfoModel *deviceSelect in self.deviceDatas) {
+        if ([deviceSelect.dno isEqualToString:_deviceInfoModelSelect.dno]) {
+            return deviceSelect;
+        }
+    }
+    return _deviceInfoModelSelect;
+}
 @end

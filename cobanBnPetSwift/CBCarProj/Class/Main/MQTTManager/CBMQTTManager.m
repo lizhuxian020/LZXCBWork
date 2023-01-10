@@ -61,9 +61,9 @@
 }
 
 - (void)startConnecet {
-    if (self.session.status != MQTTSessionStatusConnecting && self.session.status != MQTTSessionStatusConnected) {
-        [self.session connect];
-    }
+//    if (self.session.status != MQTTSessionStatusConnecting && self.session.status != MQTTSessionStatusConnected) {
+    [self.session connect];
+//    }
 }
 
 - (void)disConnecet {

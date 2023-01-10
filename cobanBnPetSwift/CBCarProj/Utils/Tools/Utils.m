@@ -267,11 +267,14 @@ static CGFloat yyj_font17 = 0;
 }
 //时间戳转时间 指定时区
 + (NSString *)convertTimeWithTimeIntervalString:(NSString *)timeString timeZone:(NSString *)timeZoneStr {
-    
-    // 获取选中设备的时区(本地缓存)
-    NSMutableDictionary *timeZoneDic = [CBCommonTools getCBdeviceInfoModelDic];
-    DeviceDetailModel *timeZoneModel = timeZoneDic[[CBCommonTools CBdeviceInfo].dno?:@""];
-    timeZoneStr = timeZoneModel.timeZone?:@"8";
+    if (kStringIsEmpty(timeZoneStr)) {
+        
+        NSArray *deviceArr = CBCarDeviceManager.shared.deviceDatas;
+        timeZoneStr = CBCarDeviceManager.shared.deviceInfoModelSelect.timeZone;
+        if (kStringIsEmpty(timeZoneStr)) {
+            timeZoneStr = @"8";
+        }
+    }
     
     //毫秒值转化为秒
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:[timeString doubleValue]/ 1000.0];
