@@ -1891,6 +1891,9 @@
 		A2E3A0A32963D21700E2C27B /* CBPhoneBookHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBPhoneBookHeaderView.m; sourceTree = "<group>"; };
 		A2E3A0A52963FDE500E2C27B /* CBPhoneBookAlertView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBPhoneBookAlertView.h; sourceTree = "<group>"; };
 		A2E3A0A62963FDE500E2C27B /* CBPhoneBookAlertView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBPhoneBookAlertView.m; sourceTree = "<group>"; };
+		A2E3A0A8296D387A00E2C27B /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		A2E3A0A9296D387A00E2C27B /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A2E3A0AA296D387B00E2C27B /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A2F9C4FF2925D1C400715AF9 /* CBPetLoginInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBPetLoginInputView.swift; sourceTree = "<group>"; };
 		A2F9C5022926135E00715AF9 /* CBLoginLayoutMarco.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBLoginLayoutMarco.swift; sourceTree = "<group>"; };
 		A2F9C504292B76A500715AF9 /* UIGestureRecognizer+BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIGestureRecognizer+BlocksKit.h"; sourceTree = "<group>"; };
@@ -6063,6 +6066,7 @@
 				en,
 				Base,
 				"zh-Hans",
+				es,
 			);
 			mainGroup = 17970A78240678B500ECDE78;
 			productRefGroup = 17970A82240678B500ECDE78 /* Products */;
@@ -6880,6 +6884,7 @@
 			children = (
 				177E20C424172D5500E4321F /* en */,
 				177E20C624172D5900E4321F /* zh-Hans */,
+				A2E3A0A9296D387A00E2C27B /* es */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -6889,6 +6894,7 @@
 			children = (
 				177E20CA2417357E00E4321F /* en */,
 				177E20CC2417358200E4321F /* zh-Hans */,
+				A2E3A0AA296D387B00E2C27B /* es */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -6898,6 +6904,7 @@
 			children = (
 				17970A8E240678C200ECDE78 /* Base */,
 				172F7BBE241636C900543DCC /* zh-Hans */,
+				A2E3A0A8296D387A00E2C27B /* es */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
