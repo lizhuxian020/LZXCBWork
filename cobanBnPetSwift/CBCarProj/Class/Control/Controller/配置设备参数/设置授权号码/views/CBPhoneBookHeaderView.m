@@ -37,7 +37,7 @@
         Localized(@"类型"),
     ];
     
-    UIView *lastView = nil;
+    UILabel *lastView = nil;
     for (int i = 0; i < titleArr.count; i++) {
         NSString *title = titleArr[i];
         UILabel *lbl = [self createLabelWithText:title];
@@ -61,6 +61,7 @@
         }];
         lastView = lbl;
     }
+    lastView.textAlignment = NSTextAlignmentCenter;
     [lastView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(@0);
     }];

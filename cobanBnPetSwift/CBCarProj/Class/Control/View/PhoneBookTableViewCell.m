@@ -116,7 +116,7 @@
         make.width.equalTo(backView).multipliedBy(0.4);
         make.height.equalTo(@(30 * KFitHeightRate));
     }];
-    _phoneTypeTitleLabel = [MINUtils createLabelWithText: @"恢复原厂设置号码" size: 14 alignment: NSTextAlignmentLeft textColor: kCellTextColor];
+    _phoneTypeTitleLabel = [MINUtils createLabelWithText: @"恢复原厂设置号码" size: 14 alignment: NSTextAlignmentCenter textColor: kCellTextColor];
     [_phoneTypeBtn addSubview: _phoneTypeTitleLabel];
     [_phoneTypeTitleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_phoneTypeBtn).with.offset(0 * KFitWidthRate);
