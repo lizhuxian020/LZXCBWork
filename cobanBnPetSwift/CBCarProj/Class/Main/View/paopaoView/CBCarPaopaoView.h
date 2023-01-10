@@ -39,7 +39,6 @@ typedef enum : NSInteger {
 /* 弹出框时，YES地图中心点不动 NO设置中心点*/
 @property (nonatomic, assign) BOOL isAlertPaopaoView;
 
-- (void)setAlertStyleIsWarmed:(BOOL)isWarmed;
 - (void)popView;//弹出视图
 - (void)dismiss;//隐藏视图
 

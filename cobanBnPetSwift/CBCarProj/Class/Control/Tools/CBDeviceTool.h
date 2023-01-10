@@ -36,6 +36,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)getReportData:(CBHomeLeftMenuDeviceInfoModel *)deviceModel blk:(void(^)(NSArray *sectionArr, NSArray *sectionTitleArr, NSArray *sectionImageTitleArr, NSArray *oilTitleArr, NSArray *oilImageArr, NSArray *warnTitleArr, NSArray *warnImageArr, NSArray *electronicTitleArr, NSArray *electronicImageArr))blk;
 
 - (NSString *)getProductSpec:(CBHomeLeftMenuDeviceInfoModel *)model;
+
+- (void)getPaoViewConfig:(CBHomeLeftMenuDeviceInfoModel *)deviceModel blk:(void(^)(NSDictionary *configData))blk;
 @end
 
 NS_ASSUME_NONNULL_END

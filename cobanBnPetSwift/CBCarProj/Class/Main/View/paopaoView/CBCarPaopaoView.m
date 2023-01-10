@@ -315,71 +315,6 @@
     }
     return containV;
 }
-//- (UIButton *)playBackBtn {
-//    if (!_playBackBtn) {
-//        _playBackBtn = [MINUtils createNoBorderBtnWithTitle:Localized(@"回放") titleColor: [UIColor whiteColor] fontSize:15 * KFitWidthRate];
-//        [_playBackBtn setImage: [UIImage imageNamed: @"回放"] forState: UIControlStateNormal];
-//        [_playBackBtn setImage: [UIImage imageNamed: @"回放"] forState: UIControlStateHighlighted];
-//        [_playBackBtn horizontalCenterImageAndTitle:5];
-//        [self.titleView addSubview:_playBackBtn];
-//        [_playBackBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.top.bottom.equalTo(_titleView);
-//            make.right.equalTo(_titleView).with.offset(-40*KFitWidthRate);
-//        }];
-//        [_playBackBtn addTarget: self action:@selector(btnClickType:) forControlEvents: UIControlEventTouchUpInside];
-//    }
-//    return _playBackBtn;
-//}
-//- (UIButton *)deleteWarmBtn {
-//    if (!_deleteWarmBtn) {
-//        _deleteWarmBtn = [MINUtils createNoBorderBtnWithTitle:Localized(@"处理报警") titleColor: [UIColor whiteColor] fontSize:15 * KFitWidthRate];
-//        _deleteWarmBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
-//        [_deleteWarmBtn setImage: [UIImage imageNamed: @"ic_handle_alarm"] forState: UIControlStateNormal];
-//        [_deleteWarmBtn setImage: [UIImage imageNamed: @"ic_handle_alarm"] forState: UIControlStateHighlighted];
-//        [_deleteWarmBtn horizontalCenterImageAndTitle:5*KFitWidthRate];
-//        [self.titleView addSubview:_deleteWarmBtn];
-//        [_deleteWarmBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.centerY.mas_equalTo(self.titleLabel.mas_centerY);
-//            make.left.mas_equalTo(self.titleLabel.mas_right).offset(0*KFitWidthRate);
-//            make.height.mas_equalTo(20*KFitHeightRate);
-//        }];
-//        [_deleteWarmBtn addTarget: self action:@selector(btnClickType:) forControlEvents: UIControlEventTouchUpInside];
-//    }
-//    return _deleteWarmBtn;
-//}
-//- (UIButton *)closeBtn {
-//    if (!_closeBtn) {
-//        _closeBtn = [[UIButton alloc] init];
-//        [_closeBtn setImage: [UIImage imageNamed: @"closeMain"] forState: UIControlStateNormal];
-//        [_closeBtn setImage: [UIImage imageNamed: @"closeMain"] forState: UIControlStateHighlighted];
-//        [_titleView addSubview: _closeBtn];
-//        [self.titleView addSubview:_closeBtn];
-//        [_closeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.top.bottom.equalTo(_titleView);
-//            make.right.equalTo(_titleView);
-//            make.width.mas_equalTo(40*KFitWidthRate);
-//        }];
-//        [_closeBtn addTarget: self action: @selector(btnClickType:) forControlEvents: UIControlEventTouchUpInside];
-//    }
-//    return _closeBtn;
-//}
-//- (UIButton *)navigationBtn {
-//    if (!_navigationBtn) {
-//        _navigationBtn = [MINUtils createNoBorderBtnWithTitle:Localized(@"导航") titleColor: [UIColor whiteColor] fontSize:15*KFitWidthRate];
-//        _navigationBtn.backgroundColor = kRGB(26, 151, 251);
-//        [_navigationBtn setTitle:Localized(@"导航") forState:UIControlStateNormal];
-//        [_navigationBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//        [_bottomView addSubview: _navigationBtn];
-//        CGFloat width = [NSString getWidthWithText:Localized(@"导航") font:[UIFont systemFontOfSize:15*KFitWidthRate] height:30*KFitHeightRate];
-//        [_navigationBtn addTarget: self action: @selector(btnClickType:) forControlEvents: UIControlEventTouchUpInside];
-//        [_navigationBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.right.mas_equalTo(self.bottomView.mas_right).offset(-15*KFitWidthRate);
-//            make.size.mas_equalTo(CGSizeMake(width + 25*KFitWidthRate, 30*KFitHeightRate));
-//            make.centerY.mas_equalTo(self.bottomView.mas_centerY);
-//        }];
-//    }
-//    return _navigationBtn;
-//}
 - (void)setupMovePopView {
     [self addSubview:self.movePopView];
     [self.movePopView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -446,14 +381,6 @@
     [self arrowView];
     [self setupBottom];
     [self setupMovePopView];
-//    [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-//        make.left.equalTo(_titleView).with.offset(15 * KFitWidthRate);
-//        make.top.bottom.equalTo(_titleView);
-//        make.width.mas_equalTo(200 * KFitWidthRate);
-//    }];
-//    [self playBackBtn];
-//    [self closeBtn];
-//    [self navigationBtn];
     
     _lngLb = [self createLbTitle:@"经纬度:"];
     _statusLb = [self createLbTitle:@"状态:"];
@@ -470,23 +397,32 @@
     _timeLb = [self createLbTitle:@"上报时间:2020-05-18 13:35:32"];
     _addressLabel = [self createLbTitle:@"四川省成都市高新区长虹科技大厦"];
     
+}
+- (void)setupMiddleContentView {
+    NSMutableArray *arrLbl = [NSMutableArray arrayWithArray:@[_lngLb,_statusLb,_cfLb,_accLb,_doorLb,_electriLb,_oilLb,_sleepModelLb,_gsmNumberLb,_gpsNumberLb,_reportLb,_warmTypeLb,_timeLb,_addressLabel]];
+    [CBDeviceTool.shareInstance getPaoViewConfig:_deviceInfoModel blk:^(NSDictionary * _Nonnull configData) {
+        BOOL cfbf = [configData[@"cfbf"] boolValue];
+        BOOL acc = [configData[@"acc"] boolValue];
+        BOOL tank = [configData[@"tank"] boolValue];
+        if (!cfbf) {
+            [arrLbl removeObject:_cfLb];
+        }
+        if (!acc) {
+            [arrLbl removeObject:_accLb];
+            [arrLbl removeObject:_doorLb];
+        }
+        if (!tank) {
+            [arrLbl removeObject:_oilLb];
+        }
+    }];
     
-    NSArray *arrLb = @[_lngLb,_statusLb,_cfLb,_accLb,_doorLb,_electriLb,_oilLb,_sleepModelLb,_gsmNumberLb,_gpsNumberLb,_reportLb,_warmTypeLb,_timeLb,_addressLabel];
-    [self restMutableArray:self.arrayLb addFromArray:arrLb];
+    [self restMutableArray:self.arrayLb addFromArray:arrLbl];
     
     //同一行的放里面(不换行）
     NSArray *sameLineLb = @[
         _accLb,_doorLb,_oilLb,_gsmNumberLb,_gpsNumberLb
     ];
 
-//    NSArray *arrT = @[@"经纬度:",
-////                      @"纬度:",@"速度:",@"离线时长:0分",@"停留时长:0分",@"停留次数:0分",@"门状态:关",@"acc状态：关",@"油量:0L 0%",@"当天里程:0km",@"内电:关",@"外电:开",@"布防:开",@"撤防:开",@"低电报警:开",@"盲区报警:开",@"掉电报警:开",@"超速报警:开",@"振动报警:开",@"油量检测报警:开",@"GPS漂移抑制:开",@"油电控制:开",@"振动灵敏度:高",@"ACC工作通知:开",@"终端时区:8",@"休眠模式：时间休眠",@"GPS:0颗",@"GSM:27",@"上报时间:2020-05-18 13:35:32",@"四川省成都市高新区长虹科技大厦"
-//    ];//@"报警类型:8"
-//    [self restMutableArray:self.arrayTitles addFromArray:arrT];
-    
-//    // 地址lb换行，即在它这插个空
-//    [self insertArrLbAndArrTitle:self.arrayTitles.count-1];
-    // 获取subView frame
     [self.bgmView layoutIfNeeded];
     UILabel *lastLbl = nil;
     for (int i = 0; i < self.arrayLb.count ; i ++) {
@@ -507,13 +443,6 @@
             }
         }];
         lastLbl = lb;
-//        if (i%2 == 0 && i != 0) {
-//            // 第二个起，偶数(即左边)，k加1(即y坐标下移)
-//            k ++;
-//        }
-//        CGFloat rate_y = 20*KFitHeightRate*k;
-//        CGFloat rate_x = i%2;
-//        lb.frame = CGRectMake(20*KFitWidthRate + rate_x*CGRectGetWidth(self.middleView.frame)/2, rate_y, 340*KFitWidthRate, 20*KFitHeightRate);
     }
     [lastLbl mas_updateConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(@-20);
@@ -530,107 +459,6 @@
 - (void)restMutableArray:(NSMutableArray *)mutableArray addFromArray:(NSArray *)array {
     [mutableArray removeAllObjects];
     [mutableArray addObjectsFromArray:array];
-}
-- (void)setupView_warmed {
-    self.backgroundColor = UIColor.clearColor;//[UIColor colorWithHexString:@"#000000" alpha:0.5];
-    
-    [self bgmView];
-    self.bgmView.image = [UIImage imageNamed:@"弹框-报警"];
-    [self titleView];
-    [self middleView];
-    [self bottomView];
-    
-    [self titleLabel];
-    [self.titleLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(_titleView).with.offset(15 * KFitWidthRate);
-        make.top.bottom.equalTo(_titleView);
-        make.height.mas_equalTo(50*KFitHeightRate);
-    }];
-//    [self deleteWarmBtn];
-//    [self playBackBtn];
-//    [self closeBtn];
-//    [self navigationBtn];
-    
-    _lngLb = [self createLbTitle:@"经度:"];
-//    _latLb = [self createLbTitle:@"维度:"];
-//    _speedLb = [self createLbTitle:@"速度:"];
-//    _offlineTimeLb = [self createLbTitle:@"离线时长:0分"];
-//    _stayTimeLb = [self createLbTitle:@"停留时长:0分"];
-//    _stayCountLb = [self createLbTitle:@"停留次数:0分"];
-//    _doorLb = [self createLbTitle:@"门状态:关"];
-//    _accLb = [self createLbTitle:@"acc状态：关"];
-//    _inElectriLb = [self createLbTitle:@"内电:关"];
-//    _outElectriLb = [self createLbTitle:@"外电:开"];
-//    _oilLb = [self createLbTitle:@"油量:0L 0%"];
-//    _mileageLb = [self createLbTitle:@"当天里程:0km"];
-//    _bfLb = [self createLbTitle:@"布防:开"];
-//    _cfLb = [self createLbTitle:@"撤防:开"];
-//
-//    _lowElectricWarmLb = [self createLbTitle:@"低电报警:开"];
-//    _mqWarmLb = [self createLbTitle:@"盲区报警:开"];
-//    _ddWarmLb = [self createLbTitle:@"掉电报警:开"];
-//    _overSpeedWarmLb = [self createLbTitle:@"超速报警:开"];
-//    _zdWarmLb = [self createLbTitle:@"振动报警:开"];
-//    _yljcWarmLb = [self createLbTitle:@"油量检测报警:开"];
-//    //_fenceStatusLb = [self createLbTitle:@"电子围栏:进/出"];
-//    _gpsDriftLb = [self createLbTitle:@"GPS漂移抑制:开"];
-//
-//    _ydControlLb = [self createLbTitle:@"油电控制:开"];
-//    _vibrationLb = [self createLbTitle:@"振动灵敏度:高"];
-//    _accNoticeLb = [self createLbTitle:@"ACC工作通知:开"];
-//    _timeZone = [self createLbTitle:@"终端时区:8"];
-//
-//    _sleepModelLb = [self createLbTitle:@"休眠模式：时间休眠"];
-//    _gpsNumberLb = [self createLbTitle:@"GPS:0颗"];
-//    _gsmNumberLb = [self createLbTitle:@"GSM:27"];
-//    _warmTypeLb = [self createLbTitle:@"报警类型:8"];
-//    _timeLb = [self createLbTitle:@"上报时间:2020-05-18 13:35:32"];
-//    _addressLabel = [self createLbTitle:@"四川省成都市高新区长虹科技大厦"];
-    
-    NSArray *arrLb = @[_lngLb,
-//                       _latLb,_speedLb,_offlineTimeLb,_stayTimeLb,_stayCountLb,_doorLb,_accLb,_oilLb,_mileageLb,_inElectriLb,
-//        _outElectriLb,_bfLb,_cfLb,_lowElectricWarmLb,_mqWarmLb,_ddWarmLb,_overSpeedWarmLb,_zdWarmLb,_yljcWarmLb,
-//                             _gpsDriftLb,_ydControlLb,_vibrationLb,_accNoticeLb,_timeZone,_sleepModelLb,_gpsNumberLb,_gsmNumberLb,_warmTypeLb,_timeLb,_addressLabel
-    ];
-    [self restMutableArray:self.arrayLb addFromArray:arrLb];
-
-//    NSArray *arrT = @[@"经纬度:",
-////                      @"纬度:",@"速度:",@"离线时长:0分",@"停留时长:0分",@"停留次数:0分",@"门状态:关",@"acc状态：关",@"油量:0L 0%",@"当天里程:0km",@"内电:关",@"外电:开",@"布防:开",@"撤防:开",@"低电报警:开",@"盲区报警:开",@"掉电报警:开",@"超速报警:开",@"振动报警:开",@"油量检测报警:开",@"GPS漂移抑制:开",@"油电控制:开",@"振动灵敏度:高",@"ACC工作通知:开",@"终端时区:8",@"休眠模式：时间休眠",@"GPS:0颗",@"GSM:27",@"报警类型:8",@"上报时间:2020-05-18 13:35:32",@"四川省成都市高新区长虹科技大厦"
-//    ];
-//    [self restMutableArray:self.arrayTitles addFromArray:arrT];
-
-//    // 上报时间lb换行，即在它这插个空
-//    [self insertArrLbAndArrTitle:self.arrayTitles.count-2];
-//    // 地址lb换行，即在它这插个空
-//    [self insertArrLbAndArrTitle:self.arrayTitles.count-1];
-    /* 获取subView frame*/
-    [self.bgmView layoutIfNeeded];
-    
-    for (int i = 0 ,k = 0; i < self.arrayLb.count ; i ++) {
-        UILabel *lb = self.arrayLb[i];
-//        lb.text = self.arrayTitles[i];
-        [self.middleView addSubview:lb];
-//        if (i%2 == 0 && i != 0) {
-//            // 偶数，左边
-//            k ++;
-//        }
-//        CGFloat rate_y = 20*KFitHeightRate*k;
-//        CGFloat rate_x = i%2;
-//        lb.frame = CGRectMake(20*KFitWidthRate + rate_x*CGRectGetWidth(self.middleView.frame)/2, rate_y, 340*KFitWidthRate, 20*KFitHeightRate);
-//        //报警-设备列表
-//        if ([self.arrayTitles[i] isEqualToString:@"报警类型:8"]) {
-//            UIImage *alarmImage = [UIImage imageNamed:@"报警"];
-//            UIImageView *alarmImageV = UIImageView.alloc.init;
-//            alarmImageV.frame = CGRectMake(20*KFitWidthRate + rate_x*CGRectGetWidth(self.middleView.frame)/2, rate_y + (20*KFitHeightRate-alarmImage.size.height)/2, alarmImage.size.width, alarmImage.size.height);
-//            lb.frame = CGRectMake(20*KFitWidthRate + rate_x*CGRectGetWidth(self.middleView.frame)/2 + alarmImage.size.width + 5, rate_y, 140*KFitWidthRate, 20*KFitHeightRate);\
-//            alarmImageV.image = alarmImage;
-//            [self.middleView addSubview:alarmImageV];
-//        }
-    }
-//    /* 滚动到底部*/
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05*NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//        [self.middleView setContentOffset:CGPointMake(0, self.middleView.contentSize.height - self.middleView.bounds.size.height)];
-//    });
 }
 - (UILabel *)createLbTitle:(NSString *)text {
     UILabel *label = [MINUtils createLabelWithText:text size:10*KFitHeightRate alignment:NSTextAlignmentLeft textColor: k137Color];
@@ -709,15 +537,6 @@
 //        }
 //    }
 }
-- (void)setAlertStyleIsWarmed:(BOOL)isWarmed {
-    [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    [self toEmpty];
-//    if (isWarmed) {
-//        [self setupView_warmed];
-//    } else {
-    [self setupView];
-//    }
-}
 - (void)toEmpty {
     _bgmView = nil;
     _titleView = nil;
@@ -755,6 +574,7 @@
 }
 - (void)setDeviceInfoModel:(CBHomeLeftMenuDeviceInfoModel *)deviceInfoModel {
     _deviceInfoModel = deviceInfoModel;
+    [self setupMiddleContentView];
     if (_deviceInfoModel) {
         _followImgView.image = deviceInfoModel.isTracking ? [UIImage imageNamed:@"跟踪-选中"] : [UIImage imageNamed:@"单次定位"];
         _followLbl.text = deviceInfoModel.isTracking ? __CarPaoTitle_EndTrack : __CarPaoTitle_Track;

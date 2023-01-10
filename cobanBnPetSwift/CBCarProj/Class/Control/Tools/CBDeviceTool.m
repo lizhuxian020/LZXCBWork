@@ -577,4 +577,14 @@
         
     return defaultModel ? defaultModel.name : Localized(@"未知");
 }
+
+- (void)getPaoViewConfig:(CBHomeLeftMenuDeviceInfoModel *)deviceModel blk:(void(^)(NSDictionary *configData))blk {
+    CBProductSpecModel *targetSpecModel = [self _getSpecModelWithDevice:deviceModel];
+    NSDictionary *config = @{
+        @"cfbf": @(targetSpecModel.arm),
+        @"acc": @(targetSpecModel.accWorkNotice),
+        @"tank": @(targetSpecModel.tankVolume),
+    };
+    blk(config);
+}
 @end
