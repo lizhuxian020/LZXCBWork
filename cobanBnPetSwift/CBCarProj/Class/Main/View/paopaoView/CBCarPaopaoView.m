@@ -399,6 +399,7 @@
     
 }
 - (void)setupMiddleContentView {
+    [self.middleContentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     NSMutableArray *arrLbl = [NSMutableArray arrayWithArray:@[_lngLb,_statusLb,_cfLb,_accLb,_doorLb,_electriLb,_oilLb,_sleepModelLb,_gsmNumberLb,_gpsNumberLb,_reportLb,_warmTypeLb,_timeLb,_addressLabel]];
     [CBDeviceTool.shareInstance getPaoViewConfig:_deviceInfoModel blk:^(NSDictionary * _Nonnull configData) {
         BOOL cfbf = [configData[@"cfbf"] boolValue];
