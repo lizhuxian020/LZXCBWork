@@ -16,15 +16,17 @@
 
 @property (nonatomic, strong) UIImageView *selectedImgV;
 
+@property (nonatomic, assign) NSInteger restMod ; /** <##> **/
 @end
 
 @implementation _CBXiuMianChooseView
 
-- (instancetype)initWithData:(NSArray *)data :(NSArray *)idArr{
+- (instancetype)initWithData:(NSArray *)data idArr:(NSArray *)idArr restMod:(NSInteger)restMod {
     self = [super init];
     if (self) {
         self.data = data;
         self.idArr = idArr;
+        self.restMod = restMod;
         [self createView];
     }
     return self;
@@ -32,6 +34,16 @@
 
 - (void)createView {
     self.backgroundColor = UIColor.whiteColor;
+    
+    NSInteger initialSelectedIndex = 0;
+    
+    for (int i = 0; i < self.idArr.count; i++) {
+        NSNumber *idNum = self.idArr[i];
+        if (idNum.integerValue == self.restMod) {
+            initialSelectedIndex = i;
+            break;
+        }
+    }
     
     UIView *lastView = nil;
     kWeakSelf(self);
@@ -50,13 +62,13 @@
         }];
         
         UIImageView *imgV = [UIImageView new];
-        imgV.image = [UIImage imageNamed: i == 0 ? @"已选中2" : @"未选中2"];
+        imgV.image = [UIImage imageNamed: i == initialSelectedIndex ? @"已选中2" : @"未选中2"];
         [view addSubview:imgV];
         [imgV mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(@0);
             make.right.equalTo(@0);
         }];
-        if (i == 0) {
+        if (i == initialSelectedIndex) {
             self.selectedImgV = imgV;
         }
         
@@ -81,7 +93,7 @@
             weakself.selectedImgV = imgV;
             imgV.image = [UIImage imageNamed:@"已选中2"];
         }];
-        if (i == 0) {
+        if (i == initialSelectedIndex) {
             self.currentIndex = [weakself.idArr[i] integerValue];
         }
     }

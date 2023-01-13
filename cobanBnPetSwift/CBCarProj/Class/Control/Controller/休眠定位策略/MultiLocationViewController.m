@@ -75,7 +75,7 @@
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:4];
     dic[@"dno"] = _deviceInfoModelSelect.dno?:@"";//[AppDelegate shareInstance].currenDeviceSno;
     dic[@"report_way"] = self.locationModeView.getReportWay;
-    dic[@"rest_mod"] = @(self.xmChooseView.currentIndex+1);//休眠模式 都要+1   不是0-5是 1-6
+    dic[@"rest_mod"] = @(self.xmChooseView.currentIndex);//休眠模式入参传参是0-5是  1-6用于显示/隐藏
     dic[@"dis_qs"] = self.locationModeView.getSpeed;
     dic[@"time_qs"] = self.locationModeView.getTimeQS;
     dic[@"time_rest"] = self.locationModeView.getTimeRest;
@@ -109,7 +109,7 @@
     [self showBackGround];
     [self initBarRighBtnTitle: Localized(@"确定") target: self action: @selector(rightBtnClick)];
     
-    self.xmChooseView = [[_CBXiuMianChooseView alloc] initWithData:self.restArr :self.restIdArr];
+    self.xmChooseView = [[_CBXiuMianChooseView alloc] initWithData:self.restArr idArr:self.restIdArr restMod:self.restMod];
     [self.view addSubview:self.xmChooseView];
     [self.xmChooseView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view).with.offset(12.5 * KFitHeightRate + kNavAndStatusHeight);

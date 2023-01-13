@@ -238,6 +238,7 @@
 //            if (cell.switchView.isON == !self.listModel.dcdd) { // 取反是因为UI的结构导致的
             //休眠定位策略
             MultiLocationViewController *locationVC = [[MultiLocationViewController alloc] init];
+            locationVC.restMod = self.listModel.restMod;
             locationVC.deviceInfoModelSelect = _deviceInfoModelSelect;
             locationVC.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController: locationVC animated: YES];

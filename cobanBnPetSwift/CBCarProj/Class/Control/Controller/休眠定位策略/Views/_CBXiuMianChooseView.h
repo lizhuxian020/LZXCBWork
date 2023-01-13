@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) NSInteger currentIndex;
 
-- (instancetype)initWithData:(NSArray *)data :(NSArray *)idArr;
+- (instancetype)initWithData:(NSArray *)data idArr:(NSArray *)idArr restMod:(NSInteger)restMod;
 
 @end
 

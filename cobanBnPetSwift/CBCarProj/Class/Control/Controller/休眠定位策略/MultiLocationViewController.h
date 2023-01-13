@@ -13,4 +13,6 @@
 /** 选中的设备  */
 @property (nonatomic, strong) CBHomeLeftMenuDeviceInfoModel *deviceInfoModelSelect;
 
+/** 休眠策略 **/
+@property (nonatomic, assign) NSInteger restMod;
 @end
