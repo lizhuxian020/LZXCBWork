@@ -57,7 +57,7 @@
      name:UIKeyboardWillHideNotification
      object:nil];
     
-    [AppDelegate setNavigationBGColor:nil :self.navigationController.navigationBar];
+//    [AppDelegate setNavigationBGColor:nil :self.navigationController.navigationBar];
 }
 
 //键盘弹起后处理scrollView的高度使得textfield可见
