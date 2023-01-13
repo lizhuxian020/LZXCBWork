@@ -301,15 +301,14 @@
             return [self getOfflineIcon:iconStr];
         }
     }
-    
-    if ([warmedStr isEqualToString:@"1"]) {
-        return [self getWarmIcon:iconStr];
-    } else if ([onlineStr isEqualToString:@"1"]) {
+    if ([onlineStr isEqualToString:@"1"]) {
+        if ([warmedStr isEqualToString:@"1"]) {
+            return [self getWarmIcon:iconStr];
+        }
         return [self getNormalIcon:iconStr];
     } else {
         return [self getOfflineIcon:iconStr];
     }
-    return [self getOfflineIcon:iconStr];
 }
 
 + (UIImage *)getWarmIcon:(NSString *)iconStr {
