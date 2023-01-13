@@ -150,7 +150,7 @@
 }
 
 - (void)didGetMQTTDeviceModel:(CBMQTTCarDeviceModel *)model {
-    if (model.code == 2) { //2时, 更新围栏.
+    if (model.code != 21) { //2时, 更新围栏.
         /*
          {
              answerResult = 0;
