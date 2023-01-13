@@ -185,7 +185,7 @@
             cell = [[DeviceTableViewCell alloc] initWithStyle: UITableViewCellStyleSubtitle reuseIdentifier: cellIndentify];
         }
     }
-    if (self.dataArr.count > indexPath.row) {
+    if ([self.dataArr[indexPath.section] count] > indexPath.row) {
         MyDeviceModel *model = self.dataArr[indexPath.section][indexPath.row];
         cell.deviceInfoModel = model;
     }
