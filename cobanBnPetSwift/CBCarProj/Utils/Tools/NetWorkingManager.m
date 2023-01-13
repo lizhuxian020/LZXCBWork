@@ -144,7 +144,7 @@ static AFHTTPSessionManager *afManager = nil;
         BOOL isFailed = [self login:task];
         failed(error);
         if (isFailed) {
-            [MBProgressHUD showMessage:Localized(@"请求超时") withDelay:1.5];
+//            [MBProgressHUD showMessage:Localized(@"请求超时") withDelay:1.5];
         }
     }];
 }
@@ -219,7 +219,7 @@ static AFHTTPSessionManager *afManager = nil;
         BOOL isFailed = [self login:task];
         failed(error);
         if (isFailed) {
-            [MBProgressHUD showMessage:Localized(@"请求超时") withDelay:1.5];
+//            [MBProgressHUD showMessage:Localized(@"请求超时") withDelay:1.5];
         }
     }];
 }

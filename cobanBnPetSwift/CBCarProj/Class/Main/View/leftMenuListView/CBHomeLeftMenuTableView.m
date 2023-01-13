@@ -234,7 +234,7 @@ static NSString *homeHeadViewIndentifer = @"homeHeadViewIndentifer";
         [self.mj_footer endRefreshing];
         [HUD hideHud];
         [MBProgressHUD hideHUDForView:self animated:YES];
-        [HUD showHUDWithText:Localized(@"请求超时") withDelay:3.0];
+//        [HUD showHUDWithText:Localized(@"请求超时") withDelay:3.0];
     }];
 }
 

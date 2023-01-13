@@ -66,7 +66,7 @@ static BDTRequestSucceedBlock _requestSucceedBlock;
                 BOOL isFailed = [self login:task];
                 failure(error);
                 if (isFailed) {
-                    [MINUtils showProgressHudToView:[AppDelegate shareInstance].window withText:Localized(@"请求超时")];
+//                    [MINUtils showProgressHudToView:[AppDelegate shareInstance].window withText:Localized(@"请求超时")];
                 }
             }];
         }
@@ -94,7 +94,7 @@ static BDTRequestSucceedBlock _requestSucceedBlock;
                 BOOL isFailed = [self login:task];
                 failure(error);
                 if (isFailed) {
-                    [MINUtils showProgressHudToView:[AppDelegate shareInstance].window withText:Localized(@"请求超时")];
+//                    [MINUtils showProgressHudToView:[AppDelegate shareInstance].window withText:Localized(@"请求超时")];
                 }
             }];
         }
@@ -186,7 +186,7 @@ static BDTRequestSucceedBlock _requestSucceedBlock;
         BOOL isFailed = [self login:task];
         failure(error);
         if (isFailed) {
-            [MINUtils showProgressHudToView:[AppDelegate shareInstance].window withText:Localized(@"请求超时")];
+//            [MINUtils showProgressHudToView:[AppDelegate shareInstance].window withText:Localized(@"请求超时")];
         }
     }];
 }

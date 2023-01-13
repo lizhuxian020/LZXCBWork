@@ -124,7 +124,7 @@ static NSString *shareHeadViewIndentifer = @"shareHeadViewIndentifer";
         } failed:^(NSError *error) {
             kStrongSelf(self);
             [MBProgressHUD hideHUDForView:self.view animated:YES];
-            [HUD showHUDWithText:Localized(@"请求超时") withDelay:3.0];
+//            [HUD showHUDWithText:Localized(@"请求超时") withDelay:3.0];
         }];
     } else {
         [self.navigationController popViewControllerAnimated: YES];
@@ -170,7 +170,7 @@ static NSString *shareHeadViewIndentifer = @"shareHeadViewIndentifer";
         [self.tableView.mj_header endRefreshing];
         [self.tableView.mj_footer endRefreshing];
         [MBProgressHUD hideHUDForView:self.view animated:YES];
-        [HUD showHUDWithText:Localized(@"请求超时") withDelay:3.0];
+//        [HUD showHUDWithText:Localized(@"请求超时") withDelay:3.0];
     }];
 }
 #pragma mark - createUI
