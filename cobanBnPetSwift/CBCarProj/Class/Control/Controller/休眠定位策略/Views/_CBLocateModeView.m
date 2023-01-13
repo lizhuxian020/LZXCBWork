@@ -534,14 +534,14 @@
 
 - (void)setAA:(int)num uni:(int)uniIndex {
     self.AALbl.text = [NSString stringWithFormat:@"%d%@", num, self.unitData[uniIndex]];
-    self.numberAA = num;
+    self.numberAA = [self getTime:num :uniIndex].integerValue;
 }
 - (void)setAB:(int)num uni:(int)uniIndex {
     self.ABLbl.text = [NSString stringWithFormat:@"%d%@", num, self.unitData[uniIndex]];
-    self.numberAB = num;
+    self.numberAB = [self getTime:num :uniIndex].integerValue;
 }
 - (void)setBA:(int)num uni:(int)uniIndex {
     self.BALbl.text = [NSString stringWithFormat:@"%d%@", num, self.unitData[uniIndex]];
-    self.numberBA = num;
+    self.numberBA = [self getTime:num :uniIndex].integerValue;
 }
 @end
