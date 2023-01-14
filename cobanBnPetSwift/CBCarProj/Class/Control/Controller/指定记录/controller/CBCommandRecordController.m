@@ -8,6 +8,7 @@
 
 #import "CBCommandRecordController.h"
 #import "_CBCommandRecordCell.h"
+#import "CBNoDataView.h"
 
 @interface CBCommandRecordController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -34,6 +35,7 @@
         make.edges.equalTo(@0);
     }];
     [self.tableView registerClass:_CBCommandRecordCell.class forCellReuseIdentifier:@"_CBCommandRecordCell"];
+    
 }
 
 - (void)requestData {
@@ -60,8 +62,14 @@
         NSArray<_CBCommandRecord *> *data = [_CBCommandRecord mj_objectArrayWithKeyValuesArray:response[@"data"]];
         self.dataArr = data;
         [self.tableView reloadData];
+        if (!self.dataArr || self.dataArr.count == 0) {
+            self.noDataView.hidden = NO;
+        } else {
+            self.noDataView.hidden = YES;
+        }
     } failed:^(NSError *error) {
         kStrongSelf(self);
+        self.noDataView.hidden = NO;
         [MBProgressHUD hideHUDForView:self.view animated:YES];
     }];
 }
