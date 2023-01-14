@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)getProductSpecData:(void(^)(NSArray *productSepcArr, NSArray *productSepcIdArr))productSpecBlk;
 
-- (void)getDeviceNames:(void(^)(NSArray<NSString *> *deviceNames))blk;
+- (void)getDeviceNames:(void(^)(NSArray<NSString *> *deviceNames,NSArray<NSString *> *deviceDno))blk;
 
 - (void)getGroupName:(void(^)(NSArray<NSString *> *groupNames))blk;
 

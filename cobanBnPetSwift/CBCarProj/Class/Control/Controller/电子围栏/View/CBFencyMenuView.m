@@ -34,7 +34,8 @@
 @property (nonatomic, strong) UISwitch *overSwitch;
 
 @property (nonatomic, strong) NSArray *deviceArr;
-
+@property (nonatomic, strong) NSArray *dnoArr;
+@property (nonatomic, copy) NSString *currentSelectedDno;
 @property (nonatomic, strong) CBDoubleTimePicker *timePickerDelegate;
 @end
 
@@ -267,8 +268,9 @@
 
 - (void)showSelectDevice {
     kWeakSelf(self);
-    [CBDeviceTool.shareInstance getDeviceNames:^(NSArray<NSString *> * _Nonnull deviceNames) {
+    [CBDeviceTool.shareInstance getDeviceNames:^(NSArray<NSString *> * _Nonnull deviceNames, NSArray<NSString *> *dnoArr) {
         weakself.deviceArr = deviceNames;
+        weakself.dnoArr = dnoArr;
         [weakself showPickView:deviceNames];
     }];
 }
@@ -284,6 +286,13 @@
         make.height.mas_equalTo(SCREEN_HEIGHT);
     }];
     [pickerView showView];
+    
+    NSString *currentDeviceName = self.deviceNameLbl.text;
+    NSUInteger index = [data indexOfObject:currentDeviceName];
+    if (index == NSNotFound) {
+        return;
+    }
+    [pickerView.pickerView selectRow:index inComponent:0 animated:NO];
 }
 
 - (void)showChooseTime:(UILabel *)lbl {
@@ -324,6 +333,7 @@
     NSLog(@"%@", dic);
     NSNumber *index = dic[@"0"];
     self.deviceNameLbl.text = self.deviceArr[index.intValue];
+    self.currentSelectedDno = self.dnoArr[index.intValue];
     self.deviceNameLbl.textColor = kCellTextColor;
 }
 
@@ -334,6 +344,7 @@
         self.fenceNameLbl.textColor  = kCellTextColor;
     }
     self.deviceNameLbl.text = model.deviceName;
+    self.currentSelectedDno = model.dno;
     self.deviceNameLbl.textColor  = kCellTextColor;
     
     if ([model.useTimes componentsSeparatedByString:@","].count == 2) {
@@ -360,7 +371,7 @@
 
 - (NSString *)getDeviceArr {
     NSDictionary *param = @{
-        @"dno": self.model.dno ?: @"",
+        @"dno": self.currentSelectedDno ?: @"",
         @"speed": @(self.overTF.text.intValue).description,
         @"useTimes": [self.alarm1TimeLbl.text stringByReplacingOccurrencesOfString:@" - " withString:@","],
         @"useTimes2": [self.alarm2TimeLbl.text stringByReplacingOccurrencesOfString:@" - " withString:@","],

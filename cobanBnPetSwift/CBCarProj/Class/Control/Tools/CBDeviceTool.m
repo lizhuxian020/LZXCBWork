@@ -38,13 +38,14 @@
     return self;
 }
 
-- (void)getDeviceNames:(void(^)(NSArray<NSString *> *))blk {
+- (void)getDeviceNames:(void(^)(NSArray<NSString *> *deviceNames,NSArray<NSString *> *deviceDno))blk {
     UIWindow *window = [UIApplication.sharedApplication keyWindow];
     [MBProgressHUD showHUDIcon:window animated:YES];
     kWeakSelf(self);
     [[NetWorkingManager shared]getWithUrl:@"personController/getMyDeviceList" params: @{} succeed:^(id response, BOOL isSucceed) {
         [MBProgressHUD hideHUDForView:window animated:YES];
         NSMutableArray *dataArr = [NSMutableArray array];
+        NSMutableArray *dnoArr = [NSMutableArray array];
         if (isSucceed) {
             if (response && [response[@"data"] isKindOfClass:[NSArray class]]) {
                 NSArray *responseArr = response[@"data"];
@@ -53,6 +54,7 @@
                     for (NSDictionary *deviceDic in dataDic[@"device"]) {
                         if (deviceDic[@"name"]) {
                             [dataArr addObject: deviceDic[@"name"]];
+                            [dnoArr addObject: deviceDic[@"dno"]];
                         }
                     }
                 }
@@ -60,11 +62,12 @@
                 for (NSDictionary *deviceDic in noGroupDic[@"noGroup"]) {
                     if (deviceDic[@"name"]) {
                         [dataArr addObject: deviceDic[@"name"]];
+                        [dnoArr addObject: deviceDic[@"dno"]];
                     }
                 }
             }
         }
-        blk(dataArr);
+        blk(dataArr, dnoArr);
     } failed:^(NSError *error) {
         [MBProgressHUD hideHUDForView:window animated:YES];
     }];

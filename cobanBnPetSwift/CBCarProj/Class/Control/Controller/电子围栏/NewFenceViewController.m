@@ -133,7 +133,7 @@
     // Do any additional setup after loading the view.
     
     self.radius = 1000;
-    self.currentModel = [CBCommonTools CBdeviceInfo];
+    self.currentModel = CBCarDeviceManager.shared.deviceInfoModelSelect;
     [self createUI];
     // 显示mark在地图上，百度地图 http://www.cocoachina.com/bbs/read.php?tid=1719280
     // 谷歌地图显示所有标记 https://stackoverflow.com/questions/21615811/ios-how-to-use-gmscoordinatebounds-to-show-all-the-markers-of-the-map
