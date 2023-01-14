@@ -30,6 +30,7 @@
 
 //有效的字母数字密码
 - (BOOL) isValidAlphaNumberPassword;
+- (BOOL) isValidAlphaNumberPassword4;
 
 //检测有效身份证
 //15位

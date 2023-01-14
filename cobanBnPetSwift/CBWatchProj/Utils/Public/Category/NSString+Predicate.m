@@ -72,6 +72,12 @@
     NSPredicate *identityCardPredicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
     return [identityCardPredicate evaluateWithObject:self];
 }
+- (BOOL) isValidAlphaNumberPassword4
+{
+    NSString *regex = @"^(?!\\d+$|[a-zA-Z]+$)\\w{4,12}$";
+    NSPredicate *identityCardPredicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+    return [identityCardPredicate evaluateWithObject:self];
+}
 
 
 - (BOOL) isValidIdentifyFifteen

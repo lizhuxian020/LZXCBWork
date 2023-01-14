@@ -56,29 +56,31 @@
 #pragma mark -- 获取子账户列表
 - (void)requestDataWithHud:(MBProgressHUD *)hud
 {
-    __weak __typeof__(self) weakSelf = self;
+    kWeakSelf(self);
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:1];
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     [[NetWorkingManager shared]getWithUrl:@"personController/getSubUsers" params: dic succeed:^(id response,BOOL isSucceed) {
-        [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
+        [MBProgressHUD hideHUDForView:weakself.view animated:YES];
+        [weakself.tableView.mj_header endRefreshing];
         NSLog(@"====子账户列表%@==",response);
         if (isSucceed) {
             if (response && [response[@"data"] isKindOfClass:[NSArray class]]) {
-                [weakSelf.dataArr removeAllObjects];
+                [weakself.dataArr removeAllObjects];
                 NSArray *array = response[@"data"];
                 for (NSDictionary *dic in array) {
                     SubAccountModel *model = [SubAccountModel mj_objectWithKeyValues:dic];//[SubAccountModel yy_modelWithDictionary: dic];
-                    [weakSelf.dataArr addObject: model];
+                    [weakself.dataArr addObject: model];
                 }
                 [hud hideAnimated:YES];
-                [weakSelf.tableView reloadData];
+                [weakself.tableView reloadData];
             }
         } else {
             //[hud hideAnimated:YES];
         }
-        weakSelf.noDataView.hidden = weakSelf.dataArr.count == 0?NO:YES;
+        weakself.noDataView.hidden = weakself.dataArr.count == 0?NO:YES;
     } failed:^(NSError *error) {
-        [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
+        [MBProgressHUD hideHUDForView:weakself.view animated:YES];
+        [weakself.tableView.mj_header endRefreshing];
     }];
 }
 #pragma mark -- 删除子账户
@@ -169,6 +171,10 @@
     [self.view addSubview: self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.top.equalTo(self.view);
+    }];
+    kWeakSelf(self);
+    self.tableView.mj_header = [MJRefreshStateHeader headerWithRefreshingBlock:^{
+        [weakself requestDataWithHud:nil];
     }];
 }
 #pragma mark -- popView  delegate
@@ -427,11 +433,11 @@
         NSString *pwd2 = contentStr[3];
         NSString *phone = contentStr[4];
         
-        if ([accountName isValidAlphaNumberPassword] == NO ) {
-            [HUD showHUDWithText:Localized(@"请输入4位以上的字母数字组合") withDelay:2.0f];
+        if ([accountName isValidAlphaNumberPassword4] == NO ) {
+            [HUD showHUDWithText:Localized(@"请输入4位以上的字母数字组合用户名") withDelay:2.0f];
             return NO;
         } else if (accountName.length < 4) {
-            [HUD showHUDWithText:Localized(@"请输入4位以上的字母数字组合") withDelay:2.0f];
+            [HUD showHUDWithText:Localized(@"请输入4位以上的字母数字组合用户名") withDelay:2.0f];
             return NO;
         }
         if (kStringIsEmpty(name)) { // 子用户姓名
@@ -494,7 +500,8 @@
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
                 if (isSucceed) {
                     [CBTopAlertView alertSuccess:Localized(@"操作成功")];
-                    [self.navigationController popViewControllerAnimated: YES];
+                    [weakself requestDataWithHud:nil];
+//                    [self.navigationController popViewControllerAnimated: YES];
                 } else {
                 }
             } failed:^(NSError *error) {

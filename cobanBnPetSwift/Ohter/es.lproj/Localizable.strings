@@ -809,6 +809,7 @@
 "名称" = "Name";
 "密码" = "Password";
 "请输入子用户名" = "Enter subuser name";
+"子用户名" = "Subuser name";
 "请输入姓名" = "Please type in your name";
 "请输入密码" = "Please enter your password";
 "请再次输入密码" = "Please enter your password again";
