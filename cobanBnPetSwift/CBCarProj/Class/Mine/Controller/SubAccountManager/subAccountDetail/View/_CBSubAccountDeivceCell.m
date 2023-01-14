@@ -42,6 +42,15 @@
         make.bottom.equalTo(@-15);
     }];
     
+    UIView *line = [MINUtils createLineView];
+    [self.contentView addSubview:line];
+    [line mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(@15);
+        make.right.equalTo(@-15);
+        make.bottom.equalTo(@0);
+        make.height.equalTo(@1);
+    }];
+    
 }
 
 - (void)setAccountModel:(SubAccountModel *)accountModel {

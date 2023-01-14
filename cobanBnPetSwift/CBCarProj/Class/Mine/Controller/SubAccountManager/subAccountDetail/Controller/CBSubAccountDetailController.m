@@ -55,7 +55,7 @@
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(@0);
     }];
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView registerClass:UITableViewCell.class forCellReuseIdentifier:@"UITableViewCell"];
@@ -85,6 +85,19 @@
         [lbl mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.equalTo(@-15);
             make.centerY.equalTo(@0);
+        }];
+    }
+    
+    UIView *line = [cell viewWithTag:102];
+    if (!line) {
+        line = [MINUtils createLineView];
+        [cell addSubview:line];
+        line.tag = 102;
+        [line mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(@15);
+            make.right.equalTo(@-15);
+            make.bottom.equalTo(@0);
+            make.height.equalTo(@1);
         }];
     }
     

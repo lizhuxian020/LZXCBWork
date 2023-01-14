@@ -45,7 +45,7 @@
     self.contentView.layer.cornerRadius = 5;
     self.contentView.layer.masksToBounds = YES;
     
-    NSArray *titleArr = @[Localized(@"编辑"), Localized(@"权限查看"), Localized(@"修改密码"), Localized(@"删除")];
+    NSArray *titleArr = @[Localized(@"编辑"), Localized(@"设置权限"), Localized(@"修改密码"), Localized(@"删除")];
     NSArray *imgArr = @[@"编辑-黑色",@"设置权限",@"修改密码",@"删除-黑色"];
     
     UIView *lastView = nil;
