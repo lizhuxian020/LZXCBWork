@@ -146,7 +146,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 @property (nonatomic, strong) UIButton *personBtn;
 @property (nonatomic, strong) UIButton *locateBtn;
 
-//是否开始跟踪
+//是否开始追踪
 @property (nonatomic, strong) CBHomeLeftMenuDeviceInfoModel *trackingDeviceModel;
 @property (nonatomic, strong) _CBMyInfoPopView *infoPopView;
 
@@ -832,7 +832,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
             case CBCarPaopaoViewClickTypeTrack: {
                 if (self.trackingDeviceModel && [self.trackingDeviceModel.dno isEqualToString:deviceModel.dno]) {
                     [self setEndTrack];
-                    [HUD showHUDWithText:Localized(@"停止跟踪") withDelay:2.0];
+                    [HUD showHUDWithText:Localized(@"停止追踪") withDelay:2.0];
                 } else {
                     if (self.trackingDeviceModel) {
                         [self setEndTrack];
@@ -840,7 +840,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
                     self.trackingDeviceModel = deviceModel;
                     [self setCanStartTrack];
                     [self startTrack:self.trackingDeviceModel];
-                    [HUD showHUDWithText:Localized(@"开始跟踪") withDelay:2.0];
+                    [HUD showHUDWithText:Localized(@"开始追踪") withDelay:2.0];
                 }
                 self.paopaoView.deviceInfoModel = deviceModel;
             }
@@ -1122,7 +1122,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
             case CBCarPaopaoViewClickTypeTrack: {
                 if (self.trackingDeviceModel && [self.trackingDeviceModel.dno isEqualToString:deviceModel.dno]) {
                     [self setEndTrack];
-                    [HUD showHUDWithText:Localized(@"停止跟踪") withDelay:2.0];
+                    [HUD showHUDWithText:Localized(@"停止追踪") withDelay:2.0];
                 } else {
                     if (self.trackingDeviceModel) {
                         [self setEndTrack];
@@ -1130,7 +1130,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
                     self.trackingDeviceModel = deviceModel;
                     [self setCanStartTrack];
                     [self startTrack:self.trackingDeviceModel];
-                    [HUD showHUDWithText:Localized(@"开始跟踪") withDelay:2.0];
+                    [HUD showHUDWithText:Localized(@"开始追踪") withDelay:2.0];
                 }
                 self.paopaoView.deviceInfoModel = deviceModel;
             }
@@ -1226,7 +1226,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
             
         }];
 }
-#pragma mark --跟踪
+#pragma mark --追踪
 - (void)setCanStartTrack {
     self.trackingDeviceModel.isTracking = YES;
 }

@@ -38,7 +38,7 @@
     [self addSubview:imgV];
     [imgV mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(@20);
-        make.bottom.equalTo(@-10);
+        make.bottom.equalTo(@-20);
     }];
     
     UILabel *lbl = [MINUtils createLabelWithText:_title size:20 alignment:NSTextAlignmentLeft textColor:UIColor.whiteColor];

@@ -10,7 +10,7 @@
 
 #define __CarPaoTitle_Title @"标题"
 #define __CarPaoTitle_Track Localized(@"跟踪")
-#define __CarPaoTitle_EndTrack Localized(@"停止跟踪")
+#define __CarPaoTitle_EndTrack Localized(@"停止追踪")
 #define __CarPaoTitle_PlayBack Localized(@"回放")
 #define __CarPaoTitle_Move Localized(@"位移")
 

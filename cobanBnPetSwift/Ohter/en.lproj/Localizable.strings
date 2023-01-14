@@ -1451,3 +1451,18 @@
 
 "正常" = "Normal";
 "冻结" = "Freeze";
+
+"欢迎登录"= "Login please";
+"巴诺物联网"= "BAANOOL IOT";
+"开始追踪"= "Start track";
+"停止追踪"= "Stop track";
+"停留"= "stay";
+"方向"= "DIR";
+"无报警"= "no alarm";
+"圆形围栏: 点击地图选择圆心, 长按拖动小方块缩放改变半径"= "Circular fence: click the map to select the center of the circle, long press and drag the small square to zoom and change the radius";
+"矩形围栏: 点击地图选择两点, 自动形成矩形围栏"= "Rectangular fence: click the map to select two points to automatically form a rectangular fence";
+"多边形围栏: 点击地图至少选取三点, 自动形成多边形围栏"= "Polygonal fence: click the map to select at least three points to automatically form a polygonal fence";
+"发动机编号"= "engine number";
+"操作成功"= "Success";
+"添加子用户"= "Add sub-user";
+"运动" = "move";
