@@ -21,11 +21,13 @@
 #import "NetWorkConfigurationViewController.h"
 #import "CBTimeZoneViewController.h"
 #import "CBCarControlConfig.h"
+#import "CBTerminalSwitchModel.h"
 
 @interface CBSetTerminalViewController ()<UITableViewDelegate, UITableViewDataSource,CBControlAlertPopViewDelegate,CBControlPickPopViewDelegate,CBControlInputPopViewDelegate,CBControlSetOilPopViewDelegate,CBControlSetRestPopViewDelegate>
 
 @property (nonatomic, strong) MINControlListDataModel *termialControlStatusModel;
 @property (nonatomic, strong) ConfigurationParameterModel *configurationModel;
+@property (nonatomic, strong) CBTerminalSwitchModel *switchModel;
 @property (nonatomic,strong) NSMutableArray *arrayData;
 /** 警告弹窗 */
 @property (nonatomic, strong) CBControlAlertPopView *alertPopView;
@@ -50,6 +52,7 @@
 - (void)requestData {
     [self terminalGetControlStatusRequest];
     [self getTerminalSettingReqeust];
+    [self requestSwichModel];
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -122,6 +125,25 @@
     return _setRestPopView;
 }
 #pragma mark -- 获取开关类设备控制参数
+- (void)requestSwichModel {
+    [MBProgressHUD showHUDIcon:self.view animated:YES];
+    NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
+    [paramters setObject:_deviceInfoModelSelect.dno?:@"" forKey:@"dno"];
+    kWeakSelf(self);
+    [[NetWorkingManager shared] getWithUrl:@"devControlController/getDeviceSwitchControl" params:paramters succeed:^(id response, BOOL isSucceed) {
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        NSLog(@"---------结果：%@",response);
+        if (isSucceed) {
+            if (response && [response[@"data"] isKindOfClass:[NSDictionary class]]) {
+                self.switchModel = [CBTerminalSwitchModel yy_modelWithJSON:response[@"data"]];
+                [self.tableView reloadData];
+            }
+        }
+    } failed:^(NSError *error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    }];
+}
 - (void)terminalGetControlStatusRequest {
     [MBProgressHUD hideHUDForView:self.view animated:YES];
     [MBProgressHUD showHUDIcon:self.view animated:YES];
@@ -185,6 +207,7 @@
         cell.centerLabel.text = @"";
         cell.controlListModel = self.termialControlStatusModel;
         cell.configurationModel = self.configurationModel;
+        cell.switchModel = self.switchModel;
         kWeakSelf(self);
         cell.switchStateChangeBlock = ^(NSIndexPath *indexPath, BOOL isON) {
             kStrongSelf(self);

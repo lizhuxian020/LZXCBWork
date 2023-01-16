@@ -293,6 +293,11 @@
         _ControlConfigTitle_SZBJDXFSCS,
         _ControlConfigTitle_SZXTJG,
         _ControlConfigTitle_ZDLMD,
+        _ControlConfigTitle_LBKG,
+        _ControlConfigTitle_PZJC,
+        _ControlConfigTitle_JZW,
+        _ControlConfigTitle_JJS,
+        _ControlConfigTitle_JSC,
         _ControlConfigTitle_CSHSZ,
         _ControlConfigTitle_SBCQ,
     ]];
@@ -308,6 +313,11 @@
         @"设置转弯补报角度",
         @"设置报警发送次数",
         @"设置心跳间隔",
+        @"振动灵敏度",
+        @"振动灵敏度",
+        @"振动灵敏度",
+        @"振动灵敏度",
+        @"振动灵敏度",
         @"振动灵敏度",
         @"初始化设置",
         @"设备重启"
@@ -326,6 +336,11 @@
         @(0), //一直不显示
         @(targetSpecModel.setGprsHeartbeat),
         @(targetSpecModel.sensitivitySet),
+        @(1),
+        @(1),
+        @(1),
+        @(1),
+        @(1),
         @(targetSpecModel.initializeSet),
         @(targetSpecModel.hardwareReboot),
     ];

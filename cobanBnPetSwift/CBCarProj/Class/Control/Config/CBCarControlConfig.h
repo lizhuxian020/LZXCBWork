@@ -33,8 +33,14 @@
 #define _ControlConfigTitle_SZBJDXFSCS Localized(@"设置报警短信发送次数")
 #define _ControlConfigTitle_SZXTJG Localized(@"设置心跳间隔")
 #define _ControlConfigTitle_ZDLMD Localized(@"振动灵敏度")
+#define _ControlConfigTitle_LBKG Localized(@"喇叭开关")
+#define _ControlConfigTitle_PZJC Localized(@"碰撞检测")
+#define _ControlConfigTitle_JZW  Localized(@"急转弯")
+#define _ControlConfigTitle_JJS  Localized(@"急加速")
+#define _ControlConfigTitle_JSC  Localized(@"急刹车")
 #define _ControlConfigTitle_CSHSZ Localized(@"初始化设置")
 #define _ControlConfigTitle_SBCQ Localized(@"设备重启")
+
 
 
 

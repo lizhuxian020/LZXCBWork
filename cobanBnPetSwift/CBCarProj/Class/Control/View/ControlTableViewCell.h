@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CBTerminalSwitchModel.h"
 @class MINSwitchView;
 @class CBControlModel;
 @class MINControlListDataModel;
@@ -18,6 +19,7 @@
 @property (nonatomic, strong) UILabel *centerLabel;
 @property (nonatomic, strong) UISwitch *switchView;
 @property (nonatomic, strong) UILabel *detailLabel;
+@property (nonatomic, strong) UILabel *switchDetailLabel;
 @property (nonatomic, strong) UIImageView *detailImageView;
 @property (nonatomic, strong) NSIndexPath *indexPath;
 @property (nonatomic, copy) void (^switchStateChangeBlock)(NSIndexPath *indexPath, BOOL isON);
@@ -29,7 +31,7 @@
 @property (nonatomic, strong) CBControlModel *controlModel;
 @property (nonatomic, strong) MINControlListDataModel *controlListModel;
 @property (nonatomic, strong) ConfigurationParameterModel *configurationModel;
-
+@property (nonatomic, strong) CBTerminalSwitchModel *switchModel;
 @end
 
 

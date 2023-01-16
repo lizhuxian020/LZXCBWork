@@ -669,6 +669,7 @@
 		A28C9156297524B9005549C6 /* CBJIashiXingWeiViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A28C9155297524B9005549C6 /* CBJIashiXingWeiViewController.m */; };
 		A28C915929752688005549C6 /* CBJiaShiXingWeiCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A28C915829752688005549C6 /* CBJiaShiXingWeiCell.m */; };
 		A28C915C29752696005549C6 /* CBJiaShiXingWeiModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A28C915B29752696005549C6 /* CBJiaShiXingWeiModel.m */; };
+		A28C916029755881005549C6 /* CBTerminalSwitchModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A28C915F29755881005549C6 /* CBTerminalSwitchModel.m */; };
 		A2BCA2D8294311F700CD4B08 /* CBFencyMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BCA2D7294311F700CD4B08 /* CBFencyMenuView.m */; };
 		A2BCA2DF2943242300CD4B08 /* CBDeviceTool.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BCA2DE2943242300CD4B08 /* CBDeviceTool.m */; };
 		A2BCA2E72943410900CD4B08 /* CBDoubleTimePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BCA2E52943410900CD4B08 /* CBDoubleTimePicker.m */; };
@@ -1902,6 +1903,8 @@
 		A28C915829752688005549C6 /* CBJiaShiXingWeiCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBJiaShiXingWeiCell.m; sourceTree = "<group>"; };
 		A28C915A29752696005549C6 /* CBJiaShiXingWeiModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBJiaShiXingWeiModel.h; sourceTree = "<group>"; };
 		A28C915B29752696005549C6 /* CBJiaShiXingWeiModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBJiaShiXingWeiModel.m; sourceTree = "<group>"; };
+		A28C915E29755881005549C6 /* CBTerminalSwitchModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBTerminalSwitchModel.h; sourceTree = "<group>"; };
+		A28C915F29755881005549C6 /* CBTerminalSwitchModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBTerminalSwitchModel.m; sourceTree = "<group>"; };
 		A2BCA2D6294311F700CD4B08 /* CBFencyMenuView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBFencyMenuView.h; sourceTree = "<group>"; };
 		A2BCA2D7294311F700CD4B08 /* CBFencyMenuView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBFencyMenuView.m; sourceTree = "<group>"; };
 		A2BCA2DD2943242300CD4B08 /* CBDeviceTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBDeviceTool.h; sourceTree = "<group>"; };
@@ -4544,6 +4547,7 @@
 		17CDAAB524CEBE5500BB9F8B /* 终端设置 */ = {
 			isa = PBXGroup;
 			children = (
+				A28C915D2975586C005549C6 /* Model */,
 				17CDAAB624CEBE5500BB9F8B /* CBSetTerminalViewController.h */,
 				17CDAAB724CEBE5500BB9F8B /* CBSetTerminalViewController.m */,
 				17CDAAB824CEBE5500BB9F8B /* 时区设置 */,
@@ -5556,6 +5560,15 @@
 			path = jiashixingwei;
 			sourceTree = "<group>";
 		};
+		A28C915D2975586C005549C6 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				A28C915E29755881005549C6 /* CBTerminalSwitchModel.h */,
+				A28C915F29755881005549C6 /* CBTerminalSwitchModel.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		A2BCA2D9294323ED00CD4B08 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
@@ -6527,6 +6540,7 @@
 				17CDAC1324CEBE5600BB9F8B /* MineTableViewCell.m in Sources */,
 				17CDAB8124CEBE5500BB9F8B /* GGKShape.m in Sources */,
 				17CDABFD24CEBE5600BB9F8B /* MINDatePickerView.m in Sources */,
+				A28C916029755881005549C6 /* CBTerminalSwitchModel.m in Sources */,
 				17CDAB6D24CEBE5500BB9F8B /* RadarData.m in Sources */,
 				435A3A71247EC6FC005ABF5B /* CBPetSelectRecordingVC.swift in Sources */,
 				B1A363632950A0B300FF6A63 /* CBMQTTCarDeviceModel.m in Sources */,
