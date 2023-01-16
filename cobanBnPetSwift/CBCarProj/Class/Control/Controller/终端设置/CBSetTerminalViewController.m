@@ -285,9 +285,15 @@
 //        }
 //        [self.pickerPopView updateTitle:Localized(@"振动灵敏度") menuArray:array seletedTitle:seletStr];
         [self showZDLMD];
+    } else if ([title isEqualToString:_ControlConfigTitle_PZJC]) {
+        [self showPZJC];
+    } else if ([title isEqualToString:_ControlConfigTitle_JZW]) {
+        [self showJZW];
+    } else if ([title isEqualToString:_ControlConfigTitle_JJS]) {
+        [self showJJS];
+    } else if ([title isEqualToString:_ControlConfigTitle_JSC]) {
+        [self showJSC];
     } else if ([title isEqualToString:_ControlConfigTitle_CSHSZ]) {
-//        [self.alertPopView updateTitle:Localized(@"初始化设置") msg:Localized(@"确定初始化?")];
-//        [self.alertPopView popView];
         [self showCSHSZ];
     } else if ([title isEqualToString:_ControlConfigTitle_SBCQ]) {
 //        [self.alertPopView updateTitle:Localized(@"设备重启") msg:Localized(@"确定重启?")];
@@ -451,6 +457,70 @@
         }];
     }] pop];
 }
+- (void)showPZJC {
+    kWeakSelf(self);
+    [[CBCarAlertView viewWithMultiInput:@[Localized(@"碰撞持续时间(ms)"), Localized(@"碰撞加速度(g)")] title:_ControlConfigTitle_PZJC isDigital:YES confirmCanDismiss:nil confrim:^(NSArray<NSString *> * _Nonnull contentStr) {
+        NSString *pzTime = contentStr.firstObject;
+        NSString *pzSpeed = contentStr.lastObject;
+        NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary: @{
+            @"pz_speed": pzSpeed ?: @"",
+            @"pz_time": pzTime ?: @"",
+        }];
+        [weakself terminalEditControlParamRequest:param success:^{
+            weakself.switchModel.pz_speed = pzSpeed ?: @"";
+            weakself.switchModel.pz_time = pzTime ?: @"";
+            [weakself.tableView reloadData];
+        }];
+    }] pop];
+}
+- (void)showJZW {
+    kWeakSelf(self);
+    [[CBCarAlertView viewWithMultiInput:@[Localized(@"转弯角度(度)"), Localized(@"转弯速度(km/h)")] title:_ControlConfigTitle_JZW isDigital:YES confirmCanDismiss:nil confrim:^(NSArray<NSString *> * _Nonnull contentStr) {
+        NSString *angle = contentStr.firstObject;
+        NSString *speed = contentStr.lastObject;
+        NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary: @{
+            @"jzw_speed": speed ?: @"",
+            @"jzw_angle": angle ?: @"",
+        }];
+        [weakself terminalEditControlParamRequest:param success:^{
+            weakself.switchModel.jzw_speed = speed ?: @"";
+            weakself.switchModel.jzw_angle = angle ?: @"";
+            [weakself.tableView reloadData];
+        }];
+    }] pop];
+}
+- (void)showJJS {
+    kWeakSelf(self);
+    [[CBCarAlertView viewWithMultiInput:@[Localized(@"速度增加量(km/h)"), Localized(@"加速时间(s)")] title:_ControlConfigTitle_JJS isDigital:YES confirmCanDismiss:nil confrim:^(NSArray<NSString *> * _Nonnull contentStr) {
+        NSString *speed = contentStr.firstObject;
+        NSString *time = contentStr.lastObject;
+        NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary: @{
+            @"jjs_speed": speed ?: @"",
+            @"jjs_time": time ?: @"",
+        }];
+        [weakself terminalEditControlParamRequest:param success:^{
+            weakself.switchModel.jjs_speed = speed ?: @"";
+            weakself.switchModel.jjs_time = time ?: @"";
+            [weakself.tableView reloadData];
+        }];
+    }] pop];
+}
+- (void)showJSC {
+    kWeakSelf(self);
+    [[CBCarAlertView viewWithMultiInput:@[Localized(@"速度减小量(km/h)"), Localized(@"刹车时间(s)")] title:_ControlConfigTitle_JSC isDigital:YES confirmCanDismiss:nil confrim:^(NSArray<NSString *> * _Nonnull contentStr) {
+        NSString *speed = contentStr.firstObject;
+        NSString *time = contentStr.lastObject;
+        NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary: @{
+            @"jsc_speed": speed ?: @"",
+            @"jsc_time": time ?: @"",
+        }];
+        [weakself terminalEditControlParamRequest:param success:^{
+            weakself.switchModel.jsc_speed = speed ?: @"";
+            weakself.switchModel.jsc_time = time ?: @"";
+            [weakself.tableView reloadData];
+        }];
+    }] pop];
+}
 - (void)showCSHSZ {
     kWeakSelf(self);
     [[CBCarAlertView viewWithAlertTips:Localized(@"确定初始化?") title:_ControlConfigTitle_CSHSZ confrim:^(NSString * _Nonnull contentStr) {
@@ -500,18 +570,21 @@
     }];
 }
 #pragma mark -- 终端设备参数设置
-- (void)terminalEditControlParamRequest:(NSMutableDictionary *)paramters {
+- (void)terminalEditControlParamRequest:(NSMutableDictionary *)paramters success:(void(^)(void))successBLK {
     [paramters setObject:_deviceInfoModelSelect.dno?:@"" forKey:@"dno"];
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     kWeakSelf(self);
     [[NetWorkingManager shared] postWithUrl:@"devParamController/editDevConf" params: paramters succeed:^(id response, BOOL isSucceed) {
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
-        if (isSucceed) {
-            [self getTerminalSettingReqeust];
+        [CBTopAlertView alertSuccess:Localized(@"操作成功")];
+        if (successBLK) {
+            successBLK();
         }
     } failed:^(NSError *error) {
         kStrongSelf(self);
+        [self getTerminalSettingReqeust];
+        [self requestSwichModel];
         [MBProgressHUD hideHUDForView:self.view animated:YES];
     }];
 }
