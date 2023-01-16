@@ -18,6 +18,7 @@
 #import "CBPersonInfoController.h"
 #import "AboutUsViewController.h"
 #import "cobanBnPetSwift-Swift.h"
+#import "CBJIashiXingWeiViewController.h"
 @interface FormViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) NSMutableArray *sectionStatusArr;
 @property (nonatomic, strong) FormProtocalModel *model;
@@ -304,6 +305,10 @@
 //            multimedieVC.hidesBottomBarWhenPushed = YES;
 //            [self.navigationController pushViewController: multimedieVC animated: YES];
 //        }
+        else if ([sectionTitle isEqualToString:Localized(@"驾驶行为报表")]) {
+            CBJIashiXingWeiViewController *vc = [[CBJIashiXingWeiViewController alloc] init];
+            [self.navigationController pushViewController: vc animated: YES];
+        }
         else { // 其他都一样
             FormDateChooseViewController *formDateChooseVC = [[FormDateChooseViewController alloc] init];
             if ([sectionTitle isEqualToString:Localized(@"怠速报表")]) {

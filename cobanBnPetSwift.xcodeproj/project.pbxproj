@@ -666,6 +666,9 @@
 		A28C914C2974F0CC005549C6 /* CBCarMsgCenterDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A28C914B2974F0CC005549C6 /* CBCarMsgCenterDelegate.m */; };
 		A28C914F2974F595005549C6 /* _CBMsgCenterModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A28C914E2974F595005549C6 /* _CBMsgCenterModel.m */; };
 		A28C91522974F5C2005549C6 /* _CBMsgCenterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A28C91512974F5C2005549C6 /* _CBMsgCenterCell.m */; };
+		A28C9156297524B9005549C6 /* CBJIashiXingWeiViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A28C9155297524B9005549C6 /* CBJIashiXingWeiViewController.m */; };
+		A28C915929752688005549C6 /* CBJiaShiXingWeiCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A28C915829752688005549C6 /* CBJiaShiXingWeiCell.m */; };
+		A28C915C29752696005549C6 /* CBJiaShiXingWeiModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A28C915B29752696005549C6 /* CBJiaShiXingWeiModel.m */; };
 		A2BCA2D8294311F700CD4B08 /* CBFencyMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BCA2D7294311F700CD4B08 /* CBFencyMenuView.m */; };
 		A2BCA2DF2943242300CD4B08 /* CBDeviceTool.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BCA2DE2943242300CD4B08 /* CBDeviceTool.m */; };
 		A2BCA2E72943410900CD4B08 /* CBDoubleTimePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BCA2E52943410900CD4B08 /* CBDoubleTimePicker.m */; };
@@ -1893,6 +1896,12 @@
 		A28C914E2974F595005549C6 /* _CBMsgCenterModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _CBMsgCenterModel.m; sourceTree = "<group>"; };
 		A28C91502974F5C2005549C6 /* _CBMsgCenterCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBMsgCenterCell.h; sourceTree = "<group>"; };
 		A28C91512974F5C2005549C6 /* _CBMsgCenterCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _CBMsgCenterCell.m; sourceTree = "<group>"; };
+		A28C9154297524B9005549C6 /* CBJIashiXingWeiViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBJIashiXingWeiViewController.h; sourceTree = "<group>"; };
+		A28C9155297524B9005549C6 /* CBJIashiXingWeiViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBJIashiXingWeiViewController.m; sourceTree = "<group>"; };
+		A28C915729752688005549C6 /* CBJiaShiXingWeiCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBJiaShiXingWeiCell.h; sourceTree = "<group>"; };
+		A28C915829752688005549C6 /* CBJiaShiXingWeiCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBJiaShiXingWeiCell.m; sourceTree = "<group>"; };
+		A28C915A29752696005549C6 /* CBJiaShiXingWeiModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBJiaShiXingWeiModel.h; sourceTree = "<group>"; };
+		A28C915B29752696005549C6 /* CBJiaShiXingWeiModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBJiaShiXingWeiModel.m; sourceTree = "<group>"; };
 		A2BCA2D6294311F700CD4B08 /* CBFencyMenuView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBFencyMenuView.h; sourceTree = "<group>"; };
 		A2BCA2D7294311F700CD4B08 /* CBFencyMenuView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBFencyMenuView.m; sourceTree = "<group>"; };
 		A2BCA2DD2943242300CD4B08 /* CBDeviceTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBDeviceTool.h; sourceTree = "<group>"; };
@@ -4037,6 +4046,7 @@
 		17CDA9DD24CEBE5400BB9F8B /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				A28C91532975249A005549C6 /* jiashixingwei */,
 				17CDA9EB24CEBE5400BB9F8B /* FormViewController.h */,
 				17CDA9DF24CEBE5400BB9F8B /* FormViewController.m */,
 				17CDA9EF24CEBE5400BB9F8B /* FormDateChooseViewController.h */,
@@ -5533,6 +5543,19 @@
 			path = Delegate;
 			sourceTree = "<group>";
 		};
+		A28C91532975249A005549C6 /* jiashixingwei */ = {
+			isa = PBXGroup;
+			children = (
+				A28C9154297524B9005549C6 /* CBJIashiXingWeiViewController.h */,
+				A28C9155297524B9005549C6 /* CBJIashiXingWeiViewController.m */,
+				A28C915729752688005549C6 /* CBJiaShiXingWeiCell.h */,
+				A28C915829752688005549C6 /* CBJiaShiXingWeiCell.m */,
+				A28C915A29752696005549C6 /* CBJiaShiXingWeiModel.h */,
+				A28C915B29752696005549C6 /* CBJiaShiXingWeiModel.m */,
+			);
+			path = jiashixingwei;
+			sourceTree = "<group>";
+		};
 		A2BCA2D9294323ED00CD4B08 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
@@ -6381,6 +6404,7 @@
 				433FF40A2485336400158301 /* CBPetFuncCvstionFootView.swift in Sources */,
 				17CDABE824CEBE5600BB9F8B /* DownloadVideoViewController.m in Sources */,
 				1782BF3024C0427E00544C36 /* ChangeBindPhoneNumViewController.m in Sources */,
+				A28C915C29752696005549C6 /* CBJiaShiXingWeiModel.m in Sources */,
 				17CDAC0524CEBE5600BB9F8B /* SubAccountManagerViewController.m in Sources */,
 				17CDABD624CEBE5600BB9F8B /* lapi.c in Sources */,
 				17CDAC4424CEBE5600BB9F8B /* CBNewFencePickPointView.m in Sources */,
@@ -6572,6 +6596,7 @@
 				439E906C2475A497004ED9AD /* CBPetLoginViewController.swift in Sources */,
 				1782BF2024C0427E00544C36 /* UIView+BGFrame.m in Sources */,
 				17AA1D5B24D2AEAB0061445D /* CBPetAvatarMarkView.swift in Sources */,
+				A28C9156297524B9005549C6 /* CBJIashiXingWeiViewController.m in Sources */,
 				17CDAC4524CEBE5600BB9F8B /* CBNewFenceMenuView.m in Sources */,
 				17F28DE32488D5FC003C4010 /* CBPetMsgCterListenRcdView.swift in Sources */,
 				434602FA2481552C00BDDE5E /* CBPetFuncLocatePopView.swift in Sources */,
@@ -6655,6 +6680,7 @@
 				17CDAC4824CEBE5600BB9F8B /* CBOBDModel.m in Sources */,
 				1782BF3D24C0427E00544C36 /* PersonalViewController.m in Sources */,
 				1782BF4F24C0427E00544C36 /* CBHomeLocationBottomView.m in Sources */,
+				A28C915929752688005549C6 /* CBJiaShiXingWeiCell.m in Sources */,
 				1782BF1A24C0427D00544C36 /* UITextField+YLYXTextLimit.m in Sources */,
 				B1F85A3A2937A57A00A90871 /* _CBLocateModeView.m in Sources */,
 				17F28DD42488D3B7003C4010 /* CBPetMsgCterListenRcdVC.swift in Sources */,
