@@ -314,11 +314,11 @@
         @"设置报警发送次数",
         @"设置心跳间隔",
         @"振动灵敏度",
-        @"振动灵敏度",
-        @"振动灵敏度",
-        @"振动灵敏度",
-        @"振动灵敏度",
-        @"振动灵敏度",
+        @"喇叭开关",
+        @"碰撞检测",
+        @"急转弯",
+        @"急加速",
+        @"急刹车",
         @"初始化设置",
         @"设备重启"
     ]];
@@ -336,11 +336,11 @@
         @(0), //一直不显示
         @(targetSpecModel.setGprsHeartbeat),
         @(targetSpecModel.sensitivitySet),
-        @(1),
-        @(1),
-        @(1),
-        @(1),
-        @(1),
+        @(targetSpecModel.hornSwitch),
+        @(targetSpecModel.pzSwitch),
+        @(targetSpecModel.jzwSwitch),
+        @(targetSpecModel.jjsSwitch),
+        @(targetSpecModel.jscSwitch),
         @(targetSpecModel.initializeSet),
         @(targetSpecModel.hardwareReboot),
     ];

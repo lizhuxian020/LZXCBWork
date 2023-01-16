@@ -73,7 +73,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL sensitivitySet;//: 1    振动灵敏度设置
 @property (nonatomic, assign) BOOL tankVolume;//: 1    油箱容积设置
 @property (nonatomic, assign) BOOL mileageInitialValue;//: 1    里程初始值
-
+@property (nonatomic, assign) BOOL hornSwitch;
+@property (nonatomic, assign) BOOL pzSwitch;
+@property (nonatomic, assign) BOOL jzwSwitch;
+@property (nonatomic, assign) BOOL jjsSwitch;
+@property (nonatomic, assign) BOOL jscSwitch;
 
 @property(nonatomic, copy) NSString *proto;
 @property(nonatomic, copy) NSString *tbDevModelId;
