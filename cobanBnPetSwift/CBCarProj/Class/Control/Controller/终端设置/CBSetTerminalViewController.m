@@ -539,20 +539,43 @@
 - (void)terminalSwitchClick:(NSString *)titleStr status:(NSString *)status {
     NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
     [paramters setObject:_deviceInfoModelSelect.dno?:@"" forKey:@"dno"];
+    kWeakSelf(self);
     if ([titleStr isEqualToString:_ControlConfigTitle_ACCGZTZ]) {
         [paramters setObject:status forKey:@"accNotice"];
+        [self terminalEditControlNewRequest:paramters success:^{
+            weakself.termialControlStatusModel.accNotice = status.intValue;
+        }];
     } else if ([titleStr isEqualToString:_ControlConfigTitle_PYYZ]) {
         [paramters setObject:status forKey:@"gpsFloat"];
-    }
-    kWeakSelf(self);
-    [self terminalEditControlNewRequest:paramters success:^{
-        if ([titleStr isEqualToString:_ControlConfigTitle_ACCGZTZ]) {
-            weakself.termialControlStatusModel.accNotice = status.intValue;
-        } else if ([titleStr isEqualToString:_ControlConfigTitle_PYYZ]) {
+        [self terminalEditControlNewRequest:paramters success:^{
             weakself.termialControlStatusModel.gpsFloat = status.intValue;
-        }
-        
-    }];
+        }];
+    } else if ([titleStr isEqualToString:_ControlConfigTitle_LBKG]) {
+        [paramters setObject:status forKey:@"horn_switch"];
+        [self terminalEditControlParamRequest:paramters success:^{
+            weakself.switchModel.horn_switch = status.boolValue;
+        }];
+    } else if ([titleStr isEqualToString:_ControlConfigTitle_PZJC]) {
+        [paramters setObject:status forKey:@"horn_switch"];
+        [self terminalEditControlParamRequest:paramters success:^{
+            weakself.switchModel.pz_switch = status.boolValue;
+        }];
+    } else if ([titleStr isEqualToString:_ControlConfigTitle_JZW]) {
+        [paramters setObject:status forKey:@"horn_switch"];
+        [self terminalEditControlParamRequest:paramters success:^{
+            weakself.switchModel.jzw_switch = status.boolValue;
+        }];
+    } else if ([titleStr isEqualToString:_ControlConfigTitle_JJS]) {
+        [paramters setObject:status forKey:@"horn_switch"];
+        [self terminalEditControlParamRequest:paramters success:^{
+            weakself.switchModel.jjs_switch = status.boolValue;
+        }];
+    } else if ([titleStr isEqualToString:_ControlConfigTitle_JSC]) {
+        [paramters setObject:status forKey:@"horn_switch"];
+        [self terminalEditControlParamRequest:paramters success:^{
+            weakself.switchModel.jsc_switch = status.boolValue;
+        }];
+    }
 }
 #pragma mark -- 终端设备开关设置
 - (void)terminalEditControlSwitchRequest:(NSMutableDictionary *)paramters {
