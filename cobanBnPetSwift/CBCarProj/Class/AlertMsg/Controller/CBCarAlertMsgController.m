@@ -55,14 +55,16 @@
     [self initBarRightImageName:@"更多" target:self action:@selector(showPopView)];
     self.popView = [_CBAlertMsgMenuPopView new];
     [self.popView setDidClick:^{
-//        [weakself requestAllRead];
+        [weakself requestAllRead];
     }];
     [self.popView setDidClickCheck:^{
-//        [weakself switchTabBarThird];
+        [weakself switchTabBarThird];
     }];
 
     self.alertMsgDelegate = [CBCarAlertMsgDelegate new];
+    self.alertMsgDelegate.navigationController = self.navigationController;
     self.msgCenterDelegate = [CBCarMsgCenterDelegate new];
+    self.msgCenterDelegate.navigationController = self.navigationController;
     
     self.sliderArray = [NSMutableArray arrayWithArray:@[Localized(@"报警消息"), Localized(@"消息通知")]];
     [self initTopBtns];
@@ -206,31 +208,18 @@
         }];
 }
 
-//- (void)switchTabBarThird {
-//    UITabBarController *tabVC = UIApplication.sharedApplication.keyWindow.rootViewController;
-//    if (!tabVC || ![tabVC isKindOfClass:UITabBarController.class]) {
-//        return;;
-//    }
-//    [self.navigationController popToRootViewControllerAnimated:NO];
-//    tabVC.selectedIndex = 2;
-//}
+- (void)switchTabBarThird {
+    UITabBarController *tabVC = UIApplication.sharedApplication.keyWindow.rootViewController;
+    if (!tabVC || ![tabVC isKindOfClass:UITabBarController.class]) {
+        return;;
+    }
+    [self.navigationController popToRootViewControllerAnimated:NO];
+    tabVC.selectedIndex = 2;
+}
 
 - (void)showPopView {
     [self.popView pop];
 }
-
-
-//- (void)requestToStop:(_CBCarAlertMsgModel *)model {
-//    NSString *url = [NSString stringWithFormat:@"%@%@", @"alarmDealController/updateAlarmDeal?id=", model.iid ];// 1595591725143363589
-//    kWeakSelf(self);
-//    [[NetWorkingManager shared] getWithUrl:url params:nil succeed:^(id response, BOOL isSucceed) {
-//        kStrongSelf(self);
-//        [HUD showHUDWithText:Localized(@"操作成功")];
-//        [self requestData];
-//        } failed:^(NSError *error) {
-//
-//        }];
-//}
 
 #pragma mark -- scrollView的代理方法
 -(void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {

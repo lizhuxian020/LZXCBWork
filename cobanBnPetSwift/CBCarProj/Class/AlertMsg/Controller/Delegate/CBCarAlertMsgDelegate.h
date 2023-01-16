@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CBCarAlertMsgDelegate : NSObject<UITableViewDelegate, UITableViewDataSource>
 
+@property (nonatomic, strong) UINavigationController *navigationController;
 @property (nonatomic, strong) NSArray<_CBCarAlertMsgModel *> *dataArr;
 
 @property (nonatomic, strong) UITableView *tableView;

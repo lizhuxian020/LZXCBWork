@@ -10,6 +10,12 @@
 
 @implementation _CBMsgCenterModel
 
++ (NSDictionary *)mj_replacedKeyFromPropertyName {
+    return @{
+             @"iid":@"id"
+             };
+}
+
 - (NSString *)descVehicleStatus {
     
     NSDictionary *dic = @{

@@ -73,11 +73,25 @@
     cell.model = model;
     kWeakSelf(self);
     [cell setDidClickStop:^{
-//        [weakself requestToStop:model];
+        [weakself requestToStop:model];
     }];
     [cell setDidClickCheck:^{
-//        [weakself.navigationController popViewControllerAnimated:YES];
+        [weakself.navigationController popViewControllerAnimated:YES];
     }];
     return cell;
+}
+
+- (void)requestToStop:(_CBCarAlertMsgModel *)model {
+    kWeakSelf(self);
+    [[NetWorkingManager shared] getWithUrl:@"alarmDealController/updateAlarmDeal" params:@{
+        @"id": model.iid,
+        @"type": @"1",
+    } succeed:^(id response, BOOL isSucceed) {
+        kStrongSelf(self);
+        [HUD showHUDWithText:Localized(@"操作成功")];
+        [self reload];
+        } failed:^(NSError *error) {
+
+        }];
 }
 @end

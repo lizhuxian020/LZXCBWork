@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 //        "lat": 22.551377,
 //        "speed": null,
 //        "vehicleStatus": "31"
-
+@property(nonatomic, copy) NSString *iid;
 @property (nonatomic, copy) NSString *name ;
 @property (nonatomic, copy) NSString *warnTime ;
 @property (nonatomic, copy) NSString *vehicleStatus ;
