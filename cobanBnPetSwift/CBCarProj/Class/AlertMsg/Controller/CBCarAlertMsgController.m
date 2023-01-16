@@ -10,6 +10,8 @@
 #import "_CBCarAlertMsgCell.h"
 #import "_CBCarAlertMsgModel.h"
 #import "_CBAlertMsgMenuPopView.h"
+#import "CBCarAlertMsgDelegate.h"
+#import "CBCarMsgCenterDelegate.h"
 
 #define __MsgUI_TitleHeight 50
 #define __MsgUI_SelectColor kAppMainColor
@@ -17,7 +19,10 @@
 
 @interface CBCarAlertMsgController ()<UITableViewDelegate, UITableViewDataSource>
 
-@property (nonatomic, strong) NSArray<_CBCarAlertMsgModel *> *dataArr;
+//@property (nonatomic, strong) NSArray<_CBCarAlertMsgModel *> *alertMsgdataArr;
+@property (nonatomic, strong) CBCarAlertMsgDelegate *alertMsgDelegate;
+
+@property (nonatomic, strong) CBCarMsgCenterDelegate *msgCenterDelegate;
 
 @property (nonatomic, strong) _CBAlertMsgMenuPopView *popView;
 
@@ -35,11 +40,9 @@
 @property (nonatomic, strong) NSMutableArray *sliderArray;
 @property (nonatomic, strong) NSMutableArray *buttonsArray;
 
-@property (nonatomic,assign) NSInteger index;
+//@property (nonatomic,assign) NSInteger index;
 /** 选中btn  */
 @property (nonatomic, strong) UIButton *selectBtn;
-@property (nonatomic, strong) UITableView *alertMsgTableView;
-@property (nonatomic, strong) UITableView *msgCenterTableView;
 @end
 
 @implementation CBCarAlertMsgController
@@ -52,12 +55,14 @@
     [self initBarRightImageName:@"更多" target:self action:@selector(showPopView)];
     self.popView = [_CBAlertMsgMenuPopView new];
     [self.popView setDidClick:^{
-        [weakself requestAllRead];
+//        [weakself requestAllRead];
     }];
     [self.popView setDidClickCheck:^{
-        [weakself switchTabBarThird];
+//        [weakself switchTabBarThird];
     }];
 
+    self.alertMsgDelegate = [CBCarAlertMsgDelegate new];
+    self.msgCenterDelegate = [CBCarMsgCenterDelegate new];
     
     self.sliderArray = [NSMutableArray arrayWithArray:@[Localized(@"报警消息"), Localized(@"消息通知")]];
     [self initTopBtns];
@@ -67,6 +72,9 @@
     [self initScrollView];
 
     [self initDownTableViews];
+    
+    [self.alertMsgDelegate reload];
+    [self.msgCenterDelegate reload];
 }
 
 #pragma mark -- 实例化顶部菜单
@@ -106,9 +114,9 @@
 - (void)tabButton:(id)sender {
 //    UIButton *button = sender;
     // 记录选择的菜单
-    self.index = [self.buttonsArray indexOfObject:sender];
-    [self changeBackColorWithPage:self.index];
-    [_mainScrollView setContentOffset:CGPointMake((self.index) * self.view.width, 0) animated:YES];
+    self.currentPage = [self.buttonsArray indexOfObject:sender];
+    [self changeBackColorWithPage:self.currentPage];
+    [_mainScrollView setContentOffset:CGPointMake((self.currentPage) * self.view.width, 0) animated:YES];
     
 //    CBHomeLeftMenuTableView *reuseTableView = _tableViewArray[self.index];
 //    CBHomeLeftMenuSliderModel *model = _sliderArray[self.index];
@@ -167,49 +175,20 @@
             make.width.height.equalTo(_mainScrollView);
             
         }];
-//        [self.view addSubview:self.tableView];
-//        self.tableView.delegate = self;
-//        self.tableView.dataSource = self;
-//        [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.edges.equalTo(@0);
-//        }];
-//        [self.tableView registerClass:_CBCarAlertMsgCell.class forCellReuseIdentifier:@"_CBCarAlertMsgCell"];
-//
-//        self.tableView.mj_header = [MJRefreshStateHeader headerWithRefreshingBlock:^{
-//            [weakself requestData];
-//        }];
-//
-//        [self requestData];
         last = contentView;
         if (i == 0) {
-            [contentView addSubview:self.alertMsgTableView];
-            [self.alertMsgTableView mas_makeConstraints:^(MASConstraintMaker *make) {
+            [contentView addSubview:self.alertMsgDelegate.tableView];
+            [self.alertMsgDelegate.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.edges.equalTo(@0);
             }];
         } else {
-            [contentView addSubview:self.msgCenterTableView];
-            [self.msgCenterTableView mas_makeConstraints:^(MASConstraintMaker *make) {
+            [contentView addSubview:self.msgCenterDelegate.tableView];
+            [self.msgCenterDelegate.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.edges.equalTo(@0);
             }];
         }
         
     }
-}
-
-- (UITableView *)alertMsgTableView {
-    if (!_alertMsgTableView) {
-        _alertMsgTableView = [[UITableView alloc] init];
-        _alertMsgTableView.backgroundColor = kBackColor;
-        _alertMsgTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        _alertMsgTableView.delegate = self;
-        self.tableView.dataSource = self;
-        [self.tableView registerClass:_CBCarAlertMsgCell.class forCellReuseIdentifier:@"_CBCarAlertMsgCell"];
-        kWeakSelf(self);
-        self.tableView.mj_header = [MJRefreshStateHeader headerWithRefreshingBlock:^{
-            [weakself requestData];
-        }];
-    }
-    return _alertMsgTableView;
 }
 
 - (void)requestAllRead {
@@ -227,74 +206,31 @@
         }];
 }
 
-- (void)switchTabBarThird {
-    UITabBarController *tabVC = UIApplication.sharedApplication.keyWindow.rootViewController;
-    if (!tabVC || ![tabVC isKindOfClass:UITabBarController.class]) {
-        return;;
-    }
-    [self.navigationController popToRootViewControllerAnimated:NO];
-    tabVC.selectedIndex = 2;
-}
+//- (void)switchTabBarThird {
+//    UITabBarController *tabVC = UIApplication.sharedApplication.keyWindow.rootViewController;
+//    if (!tabVC || ![tabVC isKindOfClass:UITabBarController.class]) {
+//        return;;
+//    }
+//    [self.navigationController popToRootViewControllerAnimated:NO];
+//    tabVC.selectedIndex = 2;
+//}
 
 - (void)showPopView {
     [self.popView pop];
 }
 
-- (void)requestData {
-    [MBProgressHUD showHUDIcon:self.view animated:YES];
-    kWeakSelf(self);
-    [[NetWorkingManager shared] getWithUrl:@"/alarmDealController/getMyWarnList" params:nil succeed:^(id response, BOOL isSucceed) {
-        
-        kStrongSelf(self);
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
-        [self.tableView.mj_header endRefreshing];
-        if (!isSucceed) {
-            return;
-        }
-        if (response && [response[@"data"] isKindOfClass:NSArray.class]) {
-            self.dataArr = [_CBCarAlertMsgModel mj_objectArrayWithKeyValuesArray:response[@"data"]];
-            [self.tableView reloadData];
-        }
-        } failed:^(NSError *error) {
-            kStrongSelf(self);
-            [self.tableView.mj_header endRefreshing];
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
-        }];
-}
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.dataArr.count;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    _CBCarAlertMsgCell *cell = [tableView dequeueReusableCellWithIdentifier:@"_CBCarAlertMsgCell"];
-    _CBCarAlertMsgModel *model = self.dataArr[indexPath.row];
-    cell.model = model;
-    kWeakSelf(self);
-    [cell setDidClickStop:^{
-        [weakself requestToStop:model];
-    }];
-    [cell setDidClickCheck:^{
-        [weakself.navigationController popViewControllerAnimated:YES];
-    }];
-    return cell;
-}
-
-- (void)requestToStop:(_CBCarAlertMsgModel *)model {
-    NSString *url = [NSString stringWithFormat:@"%@%@", @"alarmDealController/updateAlarmDeal?id=", model.iid ];// 1595591725143363589
-    kWeakSelf(self);
-    [[NetWorkingManager shared] getWithUrl:url params:nil succeed:^(id response, BOOL isSucceed) {
-        kStrongSelf(self);
-        [HUD showHUDWithText:Localized(@"操作成功")];
-        [self requestData];
-        } failed:^(NSError *error) {
-            
-        }];
-}
+//- (void)requestToStop:(_CBCarAlertMsgModel *)model {
+//    NSString *url = [NSString stringWithFormat:@"%@%@", @"alarmDealController/updateAlarmDeal?id=", model.iid ];// 1595591725143363589
+//    kWeakSelf(self);
+//    [[NetWorkingManager shared] getWithUrl:url params:nil succeed:^(id response, BOOL isSucceed) {
+//        kStrongSelf(self);
+//        [HUD showHUDWithText:Localized(@"操作成功")];
+//        [self requestData];
+//        } failed:^(NSError *error) {
+//
+//        }];
+//}
 
 #pragma mark -- scrollView的代理方法
 -(void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
@@ -320,7 +256,7 @@
 }
 //#pragma mark --根据scrollView的滚动位置复用tableView，减少内存开支
 - (void)updateTableWithPageNumber:(NSUInteger)pageNumber {
-    self.index = pageNumber;
+    self.currentPage = pageNumber;
     [self changeBackColorWithPage:pageNumber];
 //    int tabviewTag = pageNumber % 2;
 //    CGRect tableNewFrame = CGRectMake(pageNumber*KLeftMenuWidth, 0, KLeftMenuWidth, _mainScrollView.frame.size.height);

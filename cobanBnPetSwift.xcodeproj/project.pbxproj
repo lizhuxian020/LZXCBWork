@@ -662,6 +662,10 @@
 		A2555D4A29503F00005F5963 /* CBMQTTManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A2555D4929503F00005F5963 /* CBMQTTManager.m */; };
 		A2555D4E29505FDC005F5963 /* CBCarDeviceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A2555D4D29505FDC005F5963 /* CBCarDeviceManager.m */; };
 		A2555D5529515DBF005F5963 /* _CBSubAccountEditView.m in Sources */ = {isa = PBXBuildFile; fileRef = A2555D5429515DBF005F5963 /* _CBSubAccountEditView.m */; };
+		A28C91492974F0BB005549C6 /* CBCarAlertMsgDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A28C91482974F0BB005549C6 /* CBCarAlertMsgDelegate.m */; };
+		A28C914C2974F0CC005549C6 /* CBCarMsgCenterDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A28C914B2974F0CC005549C6 /* CBCarMsgCenterDelegate.m */; };
+		A28C914F2974F595005549C6 /* _CBMsgCenterModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A28C914E2974F595005549C6 /* _CBMsgCenterModel.m */; };
+		A28C91522974F5C2005549C6 /* _CBMsgCenterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A28C91512974F5C2005549C6 /* _CBMsgCenterCell.m */; };
 		A2BCA2D8294311F700CD4B08 /* CBFencyMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BCA2D7294311F700CD4B08 /* CBFencyMenuView.m */; };
 		A2BCA2DF2943242300CD4B08 /* CBDeviceTool.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BCA2DE2943242300CD4B08 /* CBDeviceTool.m */; };
 		A2BCA2E72943410900CD4B08 /* CBDoubleTimePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BCA2E52943410900CD4B08 /* CBDoubleTimePicker.m */; };
@@ -1881,6 +1885,14 @@
 		A2555D4D29505FDC005F5963 /* CBCarDeviceManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBCarDeviceManager.m; sourceTree = "<group>"; };
 		A2555D5329515DBF005F5963 /* _CBSubAccountEditView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBSubAccountEditView.h; sourceTree = "<group>"; };
 		A2555D5429515DBF005F5963 /* _CBSubAccountEditView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _CBSubAccountEditView.m; sourceTree = "<group>"; };
+		A28C91472974F0BB005549C6 /* CBCarAlertMsgDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBCarAlertMsgDelegate.h; sourceTree = "<group>"; };
+		A28C91482974F0BB005549C6 /* CBCarAlertMsgDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBCarAlertMsgDelegate.m; sourceTree = "<group>"; };
+		A28C914A2974F0CC005549C6 /* CBCarMsgCenterDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBCarMsgCenterDelegate.h; sourceTree = "<group>"; };
+		A28C914B2974F0CC005549C6 /* CBCarMsgCenterDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBCarMsgCenterDelegate.m; sourceTree = "<group>"; };
+		A28C914D2974F595005549C6 /* _CBMsgCenterModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBMsgCenterModel.h; sourceTree = "<group>"; };
+		A28C914E2974F595005549C6 /* _CBMsgCenterModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _CBMsgCenterModel.m; sourceTree = "<group>"; };
+		A28C91502974F5C2005549C6 /* _CBMsgCenterCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBMsgCenterCell.h; sourceTree = "<group>"; };
+		A28C91512974F5C2005549C6 /* _CBMsgCenterCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _CBMsgCenterCell.m; sourceTree = "<group>"; };
 		A2BCA2D6294311F700CD4B08 /* CBFencyMenuView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBFencyMenuView.h; sourceTree = "<group>"; };
 		A2BCA2D7294311F700CD4B08 /* CBFencyMenuView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBFencyMenuView.m; sourceTree = "<group>"; };
 		A2BCA2DD2943242300CD4B08 /* CBDeviceTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBDeviceTool.h; sourceTree = "<group>"; };
@@ -5510,6 +5522,17 @@
 			path = CarDeviceManager;
 			sourceTree = "<group>";
 		};
+		A28C91462974F0AA005549C6 /* Delegate */ = {
+			isa = PBXGroup;
+			children = (
+				A28C91472974F0BB005549C6 /* CBCarAlertMsgDelegate.h */,
+				A28C91482974F0BB005549C6 /* CBCarAlertMsgDelegate.m */,
+				A28C914A2974F0CC005549C6 /* CBCarMsgCenterDelegate.h */,
+				A28C914B2974F0CC005549C6 /* CBCarMsgCenterDelegate.m */,
+			);
+			path = Delegate;
+			sourceTree = "<group>";
+		};
 		A2BCA2D9294323ED00CD4B08 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
@@ -5815,6 +5838,7 @@
 		B1D0D08B292FC7F400ECA328 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				A28C91462974F0AA005549C6 /* Delegate */,
 				B1D0D08C292FC80900ECA328 /* CBCarAlertMsgController.h */,
 				B1D0D08D292FC80900ECA328 /* CBCarAlertMsgController.m */,
 			);
@@ -5828,6 +5852,8 @@
 				B1D0D091292FCAD300ECA328 /* _CBCarAlertMsgCell.m */,
 				B19D6A662932586A00D2420B /* _CBAlertMsgMenuPopView.h */,
 				B19D6A672932586A00D2420B /* _CBAlertMsgMenuPopView.m */,
+				A28C91502974F5C2005549C6 /* _CBMsgCenterCell.h */,
+				A28C91512974F5C2005549C6 /* _CBMsgCenterCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -5837,6 +5863,8 @@
 			children = (
 				B1D0D094292FD2D900ECA328 /* _CBCarAlertMsgModel.h */,
 				B1D0D095292FD2D900ECA328 /* _CBCarAlertMsgModel.m */,
+				A28C914D2974F595005549C6 /* _CBMsgCenterModel.h */,
+				A28C914E2974F595005549C6 /* _CBMsgCenterModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -6182,6 +6210,7 @@
 				17CDAC2224CEBE5600BB9F8B /* CBSportAnnotation.m in Sources */,
 				17CDABF824CEBE5600BB9F8B /* PictureClickView.m in Sources */,
 				17CDAB5924CEBE5500BB9F8B /* NumberData.m in Sources */,
+				A28C91522974F5C2005549C6 /* _CBMsgCenterCell.m in Sources */,
 				17CDAB8324CEBE5500BB9F8B /* PieAnimationManager.m in Sources */,
 				B1212C642795CE8B0044E7CC /* CBPetSwitchPetAlertView.swift in Sources */,
 				B11EBFDF29294F790000DA24 /* CBCBCarMineHeaderView.m in Sources */,
@@ -6206,6 +6235,7 @@
 				17CDABEA24CEBE5600BB9F8B /* LineSingleChartModel.m in Sources */,
 				1718B77124A9D9AE00C25A1D /* CBPetChatPlayVoiceManager.swift in Sources */,
 				17CDAC0224CEBE5600BB9F8B /* MyDeviceDetailViewController.m in Sources */,
+				A28C914C2974F0CC005549C6 /* CBCarMsgCenterDelegate.m in Sources */,
 				1798C94924A058C300C9DB35 /* CBPetEpidemicRcdPopView.swift in Sources */,
 				4346030D2482434F00BDDE5E /* CBPetChatPetmessageView.swift in Sources */,
 				439E90602475A497004ED9AD /* CBPetHomeInfoModel.swift in Sources */,
@@ -6417,6 +6447,7 @@
 				17CDAC5024CEBE5600BB9F8B /* MultiplePhotoModel.m in Sources */,
 				17CDABC724CEBE5600BB9F8B /* lstring.c in Sources */,
 				17CDAB7924CEBE5500BB9F8B /* GGCircle.m in Sources */,
+				A28C914F2974F595005549C6 /* _CBMsgCenterModel.m in Sources */,
 				17CDAB6924CEBE5500BB9F8B /* LineBarGird.m in Sources */,
 				B1F3766F293B2F620034D4D8 /* _CBInstallInfoView.m in Sources */,
 				17CDAC2024CEBE5600BB9F8B /* CBHomeLeftMenuModel.m in Sources */,
@@ -6534,6 +6565,7 @@
 				17CDAB9524CEBE5500BB9F8B /* NSArray+GGGraphics.m in Sources */,
 				17CDAC4624CEBE5600BB9F8B /* MoveWarmViewController.m in Sources */,
 				17CDAB4C24CEBE5500BB9F8B /* UUBarChart.m in Sources */,
+				A28C91492974F0BB005549C6 /* CBCarAlertMsgDelegate.m in Sources */,
 				173CD54F24C7E9F700471225 /* CBPetUpdatePwdViewController.swift in Sources */,
 				1751949C248494C100D7D415 /* CBPetFuncConversationVC.swift in Sources */,
 				17CDAC6924CEBE5600BB9F8B /* ControlTableViewCell.m in Sources */,

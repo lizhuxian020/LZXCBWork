@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy) NSString *warnTime;
 @property(nonatomic, copy) NSString *type;
 @property(nonatomic, copy) NSString *iid;
-
+@property (nonatomic, copy) NSString *timeZone ; /** <##> **/
 //        "fenceName": null,
 //        "lng": 113.90869863430072,
 //        "warnTime": 1669253686000,

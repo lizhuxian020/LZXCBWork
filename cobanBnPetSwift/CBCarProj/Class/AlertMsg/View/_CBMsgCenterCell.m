@@ -1,14 +1,14 @@
 //
-//  _CBCarAlertMsgCell.m
+//  _CBMsgCenterCell.m
 //  cobanBnPetSwift
 //
-//  Created by lee on 2022/11/24.
-//  Copyright © 2022 coban. All rights reserved.
+//  Created by zzer on 2023/1/16.
+//  Copyright © 2023 coban. All rights reserved.
 //
 
-#import "_CBCarAlertMsgCell.h"
+#import "_CBMsgCenterCell.h"
 
-@interface _CBCarAlertMsgCell ()
+@interface _CBMsgCenterCell ()
 
 @property (nonatomic, strong) UIView *myContentView;
 
@@ -24,7 +24,7 @@
 @property (nonatomic, strong) UIButton *stopBtn;
 @end
 
-@implementation _CBCarAlertMsgCell
+@implementation _CBMsgCenterCell
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -92,81 +92,30 @@
         make.bottom.equalTo(@-20);
     }];
     
-    self.stopBtn = [MINUtils createBtnWithRadius:20 title:Localized(@"停止报警")];
-    self.stopBtn.backgroundColor = kAppMainColor;
-    [self.myContentView addSubview:self.stopBtn];
-    [self.stopBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+    self.checkBtn = [MINUtils createBtnWithRadius:20 title:Localized(@"查看")];
+    self.checkBtn.backgroundColor = kAppMainColor;
+    [self.myContentView addSubview:self.checkBtn];
+    [self.checkBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.actionT);
         make.right.equalTo(@-10);
         make.width.equalTo(@120);
         make.height.equalTo(@40);
     }];
     
-    self.checkBtn = [MINUtils createBtnWithRadius:20 title:Localized(@"查看")];
-    self.checkBtn.layer.borderColor = kAppMainColor.CGColor;
-    self.checkBtn.layer.borderWidth = 1;
-    self.checkBtn.backgroundColor = UIColor.whiteColor;
-    [self.checkBtn setTitleColor:kAppMainColor forState:UIControlStateNormal];
-    [self.myContentView addSubview:self.checkBtn];
-    [self.checkBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(self.actionT);
-        make.right.equalTo(self.stopBtn.mas_left).mas_offset(-10);
-        make.width.equalTo(@120);
-        make.height.equalTo(@40);
-    }];
-    
-    kWeakSelf(self);
-    [self.stopBtn bk_whenTapped:^{
-        weakself.didClickStop();
-    }];
-    
+    kWeakSelf(self)
     [self.checkBtn bk_whenTapped:^{
         weakself.didClickCheck();
     }];
 }
 
-- (void)setModel:(_CBCarAlertMsgModel *)model {
+- (void)setModel:(_CBMsgCenterModel *)model {
     _model = model;
     self.nameLbl.text = model.name;
     
     self.timeLbl.text = [Utils convertTimeWithTimeIntervalString:model.warnTime?:@"" timeZone:model.timeZone?:@""];
+//    
+    self.typeLbl.text = model.descVehicleStatus;
     
-    self.typeLbl.text = [self type:model.type];
-    
-}
-
-- (NSString *)type:(NSString *)type {
-    
-    NSDictionary *dic = @{
-    @"0":Localized(@"SOS报警"),
-    @"1":Localized(@"超速报警"),
-    @"2":Localized(@"疲劳驾驶"),
-    @"3":Localized(@"未按时到家"),
-    @"4":Localized(@"GNSS发生故障"),
-    @"5":Localized(@"GNSS天线被剪或未接"),
-    @"6":Localized(@"轮动报警"),
-    @"7":Localized(@"低电报警"),
-    @"8":Localized(@"外电断电报警"),
-    @"9":Localized(@"区域超速报警"),
-    @"10":Localized(@"拆除报警"),
-    @"11":Localized(@"摄像头故障"),
-    @"12":Localized(@"震动报警"),
-    @"13":Localized(@"超速报警"),
-    @"14":Localized(@"疲劳驾驶报警"),
-    @"15":Localized(@"非法移位报警"),
-    @"16":Localized(@"非法点火报警"),
-    @"17":Localized(@"非法开门报警"),
-    @"18":Localized(@"当天累计驾驶超时报警"),
-    @"25":Localized(@"偷油/漏油报警"),
-    @"26":Localized(@"温度异常报警"),
-    @"27":Localized(@"碰撞报警"),
-    @"28":Localized(@"侧翻报警"),
-    @"32":Localized(@"出围栏报警"),
-    @"33":Localized(@"入围栏报警"),
-    };
-    
-    
-    return dic[type] ?: type;
 }
 
 @end
