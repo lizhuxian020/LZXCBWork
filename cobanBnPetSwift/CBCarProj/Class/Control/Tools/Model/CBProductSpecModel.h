@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface CBProductSpecReportModel : NSObject
 @property (nonatomic, assign) BOOL curvesSpeed;//;// 0,//速度报表
 @property (nonatomic, assign) BOOL reportIdle;// 0,//怠速报表
+@property (nonatomic, assign) BOOL drivingBehavior;// 0,//驾驶行为报表
 @property (nonatomic, assign) BOOL reportStop;// 0,//停留报表
 @property (nonatomic, assign) BOOL reportIgnition;// 1,//点火统计
 @property (nonatomic, assign) BOOL reportMiles;// 1,//里程统计

@@ -451,6 +451,7 @@
     [sectionTitleArr addObjectsFromArray:@[
         Localized(@"速度报表"),
         Localized(@"怠速报表"),
+        Localized(@"驾驶行为报表"),
         Localized(@"停留统计"),
         Localized(@"点火报表"),
         Localized(@"里程统计"),
@@ -460,12 +461,14 @@
         Localized(@"电子围栏报表")
     ]];
     [sectionImageTitleArr addObjectsFromArray:@[
-        @"速度报表", @"怠速报表", @"停留统计", @"点火报表", @"里程统计", @"油量统计", @"报警统计", @"OBD报表", @"电子围栏报表"
+        @"速度报表", @"怠速报表", @"驾驶行为报表", @"停留统计", @"点火报表", @"里程统计", @"油量统计", @"报警统计", @"OBD报表", @"电子围栏报表"
     ]];
     
     NSArray *sectionShowArr = @[
         @(targetSpecModel.devShowReport.curvesSpeed),
         @(targetSpecModel.devShowReport.reportIdle),
+//        @(targetSpecModel.devShowReport.drivingBehavior),
+        @(1),
         @(targetSpecModel.devShowReport.reportStop),
         @(targetSpecModel.devShowReport.reportIgnition),
         @(targetSpecModel.devShowReport.reportMiles),
