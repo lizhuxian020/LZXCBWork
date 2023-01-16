@@ -87,7 +87,7 @@
 - (void)deleteAccountRequestWithIndexPath:(NSIndexPath *)indexPath
 {
     __weak __typeof__(self) weakSelf = self;
-    SubAccountModel *model = self.dataArr[self.indexPath.row];
+    SubAccountModel *model = self.dataArr[indexPath.row];
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:1];
     dic[@"sid"] = model.accountId;
     //MBProgressHUD *hud = [MINUtils hudToView: self.view withText: Localized(@"加载中...")];
@@ -316,6 +316,7 @@
     [cell hideDeleteBtn];
     __weak typeof(self) weakSelf = self;
     [cell setDeleteBtnClick:^(NSIndexPath *indexPath) {
+        weakSelf.indexPath = indexPath;
         [weakSelf deleteAccountRequestWithIndexPath: indexPath];
     }];
     [cell setEditBtnClick:^(NSIndexPath *indexPath) {
