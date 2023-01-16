@@ -1215,7 +1215,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     NSDictionary *param = @{
         @"dno": deviceModel.dno,
         @"data": [NSString stringWithFormat:@"%@,%@,%@", deviceModel.lat,deviceModel.lng, moveStr],
-        @"shape": deviceModel.listFence.firstObject.shape?:@"",
+        @"shape": @"3", //写死:3
         @"warmType": deviceModel.listFence.firstObject.warmType?:@"",
     };
     [[NetWorkingManager shared] postWithUrl:@"/devControlController/saveFence" params:param succeed:^(id response, BOOL isSucceed) {
