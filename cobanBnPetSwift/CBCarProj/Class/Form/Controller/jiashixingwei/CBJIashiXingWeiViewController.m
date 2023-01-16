@@ -95,6 +95,7 @@
         NSArray<CBJiaShiXingWeiModel *> *dataArr = [CBJiaShiXingWeiModel mj_objectArrayWithKeyValuesArray:response[@"data"][@"dataList"]];
         [self.dataArr addObjectsFromArray:dataArr];
         for (CBJiaShiXingWeiModel *model in self.dataArr) {
+            model.dno = [CBCommonTools CBdeviceInfo].dno;
             model.ids = [NSString stringWithFormat:@"%ld", ++self.modelId];
         }
         [weakSelf.tableView reloadData];
@@ -209,4 +210,15 @@
 }
 
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    CBJiaShiXingWeiModel *model = self.dataArr[indexPath.row];
+    FormDetailInfoViewController *infoVC = [[FormDetailInfoViewController alloc] init];
+
+    NSMutableArray *array = [model getIdingOrStayModelArr];
+//    [array insertObject: [NSString stringWithFormat: @"%@: %@",Localized(@"编号"), [NSString stringWithFormat: @"%@.", model.ids]] atIndex: 0];
+    infoVC.dataArr = array;
+
+    [self.navigationController pushViewController: infoVC animated: YES];
+}
 @end

@@ -467,8 +467,7 @@
     NSArray *sectionShowArr = @[
         @(targetSpecModel.devShowReport.curvesSpeed),
         @(targetSpecModel.devShowReport.reportIdle),
-//        @(targetSpecModel.devShowReport.drivingBehavior),
-        @(1),
+        @(targetSpecModel.devShowReport.drivingBehavior),
         @(targetSpecModel.devShowReport.reportStop),
         @(targetSpecModel.devShowReport.reportIgnition),
         @(targetSpecModel.devShowReport.reportMiles),

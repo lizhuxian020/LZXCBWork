@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 //"vehicle_status": "19,20"//驾驶行为类型
 @property (nonatomic, copy) NSString *ids; //
 @property (nonatomic, copy) NSString *address;
-
+@property (nonatomic, copy) NSString *dno ; /** <##> **/
 @property (nonatomic, copy) NSString *direct ; /** <##> **/
 @property (nonatomic, copy) NSString *lat ; /** <##> **/
 @property (nonatomic, copy) NSString *lng ; /** <##> **/
@@ -29,6 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *vehicle_status ; /** <##> **/
 
 - (NSString *)descVehicleStatus;
+- (NSMutableArray *)getIdingOrStayModelArr;
+- (NSString *)descTime;
 @end
 
 NS_ASSUME_NONNULL_END

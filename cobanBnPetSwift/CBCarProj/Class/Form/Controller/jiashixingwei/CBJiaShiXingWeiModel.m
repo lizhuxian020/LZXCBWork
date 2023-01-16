@@ -10,6 +10,23 @@
 
 @implementation CBJiaShiXingWeiModel
 
+- (NSString *)descTime {
+    return [Utils convertTimeWithTimeIntervalString:_ts timeZone:@""];
+}
+
+
+- (NSMutableArray *)getIdingOrStayModelArr
+{
+    NSMutableArray *array = [NSMutableArray array];
+    [array addObject: [NSString stringWithFormat: @"%@ %@",Localized(@"设备名称:"),self.dno]];
+    [array addObject: [NSString stringWithFormat: @"%@ %@",Localized(@"时间:"),self.descTime?:@""]];
+    [array addObject: [NSString stringWithFormat: @"%@ %@",Localized(@"地址:"),self.address?:@""]];
+    [array addObject: [NSString stringWithFormat: @"%@ %@",Localized(@"消息类型:"),self.descVehicleStatus?:@""]];
+    [array addObject: [NSString stringWithFormat: @"%@ %@",Localized(@"经度:"),self.lng?:@""]];
+    [array addObject: [NSString stringWithFormat: @"%@ %@",Localized(@"纬度:"),self.lat?:@""]];
+    return array;
+}
+
 
 - (NSString *)descVehicleStatus {
     
