@@ -37,6 +37,13 @@ MJCodingImplementation
              @"listFence":[CBHomeLeftMenuDeviceInfoModelFenceModel class]
              };
 }
+- (instancetype)mj_setKeyValues:(id)keyValues {
+    [super mj_setKeyValues:keyValues];
+    if ([_productSpecId isEqualToString:@"70"] && [_proto isEqualToString:@"0"]) {
+        _devModel = Localized(@"其他");
+    }
+    return self;
+}
 @end
 
 @implementation CBHomeLeftMenuDeviceInfoModelFenceModel

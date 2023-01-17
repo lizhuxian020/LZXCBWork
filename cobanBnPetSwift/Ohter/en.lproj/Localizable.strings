@@ -1466,3 +1466,30 @@
 "操作成功"= "Success";
 "添加子用户"= "Add sub-user";
 "运动" = "move";
+
+"喇叭开关" = "Speaker switch";
+"碰撞检测" = "Collision detection";
+"碰撞持续时间(ms)" = "Collision duration(ms)";
+"碰撞加速度(g)" = "Collision acceleration(g)";
+"急转弯" = "Sharp turn";
+"转弯角度(度)" = "Turning angle(°)";
+"转弯速度(km/h)" = "Turning speed(km/h)";
+
+"急加速" = "Rapid acceleration";
+"速度增加量(km/h)" = "Speed increase(km/h)";
+"加速时间(s)" = "Acceleration time(s)";
+
+"急刹车" = "Slam brake";
+"速度减小量(km/h)" = "Speed reduction(km/h)";
+"刹车时间(s)" = "Braking time(s)";
+"驾驶行为报表" = "Driving behavior report";
+
+"碰撞" = "Collision";
+"急加速" = "Rapid acceleration";
+"急刹车" = "Slam brake";
+"急转弯" = "Sharp turn";
+
+"其他" = "Other";
+"至少需要指定1个点" = "At least need to specify 1 points";
+"至少需要指定3个点" = "At least need to specify 3 points";
+"至少需要指定2个点" = "At least need to specify 2 points";

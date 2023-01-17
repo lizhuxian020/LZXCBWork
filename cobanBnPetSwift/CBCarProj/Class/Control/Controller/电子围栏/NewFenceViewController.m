@@ -1063,16 +1063,35 @@
         normalInfoMarker.appearAnimation = kGMSMarkerAnimationNone;
         normalInfoMarker.position = coor;
 
-        normalInfoMarker.groundAnchor = CGPointMake(0.5f, 2.0f);
-        UILabel *lbl = [MINUtils createLabelWithText:deviceInfoModel.name?:@"" size:14 alignment:NSTextAlignmentCenter textColor:kCellTextColor];
-        [lbl sizeToFit];
-        lbl.backgroundColor = [UIColor colorWithWhite:1 alpha:0.8];
-        normalInfoMarker.iconView = lbl;
+        normalInfoMarker.groundAnchor = CGPointMake(0.5f, 1.5f);
+//        UILabel *lbl = [MINUtils createLabelWithText:deviceInfoModel.name?:@"" size:14 alignment:NSTextAlignmentCenter textColor:kCellTextColor];
+//        [lbl sizeToFit];
+//        lbl.backgroundColor = [UIColor colorWithWhite:1 alpha:0.8];
+//        normalInfoMarker.iconView = lbl;
+        normalInfoMarker.iconView = [self createGMSInfoMarkView:deviceInfoModel];
         normalInfoMarker.map = self.googleMapView;
         // 选中设备显示最前
         self.googleMapView.selectedMarker = normalMarker;
         self.googleMapView.camera = [GMSCameraPosition cameraWithLatitude:coor.latitude longitude:coor.longitude zoom:self.googleMapView.camera.zoom];
     }
+}
+
+- (UIView *)createGMSInfoMarkView:(CBHomeLeftMenuDeviceInfoModel *)deviceInfoModel  {
+    UIView *contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 70 * KFitWidthRate,  30 * KFitWidthRate)];
+    UIImage *img = [UIImage imageNamed:@"话框"];
+    UIImageView *bgImgView = [[UIImageView alloc] init];
+    [contentView addSubview:bgImgView];
+    bgImgView.image = img;
+    
+    [bgImgView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(@0);
+    }];
+    UILabel *lbl = [MINUtils createLabelWithText:deviceInfoModel.name?:@"" size:14 alignment:NSTextAlignmentCenter textColor:kCellTextColor];
+    [contentView addSubview:lbl];
+    [lbl mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.centerY.equalTo(@0);
+    }];
+    return contentView;
 }
 
 - (BOOL)showBaidu {

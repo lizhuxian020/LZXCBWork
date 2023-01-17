@@ -34,6 +34,23 @@
     return _tableView;
 }
 
+- (CBNoDataView *)noDataView {
+    if (!_noDataView) {
+        _noDataView = [[CBNoDataView alloc] initWithGrail];
+        [self.tableView addSubview:_noDataView];
+        _noDataView.center = self.tableView.center;
+        _noDataView.hidden = YES;
+        kWeakSelf(self);
+        [_noDataView mas_makeConstraints:^(MASConstraintMaker *make) {
+            kStrongSelf(self);
+            make.size.mas_equalTo(CGSizeMake(200, 200));
+            make.centerX.equalTo(self.tableView.mas_centerX);
+            make.centerY.equalTo(self.tableView.mas_centerY).offset(-20);
+        }];
+    }
+    return _noDataView;
+}
+
 - (void)reload {
     [MBProgressHUD showHUDIcon:self.tableView animated:YES];
     kWeakSelf(self);
@@ -49,6 +66,7 @@
         }
         if (response && [response[@"data"] isKindOfClass:NSArray.class]) {
             self.dataArr = [_CBMsgCenterModel mj_objectArrayWithKeyValuesArray:response[@"data"]];
+            self.noDataView.hidden = self.dataArr.count == 0?NO:YES;
             [self.tableView reloadData];
         }
         } failed:^(NSError *error) {

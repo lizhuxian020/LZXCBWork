@@ -43,7 +43,7 @@
 #pragma mark - CreateUI
 - (void)createUI
 {
-    [self initBarWithTitle:Localized(@"电子围栏") isBack: YES];
+    [self initBarWithTitle:Localized(@"电子围栏") isBack: NO];
     [self showBackGround];
     [self initBarRightImageName:@"添加" target:self action:@selector(rightBtnClick)];
     [self createTableView];

@@ -585,6 +585,9 @@
 }
 
 - (NSString *)getProductSpec:(CBHomeLeftMenuDeviceInfoModel *)devModel {
+    if ([devModel.productSpecId isEqualToString:@"70"] && [devModel.proto isEqualToString:@"0"]) {
+        return Localized(@"其他");
+    }
     CBProductSpecModel *defaultModel = nil;
     for (CBProductSpecModel *model in self.productSpecData) {
         if ([model.tbDevModelId isEqualToString:@"70"] && [model.proto isEqualToString:@"0"]) {
@@ -595,7 +598,7 @@
         }
     }
         
-    return defaultModel ? defaultModel.name : Localized(@"未知");
+    return defaultModel ? Localized(@"其他") : Localized(@"未知");
 }
 
 - (void)getPaoViewConfig:(CBHomeLeftMenuDeviceInfoModel *)deviceModel blk:(void(^)(NSDictionary *configData))blk {

@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) UINavigationController *navigationController;
 @property (nonatomic, strong) NSArray<_CBMsgCenterModel *> *dataArr;
-
+@property (nonatomic, strong) CBNoDataView *noDataView;
 @property (nonatomic, strong) UITableView *tableView;
 
 - (void)reload;

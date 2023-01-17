@@ -31,10 +31,10 @@
 - (NSString *)descVehicleStatus {
     
     NSDictionary *dic = @{
-        @"31": @"碰撞",
-        @"19": @"急加速",
-        @"20": @"急刹车",
-        @"21": @"急转弯",
+        @"31": Localized(@"碰撞"),
+        @"19": Localized(@"急加速"),
+        @"20": Localized(@"急刹车"),
+        @"21": Localized(@"急转弯"),
     };
     
     NSArray *status = [self.vehicle_status componentsSeparatedByString:@","];

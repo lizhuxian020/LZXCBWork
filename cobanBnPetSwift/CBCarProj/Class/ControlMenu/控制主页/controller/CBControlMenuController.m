@@ -204,7 +204,7 @@
                     model.groupId = @"0";
                     if (kStringIsEmpty(model.devModel)) {
                         if ([model.productSpecId isEqualToString:@"70"]) {
-                            model.devModel = @"其他";
+                            model.devModel = Localized(@"其他");
                         }
                     }
                     [dataArr addObject: model];
