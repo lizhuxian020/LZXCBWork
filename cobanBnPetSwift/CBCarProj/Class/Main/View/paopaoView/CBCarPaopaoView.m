@@ -421,7 +421,7 @@
     
     //同一行的放里面(不换行）
     NSArray *sameLineLb = @[
-        _accLb,_doorLb,_oilLb,_gsmNumberLb,_gpsNumberLb
+        _accLb,_doorLb,_oilLb,_gpsNumberLb
     ];
 
     [self.bgmView layoutIfNeeded];
