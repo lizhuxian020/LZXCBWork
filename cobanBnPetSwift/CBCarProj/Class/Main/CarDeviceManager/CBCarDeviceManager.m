@@ -150,6 +150,9 @@
 }
 
 - (void)didGetMQTTDeviceModel:(CBMQTTCarDeviceModel *)model {
+    if (model.devStatus.intValue == 3) { //收到报警时, 更新首页的报警数量
+        [NSNotificationCenter.defaultCenter postNotificationName:@"CBCAR_NOTFICIATION_UPDATE_ALARM_NUM" object:nil userInfo:nil];
+    }
     if (model.code != 21) { //2时, 更新围栏.
         /*
          {
@@ -209,9 +212,6 @@
             deviceModel.speedInMqtt = model.location.speed;
             deviceModel.directInMqtt = model.location.direct;
         }
-    }
-    if (model.code == 21 && model.devStatus.intValue == 3) { //收到报警时, 更新首页的报警数量
-        [NSNotificationCenter.defaultCenter postNotificationName:@"CBCAR_NOTFICIATION_UPDATE_ALARM_NUM" object:nil userInfo:nil];
     }
     if (self.didUpdateDeviceData) {
         self.didUpdateDeviceData(self.deviceDatas);
