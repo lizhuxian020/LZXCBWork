@@ -35,7 +35,7 @@
 @property (nonatomic, copy) NSString *registerTime;        //   注册时间
 @property (nonatomic, copy) NSString *expireTime;        //   有效时间
 @property (nonatomic, copy) NSString *devModel; //产品类型
-
+@property(nonatomic, copy) NSString *productSpecId;
 @property (nonatomic, copy) NSString *leftTitle;        //   左侧标题
 @property (nonatomic, copy) NSString *groupNameStr;     //   分组名称
 @end

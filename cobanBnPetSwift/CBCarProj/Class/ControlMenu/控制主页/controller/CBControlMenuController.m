@@ -202,6 +202,11 @@
                     MyDeviceModel *model = [MyDeviceModel yy_modelWithDictionary: deviceDic];
                     model.groupNameStr = Localized(@"默认分组");
                     model.groupId = @"0";
+                    if (kStringIsEmpty(model.devModel)) {
+                        if ([model.productSpecId isEqualToString:@"70"]) {
+                            model.devModel = @"其他";
+                        }
+                    }
                     [dataArr addObject: model];
                 }
                 [weakSelf.groupNameArr addObject:Localized(@"默认分组")];
