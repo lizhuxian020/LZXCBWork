@@ -448,24 +448,48 @@
         if ([titleStr isEqualToString:_ControlConfigTitle_LBKG]) {
             self.switchView.on = _switchModel.horn_switch;
         } else if ([titleStr isEqualToString:_ControlConfigTitle_PZJC]) {
-            NSString *desc = [NSString stringWithFormat:@"%@ms,%@g", _switchModel.pz_time, _switchModel.pz_speed];
+            NSMutableArray *arr = [NSMutableArray new];
+            if (!kStringIsEmpty(_switchModel.pz_time)) {
+                [arr addObject:[NSString stringWithFormat:@"%@ms", _switchModel.pz_time]];
+            }
+            if (!kStringIsEmpty(_switchModel.pz_speed)) {
+                [arr addObject:[NSString stringWithFormat:@"%@g", _switchModel.pz_speed]];
+            }
             self.switchDetailLabel.hidden = NO;
-            self.switchDetailLabel.text = desc;
+            self.switchDetailLabel.text = [arr componentsJoinedByString:@","];
             self.switchView.on = _switchModel.pz_switch;
         } else if ([titleStr isEqualToString:_ControlConfigTitle_JZW]) {
-            NSString *desc = [NSString stringWithFormat:@"%@°,%@km/h", _switchModel.jzw_angle, _switchModel.jzw_speed];
+            NSMutableArray *arr = [NSMutableArray new];
+            if (!kStringIsEmpty(_switchModel.jzw_angle)) {
+                [arr addObject:[NSString stringWithFormat:@"%@°", _switchModel.jzw_angle]];
+            }
+            if (!kStringIsEmpty(_switchModel.jzw_speed)) {
+                [arr addObject:[NSString stringWithFormat:@"%@km/h", _switchModel.jzw_speed]];
+            }
             self.switchDetailLabel.hidden = NO;
-            self.switchDetailLabel.text = desc;
+            self.switchDetailLabel.text = [arr componentsJoinedByString:@","];
             self.switchView.on = _switchModel.jzw_switch;
         } else if ([titleStr isEqualToString:_ControlConfigTitle_JJS]) {
-            NSString *desc = [NSString stringWithFormat:@"%@km/h,%@s", _switchModel.jjs_speed, _switchModel.jjs_time];
+            NSMutableArray *arr = [NSMutableArray new];
+            if (!kStringIsEmpty(_switchModel.jjs_speed)) {
+                [arr addObject:[NSString stringWithFormat:@"%@km/h°", _switchModel.jjs_speed]];
+            }
+            if (!kStringIsEmpty(_switchModel.jjs_time)) {
+                [arr addObject:[NSString stringWithFormat:@"%@s", _switchModel.jjs_time]];
+            }
             self.switchDetailLabel.hidden = NO;
-            self.switchDetailLabel.text = desc;
+            self.switchDetailLabel.text = [arr componentsJoinedByString:@","];
             self.switchView.on = _switchModel.jjs_switch;
         } else if ([titleStr isEqualToString:_ControlConfigTitle_JSC]) {
-            NSString *desc = [NSString stringWithFormat:@"%@km/h,%@s", _switchModel.jsc_speed, _switchModel.jsc_time];
+            NSMutableArray *arr = [NSMutableArray new];
+            if (!kStringIsEmpty(_switchModel.jsc_speed)) {
+                [arr addObject:[NSString stringWithFormat:@"%@km/h°", _switchModel.jsc_speed]];
+            }
+            if (!kStringIsEmpty(_switchModel.jsc_time)) {
+                [arr addObject:[NSString stringWithFormat:@"%@s", _switchModel.jsc_time]];
+            }
             self.switchDetailLabel.hidden = NO;
-            self.switchDetailLabel.text = desc;
+            self.switchDetailLabel.text = [arr componentsJoinedByString:@","];
             self.switchView.on = _switchModel.jsc_switch;
         }
     }
