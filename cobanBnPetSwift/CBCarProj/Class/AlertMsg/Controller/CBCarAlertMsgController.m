@@ -91,8 +91,9 @@
     scrollView.contentSize = CGSizeMake(self.view.width, 0);
     [self.view addSubview:scrollView];
     _topScrollView = scrollView;
+    
     [_topScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(@64);
+        make.top.equalTo(@(PPNavigationBarHeight));
         make.left.right.equalTo(@0);
         make.height.equalTo(@(__MsgUI_TitleHeight));
     }];
@@ -196,7 +197,9 @@
 - (void)requestAllRead {
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     kWeakSelf(self);
-    [[NetWorkingManager shared] getWithUrl:@"/alarmDealController/updateAlarmDeal" params:nil succeed:^(id response, BOOL isSucceed) {
+    [[NetWorkingManager shared] getWithUrl:@"/alarmDealController/updateAlarmDeal" params:@{
+        @"type": _currentPage == 0 ? @"1": @"2"
+    } succeed:^(id response, BOOL isSucceed) {
         
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
