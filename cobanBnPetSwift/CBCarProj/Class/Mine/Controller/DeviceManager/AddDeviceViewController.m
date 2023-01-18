@@ -12,6 +12,9 @@
 #import "MyDeviceModel.h"
 #import "cobanBnPetSwift-Swift.h"
 
+#define __scanArea_Y (100 * KFitHeightRate + kStautsRectHeight + 44)
+#define __scanArea_Width (235*KFitHeightRate)
+
 @interface AddDeviceViewController ()<AVCaptureMetadataOutputObjectsDelegate, UITextFieldDelegate>
 /** 设备 */
 @property (nonatomic, strong) AVCaptureDevice * device;
@@ -108,9 +111,9 @@
     UIImageView *qrImageView = [[UIImageView alloc] initWithImage: qrImage];
     [self.view addSubview: qrImageView];
     [qrImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view).with.offset(100 * KFitHeightRate + kStautsRectHeight + 44);
+        make.top.equalTo(self.view).with.offset(__scanArea_Y);
         //make.centerY.mas_equalTo(self.view.mas_centerY);
-        make.size.mas_equalTo(CGSizeMake(235*KFitHeightRate, 235*KFitHeightRate));
+        make.size.mas_equalTo(CGSizeMake(__scanArea_Width, __scanArea_Width));
         make.centerX.equalTo(self.view);
     }];
     // 设置上下左右的阴影部分
@@ -291,7 +294,7 @@
         [self.session addOutput:metadataOutput];
     }
     self.previewLayer = [AVCaptureVideoPreviewLayer layerWithSession:self.session];
-    self.previewLayer.frame = CGRectMake(0, PPNavigationBarHeight, SCREEN_HEIGHT, SCREEN_HEIGHT - PPNavigationBarHeight);
+    self.previewLayer.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     self.previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
     [self.view.layer addSublayer:self.previewLayer];
     
@@ -299,13 +302,14 @@
     metadataOutput.metadataObjectTypes = self.metadataObjectTypes;
     //优化扫描区域
     //设置扫描范围区域 CGRectMake（y的起点/屏幕的高，x的起点/屏幕的宽，扫描的区域的高/屏幕的高，扫描的区域的宽/屏幕的宽）
-//    CGFloat x,y,width,height;
-//    x = (100*KFitHeightRate + kStautsRectHeight + 44)/SCREEN_HEIGHT;
-//    y = ((SCREEN_WIDTH - 235*KFitHeightRate)/2)/SCREEN_WIDTH;
-//    width = 235*KFitHeightRate/SCREEN_HEIGHT;
-//    height = 235*KFitHeightRate/SCREEN_WIDTH;
-//    CGRect rect = CGRectMake(x, y, width, height);
-//    metadataOutput.rectOfInterest = rect;// 扫描框居中的话，不用设置rectOfInterest，rectOfInterest默认局中
+    CGFloat x,y,width,height;
+    x = (__scanArea_Y)/SCREEN_HEIGHT;
+    y = ((SCREEN_WIDTH - __scanArea_Width)/2)/SCREEN_WIDTH;
+    width = __scanArea_Width/SCREEN_HEIGHT;
+    height = __scanArea_Width/SCREEN_WIDTH;
+    CGRect rect = CGRectMake(x, y, width, height);
+//    CGRect rect = CGRectMake(0.5, 0.5, 0.5, 0.5);
+    metadataOutput.rectOfInterest = rect;// 扫描框居中的话，不用设置rectOfInterest，rectOfInterest默认局中
 }
 
 #pragma mark - AVCaptureMetadataOutputObjectsDelegate
