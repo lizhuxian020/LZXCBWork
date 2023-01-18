@@ -1757,7 +1757,11 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         return;
     }
     //更新中心位置
-    [self updateMapCenter:self.trackingDeviceModel ?: CarDeviceManager.deviceInfoModelSelect];
+    CBHomeLeftMenuDeviceInfoModel *targetModel = self.trackingDeviceModel ?: CarDeviceManager.deviceInfoModelSelect;
+    if (!targetModel) {
+        targetModel = CarDeviceManager.deviceDatas.firstObject;
+    }
+    [self updateMapCenter:targetModel];
 }
 - (void)updateMapLocationWhenPaoView {
     kWeakSelf(self);
