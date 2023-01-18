@@ -342,6 +342,8 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
             [CarDeviceManager setCurrentChooseDevice:model];
             // 左侧菜单隐藏
             [self hideListView];
+            
+            [self setEndTrack];
             // 20s刷新轨迹数组,初始化
             [self initTrackLine];
             // 20s刷新的轨迹的line和路径

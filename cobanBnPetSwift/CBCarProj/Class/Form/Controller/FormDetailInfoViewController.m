@@ -46,7 +46,7 @@
 #pragma mark - CreateUI
 - (void)createUI
 {
-    [self initBarWithTitle: @"查看记录" isBack: YES];
+    [self initBarWithTitle: Localized(@"查看记录") isBack: YES];
     [self createTableView];
 }
 

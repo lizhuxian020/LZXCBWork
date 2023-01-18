@@ -1493,3 +1493,6 @@
 "至少需要指定1个点" = "At least need to specify 1 points";
 "至少需要指定3个点" = "At least need to specify 3 points";
 "至少需要指定2个点" = "At least need to specify 2 points";
+
+"查看记录" = "Check Record";
+"消息类型:" = "Message Type:";
