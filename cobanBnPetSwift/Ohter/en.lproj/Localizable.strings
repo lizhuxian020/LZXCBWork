@@ -1496,3 +1496,6 @@
 
 "查看记录" = "Check Record";
 "消息类型:" = "Message Type:";
+
+"imei号已经被绑定，解绑后再试" = "imei number has been bound";
+"imei号不存在" = "imei number does not exist";

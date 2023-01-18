@@ -207,9 +207,14 @@
         if (isSucceed) {
             [self requestDeviceMessageWithDno:dno];
         } else {
-            [HUD showHUDWithText:Localized(@"设备号错误") withDelay:1.5];
+            [self.session startRunning];
+            if ([response[@"status"] integerValue] == -1) {
+                [HUD showHUDWithText:Localized(@"imei号不存在") withDelay:1.5];
+            }
         }
     } failed:^(NSError *error) {
+        kStrongSelf(self);
+        [self.session startRunning];
     }];
 }
 #pragma mark -- 获取设备编号信息

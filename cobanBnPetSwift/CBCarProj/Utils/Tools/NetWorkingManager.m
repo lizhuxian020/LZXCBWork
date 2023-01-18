@@ -110,7 +110,7 @@ static AFHTTPSessionManager *afManager = nil;
                 [CBTopAlertView alertFail:Localized(@"设备不在线")];
             } else if ([responseObject[@"status"]integerValue] == 1) {
                 succeed(responseObject,NO);
-                [HUD showHUDWithText:[Utils getSafeString:Localized(@"授权号码已存在")] withDelay:2.0];
+                [HUD showHUDWithText:[Utils getSafeString:Localized(@"imei号已经被绑定，解绑后再试")] withDelay:2.0];
             } else if ([responseObject[@"status"]integerValue] == 205) { //从CBWtNetworkingServers移植过来的逻辑
                 succeed(responseObject,NO);
                 //状态205，代码联系人达到上限12个。。app这边有这样错误时提示“联系人已达上限”
