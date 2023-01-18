@@ -1372,7 +1372,6 @@
 "添加" = "Add";
 "分配的设备" = "assigned equipment";
 "创建时间" = "creation time";
-"设置权限" = "Setting permissions";
 "请输入备注" = "Please enter a note";
 "请输入详细地址" = "Please input full address";
 "确认删除?\n删除后不可找回" = "Confirm to delete?\nit cannot be retrieved after deletion";
@@ -1499,3 +1498,4 @@
 
 "imei号已经被绑定，解绑后再试" = "imei number has been bound";
 "imei号不存在" = "imei number does not exist";
+"设置权限" = "Setting permissions";
