@@ -131,7 +131,11 @@
     
     self.timeLbl.text = [Utils convertTimeWithTimeIntervalString:model.warnTime?:@"" timeZone:model.timeZone?:@""];
     
-    self.typeLbl.text = [self type:model.type];
+    NSMutableArray *resultArr =[ NSMutableArray new];
+    for (NSString *key in [model.type componentsSeparatedByString:@","] ) {
+        [resultArr addObject:[self type:key]];
+    }
+    self.typeLbl.text = [resultArr componentsJoinedByString:@","];
     
 }
 

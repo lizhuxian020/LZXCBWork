@@ -152,6 +152,8 @@
 }
 
 - (void)saveBtnClick {
+    NSTimeZone *zone = [NSTimeZone systemTimeZone];
+    CGFloat timeZone = zone.secondsFromGMT / 3600;
     NSMutableDictionary *param = [[NSMutableDictionary alloc] initWithDictionary:@{
         @"data": _model.data ?: @"",
         @"deviceArr": [self.menuView getDeviceArr],
@@ -159,8 +161,8 @@
         @"name": [self.menuView getFenceName],
         @"shape": @(self.model.shape),
         @"sn": self.model.sn ?: @"",
-        @"timeZone": @"8.0"
-    }];;
+        @"timeZone": [NSString stringWithFormat:@"%.01lf", timeZone]
+    }];
     
     if (self.model.shape == 1) {
         CGFloat lat, lon, rad;
