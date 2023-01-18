@@ -55,7 +55,9 @@
     [MBProgressHUD showHUDIcon:self.tableView animated:YES];
     kWeakSelf(self);
     [[NetWorkingManager shared] getWithUrl:@"/alarmDealController/getMyWarnList" params:@{
-        @"type" : @"1"
+        @"type" : @"1",
+        @"page": @1,
+        @"length": @100
     } succeed:^(id response, BOOL isSucceed) {
         
         kStrongSelf(self);
