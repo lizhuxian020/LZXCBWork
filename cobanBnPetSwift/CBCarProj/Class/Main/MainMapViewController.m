@@ -1915,8 +1915,12 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 
         // 有两点时，创建轨迹
         if (sportNodes_realTime.count > 1) {
+            self.polyline_realTime = [[GMSPolyline alloc] init];
             self.polyline_realTime.strokeColor = [UIColor colorWithHexString:@"#1FC8A9"];
             self.polyline_realTime.strokeWidth = 2*KFitWidthRate;
+            
+            self.linePath_realTime = [GMSMutablePath path];
+            [self.linePath_realTime removeAllCoordinates];
             for(int idx = 0; idx < sportNodes_realTime.count; idx++)
             {
                 BMKSportNode *node = [sportNodes_realTime objectAtIndex:idx];
@@ -1924,7 +1928,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
                 [self.linePath_realTime addCoordinate:location];
 
                 // 添加轨迹上的圆点
-                if (idx > 0 && idx < (sportNodes_realTime.count - 1)) {
+                if (idx < (sportNodes_realTime.count - 1)) {
 
                     GMSMarker *mark_point = [[GMSMarker alloc] init];
                     mark_point.appearAnimation = kGMSMarkerAnimationNone;//kGMSMarkerAnimationPop;
