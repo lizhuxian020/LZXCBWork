@@ -33,6 +33,8 @@
 @property (nonatomic,strong) UIView *deviceInputView;
 @property (nonatomic, strong) UITextField *deviceTextField;
 @property (nonatomic, copy) NSString *scanContentStr ;
+
+@property (nonatomic, strong) UIButton *addDeviceBtn;
 @end
 
 @implementation AddDeviceViewController
@@ -105,7 +107,7 @@
  */
 - (void)initFontView {
     [self initBarWithTitle:Localized(@"添加设备") isBack: YES];
-    [self initBarRighBtnTitle:Localized(@"手动添加") target: self action: @selector(rightBtnClick)];
+//    [self initBarRighBtnTitle:Localized(@"手动添加") target: self action: @selector(rightBtnClick)];
     // 设置中间的二维码框
     UIImage *qrImage = [UIImage imageNamed:@"扫一扫框"];
     UIImageView *qrImageView = [[UIImageView alloc] initWithImage: qrImage];
@@ -157,13 +159,28 @@
     self.line.image = [UIImage imageNamed:@"扫一扫-横线"];
     [qrImageView addSubview:self.line];
     
+    
+    self.addDeviceBtn = [MINUtils createBtnWithRadius:20 title:Localized(@"手动添加")];
+    self.addDeviceBtn.backgroundColor = kAppMainColor;
+    [self.view addSubview:self.addDeviceBtn];
+    [self.addDeviceBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.view);
+        make.top.equalTo(qrImageView.mas_bottom).with.offset(35 * KFitHeightRate);
+        make.width.equalTo(@120);
+        make.height.equalTo(@40);
+    }];
+    kWeakSelf(self);
+    [self.addDeviceBtn bk_whenTapped:^{
+        [weakself rightBtnClick];
+    }];
+    
     _deviceInputView = [[UIView alloc] init];
 //    _deviceInputView.layer.cornerRadius = 5 * KFitWidthRate;
     _deviceInputView.backgroundColor = UIColor.clearColor;
     [self.view addSubview:_deviceInputView];
     [_deviceInputView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.view);
-        make.top.equalTo(qrImageView.mas_bottom).with.offset(35 * KFitHeightRate);
+        make.top.equalTo(self.addDeviceBtn.mas_bottom).with.offset(15 * KFitHeightRate);
         make.size.mas_equalTo(CGSizeMake(260 * KFitWidthRate,  40 * KFitHeightRate));
     }];
     _deviceTextField = [MINUtils createTextFieldWithHoldText:Localized(@"输入设备编号添加") fontSize: 13 * KFitWidthRate];
@@ -176,6 +193,7 @@
     _deviceTextField.text = Localized(@"请对准需要识别设备的二维码");
     _deviceTextField.userInteractionEnabled = NO;
     _deviceTextField.textColor = KCarLineColor;
+    
 }
 
 #pragma mark - action
