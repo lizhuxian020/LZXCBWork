@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CBMQTTManager : NSObject
 
+@property (nonatomic, copy) NSString *currentUserId ; /** 当前用户id **/
 @property (nonatomic, strong) NSArray *topicArr; //订阅主题
 @property (nonatomic, copy)ReceivedMessageBlock receivedMessageBlock;
 @property (nonatomic, assign)NSInteger eventCode;
@@ -30,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)startConnecet;//开始链接，要先设置topicArr
 - (void)disConnecet; //断开连接
 - (void)changeTopic:(NSArray *)newTopic; //更换订阅主题
+- (void)checkAndChangeTopic;
 @end
 
 NS_ASSUME_NONNULL_END

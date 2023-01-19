@@ -8,7 +8,7 @@
 
 #import "CBMQTTManager.h"
 #import <MQTTClient/MQTTClient.h>
-
+#import "cobanBnPetSwift-Swift.h"
 
 
 @implementation MQTTClientModel
@@ -148,6 +148,16 @@
     }
     // 进行下一步操作
     
+}
+
+- (void)checkAndChangeTopic {
+    CBPetLoginModel *userModel = [CBPetLoginModelTool getUser];
+    if ([userModel.uid isEqualToString:_currentUserId]) {
+        return;
+    }
+    _currentUserId = userModel.uid;
+    NSString *topic = [NSString stringWithFormat:@"topic/car-pc/%@/+", userModel.uid];
+    [self changeTopic:@[topic]];
 }
 
 @end
