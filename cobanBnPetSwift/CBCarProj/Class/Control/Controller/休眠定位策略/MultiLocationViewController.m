@@ -75,7 +75,7 @@
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:4];
     dic[@"dno"] = _deviceInfoModelSelect.dno?:@"";//[AppDelegate shareInstance].currenDeviceSno;
     dic[@"report_way"] = self.locationModeView.getReportWay;
-    dic[@"rest_mod"] = @(self.xmChooseView.currentIndex);//休眠模式入参传参是0-5是  1-6用于显示/隐藏
+    dic[@"rest_mod"] = @(self.xmChooseView.currentIndex);//休眠模式入参传参是0-5是  0-5用于显示/隐藏
     dic[@"dis_qs"] = self.locationModeView.getSpeed;
     dic[@"time_qs"] = self.locationModeView.getTimeQS;
     dic[@"time_rest"] = self.locationModeView.getTimeRest;

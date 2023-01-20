@@ -10,6 +10,11 @@ import UIKit
 
 class CBPetBaseNavigationViewController: UINavigationController,UINavigationControllerDelegate {
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        AppDelegate.setNavigationBGColor(nil, nil)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

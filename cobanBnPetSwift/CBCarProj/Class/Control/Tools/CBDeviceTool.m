@@ -425,12 +425,12 @@
     ]];
     
     NSArray *showArr = @[
+        @([targetSpecModel.hibernates containsString:@"0"]),
         @([targetSpecModel.hibernates containsString:@"1"]),
         @([targetSpecModel.hibernates containsString:@"2"]),
         @([targetSpecModel.hibernates containsString:@"3"]),
         @([targetSpecModel.hibernates containsString:@"4"]),
         @([targetSpecModel.hibernates containsString:@"5"]),
-        @([targetSpecModel.hibernates containsString:@"6"]),
     ];
     
     if (!self.currentProductSpec) {

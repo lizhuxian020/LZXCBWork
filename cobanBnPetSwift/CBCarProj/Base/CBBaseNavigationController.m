@@ -17,6 +17,10 @@
 //    UIViewController* topVC = self.topViewController;
 //    return [topVC preferredStatusBarStyle];
 //}
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [AppDelegate setNavigationBGColor:kBackColor :self.navigationController.navigationBar];
+}
 - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
     if (self.childViewControllers.count > 0) {

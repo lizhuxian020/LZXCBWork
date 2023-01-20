@@ -189,6 +189,8 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [[CBPetBottomSwitchBtnView share] showCtrlPanelWithResultBlock:^{
     }];
 //    }
+    
+//    [AppDelegate setNavigationBGColor:nil :self.navigationController.navigationBar];
 }
 - (void)checkNetWork {
     kWeakSelf(self);
