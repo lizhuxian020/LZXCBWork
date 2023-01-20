@@ -42,6 +42,16 @@ MJCodingImplementation
     if ([_productSpecId isEqualToString:@"70"] && [_proto isEqualToString:@"0"]) {
         _devModel = Localized(@"其他");
     }
+    if ([_createTime containsString:@"-"]) {
+        NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+        formatter.timeZone = [NSTimeZone timeZoneWithName:@"shanghai"];
+        [formatter setDateStyle:NSDateFormatterMediumStyle];
+        [formatter setTimeStyle:NSDateFormatterShortStyle];
+        [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        NSDate *date = [formatter dateFromString:_createTime];
+        NSTimeInterval timeInt = [date timeIntervalSince1970];
+        _createTime = [NSString stringWithFormat:@"%lf", timeInt*1000];
+    }
     return self;
 }
 @end

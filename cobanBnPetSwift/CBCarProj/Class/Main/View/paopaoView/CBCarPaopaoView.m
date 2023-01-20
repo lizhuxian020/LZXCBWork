@@ -568,8 +568,17 @@
     self.isAlertPaopaoView = NO;
     [self removeFromSuperview];
 }
+- (void)updateDeviceInfoModel {
+    if (_deviceInfoModel) {
+        CBHomeLeftMenuDeviceInfoModel *model = [CarDeviceManager getModelWithDno:_deviceInfoModel.dno];
+        if (model) {
+            _deviceInfoModel = model;
+        }
+    }
+}
 - (void)didGetMQTT {
     if (_deviceInfoModel) {
+        [self updateDeviceInfoModel];
         [self setDeviceInfoModel:_deviceInfoModel];
     }
 }

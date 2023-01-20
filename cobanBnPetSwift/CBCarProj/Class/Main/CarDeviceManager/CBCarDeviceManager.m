@@ -36,12 +36,19 @@
 }
 
 - (void)refreashData:(void(^)(void))finishBlk {
-    [self generalInitData:^{
-        [self requestDeviceDataBlk:finishBlk];
+    [self generalInitData:self.deviceDatas finishBlk:^(NSArray *deviceArrResult){
+        [self requestDeviceDataBlk:deviceArrResult finishBlk:^(NSArray *deviceArrResult2) {
+            [self updateAllDeviceParamList:deviceArrResult2 finishBlk:^(NSArray *deviceArrResult3) {
+                self.deviceDatas = deviceArrResult3;
+                if (self.didUpdateDeviceData) {
+                    self.didUpdateDeviceData(self.deviceDatas);
+                }
+            }];
+        }];
     }];
 }
 
-- (void)generalInitData:(void(^)(void))finishBlk {
+- (void)generalInitData:(NSArray *)deviceArr finishBlk:(void(^)(NSArray *))finishBlk {
     [[NetWorkingManager shared] getWithUrl:@"/personController/getMyDeviceList" params:@{} succeed:^(id response, BOOL isSucceed) {
         if (!isSucceed || !response || !response[@"data"]) {
             return;
@@ -55,21 +62,28 @@
                 [deviceList addObjectsFromArray:groupModel.device];
             }
         }
-        self.deviceDatas = deviceList;
-        finishBlk();
+//        self.deviceDatas = deviceList;
+        finishBlk(deviceList);
     } failed:^(NSError *error) {
         
     }];
 }
 
 - (void)requestDeviceData {
-    [self requestDeviceDataBlk:nil];
+    [self requestDeviceDataBlk:self.deviceDatas finishBlk:^(NSArray *deviceArrResult2) {
+        [self updateAllDeviceParamList:deviceArrResult2 finishBlk:^(NSArray *deviceArrResult3) {
+            self.deviceDatas = deviceArrResult3;
+            if (self.didUpdateDeviceData) {
+                self.didUpdateDeviceData(self.deviceDatas);
+            }
+        }];
+    }];
 }
 
-- (void)requestDeviceDataBlk:(void(^)(void))finishBlk {
-    if (!self.deviceDatas) {
-        [self generalInitData:^{
-            [self requestDeviceDataBlk:finishBlk];
+- (void)requestDeviceDataBlk:(NSArray *)deviceArr finishBlk:(void(^)(NSArray *))finishBlk {
+    if (!deviceArr) {
+        [self generalInitData:deviceArr finishBlk:^(NSArray *deviceArrResult){
+            [self requestDeviceDataBlk:deviceArrResult finishBlk:finishBlk];
         }];
         return;
     }
@@ -92,36 +106,36 @@
             }
         }
         
-        self.deviceDatas = modelArr;
-        [self updateAllDeviceParamList:^{
-            NSLog(@"%s", __FUNCTION__);
-        }];
-        if (self.didUpdateDeviceData) {
-            self.didUpdateDeviceData(self.deviceDatas);
-        }
+//        self.deviceDatas = modelArr;
+//        [self updateAllDeviceParamList:^{
+//            NSLog(@"%s", __FUNCTION__);
+//        }];
+//        if (self.didUpdateDeviceData) {
+//            self.didUpdateDeviceData(self.deviceDatas);
+//        }
         if (finishBlk) {
-            finishBlk();
+            finishBlk(modelArr);
         }
     } failed:^(NSError *error) {
         
     }];
 }
 
-- (void)updateAllDeviceParamList:(void(^)(void))finishBlk {
+- (void)updateAllDeviceParamList:(NSArray *)deviceArr finishBlk:(void(^)(NSArray *))finishBlk {
     __block int time = 0;
-    for (CBHomeLeftMenuDeviceInfoModel *deviceModel in self.deviceDatas) {
-        [self updateParamList:deviceModel finish:^{
+    for (CBHomeLeftMenuDeviceInfoModel *deviceModel in deviceArr) {
+        [self updateParamList:deviceModel finish:^(CBHomeLeftMenuDeviceInfoModel *resultModel){
             if (finishBlk) {
                 time++;
-                if (time == self.deviceDatas.count) {
-                    finishBlk();
+                if (time == deviceArr.count) {
+                    finishBlk(deviceArr);
                 }
             }
         }];
     }
 }
 
-- (void)updateParamList:(CBHomeLeftMenuDeviceInfoModel *)model finish:(void(^)(void))finishBLk {
+- (void)updateParamList:(CBHomeLeftMenuDeviceInfoModel *)model finish:(void(^)(CBHomeLeftMenuDeviceInfoModel *))finishBLk {
     if (kStringIsEmpty(model.dno)) {
         return;
     }
@@ -140,11 +154,11 @@
         model.timeRest = deviceModel.timeRest;
         model.timeSos = deviceModel.timeSos;
         if (finishBLk) {
-            finishBLk();
+            finishBLk(model);
         }
     } failed:^(NSError *error) {
         if (finishBLk) {
-            finishBLk();
+            finishBLk(model);
         }
     }];
 }
@@ -161,7 +175,8 @@
          }
          */
         [self updateFence:^{
-            [self updateAllDeviceParamList:^{
+            [self updateAllDeviceParamList:self.deviceDatas finishBlk:^(NSArray *deviceArr) {
+                self.deviceDatas = deviceArr;
                 if (self.didUpdateDeviceData) {
                     self.didUpdateDeviceData(self.deviceDatas);
                 }
@@ -269,5 +284,14 @@
         }
     }
     return _deviceInfoModelSelect;
+}
+
+- (CBHomeLeftMenuDeviceInfoModel *)getModelWithDno:(NSString *)dno {
+    for (CBHomeLeftMenuDeviceInfoModel *deviceSelect in self.deviceDatas) {
+        if ([deviceSelect.dno isEqualToString:dno]) {
+            return deviceSelect;
+        }
+    }
+    return nil;
 }
 @end

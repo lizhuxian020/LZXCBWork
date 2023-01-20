@@ -161,7 +161,7 @@
 
 - (void)updateDeviceModelForProduct:(CBHomeLeftMenuDeviceInfoModel *)currentModel finishCallback:(void(^)(CBHomeLeftMenuDeviceInfoModel *model))blk {
     UIWindow *window = [UIApplication.sharedApplication keyWindow];
-    [MBProgressHUD showHUDIcon:window animated:YES];
+//    [MBProgressHUD showHUDIcon:window animated:YES];
     kWeakSelf(self);
     [[NetWorkingManager shared]getWithUrl:@"personController/getMyDeviceList" params: @{}succeed:^(id response, BOOL isSucceed) {
         kStrongSelf(self);

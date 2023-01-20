@@ -42,6 +42,7 @@ typedef enum : NSInteger {
 - (void)popView;//弹出视图
 - (void)dismiss;//隐藏视图
 
+- (void)updateDeviceInfoModel;
 @end
 
 NS_ASSUME_NONNULL_END

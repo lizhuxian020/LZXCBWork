@@ -1769,6 +1769,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 }
 - (void)updateMapLocationWhenPaoView {
     kWeakSelf(self);
+    [_paopaoView updateDeviceInfoModel];
     CBHomeLeftMenuDeviceInfoModel *didClickModel = _paopaoView.deviceInfoModel;
     if (self.baiduView.hidden == NO) {
         // 更新选中设备在地图中居中位置
@@ -1816,6 +1817,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
             NSString *addressStr = [NSString stringWithFormat:@"%@%@%@%@%@",address.country,address.administrativeArea,address.locality,address.subLocality,address.thoroughfare];
             didClickModel.address = addressStr;
             self.paopaoView.deviceInfoModel = didClickModel;
+            
         }
     }];
 }
