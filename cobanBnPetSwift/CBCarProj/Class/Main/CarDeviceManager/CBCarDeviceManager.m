@@ -200,6 +200,8 @@
         if (self.didUpdateDeviceData) {
             self.didUpdateDeviceData(self.deviceDatas);
         }
+        [NSNotificationCenter.defaultCenter postNotificationName:@"CBCAR_NOTFICIATION_GETMQTT" object:nil userInfo:nil];
+        return;
     } else if (model.code != 21) { //2时, 更新围栏.
         /*
          {
