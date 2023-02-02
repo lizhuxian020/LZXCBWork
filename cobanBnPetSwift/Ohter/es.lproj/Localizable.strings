@@ -1501,3 +1501,4 @@
 "设置权限" = "Setting permissions";
 "号码类型" = "Number type";
 "输入手机号码(必填)" = "Enter  phone number (required)";
+"任何一项不能为空" = "None of the items can be empty";
