@@ -1,4 +1,4 @@
-/* 
+/*
   Localizable.strings
   cobanBnPetSwift
 
@@ -110,7 +110,7 @@
 "用户" = "User";
 "已同意" = "Approved";
 "点击查看" = "Click to view";
-"位置在" = "'s location in'"; 
+"位置在" = "'s location in'";
 "的声音" = "'s sound";
 "是否听听" = "Are you listening";
 "的位置未知" = "'s location is unkonwn";
@@ -809,7 +809,6 @@
 "名称" = "Name";
 "密码" = "Password";
 "请输入子用户名" = "Enter subuser name";
-"子用户名" = "Subuser name";
 "请输入姓名" = "Please type in your name";
 "请输入密码" = "Please enter your password";
 "请再次输入密码" = "Please enter your password again";
@@ -1451,4 +1450,54 @@
 
 "正常" = "Normal";
 "冻结" = "Freeze";
+
+"欢迎登录"= "Login please";
+"巴诺物联网"= "BAANOOL IOT";
+"开始追踪"= "Start track";
+"停止追踪"= "Stop track";
+"停留"= "stay";
+"方向"= "DIR";
+"无报警"= "no alarm";
+"圆形围栏: 点击地图选择圆心, 长按拖动小方块缩放改变半径"= "Circular fence: click the map to select the center of the circle, long press and drag the small square to zoom and change the radius";
+"矩形围栏: 点击地图选择两点, 自动形成矩形围栏"= "Rectangular fence: click the map to select two points to automatically form a rectangular fence";
+"多边形围栏: 点击地图至少选取三点, 自动形成多边形围栏"= "Polygonal fence: click the map to select at least three points to automatically form a polygonal fence";
+"发动机编号"= "engine number";
+"操作成功"= "Success";
+"添加子用户"= "Add sub-user";
+"运动" = "move";
+
+"喇叭开关" = "Speaker switch";
+"碰撞检测" = "Collision detection";
+"碰撞持续时间(ms)" = "Collision duration(ms)";
+"碰撞加速度(g)" = "Collision acceleration(g)";
+"急转弯" = "Sharp turn";
+"转弯角度(度)" = "Turning angle(°)";
+"转弯速度(km/h)" = "Turning speed(km/h)";
+
+"急加速" = "Rapid acceleration";
+"速度增加量(km/h)" = "Speed increase(km/h)";
+"加速时间(s)" = "Acceleration time(s)";
+
+"急刹车" = "Slam brake";
+"速度减小量(km/h)" = "Speed reduction(km/h)";
+"刹车时间(s)" = "Braking time(s)";
+"驾驶行为报表" = "Driving behavior report";
+
+"碰撞" = "Collision";
+"急加速" = "Rapid acceleration";
+"急刹车" = "Slam brake";
+"急转弯" = "Sharp turn";
+
+"其他" = "Other";
+"至少需要指定1个点" = "At least need to specify 1 points";
+"至少需要指定3个点" = "At least need to specify 3 points";
+"至少需要指定2个点" = "At least need to specify 2 points";
+
+"查看记录" = "Check Record";
+"消息类型:" = "Message Type:";
+
+"imei号已经被绑定，解绑后再试" = "imei number has been bound";
+"imei号不存在" = "imei number does not exist";
 "设置权限" = "Setting permissions";
+"号码类型" = "Number type";
+"输入手机号码(必填)" = "Enter  phone number (required)";
