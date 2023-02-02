@@ -96,20 +96,39 @@
         [weakself requestToStop:model];
     }];
     [cell setDidClickCheck:^{
-        [weakself.navigationController popViewControllerAnimated:YES];
+        [weakself requestToView:model];
+//        [weakself.navigationController popViewControllerAnimated:YES];
     }];
     return cell;
 }
 
 - (void)requestToStop:(_CBCarAlertMsgModel *)model {
     kWeakSelf(self);
+    [MBProgressHUD showHUDIcon:self.tableView animated:YES];
+    [[NetWorkingManager shared] postWithUrl:@"/devControlController/updateDeviceStatus" params:@{
+        @"dno": model.imei ?: @"",
+        @"warnStop": @1
+    } succeed:^(id response, BOOL isSucceed) {
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.tableView animated:YES];
+        [CBTopAlertView alertSuccess:Localized(@"操作成功")];
+        [self reload];
+    } failed:^(NSError *error) {
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.tableView animated:YES];
+    }];
+}
+
+- (void)requestToView:(_CBCarAlertMsgModel *)model {
+    kWeakSelf(self);
     [[NetWorkingManager shared] getWithUrl:@"alarmDealController/updateAlarmDeal" params:@{
         @"id": model.iid,
         @"type": @"1",
     } succeed:^(id response, BOOL isSucceed) {
         kStrongSelf(self);
+        [weakself.navigationController popViewControllerAnimated:YES];
         [HUD showHUDWithText:Localized(@"操作成功")];
-        [self reload];
+//        [CBTopAlertView alertSuccess:Localized(@"操作成功")];
         } failed:^(NSError *error) {
 
         }];
