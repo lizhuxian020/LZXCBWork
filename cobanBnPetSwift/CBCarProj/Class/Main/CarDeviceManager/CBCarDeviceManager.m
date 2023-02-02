@@ -167,7 +167,40 @@
     if (model.devStatus.intValue == 3) { //收到报警时, 更新首页的报警数量
         [NSNotificationCenter.defaultCenter postNotificationName:@"CBCAR_NOTFICIATION_UPDATE_ALARM_NUM" object:nil userInfo:nil];
     }
-    if (model.code != 21) { //2时, 更新围栏.
+    if (model.code == 1 || model.code == 6) {
+//        主题内容 topic/car-pc/188/863584040008426
+//
+//        上线推送数据：
+//        {
+//            "code": 6,
+//            "data": {
+//                "dno": "863584040008426",
+//                "devStatus": 1
+//            },
+//            "answerResult": 0,
+//            "dno": "863584040008426"
+//        }
+//
+//        离线推送数据
+//        {
+//            "code": 1,
+//            "data": {
+//                "dno": "863584040008426",
+//                "devStatus": 5
+//            },
+//            "answerResult": 0,
+//            "dno": "863584040008426"
+//        }
+        for (CBHomeLeftMenuDeviceInfoModel *deviceModel in self.deviceDatas) {
+            if ([deviceModel.dno isEqualToString:model.dno]) {
+                deviceModel.devStatusInMQTT = model.devStatus;
+                deviceModel.mqttCode = model.code;
+            }
+        }
+        if (self.didUpdateDeviceData) {
+            self.didUpdateDeviceData(self.deviceDatas);
+        }
+    } else if (model.code != 21) { //2时, 更新围栏.
         /*
          {
              answerResult = 0;

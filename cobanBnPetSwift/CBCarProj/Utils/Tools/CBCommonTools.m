@@ -283,6 +283,15 @@
     
     if (mqttCode > 0) {
         if (mqttCode == 6) {
+            if (devStatusInMqtt.intValue == 1 || devStatusInMqtt.intValue == 4) {
+                return [self getStopIcon:iconStr];
+            }
+            if (devStatusInMqtt.intValue == 2) {
+                return [self getNormalIcon:iconStr];
+            }
+            if (devStatusInMqtt.intValue == 3) {
+                return [self getWarmIcon:iconStr];
+            }
             return [self getNormalIcon:iconStr];
         }
         if (mqttCode == 21) {
