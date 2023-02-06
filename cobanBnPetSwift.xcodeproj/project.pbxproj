@@ -7134,7 +7134,7 @@
 					"\"$(SRCROOT)/cobanBnPetSwift/Vendors/VoiceConvert/AmrConverter/lib\"",
 					"\"$(SRCROOT)/cobanBnPetSwift/Vendors/VoiceConvert/LameUitls\"",
 				);
-				MARKETING_VERSION = 2.7;
+				MARKETING_VERSION = 2.8;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.coban.iot;
 				PRODUCT_MODULE_NAME = cobanBnPetSwift;
@@ -7178,7 +7178,7 @@
 					"\"$(SRCROOT)/cobanBnPetSwift/Vendors/VoiceConvert/AmrConverter/lib\"",
 					"\"$(SRCROOT)/cobanBnPetSwift/Vendors/VoiceConvert/LameUitls\"",
 				);
-				MARKETING_VERSION = 2.7;
+				MARKETING_VERSION = 2.8;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.coban.iot;
 				PRODUCT_MODULE_NAME = cobanBnPetSwift;
