@@ -170,10 +170,11 @@
 
 - (void)requestDeviceList {
     __weak __typeof__(self) weakSelf = self;
-    NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:1];
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     kWeakSelf(self);
-    [[NetWorkingManager shared]getWithUrl:@"personController/getMyDeviceList" params: dic succeed:^(id response,BOOL isSucceed) {
+    [[NetWorkingManager shared]getWithUrl:@"personController/getMyDeviceList" params:@{
+        @"keyWord": self.deviceInfoModelSelect.dno ?: @""
+    } succeed:^(id response,BOOL isSucceed) {
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         NSLog(@"设备列表:%@",response);
