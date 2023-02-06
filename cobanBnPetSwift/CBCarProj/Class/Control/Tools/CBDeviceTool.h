@@ -38,6 +38,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)getProductSpec:(CBHomeLeftMenuDeviceInfoModel *)model;
 
 - (void)getPaoViewConfig:(CBHomeLeftMenuDeviceInfoModel *)deviceModel blk:(void(^)(NSDictionary *configData))blk;
+
+- (void)createProductSpecData;
 @end
 
 NS_ASSUME_NONNULL_END

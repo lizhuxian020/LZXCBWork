@@ -43,6 +43,7 @@
                 if (self.didUpdateDeviceData) {
                     self.didUpdateDeviceData(self.deviceDatas);
                 }
+                [NSNotificationCenter.defaultCenter postNotificationName:@"CBCAR_NOTFICIATION_GETMQTT" object:nil userInfo:nil];
             }];
         }];
     }];
@@ -93,7 +94,7 @@
         }
         //把接口DeviceList的devStatus, online数据, 更新到getDevData之后的模型里
         NSArray<CBHomeLeftMenuDeviceInfoModel*> *modelArr = [CBHomeLeftMenuDeviceInfoModel mj_objectArrayWithKeyValuesArray:response[@"data"]];
-        for (CBHomeLeftMenuDeviceInfoModel *modelInDevice in self.deviceDatas) {
+        for (CBHomeLeftMenuDeviceInfoModel *modelInDevice in deviceArr) {
             for (CBHomeLeftMenuDeviceInfoModel *model in modelArr) {
                 if ([modelInDevice.dno isEqualToString:model.dno]) {
                     model.devStatus = modelInDevice.devStatus;

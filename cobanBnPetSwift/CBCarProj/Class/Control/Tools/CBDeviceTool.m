@@ -194,8 +194,25 @@
     }];
 }
 
+- (void)createProductSpecData {
+    kWeakSelf(self);
+    [[NetWorkingManager shared]postWithUrl:@"/productSpec/getInfo" params:@{} succeed:^(id response, BOOL isSucceed) {
+        kStrongSelf(self);
+        if (isSucceed) {
+            if (response && [response[@"data"] isKindOfClass:[NSArray class]]) {
+                NSArray<CBProductSpecModel *> *modelArr = [CBProductSpecModel mj_objectArrayWithKeyValuesArray:response[@"data"]];
+                self.productSpecData = modelArr;
+            }
+        }
+    } failed:^(NSError *error) {
+        
+    }];
+    
+}
+
 - (CBProductSpecModel *)_getSpecModelWithDevice:(CBHomeLeftMenuDeviceInfoModel *)deviceModel {
     if (!self.productSpecData) {
+        [self createProductSpecData];
         return nil;
     }
     CBProductSpecModel *targetModel = nil;
@@ -257,10 +274,10 @@
         @(targetSpecModel.isShowOverSpeed),
     ];
     
-    if (!self.currentProductSpec) {
-        blk(titleMArr, imageMArr);
-        return;
-    }
+//    if (!self.currentProductSpec) {
+//        blk(titleMArr, imageMArr);
+//        return;
+//    }
     NSMutableArray *waitToRemoveTitle = [NSMutableArray new];
     NSMutableArray *waitToRemoveImg = [NSMutableArray new];
     for (int i = 0; i < showArr.count; i++) {
@@ -345,10 +362,10 @@
         @(targetSpecModel.hardwareReboot),
     ];
     
-    if (!self.currentProductSpec) {
-        blk(titleMArr, imageMArr);
-        return;
-    }
+//    if (!self.currentProductSpec) {
+//        blk(titleMArr, imageMArr);
+//        return;
+//    }
     NSMutableArray *waitToRemoveTitle = [NSMutableArray new];
     NSMutableArray *waitToRemoveImg = [NSMutableArray new];
     for (int i = 0; i < showArr.count; i++) {
@@ -391,10 +408,10 @@
         @(targetSpecModel.isShowOilCheck),
     ];
     
-    if (!self.currentProductSpec) {
-        blk(titleMArr, imageMArr);
-        return;
-    }
+//    if (!self.currentProductSpec) {
+//        blk(titleMArr, imageMArr);
+//        return;
+//    }
     NSMutableArray *waitToRemoveTitle = [NSMutableArray new];
     NSMutableArray *waitToRemoveImg = [NSMutableArray new];
     for (int i = 0; i < showArr.count; i++) {
@@ -433,10 +450,10 @@
         @([targetSpecModel.hibernates containsString:@"5"]),
     ];
     
-    if (!self.currentProductSpec) {
-        blk(titleMArr, imageMArr);
-        return;
-    }
+//    if (!self.currentProductSpec) {
+//        blk(titleMArr, imageMArr);
+//        return;
+//    }
     NSMutableArray *waitToRemoveTitle = [NSMutableArray new];
     NSMutableArray *waitToRemoveImg = [NSMutableArray new];
     for (int i = 0; i < showArr.count; i++) {
