@@ -143,7 +143,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         let baiduManager = BMKMapManager.init()
         /// "ez3XELufZYgRK5XGP70XSOGYkxjYZDdt" 宠物的
         /// "iubOgPuj5aLUwQF2mrRmFrXUXnbZM970" 物联网的
-        let result = baiduManager.start("iubOgPuj5aLUwQF2mrRmFrXUXnbZM970", generalDelegate: nil)
+        let result = baiduManager.start("bPjUgGEY6QRbXnH6trvqD5GIcsGfarGg", generalDelegate: nil)
 //        let result = baiduManager.start("4AOKqVE1Ac5DtA8aD2IqkbtActwwSz8s", generalDelegate: nil)
         
         if result {
