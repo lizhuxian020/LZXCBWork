@@ -35,6 +35,10 @@
 @property (nonatomic, assign) NSInteger urgentWarn;
 /** 油量检测报警 */
 @property (nonatomic, assign) NSInteger oilCheckWarn;
+/** 温度报警参数 */
+@property (nonatomic, assign) NSInteger warmWd;
+/** 拆除报警参数 */
+@property (nonatomic, assign) NSInteger warmCc;
 /** 保养通知 */
 @property (nonatomic, assign) NSInteger serviceFlag;
 /** 振动灵敏度 */

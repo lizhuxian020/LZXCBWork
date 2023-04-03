@@ -203,6 +203,12 @@
         } else if ([titleStr isEqualToString:Localized(@"油量检测报警")]) {
             self.detailLabel.hidden = YES;
             self.detailImageView.hidden = YES;
+        } else if ([titleStr isEqualToString:Localized(@"拆除报警")]) {
+            self.detailLabel.hidden = YES;
+            self.detailImageView.hidden = YES;
+        } else if ([titleStr isEqualToString:Localized(@"温度报警")]) {
+            self.detailLabel.hidden = NO;
+            self.detailImageView.hidden = NO;
         } else if ([titleStr isEqualToString:Localized(@"保养通知")]) {
         }
         // 其他（待删，待梳理有无用处）
@@ -316,6 +322,11 @@
             self.switchView.on = controlListModel.warmZd;
         } else if ([titleStr isEqualToString:Localized(@"油量检测报警")]) {
             self.switchView.on = controlListModel.oilCheckWarn;
+        } else if ([titleStr isEqualToString:Localized(@"拆除报警")]) {
+            self.switchView.on = controlListModel.warmCc;
+        } else if ([titleStr isEqualToString:Localized(@"温度报警")]) {
+            self.switchView.on = controlListModel.warmWd;
+            self.centerLabel.text = Localized(@"0°C~1°C");
         } else if ([titleStr isEqualToString:Localized(@"保养通知")]) {
             self.switchView.on = controlListModel.serviceFlag;
             if (kStringIsEmpty(controlListModel.serviceInterval)) {

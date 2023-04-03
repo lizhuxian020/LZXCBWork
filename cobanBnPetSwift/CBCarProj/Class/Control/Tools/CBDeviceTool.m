@@ -390,13 +390,17 @@
         Localized(@"低电报警"),
         Localized(@"盲区报警") ,
         Localized(@"振动报警"),
-        Localized(@"油量检测报警")
+        Localized(@"油量检测报警"),
+        Localized(@"拆除报警"),
+        Localized(@"温度报警"),
     ]];
     [imageMArr addObjectsFromArray:@[
         @"掉电报警",
         @"低电报警",
         @"盲区报警",
         @"振动报警",
+        @"油量检测报警",
+        @"油量检测报警",
         @"油量检测报警"
     ]];
     
@@ -405,6 +409,8 @@
         @(targetSpecModel.isShowDidian),
         @(targetSpecModel.isShowBlind),
         @(targetSpecModel.isShowZd),
+        @(targetSpecModel.isShowOilCheck),
+        @(targetSpecModel.isShowOilCheck),
         @(targetSpecModel.isShowOilCheck),
     ];
     

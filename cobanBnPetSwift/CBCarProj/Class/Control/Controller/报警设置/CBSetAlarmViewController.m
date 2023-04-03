@@ -144,6 +144,8 @@
             [self showAlertSppedView];
         } else if ([model.titleStr isEqualToString:Localized(@"保养通知")]) {
             [self showServiceFlagView];
+        } else if ([model.titleStr isEqualToString:Localized(@"温度报警")]) {
+            NSLog(@"%s", __FUNCTION__);
         }
     }
 }
@@ -182,6 +184,16 @@
         }];
     } else if ([titleStr isEqualToString:Localized(@"油量检测报警")]) {
         [paramters setObject:status forKey:@"oilCheckWarn"];
+        [self alarmEditControlSwitchRequest:paramters succcess:^{
+            weakself.controlStatusModel.oilCheckWarn = status.intValue;
+        }];
+    } else if ([titleStr isEqualToString:Localized(@"拆除报警")]) {
+        [paramters setObject:status forKey:@"warm_cc"];
+        [self alarmEditControlSwitchRequest:paramters succcess:^{
+            weakself.controlStatusModel.oilCheckWarn = status.intValue;
+        }];
+    } else if ([titleStr isEqualToString:Localized(@"温度报警")]) {
+        [paramters setObject:status forKey:@"warm_wd"];//接口文档小写, 需求文档大写
         [self alarmEditControlSwitchRequest:paramters succcess:^{
             weakself.controlStatusModel.oilCheckWarn = status.intValue;
         }];

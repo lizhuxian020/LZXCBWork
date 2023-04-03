@@ -78,6 +78,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL jzwSwitch;
 @property (nonatomic, assign) BOOL jjsSwitch;
 @property (nonatomic, assign) BOOL jscSwitch;
+//@property (nonatomic, assign) BOOL warmWd;
+//@property (nonatomic, assign) BOOL warmCc;
 
 @property(nonatomic, copy) NSString *proto;
 @property(nonatomic, copy) NSString *tbDevModelId;
