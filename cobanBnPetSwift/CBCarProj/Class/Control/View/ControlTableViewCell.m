@@ -163,6 +163,20 @@
         } else if ([titleStr isEqualToString:_ControlConfigTitle_CSBJ]) {
             self.switchView.enabled = NO;
             self.detailLabel.hidden = YES;
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_WIFIRD]) {
+            self.detailLabel.hidden = YES;
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_PZ]) {
+            self.switchView.hidden = YES;
+            self.detailLabel.hidden = YES;
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_SSSP]) {
+            self.switchView.hidden = YES;
+            self.detailLabel.hidden = YES;
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_SXJCMM]) {
+            self.switchView.hidden = YES;
+            self.detailLabel.hidden = YES;
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_SCSXJ]) {
+            self.switchView.hidden = YES;
+            self.detailLabel.hidden = YES;
         } else if ([titleStr isEqualToString:Localized(@"电话唤醒")]) {
             self.switchView.hidden = YES;
             self.detailImageView.hidden = YES;
@@ -209,6 +223,7 @@
         } else if ([titleStr isEqualToString:Localized(@"温度报警")]) {
             self.detailLabel.hidden = NO;
             self.detailImageView.hidden = NO;
+//            self.switchView.enabled = NO;
         } else if ([titleStr isEqualToString:Localized(@"保养通知")]) {
         }
         // 其他（待删，待梳理有无用处）
@@ -304,6 +319,8 @@
         } else if ([titleStr isEqualToString:_ControlConfigTitle_CSBJ]) {
             self.switchView.on = controlListModel.warmSpeed;
             self.centerLabel.text = [NSString stringWithFormat: @"%@Km/h", controlListModel.overWarm?:@"0"];
+        } else if ([titleStr isEqualToString:_ControlConfigTitle_WIFIRD]) {
+            self.switchView.on = controlListModel.warmSpeed;
         } else if ([titleStr isEqualToString:Localized(@"多次定位")]) {
             self.switchView.on = controlListModel.dcdd;
         } else if ([titleStr isEqualToString:Localized(@"断油断电")]) {
@@ -326,7 +343,6 @@
             self.switchView.on = controlListModel.warmCc;
         } else if ([titleStr isEqualToString:Localized(@"温度报警")]) {
             self.switchView.on = controlListModel.warmWd;
-            self.centerLabel.text = Localized(@"0°C~1°C");
         } else if ([titleStr isEqualToString:Localized(@"保养通知")]) {
             self.switchView.on = controlListModel.serviceFlag;
             if (kStringIsEmpty(controlListModel.serviceInterval)) {
@@ -502,6 +518,9 @@
             self.switchDetailLabel.hidden = NO;
             self.switchDetailLabel.text = [arr componentsJoinedByString:@","];
             self.switchView.on = _switchModel.jsc_switch;
+        } else if ([titleStr isEqualToString:Localized(@"温度报警")]) {
+            NSString *text = [NSString stringWithFormat:@"%@°C~%@°C", _switchModel.wdLowerLimit, _switchModel.wdUpperLimit];
+            self.centerLabel.text = text;
         }
     }
     

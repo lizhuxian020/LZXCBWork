@@ -20,6 +20,11 @@
 #define _ControlConfigTitle_BFCF Localized(@"布防/撤防")
 #define _ControlConfigTitle_HFCX Localized(@"话费查询")
 #define _ControlConfigTitle_CSBJ Localized(@"超速报警")
+#define _ControlConfigTitle_WIFIRD Localized(@"Wifi热点")
+#define _ControlConfigTitle_PZ Localized(@"拍照")
+#define _ControlConfigTitle_SSSP Localized(@"实时视频")
+#define _ControlConfigTitle_SXJCMM Localized(@"摄像机重命名")
+#define _ControlConfigTitle_SCSXJ Localized(@"删除摄像机")
 
 #define _ControlConfigTitle_SQSZ Localized(@"时区设置")
 #define _ControlConfigTitle_SZDXMM Localized(@"设置短信密码")

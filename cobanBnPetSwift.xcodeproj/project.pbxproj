@@ -673,6 +673,7 @@
 		A2BCA2D8294311F700CD4B08 /* CBFencyMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BCA2D7294311F700CD4B08 /* CBFencyMenuView.m */; };
 		A2BCA2DF2943242300CD4B08 /* CBDeviceTool.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BCA2DE2943242300CD4B08 /* CBDeviceTool.m */; };
 		A2BCA2E72943410900CD4B08 /* CBDoubleTimePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BCA2E52943410900CD4B08 /* CBDoubleTimePicker.m */; };
+		A2D7737829DAE12900EA2783 /* _CBWIFIModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A2D7737729DAE12900EA2783 /* _CBWIFIModel.m */; };
 		A2E3A0A42963D21700E2C27B /* CBPhoneBookHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E3A0A32963D21700E2C27B /* CBPhoneBookHeaderView.m */; };
 		A2E3A0A72963FDE500E2C27B /* CBPhoneBookAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E3A0A62963FDE500E2C27B /* CBPhoneBookAlertView.m */; };
 		A2F9C5002925D1C400715AF9 /* CBPetLoginInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F9C4FF2925D1C400715AF9 /* CBPetLoginInputView.swift */; };
@@ -1911,6 +1912,8 @@
 		A2BCA2DE2943242300CD4B08 /* CBDeviceTool.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBDeviceTool.m; sourceTree = "<group>"; };
 		A2BCA2E52943410900CD4B08 /* CBDoubleTimePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBDoubleTimePicker.m; sourceTree = "<group>"; };
 		A2BCA2E62943410900CD4B08 /* CBDoubleTimePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBDoubleTimePicker.h; sourceTree = "<group>"; };
+		A2D7737629DAE12900EA2783 /* _CBWIFIModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBWIFIModel.h; sourceTree = "<group>"; };
+		A2D7737729DAE12900EA2783 /* _CBWIFIModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _CBWIFIModel.m; sourceTree = "<group>"; };
 		A2E3A0A22963D21700E2C27B /* CBPhoneBookHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBPhoneBookHeaderView.h; sourceTree = "<group>"; };
 		A2E3A0A32963D21700E2C27B /* CBPhoneBookHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBPhoneBookHeaderView.m; sourceTree = "<group>"; };
 		A2E3A0A52963FDE500E2C27B /* CBPhoneBookAlertView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBPhoneBookAlertView.h; sourceTree = "<group>"; };
@@ -5969,6 +5972,8 @@
 			children = (
 				B1F37663293B06EA0034D4D8 /* _CBCommandRecord.h */,
 				B1F37664293B06EA0034D4D8 /* _CBCommandRecord.m */,
+				A2D7737629DAE12900EA2783 /* _CBWIFIModel.h */,
+				A2D7737729DAE12900EA2783 /* _CBWIFIModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -6294,6 +6299,7 @@
 				17970AC724076AD400ECDE78 /* CBPetBaseViewController.swift in Sources */,
 				439E90552475A497004ED9AD /* CBAppSettingViewController.swift in Sources */,
 				17CDAB6124CEBE5500BB9F8B /* BaseLineBarData.m in Sources */,
+				A2D7737829DAE12900EA2783 /* _CBWIFIModel.m in Sources */,
 				1782BF5B24C0427E00544C36 /* CBHomeTalkViewController.m in Sources */,
 				17CDAB7024CEBE5500BB9F8B /* GGAxisRenderer.m in Sources */,
 				437E1644248BF82B0086DBB4 /* UIView+Extension.swift in Sources */,

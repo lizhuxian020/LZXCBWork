@@ -245,6 +245,11 @@
         _ControlConfigTitle_BFCF,
         _ControlConfigTitle_HFCX,
         _ControlConfigTitle_CSBJ,
+        _ControlConfigTitle_WIFIRD,
+        _ControlConfigTitle_PZ,
+        _ControlConfigTitle_SSSP,
+        _ControlConfigTitle_SXJCMM,
+        _ControlConfigTitle_SCSXJ
     ]];
     [imageMArr addObjectsFromArray:@[
         @"单次定位",
@@ -257,6 +262,11 @@
         @"远程点火",
         @"布防撤防",
         @"话费查询",
+        @"超速报警",
+        @"超速报警",
+        @"超速报警",
+        @"超速报警",
+        @"超速报警",
         @"超速报警",
     ]];
     
@@ -271,6 +281,11 @@
         @(targetSpecModel.remoteStart),
         @(targetSpecModel.arm),
         @(targetSpecModel.callChargeInquiry),
+        @(targetSpecModel.isShowOverSpeed),
+        @(targetSpecModel.isShowOverSpeed),
+        @(targetSpecModel.isShowOverSpeed),
+        @(targetSpecModel.isShowOverSpeed),
+        @(targetSpecModel.isShowOverSpeed),
         @(targetSpecModel.isShowOverSpeed),
     ];
     

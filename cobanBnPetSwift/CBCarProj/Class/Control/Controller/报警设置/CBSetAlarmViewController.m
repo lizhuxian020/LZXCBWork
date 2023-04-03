@@ -17,6 +17,7 @@
 
 @property (nonatomic,strong) NSMutableArray *arrayData;
 @property (nonatomic, strong) MINControlListDataModel *controlStatusModel;
+@property (nonatomic, strong) CBTerminalSwitchModel *switchModel;
 @property (nonatomic, strong) UITextField *speedTF;
 
 /** 输入弹窗 */
@@ -32,6 +33,7 @@
     [super viewWillAppear:animated];
     
     [self getControlStatusRequest];
+    [self requestSwichModel];
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -106,6 +108,26 @@
         [MBProgressHUD hideHUDForView:self.view animated:YES];
     }];
 }
+#pragma mark -- 获取开关类设备控制参数
+- (void)requestSwichModel {
+    [MBProgressHUD showHUDIcon:self.view animated:YES];
+    NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
+    [paramters setObject:_deviceInfoModelSelect.dno?:@"" forKey:@"dno"];
+    kWeakSelf(self);
+    [[NetWorkingManager shared] getWithUrl:@"devControlController/getDeviceSwitchControl" params:paramters succeed:^(id response, BOOL isSucceed) {
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        NSLog(@"---------结果：%@",response);
+        if (isSucceed) {
+            if (response && [response[@"data"] isKindOfClass:[NSDictionary class]]) {
+                self.switchModel = [CBTerminalSwitchModel yy_modelWithJSON:response[@"data"]];
+                [self.tableView reloadData];
+            }
+        }
+    } failed:^(NSError *error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    }];
+}
 #pragma mark UITableViewDatasource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
@@ -124,6 +146,7 @@
         cell.indexPath = indexPath;
         cell.controlModel = model;
         cell.controlListModel = self.controlStatusModel;
+        cell.switchModel = self.switchModel;
         kWeakSelf(self);
         cell.switchStateChangeBlock = ^(NSIndexPath *indexPath, BOOL isON) {
             kStrongSelf(self);
@@ -145,7 +168,7 @@
         } else if ([model.titleStr isEqualToString:Localized(@"保养通知")]) {
             [self showServiceFlagView];
         } else if ([model.titleStr isEqualToString:Localized(@"温度报警")]) {
-            NSLog(@"%s", __FUNCTION__);
+            [self showWDBJ];
         }
     }
 }
@@ -202,6 +225,87 @@
         [self alarmEditControlNewRequest:paramters];
     }
 }
+- (void)showWDBJ {
+    UIView *contentView = [UIView new];
+    contentView.backgroundColor = [UIColor whiteColor];
+    UISwitch *s = [UISwitch new];
+    [contentView addSubview:s];
+    
+    UITextField *tfLow = [self wdTF];
+    tfLow.text = self.switchModel.wdLowerLimit;
+    [contentView addSubview:tfLow];
+    
+    UITextField *tfHigh = [self wdTF];
+    tfHigh.text = self.switchModel.wdUpperLimit;
+    [contentView addSubview:tfHigh];
+    
+    [s mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(@15);
+        make.bottom.equalTo(@-15);
+        make.right.equalTo(@-15);
+    }];
+    
+    [tfHigh mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(@0);
+        make.width.equalTo(s);
+        make.right.equalTo(s.mas_left);
+    }];
+    
+    [tfLow mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(@0);
+        make.width.equalTo(s);
+        make.right.equalTo(tfHigh.mas_left);
+        make.left.equalTo(@15);
+    }];
+    
+    CBAlertBaseView *alertView = [[CBAlertBaseView alloc] initWithContentView:contentView title:Localized(@"温度报警")];
+    
+    CBBasePopView *popView = [[CBBasePopView alloc] initWithContentView:alertView];
+    __weak CBBasePopView *wpopView = popView;
+    kWeakSelf(self);
+    [alertView setDidClickConfirm:^{
+        [wpopView dismiss];
+//        if (confirmBlk) {
+//            confirmBlk(@"");
+//        }
+        [weakself confirmWDBJ:tfLow.text wdHigh:tfHigh.text];
+    }];
+    [alertView setDidClickCancel:^{
+        [wpopView dismiss];
+//        if (cancelBlk) {
+//            cancelBlk();
+//        }
+    }];
+    [popView pop];
+}
+
+- (UITextField *)wdTF {
+    UITextField *tf = [UITextField new];
+    tf.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+    return tf;
+}
+
+- (void)confirmWDBJ:(NSString *)wdLow wdHigh:(NSString *)wdHigh{
+    [MBProgressHUD showHUDIcon:self.view animated:YES];
+    NSDictionary *paramters = @{
+        @"dno": _deviceInfoModelSelect.dno ?: @"",
+        @"wd_lower_limit": wdLow ?: @"",
+        @"wd_upper_limit": wdHigh ?: @"",
+    };
+    kWeakSelf(self);
+    [[NetWorkingManager shared] postWithUrl:@"devParamController/editDevConf" params: paramters succeed:^(id response, BOOL isSucceed) {
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [CBTopAlertView alertSuccess:Localized(@"操作成功")];
+        [self requestSwichModel];
+    } failed:^(NSError *error) {
+        kStrongSelf(self);
+        [self requestSwichModel];
+        [self requestSwichModel];
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    }];
+}
+
 #pragma mark -- 超速报警
 - (void)showAlertSppedView {
     [self.inputPopView updateTitle:Localized(@"超速报警") placehold:Localized(@"输入时速KM") isDigital:YES];

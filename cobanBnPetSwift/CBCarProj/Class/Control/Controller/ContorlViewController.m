@@ -31,6 +31,7 @@
 #import "CBOBDMsgViewController.h"
 #import "CBCarControlConfig.h"
 #import "CBCarAlertView.h"
+#import "_CBWIFIModel.h"
 
 #define K_CBCarWakeUpByCallPhoneNotification @"K_CBCarWakeUpByCallPhoneNotification"  // 车联网唤醒
 
@@ -63,6 +64,7 @@
     [super viewWillAppear: animated];
     
     [self requestListDataWithHud:nil];
+    [self requestWIFIInfo];
 }
 //Localized(@"断油断电")
 - (void)viewDidLoad {
@@ -210,11 +212,16 @@
     __weak __typeof__(self) weakSelf = self;
     cell.switchStateChangeBlock = ^(NSIndexPath *indexPath, BOOL isON) {
         NSLog(@"%ld %d", (long)indexPath.row , isON);
-//        if (isON == YES) {
-//            [weakSelf editRowDataWithIndexPath:indexPath data:@"1" switchStr:@"1"];
-//        }else {
-//            [weakSelf editRowDataWithIndexPath:indexPath data:@"0" switchStr:@"0"];
-//        }
+        CBControlModel *model = self.arrayData[indexPath.row];
+        NSString *titleStr = model.titleStr;
+        NSMutableDictionary *paramters = [NSMutableDictionary dictionaryWithDictionary:@{
+        }];
+        if ([titleStr isEqualToString:Localized(@"单次定位")]) {
+            paramters[@"wifi_switch"] = isON?@"1":@"0";
+        }
+        [weakSelf editControlSwitchRequest:paramters success:^{
+            //TODO: 直接把缓存的wifi改了, 然后reloadtableView
+        }];
     };
     return cell;
 }
@@ -263,6 +270,16 @@
             [self.navigationController pushViewController: vc animated: YES];
         } else if ([model.titleStr isEqualToString:_ControlConfigTitle_CSBJ]) {
             [self showCSBJ];
+        } else if ([model.titleStr isEqualToString:_ControlConfigTitle_WIFIRD]) {
+            [self clickWIFI];
+        } else if ([model.titleStr isEqualToString:_ControlConfigTitle_PZ]) {
+            [self clickPZ];
+        } else if ([model.titleStr isEqualToString:_ControlConfigTitle_SSSP]) {
+            [self clickSSSP];
+        } else if ([model.titleStr isEqualToString:_ControlConfigTitle_SXJCMM]) {
+            [self clickSXJCMM];
+        } else if ([model.titleStr isEqualToString:_ControlConfigTitle_SCSXJ]) {
+            [self clickSCSXJ];
         } else if ([model.titleStr isEqualToString:Localized(@"电子围栏")]) {
             ElectronicFenceViewController *electronicFenceVC = [[ElectronicFenceViewController alloc] init];
             electronicFenceVC.hidesBottomBarWhenPushed = YES;
@@ -407,116 +424,27 @@
     }] pop];
    
 }
-//- (void)showAlertPickerViewWithTitle:(NSString *)title selectTitle:(NSString *)selectTitle indexPath:(NSIndexPath *)indexPath {
-//    ControlTableViewCell *cell = [self.tableView cellForRowAtIndexPath: indexPath];
-//    __weak __typeof__(self) weakSelf = self;
-//    MINAlertView *alertView = [[MINAlertView alloc] init];
-//    __weak MINAlertView *weakAlertView = alertView;
-//    alertView.titleLabel.text = title;
-//    [weakSelf.view addSubview: alertView];
-//    [alertView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.bottom.right.equalTo(weakSelf.view);
-//        make.height.mas_equalTo(SCREEN_HEIGHT);
-//    }];
-//    weakSelf.alertButton = [MINUtils createBorderBtnWithArrowImage];
-//    [alertView.contentView addSubview: weakSelf.alertButton];
-//    [weakSelf.alertButton mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.centerX.equalTo(alertView.contentView);
-//        make.centerY.equalTo(alertView.contentView).with.offset(-5 * KFitHeightRate);
-//        make.height.mas_equalTo(40 * KFitHeightRate);
-//        make.width.mas_equalTo(250 * KFitWidthRate);
-//    }];
-//    [weakSelf.alertButton addTarget: self action: @selector(alertButtonClick) forControlEvents: UIControlEventTouchUpInside];
-//    weakSelf.btnLabel = [MINUtils createLabelWithText: selectTitle size: 15 * KFitHeightRate alignment: NSTextAlignmentLeft textColor: kRGB(96, 96, 96)];
-//    [weakSelf.alertButton addSubview: weakSelf.btnLabel];
-//    [weakSelf.btnLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.bottom.equalTo(weakSelf.alertButton);
-//        make.left.equalTo(weakSelf.alertButton).with.offset(12.5 * KFitWidthRate);
-//        make.width.mas_equalTo(200 * KFitWidthRate);
-//    }];
-//    alertView.rightBtnClick = ^{
-//        [weakAlertView hideView];
-//            // 修改model的数据，不要忘记了
-//        cell.detailLabel.text = weakSelf.btnLabel.text;
-//        [weakSelf editRowDataWithIndexPath: indexPath data: [NSString stringWithFormat: @"%d" , weakSelf.listModel.restMod] switchStr:nil];
-//    };
-//    alertView.leftBtnClick = ^{
-//        [weakAlertView hideView];
-//    };
-//}
-//- (void)editRowDataWithIndexPath:(NSIndexPath *)indexPath data:(NSString *)data switchStr:(NSString *)switchStr {
-//    NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:3];
-//    dic[@"dno"] = _deviceInfoModelSelect.dno?:@"";
-//    if (self.arrayData.count > indexPath.row) {
-//        CBControlModel *model = self.arrayData[indexPath.row];
-//        NSString *titleStr = model.titleStr;
-//        if ([titleStr isEqualToString:Localized(@"单次定位")]) {
-//        } else if ([titleStr isEqualToString:Localized(@"休眠定位策略")]) {
-//            dic[@"dcdd"] = data;
-//        } else if ([titleStr isEqualToString:Localized(@"电子围栏")]) {
-//        } else if ([titleStr isEqualToString:Localized(@"断油断电")]) {
-//            if ([data isEqualToString: @"oil"]) {
-//                dic[@"oil"] = [NSString stringWithFormat: @"%d", self.listModel.oil];;
-//            }else {
-//                dic[@"dydd"] = data;
-//            }
-//        } else if ([titleStr isEqualToString:Localized(@"布防/撤防")]) {
-//            dic[@"cfbf"] = data;
-//        } else if ([titleStr isEqualToString:Localized(@"振动报警")]) {
-//            dic[@"warm_zd"] = data;
-//        } else if ([titleStr isEqualToString:Localized(@"低电报警")]) {
-//            dic[@"warm_didian"] = data;
-//        } else if ([titleStr isEqualToString:Localized(@"掉电报警")]) {
-//            dic[@"warm_diaodian"] = data;
-//        } else if ([titleStr isEqualToString:Localized(@"位移报警")]) {
-//            dic[@"warm_wy"] = data;  //位移开关
-//            if (switchStr) {
-//                dic[@"move_warm"] = data; //位移值
-//            }
-//        } else if ([titleStr isEqualToString:Localized(@"录音")]) {
-//            dic[@"voice"] = data;
-//        } else if ([titleStr isEqualToString:Localized(@"立即拍照")]) {
-//            dic[@"photo"] = data;
-//        } else if ([titleStr isEqualToString:Localized(@"请求OBD消息")]) {
-//            if ([data isEqualToString: @"ObdMsg"]) {
-//                dic[@"obdMsg"] = [NSString stringWithFormat: @"%d", self.listModel.obdMsg];
-//                dic[@"obd"] = @"1";  // 选择了时间，就开启了OBD消息
-//            }else {
-//                dic[@"obd"] = data;
-//            }
-//        } else if ([titleStr isEqualToString:Localized(@"电话回拨")]) {
-//            dic[@"phone"] = data;
-//        } else if ([titleStr isEqualToString:Localized(@"超速报警")]) {
-//            dic[@"over_warm"] = data;           //超速值
-//            if (switchStr) {
-//                dic[@"warm_speed"] = switchStr; //超速开关
-//            }
-//        } else if ([titleStr isEqualToString:Localized(@"信息服务下发")]) {
-//        } else if ([titleStr isEqualToString:Localized(@"云台控制")]) {
-//        } else if ([titleStr isEqualToString:Localized(@"多次拍照")]) {
-//        } else if ([titleStr isEqualToString:Localized(@"休眠模式")]) {
-//            dic[@"rest_mod"] = data;
-//        } else if ([titleStr isEqualToString:Localized(@"配置设备参数")]) {
-//        }
-//    }
-//#pragma mark -- 编辑开关类控制网络请求
-//    __weak __typeof__(self) weakSelf = self;
-//    [MBProgressHUD showHUDIcon:self.view animated:YES];
-//    kWeakSelf(self);
-//    [[NetWorkingManager shared] postWithUrl: @"devControlController/editSwitchParam" params: dic succeed:^(id response, BOOL isSucceed) {
-//        kStrongSelf(self);
-//        if (isSucceed) {
-//            [weakSelf requestListDataWithHud:nil];
-//        } else {
-//            [self.tableView reloadData];
-//            [MBProgressHUD hideHUDForView:self.view animated:YES];
-//        }
-//    } failed:^(NSError *error) {
-//        kStrongSelf(self);
-//        [MBProgressHUD hideHUDForView:self.view animated:YES];
-//        [self.tableView reloadData];
-//    }];
-//}
+
+- (void)clickWIFI {
+    
+}
+
+- (void)clickPZ {
+    
+}
+
+- (void)clickSSSP {
+    
+}
+
+- (void)clickSXJCMM {
+    
+}
+
+- (void)clickSCSXJ {
+    
+}
+
 //#pragma mark - PickerViewDelegate
 //- (void)minPickerView:(MINPickerView *)pickerView didSelectWithDic:(NSDictionary *)dic {
 //    NSNumber *number = dic[@"0"];
@@ -654,6 +582,23 @@
         default:
             break;
     }
+}
+
+- (void)requestWIFIInfo {
+    __weak __typeof__(self) weakSelf = self;
+    [MBProgressHUD showHUDIcon:self.view animated:YES];
+    kWeakSelf(self);
+    [[NetWorkingManager shared] getWithUrl: @"/cameraChannelController/getChannelBydno" params:@{
+        @"dno": _deviceInfoModelSelect.dno ?: @""
+    } succeed:^(id response, BOOL isSucceed) {
+        kStrongSelf(self);
+//        [self.tableView reloadData];
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    } failed:^(NSError *error) {
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+//        [self.tableView reloadData];
+    }];
 }
 #pragma mark -- 终端设备开关设置
 - (void)editControlSwitchRequest:(NSMutableDictionary *)paramters success:(void(^)(void))successBlk{

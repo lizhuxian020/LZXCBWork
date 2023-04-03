@@ -28,6 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL jsc_switch ; /** <##> **/
 @property (nonatomic, copy) NSString *jsc_speed ; /** <##> **/
 @property (nonatomic, copy) NSString *jsc_time ; /** <##> **/
+@property (nonatomic, copy) NSString *wdLowerLimit ; //温度下限
+@property (nonatomic, copy) NSString *wdUpperLimit ; //温度上限
 //"pz_switch" ：1,//碰撞开关 0:关,1:开，
 //"pz_speed":10,//碰撞加速度（g）
 //"pz_time":50,//碰撞时长（ms）
