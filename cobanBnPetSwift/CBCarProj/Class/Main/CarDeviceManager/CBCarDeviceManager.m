@@ -168,7 +168,53 @@
     if (model.devStatus.intValue == 3) { //收到报警时, 更新首页的报警数量
         [NSNotificationCenter.defaultCenter postNotificationName:@"CBCAR_NOTFICIATION_UPDATE_ALARM_NUM" object:nil userInfo:nil];
     }
-    if (model.code == 1 || model.code == 6) {
+    /*
+     "code":73 下发wifi名和密码
+
+     {
+         "code": 73,
+         "data": {
+             "wifi_name ": "cobanxxx",
+             "wifi_password": "123456"
+         },
+         "answerResult": 0,
+         "dno": "863584040008426"
+     }
+     */
+    if (model.code == 73) {
+        
+        [NSNotificationCenter.defaultCenter postNotificationName:@"CBCAR_NOTFICIATION_GET_WIFI_INFO" object:nil userInfo:@{
+            @"wifi_name": model.wifi_name ?: @"",
+            @"wifi_password": model.wifi_password ?: @"",
+        }];
+        return;
+    } else if (model.code == 64) {
+        /*
+         "code": 64 设备主动上报报警图片/用户下发拍照指令上报
+
+         备注:863584040008426
+         1.主动上报和报警的区分标识：
+                   warn_type:字段为空用户下发拍照上报,不为空触发报警主动上报
+          触发报警主动上报类型：直接弹个大图出来，存在 查看、忽略 两个按钮 点查看跳到消息列表，点忽略消失
+          用户下发拍照上报类型：直接弹个大图出来，存在   保存、忽略两个按钮 点保存存到手机相册，点忽略消失
+         2.消息列表：消息列表有图就图文展示 没图就和之前一样
+
+         {
+             "code": 64,
+             "data": {
+                 "lat":22.115,//纬度
+                 "lng":113.5555,//经度
+                 "image_paths":"a.jpg,b.jpg",//报警图片
+                 "warn_type":1,2,3 //报警类型
+                 "ts":1678417609 //报警时间
+             }
+             "answerResult": 0, //0 成功  其他： 下发失败
+             "dno": "863584040008426"
+
+         }
+         */
+        return;
+    } else if (model.code == 1 || model.code == 6) {
 //        主题内容 topic/car-pc/188/863584040008426
 //
 //        上线推送数据：

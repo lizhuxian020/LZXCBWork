@@ -80,6 +80,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL jscSwitch;
 //@property (nonatomic, assign) BOOL warmWd;
 //@property (nonatomic, assign) BOOL warmCc;
+@property (nonatomic, assign) BOOL wifiHotspot; //wifi热点
+@property (nonatomic, assign) BOOL photograph; //拍照
+@property (nonatomic, assign) BOOL realtimeVideo; //实时视频
+@property (nonatomic, assign) BOOL temp; //温度 此参数控制：温度开关 设置温度上/下限值判断
+//@property (nonatomic, assign) BOOL warmCc;
 
 @property(nonatomic, copy) NSString *proto;
 @property(nonatomic, copy) NSString *tbDevModelId;

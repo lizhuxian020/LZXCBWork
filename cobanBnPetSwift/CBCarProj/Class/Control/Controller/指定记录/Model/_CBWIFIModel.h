@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface _CBWIFIModel : NSObject
 
 @property (nonatomic, strong) _CBWIFIModel_WIFI *wifi;
-@property (nonatomic, strong) _CBWIFIModel_ROW *row;
+@property (nonatomic, strong) NSArray<_CBWIFIModel_ROW *> *row;
 
 @end
 

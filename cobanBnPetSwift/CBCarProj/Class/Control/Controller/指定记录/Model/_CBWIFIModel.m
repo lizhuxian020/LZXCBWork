@@ -24,4 +24,10 @@
 
 @implementation _CBWIFIModel
 
++ (NSDictionary *)mj_objectClassInArray {
+    return @{
+        @"row": _CBWIFIModel_ROW.class
+    };
+}
+
 @end

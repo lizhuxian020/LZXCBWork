@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "CBTerminalSwitchModel.h"
+#import "_CBWIFIModel.h"
 @class MINSwitchView;
 @class CBControlModel;
 @class MINControlListDataModel;
@@ -32,6 +33,7 @@
 @property (nonatomic, strong) MINControlListDataModel *controlListModel;
 @property (nonatomic, strong) ConfigurationParameterModel *configurationModel;
 @property (nonatomic, strong) CBTerminalSwitchModel *switchModel;
+@property (nonatomic, strong) _CBWIFIModel *wifiModel;
 @end
 
 

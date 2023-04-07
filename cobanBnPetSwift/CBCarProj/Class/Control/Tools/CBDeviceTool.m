@@ -282,11 +282,11 @@
         @(targetSpecModel.arm),
         @(targetSpecModel.callChargeInquiry),
         @(targetSpecModel.isShowOverSpeed),
-        @(targetSpecModel.isShowOverSpeed),
-        @(targetSpecModel.isShowOverSpeed),
-        @(targetSpecModel.isShowOverSpeed),
-        @(targetSpecModel.isShowOverSpeed),
-        @(targetSpecModel.isShowOverSpeed),
+        @(targetSpecModel.wifiHotspot),
+        @(targetSpecModel.photograph),
+        @(targetSpecModel.realtimeVideo),
+        @(1),//LZXTODO: 字段是什么?
+        @(1),//LZXTODO: 字段是什么?
     ];
     
 //    if (!self.currentProductSpec) {

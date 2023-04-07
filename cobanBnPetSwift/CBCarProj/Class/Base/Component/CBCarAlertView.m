@@ -375,4 +375,18 @@
     }];
     return popView;
 }
+
++ (CBBasePopView *)viewWithImage:(UIImage *)img {
+    UIView *contentView = [UIView new];
+    contentView.backgroundColor = [UIColor whiteColor];
+    UIImageView *imgV = [[UIImageView alloc] initWithImage:img];
+    [contentView addSubview:imgV];
+    [imgV mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.equalTo(@10);
+        make.right.bottom.equalTo(@-10);
+        make.width.equalTo(imgV.mas_height);
+    }];
+    CBBasePopView *popView = [[CBBasePopView alloc] initWithContentView:contentView];
+    return popView;
+}
 @end

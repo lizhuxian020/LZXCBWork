@@ -535,6 +535,12 @@
         self.switchStateChangeBlock(self.indexPath, switchView.isOn);
     }
 }
+
+- (void)setWifiModel:(_CBWIFIModel *)wifiModel {
+    _wifiModel = wifiModel;
+    
+    self.switchView.on = _wifiModel ? [_wifiModel.wifi.wifiSwitch isEqualToString:@"1"] : NO;
+}
 @end
 
 

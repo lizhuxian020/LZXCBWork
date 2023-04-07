@@ -68,6 +68,9 @@ NS_ASSUME_NONNULL_BEGIN
 + (CBBasePopView *)viewWithSubAccountAuthConfig:(UIView *)contentView
                                         confrim:(void(^)(NSString *contentStr))confirmBlk;
 
++ (CBBasePopView *)viewWithImage:(UIImage *)img;
++ (CBBasePopView *)viewWithImageURL:(UIImage *)img;
+
 @end
 
 NS_ASSUME_NONNULL_END

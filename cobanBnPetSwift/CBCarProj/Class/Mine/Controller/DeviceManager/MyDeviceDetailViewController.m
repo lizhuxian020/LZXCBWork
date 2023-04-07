@@ -411,11 +411,16 @@
         [paramters setObject:[NSNumber numberWithInteger:self.model.icon] forKey:@"icon"];
         NSInteger produceSpecdIdx = [self.devModelArray indexOfObject:self.devModel];
         if (produceSpecdIdx != NSNotFound) {
-            [paramters setObject:@(produceSpecdIdx+1) forKey:@"productSpecId"];
+//            [paramters setObject:@(produceSpecdIdx+1) forKey:@"productSpecId"];
+            [paramters setObject:self.devModelIdArray[produceSpecdIdx] forKey:@"productSpecId"];
         }
         NSInteger groupIdx = [self.groupNameArray indexOfObject:self.groupName];
         if (groupIdx != NSNotFound) {
-            [paramters setObject:@(groupIdx) forKey:@"groupId"];
+            if (self.groupIdArray && groupIdx < self.groupIdArray.count) {
+                [paramters setObject:self.groupIdArray[groupIdx] forKey:@"groupId"];
+            } else {
+                [paramters setObject:@(groupIdx) forKey:@"groupId"];
+            }
         }
 
         [MBProgressHUD showHUDIcon:self.view animated:YES];

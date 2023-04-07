@@ -32,6 +32,7 @@
 #import "CBCarControlConfig.h"
 #import "CBCarAlertView.h"
 #import "_CBWIFIModel.h"
+#import "CBWtCommonTools.h"
 
 #define K_CBCarWakeUpByCallPhoneNotification @"K_CBCarWakeUpByCallPhoneNotification"  // 车联网唤醒
 
@@ -47,7 +48,7 @@
 //@property (nonatomic, strong) UIButton *obdBttomBtn;
 @property (nonatomic, assign) BOOL isObdMessage;
 @property (nonatomic, strong) MINControlListDataModel *listModel;
-
+@property (nonatomic, strong) _CBWIFIModel *wifiModel;
 /** 提示弹窗 */
 @property (nonatomic,strong) CBControlAlertPopView *alertPopView;
 /** 输入值弹窗 */
@@ -74,6 +75,7 @@
     [self createUI];
 //    self.restArr = @[@[Localized(@"长在线"), Localized(@"时间休眠"), Localized(@"振动休眠"), Localized(@"深度振动休眠"), Localized(@"定时报告"), Localized(@"定时报告+深度振动休眠")]];
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(requestListDataWithHud:) name:@"CBCAR_NOTFICIATION_GETMQTT_CODE2" object:nil];
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(didGetMQTTWIFIInfo:) name:@"CBCAR_NOTFICIATION_GET_WIFI_INFO" object:nil];
 }
 - (NSMutableArray *)arrayData {
     if (!_arrayData) {
@@ -113,6 +115,21 @@
         _inputPopView.delegate = self;
     }
     return _inputPopView;
+}
+
+- (void)didGetMQTTWIFIInfo:(NSNotification *)notify {
+    if (!_wifiModel) {
+        return;
+    }
+    NSDictionary *userInfo = notify.userInfo;
+    NSString *wifi_name = userInfo[@"wifi_name"];
+    NSString *wifi_password = userInfo[@"wifi_password"];
+    if (wifi_name) {
+        _wifiModel.wifi.wifiName = wifi_name;
+    }
+    if (wifi_password) {
+        _wifiModel.wifi.wifiPassword = wifi_password;
+    }
 }
 #pragma mark -- 获取开关类设备控制参数
 - (void)requestListDataWithHud:(MBProgressHUD *)hud {
@@ -208,6 +225,7 @@
         cell.controlModel = model;
         cell.centerLabel.text = @"";
         cell.controlListModel = self.listModel;
+        cell.wifiModel = self.wifiModel;
     }
     __weak __typeof__(self) weakSelf = self;
     cell.switchStateChangeBlock = ^(NSIndexPath *indexPath, BOOL isON) {
@@ -426,15 +444,41 @@
 }
 
 - (void)clickWIFI {
-    
+    if (!_wifiModel) {
+        return;
+    }
+    UIImage *img = [CBWtCommonTools createQRCodeByStringLogo:[NSString stringWithFormat:@"%@,%@", _wifiModel.wifi.wifiName, _wifiModel.wifi.wifiPassword]];
+    [[CBCarAlertView viewWithImage:img] pop];
 }
 
 - (void)clickPZ {
-    
+    if (!_wifiModel) {
+        return;
+    }
+    NSArray *str = [_wifiModel.row valueForKey:@"channelName"];
+    kWeakSelf(self);
+    [[CBCarAlertView viewWithChooseData:str selectedIndex:0 title:Localized(@"摄像机列表") didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
+        
+    } confrim:^(NSString * _Nonnull contentStr, NSInteger index) {
+        kStrongSelf(self);
+        _CBWIFIModel_ROW *rowItem = [self.wifiModel.row objectAtIndex:index];
+        [self doPZ:rowItem];
+    }] pop];
 }
 
 - (void)clickSSSP {
-    
+    if (!_wifiModel) {
+        return;
+    }
+    NSArray *str = [_wifiModel.row valueForKey:@"channelName"];
+    kWeakSelf(self);
+    [[CBCarAlertView viewWithChooseData:str selectedIndex:0 title:Localized(@"摄像机列表") didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
+        
+    } confrim:^(NSString * _Nonnull contentStr, NSInteger index) {
+        kStrongSelf(self);
+        _CBWIFIModel_ROW *rowItem = [self.wifiModel.row objectAtIndex:index];
+        [self doSSSP:rowItem];
+    }] pop];
 }
 
 - (void)clickSXJCMM {
@@ -442,7 +486,18 @@
 }
 
 - (void)clickSCSXJ {
-    
+    if (!_wifiModel) {
+        return;
+    }
+    NSArray *str = [_wifiModel.row valueForKey:@"channelName"];
+    kWeakSelf(self);
+    [[CBCarAlertView viewWithChooseData:str selectedIndex:0 title:Localized(@"") didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
+        
+    } confrim:^(NSString * _Nonnull contentStr, NSInteger index) {
+        kStrongSelf(self);
+        _CBWIFIModel_ROW *rowItem = [self.wifiModel.row objectAtIndex:index];
+        [self doSC:rowItem];
+    }] pop];
 }
 
 //#pragma mark - PickerViewDelegate
@@ -584,6 +639,85 @@
     }
 }
 
+#pragma mark -- 摄像机相关
+//拍照
+- (void)doPZ:(_CBWIFIModel_ROW *)row {
+    [MBProgressHUD showHUDIcon:self.view animated:YES];
+    kWeakSelf(self);
+    [[NetWorkingManager shared] postWithUrl: @"/cameraController/photograph"
+                                     params:@{
+        @"channel_id": row.channelId ?: @"",
+        @"dno": _deviceInfoModelSelect.dno ?: @"",
+        @"pz_count": @"1",
+        @"resolve": @"0"
+    } succeed:^(id response, BOOL isSucceed) {
+        kStrongSelf(self);
+        [self requestWIFIInfo];
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    } failed:^(NSError *error) {
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+//        [self.tableView reloadData];
+    }];
+}
+//实时视频
+- (void)doSSSP:(_CBWIFIModel_ROW *)row {
+    [MBProgressHUD showHUDIcon:self.view animated:YES];
+    kWeakSelf(self);
+    [[NetWorkingManager shared] postWithUrl: @"/cameraController/cameraControl"
+                                     params:@{
+        @"channel_id": row.channelId ?: @"",
+        @"dno": _deviceInfoModelSelect.dno ?: @"",
+        @"video_switch": @"1",
+        @"resolve": @"0"
+    } succeed:^(id response, BOOL isSucceed) {
+        kStrongSelf(self);
+        [self requestWIFIInfo];
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    } failed:^(NSError *error) {
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+//        [self.tableView reloadData];
+    }];
+}
+//重命名
+- (void)doCMM:(_CBWIFIModel_ROW *)row channelName:(NSString *)name{
+    [MBProgressHUD showHUDIcon:self.view animated:YES];
+    kWeakSelf(self);
+    [[NetWorkingManager shared] getWithUrl: @"/cameraController/updById"
+                                     params:@{
+        @"id": row.channelId ?: @"",
+        @"dno": _deviceInfoModelSelect.dno ?: @"",
+        @"channelName": name ?: @""
+    } succeed:^(id response, BOOL isSucceed) {
+        kStrongSelf(self);
+        [self requestWIFIInfo];
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    } failed:^(NSError *error) {
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+//        [self.tableView reloadData];
+    }];
+}
+//删除
+- (void)doSC:(_CBWIFIModel_ROW *)row {
+    [MBProgressHUD showHUDIcon:self.view animated:YES];
+    kWeakSelf(self);
+    [[NetWorkingManager shared] getWithUrl: @"/cameraController/delChannelById"
+                                     params:@{
+        @"id": row.channelId ?: @"",
+        @"dno": _deviceInfoModelSelect.dno ?: @"",
+    } succeed:^(id response, BOOL isSucceed) {
+        kStrongSelf(self);
+        [self requestWIFIInfo];
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    } failed:^(NSError *error) {
+        kStrongSelf(self);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+//        [self.tableView reloadData];
+    }];
+}
+#pragma mark -- 获取wifi信息
 - (void)requestWIFIInfo {
     __weak __typeof__(self) weakSelf = self;
     [MBProgressHUD showHUDIcon:self.view animated:YES];
@@ -592,7 +726,10 @@
         @"dno": _deviceInfoModelSelect.dno ?: @""
     } succeed:^(id response, BOOL isSucceed) {
         kStrongSelf(self);
-//        [self.tableView reloadData];
+        if (response && response[@"data"]) {
+            self.wifiModel = [_CBWIFIModel mj_objectWithKeyValues:response[@"data"]];
+            [self.tableView reloadData];
+        }
         [MBProgressHUD hideHUDForView:self.view animated:YES];
     } failed:^(NSError *error) {
         kStrongSelf(self);
