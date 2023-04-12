@@ -95,6 +95,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)isShowBlind;
 - (BOOL)isShowZd;
 - (BOOL)isShowOilCheck;
+- (BOOL)isShowChaiChu;
 
 @property (nonatomic, strong) CBProductSpecReportModel *devShowReport;
 @end

@@ -23,6 +23,9 @@
         @"19": Localized(@"急加速"),
         @"20": Localized(@"急刹车"),
         @"21": Localized(@"急转弯"),
+        @"16": Localized(@"Acc on"),
+        @"34": Localized(@"Acc off"),
+        @"35": Localized(@"拍照"),
     };
     
     NSArray *status = [self.vehicleStatus componentsSeparatedByString:@","];

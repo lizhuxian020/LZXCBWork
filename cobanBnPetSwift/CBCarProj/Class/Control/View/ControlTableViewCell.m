@@ -320,7 +320,8 @@
             self.switchView.on = controlListModel.warmSpeed;
             self.centerLabel.text = [NSString stringWithFormat: @"%@Km/h", controlListModel.overWarm?:@"0"];
         } else if ([titleStr isEqualToString:_ControlConfigTitle_WIFIRD]) {
-            self.switchView.on = controlListModel.warmSpeed;
+//            self.switchView.on = controlListModel.warmSpeed;
+            //开关结果在wifiModel那
         } else if ([titleStr isEqualToString:Localized(@"多次定位")]) {
             self.switchView.on = controlListModel.dcdd;
         } else if ([titleStr isEqualToString:Localized(@"断油断电")]) {
@@ -538,8 +539,11 @@
 
 - (void)setWifiModel:(_CBWIFIModel *)wifiModel {
     _wifiModel = wifiModel;
-    
-    self.switchView.on = _wifiModel ? [_wifiModel.wifi.wifiSwitch isEqualToString:@"1"] : NO;
+    NSString *titleStr = self.controlModel.titleStr;
+    if (([titleStr isEqualToString:_ControlConfigTitle_WIFIRD])) {
+        self.switchView.on = _wifiModel ? [_wifiModel.wifi.wifiSwitch isEqualToString:@"1"] : NO;
+        self.centerLabel.text = self.switchView.isOn ? [NSString stringWithFormat:@"%@,%@", _wifiModel.wifi.wifiName, _wifiModel.wifi.wifiPassword] : @"";
+    }
 }
 @end
 

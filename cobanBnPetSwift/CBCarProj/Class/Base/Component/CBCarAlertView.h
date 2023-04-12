@@ -68,8 +68,13 @@ NS_ASSUME_NONNULL_BEGIN
 + (CBBasePopView *)viewWithSubAccountAuthConfig:(UIView *)contentView
                                         confrim:(void(^)(NSString *contentStr))confirmBlk;
 
+/// 只有图片没有按钮
+/// - Parameter img: img description
 + (CBBasePopView *)viewWithImage:(UIImage *)img;
-+ (CBBasePopView *)viewWithImageURL:(UIImage *)img;
+
+/// 一张图片, 带保存按钮和忽略按钮
+/// - Parameter img: img description
++ (CBBasePopView *)viewWithImageURL:(NSString *)img;
 
 @end
 

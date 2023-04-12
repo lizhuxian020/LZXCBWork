@@ -44,4 +44,8 @@
     return [_alarmSwitch containsString:@"7"];
 }
 
+- (BOOL)isShowChaiChu {
+    return [_alarmSwitch containsString:@"9"];
+}
+
 @end

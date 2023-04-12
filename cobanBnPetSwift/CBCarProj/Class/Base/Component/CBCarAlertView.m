@@ -221,7 +221,9 @@
     __weak CBBasePopView *wpopView = popView;
     __weak CBAlertSelectableView *wc = c;
     [alertView setDidClickConfirm:^{
-        confirmBlk(dataArr[wc.currentIndex], wc.currentIndex);
+        if (dataArr.count > 0 && wc.currentIndex < dataArr.count) {        
+            confirmBlk(dataArr[wc.currentIndex], wc.currentIndex);
+        }
         [wpopView dismiss];
     }];
     [alertView setDidClickCancel:^{
@@ -380,6 +382,21 @@
     UIView *contentView = [UIView new];
     contentView.backgroundColor = [UIColor whiteColor];
     UIImageView *imgV = [[UIImageView alloc] initWithImage:img];
+    [contentView addSubview:imgV];
+    [imgV mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.equalTo(@10);
+        make.right.bottom.equalTo(@-10);
+        make.width.equalTo(imgV.mas_height);
+    }];
+    CBBasePopView *popView = [[CBBasePopView alloc] initWithContentView:contentView];
+    return popView;
+}
+
++ (CBBasePopView *)viewWithImageURL:(NSString *)img {
+    UIView *contentView = [UIView new];
+    contentView.backgroundColor = [UIColor whiteColor];
+    UIImageView *imgV = [[UIImageView alloc] init];
+    [imgV sd_setImageWithURL:[NSURL URLWithString:img]];
     [contentView addSubview:imgV];
     [imgV mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.equalTo(@10);

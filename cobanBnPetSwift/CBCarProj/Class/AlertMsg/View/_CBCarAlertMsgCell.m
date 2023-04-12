@@ -15,11 +15,13 @@
 @property (nonatomic, strong) UILabel *nameT;
 @property (nonatomic, strong) UILabel *timeT;
 @property (nonatomic, strong) UILabel *typeT;
+@property (nonatomic, strong) UILabel *imgT;
 @property (nonatomic, strong) UILabel *actionT;
 
 @property (nonatomic, strong) UILabel *nameLbl;
 @property (nonatomic, strong) UILabel *timeLbl;
 @property (nonatomic, strong) UILabel *typeLbl;
+@property (nonatomic, strong) UIImageView *imgView;
 @property (nonatomic, strong) UIButton *checkBtn;
 @property (nonatomic, strong) UIButton *stopBtn;
 @end
@@ -71,11 +73,25 @@
         make.right.equalTo(@-10);
     }];
     
+    self.imgT = [MINUtils createLabelWithText:Localized(@"图片") size:14 alignment:NSTextAlignmentCenter textColor:kCellTextColor];
+    [self.myContentView addSubview:self.imgT];
+    self.imgView = [UIImageView new];
+    [self.myContentView addSubview:self.imgView];
+    [self.imgView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(@-10);
+        make.width.height.equalTo(@100);
+        make.top.equalTo(self.timeT.mas_bottom).mas_offset(10);
+    }];
+    [self.imgT mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(@10);
+        make.centerY.equalTo(self.imgView);
+    }];
+    
     self.typeT = [MINUtils createLabelWithText:Localized(@"报警类型") size:14 alignment:NSTextAlignmentCenter textColor:kCellTextColor];
     [self.myContentView addSubview:self.typeT];
     [self.typeT mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(@10);
-        make.top.equalTo(self.timeT.mas_bottom).mas_offset(10);
+        make.top.equalTo(self.imgView.mas_bottom).mas_offset(10);
     }];
     self.typeLbl = [MINUtils createLabelWithText:@"震动" size:14 alignment:NSTextAlignmentCenter textColor:kCellTextColor];
     [self.myContentView addSubview:self.typeLbl];
@@ -136,6 +152,27 @@
         [resultArr addObject:[self type:key]];
     }
     self.typeLbl.text = [resultArr componentsJoinedByString:@","];
+    
+    if (kStringIsEmpty(model.image_paths)) {
+        [self.imgView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.right.equalTo(@-10);
+            make.width.height.equalTo(@0);
+            make.top.equalTo(self.timeT.mas_bottom).mas_offset(0);
+        }];
+        self.imgView.hidden = YES;
+        self.imgT.hidden = YES;
+        
+    } else {
+        NSString *firImgUrl = [model.image_paths componentsSeparatedByString:@","].firstObject;
+        [self.imgView sd_setImageWithURL:[NSURL URLWithString:firImgUrl]];
+        [self.imgView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.right.equalTo(@-10);
+            make.width.height.equalTo(@100);
+            make.top.equalTo(self.timeT.mas_bottom).mas_offset(10);
+        }];
+        self.imgView.hidden = NO;
+        self.imgT.hidden = NO;
+    }
     
 }
 

@@ -29,6 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *warnTime ;
 @property (nonatomic, copy) NSString *vehicleStatus ;
 @property (nonatomic, copy) NSString *timeZone ; /** <##> **/
+@property (nonatomic, copy) NSString *image_paths; //通知消息：vehicleStatus:：35的时候  显示图
 
 - (NSString *)descVehicleStatus;
 @end

@@ -33,6 +33,7 @@
 #import "CBCarAlertView.h"
 #import "_CBWIFIModel.h"
 #import "CBWtCommonTools.h"
+#import "CBRealTimeVideoController.h"
 
 #define K_CBCarWakeUpByCallPhoneNotification @"K_CBCarWakeUpByCallPhoneNotification"  // 车联网唤醒
 
@@ -130,6 +131,7 @@
     if (wifi_password) {
         _wifiModel.wifi.wifiPassword = wifi_password;
     }
+    [self.tableView reloadData];
 }
 #pragma mark -- 获取开关类设备控制参数
 - (void)requestListDataWithHud:(MBProgressHUD *)hud {
@@ -234,11 +236,11 @@
         NSString *titleStr = model.titleStr;
         NSMutableDictionary *paramters = [NSMutableDictionary dictionaryWithDictionary:@{
         }];
-        if ([titleStr isEqualToString:Localized(@"单次定位")]) {
+        if ([titleStr isEqualToString:_ControlConfigTitle_WIFIRD]) {
             paramters[@"wifi_switch"] = isON?@"1":@"0";
         }
         [weakSelf editControlSwitchRequest:paramters success:^{
-            //TODO: 直接把缓存的wifi改了, 然后reloadtableView
+            weakSelf.wifiModel.wifi.wifiSwitch = isON?@"1":@"0";
         }];
     };
     return cell;
@@ -500,6 +502,13 @@
     }] pop];
 }
 
+- (void)jumpToVideo:(_CBWIFIModel_ROW *)row {
+    CBRealTimeVideoController *vc = CBRealTimeVideoController.new;
+    vc.channelId = row.channelId;
+    vc.dno = row.dno;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
 //#pragma mark - PickerViewDelegate
 //- (void)minPickerView:(MINPickerView *)pickerView didSelectWithDic:(NSDictionary *)dic {
 //    NSNumber *number = dic[@"0"];
@@ -674,6 +683,7 @@
         kStrongSelf(self);
         [self requestWIFIInfo];
         [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [self jumpToVideo:row];
     } failed:^(NSError *error) {
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];

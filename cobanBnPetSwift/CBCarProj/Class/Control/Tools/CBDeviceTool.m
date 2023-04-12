@@ -263,11 +263,11 @@
         @"布防撤防",
         @"话费查询",
         @"超速报警",
-        @"超速报警",
-        @"超速报警",
-        @"超速报警",
-        @"超速报警",
-        @"超速报警",
+        @"wifi热点",
+        @"拍照",
+        @"查看实时视频",
+        @"摄像机重命名",
+        @"摄像机删除",
     ]];
     
     NSArray *showArr = @[
@@ -415,8 +415,8 @@
         @"盲区报警",
         @"振动报警",
         @"油量检测报警",
-        @"油量检测报警",
-        @"油量检测报警"
+        @"chaichu",
+        @"wendu"
     ]];
     
     NSArray *showArr = @[
@@ -425,8 +425,8 @@
         @(targetSpecModel.isShowBlind),
         @(targetSpecModel.isShowZd),
         @(targetSpecModel.isShowOilCheck),
-        @(targetSpecModel.isShowOilCheck),
-        @(targetSpecModel.isShowOilCheck),
+        @(targetSpecModel.isShowChaiChu),
+        @(targetSpecModel.temp),
     ];
     
 //    if (!self.currentProductSpec) {

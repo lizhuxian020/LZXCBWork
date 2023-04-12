@@ -674,6 +674,9 @@
 		A2BCA2DF2943242300CD4B08 /* CBDeviceTool.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BCA2DE2943242300CD4B08 /* CBDeviceTool.m */; };
 		A2BCA2E72943410900CD4B08 /* CBDoubleTimePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = A2BCA2E52943410900CD4B08 /* CBDoubleTimePicker.m */; };
 		A2D7737829DAE12900EA2783 /* _CBWIFIModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A2D7737729DAE12900EA2783 /* _CBWIFIModel.m */; };
+		A2D7738129E53DBC00EA2783 /* CBRealTimeVideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = A2D7738029E53DBC00EA2783 /* CBRealTimeVideoController.m */; };
+		A2D7738529E5413E00EA2783 /* CBVideoControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = A2D7738429E5413E00EA2783 /* CBVideoControlView.m */; };
+		A2D773A629E5539000EA2783 /* IJKMediaFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2D773A129E5538300EA2783 /* IJKMediaFramework.framework */; };
 		A2E3A0A42963D21700E2C27B /* CBPhoneBookHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E3A0A32963D21700E2C27B /* CBPhoneBookHeaderView.m */; };
 		A2E3A0A72963FDE500E2C27B /* CBPhoneBookAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E3A0A62963FDE500E2C27B /* CBPhoneBookAlertView.m */; };
 		A2F9C5002925D1C400715AF9 /* CBPetLoginInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F9C4FF2925D1C400715AF9 /* CBPetLoginInputView.swift */; };
@@ -738,6 +741,27 @@
 			proxyType = 1;
 			remoteGlobalIDString = 17970A80240678B500ECDE78;
 			remoteInfo = cobanBnPetSwift;
+		};
+		A2D773A029E5538300EA2783 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A2D7739A29E5538200EA2783 /* IJKMediaPlayer.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E654EA8A1B6B27E600B0F2D0;
+			remoteInfo = IJKMediaFramework;
+		};
+		A2D773A229E5538300EA2783 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A2D7739A29E5538200EA2783 /* IJKMediaPlayer.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5450B0431E63EA4300568494;
+			remoteInfo = IJKMediaFrameworkWithSSL;
+		};
+		A2D773A429E5538300EA2783 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A2D7739A29E5538200EA2783 /* IJKMediaPlayer.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E654EA941B6B27E600B0F2D0;
+			remoteInfo = IJKMediaFrameworkTests;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -1914,6 +1938,11 @@
 		A2BCA2E62943410900CD4B08 /* CBDoubleTimePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBDoubleTimePicker.h; sourceTree = "<group>"; };
 		A2D7737629DAE12900EA2783 /* _CBWIFIModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _CBWIFIModel.h; sourceTree = "<group>"; };
 		A2D7737729DAE12900EA2783 /* _CBWIFIModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _CBWIFIModel.m; sourceTree = "<group>"; };
+		A2D7737F29E53DBC00EA2783 /* CBRealTimeVideoController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBRealTimeVideoController.h; sourceTree = "<group>"; };
+		A2D7738029E53DBC00EA2783 /* CBRealTimeVideoController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBRealTimeVideoController.m; sourceTree = "<group>"; };
+		A2D7738329E5413E00EA2783 /* CBVideoControlView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBVideoControlView.h; sourceTree = "<group>"; };
+		A2D7738429E5413E00EA2783 /* CBVideoControlView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBVideoControlView.m; sourceTree = "<group>"; };
+		A2D7739A29E5538200EA2783 /* IJKMediaPlayer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = IJKMediaPlayer.xcodeproj; path = "ijkplayer-ios/ios/IJKMediaPlayer/IJKMediaPlayer.xcodeproj"; sourceTree = "<group>"; };
 		A2E3A0A22963D21700E2C27B /* CBPhoneBookHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBPhoneBookHeaderView.h; sourceTree = "<group>"; };
 		A2E3A0A32963D21700E2C27B /* CBPhoneBookHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBPhoneBookHeaderView.m; sourceTree = "<group>"; };
 		A2E3A0A52963FDE500E2C27B /* CBPhoneBookAlertView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBPhoneBookAlertView.h; sourceTree = "<group>"; };
@@ -2016,6 +2045,7 @@
 				1761C32124C1453000F5F17F /* libsqlite3.0.tbd in Frameworks */,
 				17AA5C7F24B4701C00AA2191 /* SystemConfiguration.framework in Frameworks */,
 				17AA5C7D24B46FFB00AA2191 /* CoreTelephony.framework in Frameworks */,
+				A2D773A629E5539000EA2783 /* IJKMediaFramework.framework in Frameworks */,
 				17AA5C6424B4031400AA2191 /* UserNotifications.framework in Frameworks */,
 				17AA5C7B24B466C000AA2191 /* libz.tbd in Frameworks */,
 				1718B76F24A98C0500C25A1D /* libsqlite3.tbd in Frameworks */,
@@ -3074,6 +3104,7 @@
 		17970A78240678B500ECDE78 = {
 			isa = PBXGroup;
 			children = (
+				A2D7739A29E5538200EA2783 /* IJKMediaPlayer.xcodeproj */,
 				17970A83240678B500ECDE78 /* cobanBnPetSwift */,
 				17970A98240678C200ECDE78 /* cobanBnPetSwiftTests */,
 				17970AA3240678C200ECDE78 /* cobanBnPetSwiftUITests */,
@@ -4439,6 +4470,7 @@
 		17CDAA9824CEBE5500BB9F8B /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				A2D7737E29E53DA100EA2783 /* 实时视频 */,
 				B1F37659293B050C0034D4D8 /* 指定记录 */,
 				17CDAAC124CEBE5500BB9F8B /* ContorlViewController.h */,
 				17CDAA9924CEBE5500BB9F8B /* ContorlViewController.m */,
@@ -5591,6 +5623,35 @@
 			path = TimePicker;
 			sourceTree = "<group>";
 		};
+		A2D7737E29E53DA100EA2783 /* 实时视频 */ = {
+			isa = PBXGroup;
+			children = (
+				A2D7738229E5412F00EA2783 /* Views */,
+				A2D7737F29E53DBC00EA2783 /* CBRealTimeVideoController.h */,
+				A2D7738029E53DBC00EA2783 /* CBRealTimeVideoController.m */,
+			);
+			path = "实时视频";
+			sourceTree = "<group>";
+		};
+		A2D7738229E5412F00EA2783 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A2D7738329E5413E00EA2783 /* CBVideoControlView.h */,
+				A2D7738429E5413E00EA2783 /* CBVideoControlView.m */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A2D7739B29E5538200EA2783 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A2D773A129E5538300EA2783 /* IJKMediaFramework.framework */,
+				A2D773A329E5538300EA2783 /* IJKMediaFrameworkWithSSL.framework */,
+				A2D773A529E5538300EA2783 /* IJKMediaFrameworkTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		A2E3A0A12963D20A00E2C27B /* views */ = {
 			isa = PBXGroup;
 			children = (
@@ -6140,6 +6201,12 @@
 			mainGroup = 17970A78240678B500ECDE78;
 			productRefGroup = 17970A82240678B500ECDE78 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = A2D7739B29E5538200EA2783 /* Products */;
+					ProjectRef = A2D7739A29E5538200EA2783 /* IJKMediaPlayer.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				17970A80240678B500ECDE78 /* cobanBnPetSwift */,
@@ -6148,6 +6215,30 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		A2D773A129E5538300EA2783 /* IJKMediaFramework.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = IJKMediaFramework.framework;
+			remoteRef = A2D773A029E5538300EA2783 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A2D773A329E5538300EA2783 /* IJKMediaFrameworkWithSSL.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = IJKMediaFrameworkWithSSL.framework;
+			remoteRef = A2D773A229E5538300EA2783 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A2D773A529E5538300EA2783 /* IJKMediaFrameworkTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = IJKMediaFrameworkTests.xctest;
+			remoteRef = A2D773A429E5538300EA2783 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		17970A7F240678B500ECDE78 /* Resources */ = {
@@ -6268,6 +6359,7 @@
 				17466E4A24874082009ABA80 /* CBPetPsnalCterModel.swift in Sources */,
 				439E906E2475A497004ED9AD /* CBPetLoginViewModel.swift in Sources */,
 				1782BFA024C0427E00544C36 /* MINClickCellView.m in Sources */,
+				A2D7738129E53DBC00EA2783 /* CBRealTimeVideoController.m in Sources */,
 				17CDAB8024CEBE5500BB9F8B /* GGPolygon.m in Sources */,
 				17CDAC0A24CEBE5600BB9F8B /* MineViewController.m in Sources */,
 				17CDAC1C24CEBE5600BB9F8B /* MINAlertView.m in Sources */,
@@ -6642,6 +6734,7 @@
 				17CDAB5424CEBE5500BB9F8B /* BaseLineBarChart.m in Sources */,
 				17973B2024B5C11A00464698 /* CBPetFenceAnnotionView.swift in Sources */,
 				1782BF5224C0427E00544C36 /* CBHomeBindWatchView.m in Sources */,
+				A2D7738529E5413E00EA2783 /* CBVideoControlView.m in Sources */,
 				17CDAC0D24CEBE5600BB9F8B /* ChangeLanguageViewController.m in Sources */,
 				17CDABEB24CEBE5600BB9F8B /* FormInfoModel.m in Sources */,
 				17CDAB8224CEBE5500BB9F8B /* GGGrid.m in Sources */,
@@ -7141,6 +7234,7 @@
 					"\"$(SRCROOT)/cobanBnPetSwift/Vendors/VoiceConvert/LameUitls\"",
 				);
 				MARKETING_VERSION = 2.8;
+				OTHER_CODE_SIGN_FLAGS = "";
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.coban.iot;
 				PRODUCT_MODULE_NAME = cobanBnPetSwift;
@@ -7185,6 +7279,7 @@
 					"\"$(SRCROOT)/cobanBnPetSwift/Vendors/VoiceConvert/LameUitls\"",
 				);
 				MARKETING_VERSION = 2.8;
+				OTHER_CODE_SIGN_FLAGS = "";
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.coban.iot;
 				PRODUCT_MODULE_NAME = cobanBnPetSwift;
