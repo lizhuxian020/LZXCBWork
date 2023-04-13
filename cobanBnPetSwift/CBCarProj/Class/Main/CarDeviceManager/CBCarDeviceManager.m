@@ -267,53 +267,56 @@
         [NSNotificationCenter.defaultCenter postNotificationName:@"CBCAR_NOTFICIATION_GETMQTT" object:nil userInfo:nil];
         [NSNotificationCenter.defaultCenter postNotificationName:@"CBCAR_NOTFICIATION_GETMQTT_CODE2" object:nil userInfo:nil];
         return;
-    }
-    CBHomeLeftMenuDeviceInfoModel *targetDeviceModel = nil;
-//    static int i = 1;
-//    static double lat = 22.55143761870045;
-//    static double lng = 113.9088315586976;
-//
-//    if (i++ % 2 == 0) {
-//        static int k = 1;
-//        lat = lat + k++ * 0.00100000070045;
-//        model.dno = @"864180032876083";
-//    } else {
-//        static int j = 1;
-//        lng = lng + j++ * 0.0010000006976;
-//        model.dno = @"863584040008426";
-//    }
-//    model.location.lng = @(lng).description;
-//    model.location.lat = @(lat).description;
-    for (CBHomeLeftMenuDeviceInfoModel *deviceModel in self.deviceDatas) {
-        if ([deviceModel.dno isEqualToString:model.dno]) {
-            targetDeviceModel = deviceModel;
-            deviceModel.lat = model.location.lat;
-            deviceModel.lng = model.location.lng;
-            deviceModel.devStatusInMQTT = model.devStatus;
-            deviceModel.cfbf = model.state.cfbf;
-            deviceModel.acc = model.state.acc;
-            deviceModel.door = model.state.door;
-            deviceModel.battery = model.location.battery;
-            deviceModel.warmType = model.state.warnType;
-            deviceModel.stopTime = model.state.stopTime;
-            
-            deviceModel.oil = model.state.oil;
-            deviceModel.gps = model.location.gps;
-            deviceModel.gsm = model.location.gsm;
-            
-            deviceModel.mqttCode = model.code;
-            
-            deviceModel.timeZone = model.location.timeZone;
-            deviceModel.createTime = model.location.updateTime;
-            
-            deviceModel.speedInMqtt = model.location.speed;
-            deviceModel.directInMqtt = model.location.direct;
+    } else if (model.code == 21) {
+        CBHomeLeftMenuDeviceInfoModel *targetDeviceModel = nil;
+        //    static int i = 1;
+        //    static double lat = 22.55143761870045;
+        //    static double lng = 113.9088315586976;
+        //
+        //    if (i++ % 2 == 0) {
+        //        static int k = 1;
+        //        lat = lat + k++ * 0.00100000070045;
+        //        model.dno = @"864180032876083";
+        //    } else {
+        //        static int j = 1;
+        //        lng = lng + j++ * 0.0010000006976;
+        //        model.dno = @"863584040008426";
+        //    }
+        //    model.location.lng = @(lng).description;
+        //    model.location.lat = @(lat).description;
+        for (CBHomeLeftMenuDeviceInfoModel *deviceModel in self.deviceDatas) {
+            if ([deviceModel.dno isEqualToString:model.dno]) {
+                targetDeviceModel = deviceModel;
+                deviceModel.lat = model.location.lat;
+                deviceModel.lng = model.location.lng;
+                deviceModel.devStatusInMQTT = model.devStatus;
+                deviceModel.cfbf = model.state.cfbf;
+                deviceModel.acc = model.state.acc;
+                deviceModel.door = model.state.door;
+                deviceModel.battery = model.location.battery;
+                deviceModel.warmType = model.state.warnType;
+                deviceModel.stopTime = model.state.stopTime;
+                
+                deviceModel.oil = model.state.oil;
+                deviceModel.temp = model.state.temp;
+                deviceModel.humidity = model.state.humidity;
+                deviceModel.gps = model.location.gps;
+                deviceModel.gsm = model.location.gsm;
+                
+                deviceModel.mqttCode = model.code;
+                
+                deviceModel.timeZone = model.location.timeZone;
+                deviceModel.createTime = model.location.updateTime;
+                
+                deviceModel.speedInMqtt = model.location.speed;
+                deviceModel.directInMqtt = model.location.direct;
+            }
         }
+        if (self.didUpdateDeviceData) {
+            self.didUpdateDeviceData(self.deviceDatas);
+        }
+        [NSNotificationCenter.defaultCenter postNotificationName:@"CBCAR_NOTFICIATION_GETMQTT" object:nil userInfo:nil];
     }
-    if (self.didUpdateDeviceData) {
-        self.didUpdateDeviceData(self.deviceDatas);
-    }
-    [NSNotificationCenter.defaultCenter postNotificationName:@"CBCAR_NOTFICIATION_GETMQTT" object:nil userInfo:nil];
 }
 
 - (void)updateFence:(void(^)(void))finishBlk {

@@ -115,6 +115,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *cfbf;
 /* 油量*/
 @property (nonatomic, copy) NSString *oil;
+/* 温度*/
+@property (nonatomic, copy) NSString *temp;
+/* 湿度*/
+@property (nonatomic, copy) NSString *humidity;
 /* 油量百分比 */
 @property (nonatomic, copy) NSString *oil_prop;
 /* 休眠模式 */

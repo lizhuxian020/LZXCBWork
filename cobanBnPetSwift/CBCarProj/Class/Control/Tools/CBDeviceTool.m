@@ -645,6 +645,7 @@
         @"cfbf": @(targetSpecModel.arm),
         @"acc": @(targetSpecModel.accWorkNotice),
         @"tank": @(targetSpecModel.tankVolume),
+        @"temp": @(targetSpecModel.temp),
     };
     blk(config);
 }

@@ -22,6 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy) NSString *stopTime;
 @property(nonatomic, copy) NSString *stop_num;
 @property(nonatomic, copy) NSString *warnType;
+@property(nonatomic, copy) NSString *temp;
+@property(nonatomic, copy) NSString *humidity;
 @end
 
 @interface CBMQTTCarDeviceLocationModel : NSObject

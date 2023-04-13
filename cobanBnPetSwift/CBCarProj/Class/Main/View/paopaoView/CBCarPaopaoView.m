@@ -46,6 +46,10 @@
 @property (nonatomic, strong) UILabel *electriLb;
 /* 油量：0L 0%*/
 @property (nonatomic, strong) UILabel *oilLb;
+/* 温度*/
+@property (nonatomic, strong) UILabel *tempLb;
+/* 湿度*/
+@property (nonatomic, strong) UILabel *humidityLb;
 /* 休眠模式：时间休眠*/
 @property (nonatomic, strong) UILabel *sleepModelLb;
 /* gsm个数*/
@@ -389,6 +393,8 @@
     _doorLb = [self createLbTitle:@"门状态:关"];
     _electriLb = [self createLbTitle:@"电量:0"];
     _oilLb = [self createLbTitle:@"油量:0L 0%"];
+    _tempLb = [self createLbTitle:@"温度:0℃"];
+    _humidityLb = [self createLbTitle:@"湿度:0%"];
     _sleepModelLb = [self createLbTitle:@"休眠模式：时间休眠"];
     _gsmNumberLb = [self createLbTitle:@"GSM:27"];
     _gpsNumberLb = [self createLbTitle:@"GPS:0颗"];
@@ -400,11 +406,12 @@
 }
 - (void)setupMiddleContentView {
     [self.middleContentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    NSMutableArray *arrLbl = [NSMutableArray arrayWithArray:@[_lngLb,_statusLb,_cfLb,_accLb,_doorLb,_electriLb,_oilLb,_sleepModelLb,_gsmNumberLb,_gpsNumberLb,_reportLb,_warmTypeLb,_timeLb,_addressLabel]];
+    NSMutableArray *arrLbl = [NSMutableArray arrayWithArray:@[_lngLb,_statusLb,_cfLb,_accLb,_doorLb,_electriLb,_oilLb,_tempLb,_humidityLb,_sleepModelLb,_gsmNumberLb,_gpsNumberLb,_reportLb,_warmTypeLb,_timeLb,_addressLabel]];
     [CBDeviceTool.shareInstance getPaoViewConfig:_deviceInfoModel blk:^(NSDictionary * _Nonnull configData) {
         BOOL cfbf = [configData[@"cfbf"] boolValue];
         BOOL acc = [configData[@"acc"] boolValue];
         BOOL tank = [configData[@"tank"] boolValue];
+        BOOL temp = [configData[@"temp"] boolValue];
         if (!cfbf) {
             [arrLbl removeObject:_cfLb];
         }
@@ -415,13 +422,17 @@
         if (!tank) {
             [arrLbl removeObject:_oilLb];
         }
+        if (!temp) {
+            [arrLbl removeObject:_tempLb];
+            [arrLbl removeObject:_humidityLb];
+        }
     }];
     
     [self restMutableArray:self.arrayLb addFromArray:arrLbl];
     
     //同一行的放里面(不换行）
     NSArray *sameLineLb = @[
-        _accLb,_doorLb,_oilLb,_gpsNumberLb
+        _accLb,_doorLb,_oilLb,_humidityLb,_gpsNumberLb
     ];
 
     [self.bgmView layoutIfNeeded];
@@ -603,6 +614,8 @@
         _doorLb.attributedText = [self getAttStr:Localized(@"门:") content:[self returnStatus:_deviceInfoModel.door]];
         _electriLb.attributedText = [self getAttStr:Localized(@"电量:") content:_deviceInfoModel.battery  ? [_deviceInfoModel.battery stringByAppendingString:@"%"] : @"0%"];
         _oilLb.attributedText = [self getAttStr:Localized(@"油量:") content:[NSString stringWithFormat:@"%@L %@%@",_deviceInfoModel.oil,_deviceInfoModel.oil_prop,@"%"]];
+        _tempLb.attributedText = [self getAttStr:Localized(@"温度:") content:[NSString stringWithFormat:@"%@℃",_deviceInfoModel.temp?:@"-"]];
+        _humidityLb.attributedText = [self getAttStr:Localized(@"油量:") content:[NSString stringWithFormat:@"%@%@",_deviceInfoModel.humidity?:@"-",@"%"]];
 
         _sleepModelLb.attributedText = [self getAttStr:Localized(@"休眠模式:") content:[self returnSleepModel:_deviceInfoModel.restMod]];
         _gsmNumberLb.attributedText = [self getAttStr:@"GSM:" content:deviceInfoModel.gsm.intValue >= 15 ? Localized(@"强") : Localized(@"弱")];
