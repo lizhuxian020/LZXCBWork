@@ -128,4 +128,12 @@
     self.layer.masksToBounds = YES;
 }
 
+- (void)setConfirmText:(NSString *)confirmText {
+    _confirmText = confirmText;
+    if (kStringIsEmpty(confirmText)) {
+        return;
+    }
+    self.confirmLbl.text = confirmText;
+}
+
 @end

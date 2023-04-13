@@ -37,6 +37,8 @@
 	<string>App需要您的同意,才能访问麦克风录音以发送语音给设备</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>App需要您的同意,才能访问相册以便于选取照片上传用户头像</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>App需要您的同意,才能访问相册以便于选取照片上传用户头像</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

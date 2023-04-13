@@ -392,7 +392,8 @@
     return popView;
 }
 
-+ (CBBasePopView *)viewWithImageURL:(NSString *)img {
++ (CBBasePopView *)viewWithImageURL:(NSString *)img title:(NSString *)title{
+    
     UIView *contentView = [UIView new];
     contentView.backgroundColor = [UIColor whiteColor];
     UIImageView *imgV = [[UIImageView alloc] init];
@@ -403,7 +404,19 @@
         make.right.bottom.equalTo(@-10);
         make.width.equalTo(imgV.mas_height);
     }];
-    CBBasePopView *popView = [[CBBasePopView alloc] initWithContentView:contentView];
+    
+    CBAlertBaseView *alertView = [[CBAlertBaseView alloc] initWithContentView:contentView title:title];
+    alertView.confirmText = Localized(@"保存");
+    CBBasePopView *popView = [[CBBasePopView alloc] initWithContentView:alertView];
+    __weak CBBasePopView *wpopView = popView;
+    __weak UIImageView *wimgV = imgV;
+    [alertView setDidClickConfirm:^{
+        UIImageWriteToSavedPhotosAlbum(wimgV.image, nil, nil, nil);
+        [wpopView dismiss];
+    }];
+    [alertView setDidClickCancel:^{
+        [wpopView dismiss];
+    }];
     return popView;
 }
 @end

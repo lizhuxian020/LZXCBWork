@@ -8,6 +8,7 @@
 CFBundleDisplayName = "BAANOOL IOT";
 "NSMicrophoneUsageDescription" = "App needs your consent to access the microphone recording to send voice";
 "NSPhotoLibraryUsageDescription" = "App requires your consent in order to scan the QR code to bind the device";
+"NSPhotoLibraryAddUsageDescription" = "App requires your consent in order to scan the QR code to bind the device";
 "NSLocationAlwaysUsageDescription" = "App needs your consent to access the geographic location information to obtain the location information of the device";
 "NSLocationWhenInUseUsageDescription" = "App needs your consent to access the geographic location information to obtain the location information of the device";
 "NSCameraUsageDescription"= "The app needs your consent to scan the QR code and bind the device";
