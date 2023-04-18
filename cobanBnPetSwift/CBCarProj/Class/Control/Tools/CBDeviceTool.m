@@ -285,8 +285,8 @@
         @(targetSpecModel.wifiHotspot),
         @(targetSpecModel.photograph),
         @(targetSpecModel.realtimeVideo),
-        @(1),//LZXTODO: 字段是什么?
-        @(1),//LZXTODO: 字段是什么?
+        @(targetSpecModel.photograph),
+        @(targetSpecModel.photograph),
     ];
     
 //    if (!self.currentProductSpec) {

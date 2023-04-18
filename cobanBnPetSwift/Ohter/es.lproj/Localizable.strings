@@ -1502,3 +1502,4 @@
 "号码类型" = "Number type";
 "输入手机号码(必填)" = "Enter  phone number (required)";
 "任何一项不能为空" = "None of the items can be empty";
+"设置转弯补报角度最低不能小于5度" = "Set the minimum angle of turn reporting to be no less than 5 degrees";
