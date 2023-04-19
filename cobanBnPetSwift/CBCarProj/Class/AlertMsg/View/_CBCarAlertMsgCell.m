@@ -149,7 +149,7 @@
     
     NSMutableArray *resultArr =[ NSMutableArray new];
     for (NSString *key in [model.type componentsSeparatedByString:@","] ) {
-        [resultArr addObject:[self type:key]];
+        [resultArr addObject:[self.class type:key]];
     }
     self.typeLbl.text = [resultArr componentsJoinedByString:@","];
     
@@ -176,7 +176,7 @@
     
 }
 
-- (NSString *)type:(NSString *)type {
++ (NSString *)type:(NSString *)type {
     
     NSDictionary *dic = @{
     @"0":Localized(@"SOS报警"),

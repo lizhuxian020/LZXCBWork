@@ -50,6 +50,9 @@
 #import "QFTimePickerView.h"
 #import "QFTimerPicker.h"
 
+#import "_CBCarAlertMsgCell.h"
+#import "_CBMsgCenterModel.h"
+
 #endif /* cobanPet_Bridging_Header_h */
 
 

@@ -96,6 +96,19 @@
         make.top.equalTo(aboutV.mas_bottom);
     }];
     
+    UIView *notifyS = [self viewSwitchWithImg:@"修改密码" title:Localized(@"消息通知") action:@selector(notifyS:)];
+    UIView *soundS = [self viewSwitchWithImg:@"修改密码" title:Localized(@"通知声音") action:@selector(soundS:)];
+    [self.contentView addSubview:notifyS];
+    [self.contentView addSubview:soundS];
+    [notifyS mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(@0);
+        make.top.equalTo(pwdV.mas_bottom);
+    }];
+    [soundS mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(@0);
+        make.top.equalTo(notifyS.mas_bottom);
+    }];
+    
     UIButton *logoutBtn = [MINUtils createBtnWithRadius:20 title:Localized(@"退出登录")];
     logoutBtn.backgroundColor = UIColor.whiteColor;
     logoutBtn.layer.borderColor = [kAppMainColor CGColor];
@@ -107,7 +120,7 @@
         make.left.equalTo(@30);
         make.right.equalTo(@-30);
         make.bottom.equalTo(@-20);
-        make.top.equalTo(pwdV.mas_bottom).mas_offset(20);
+        make.top.equalTo(soundS.mas_bottom).mas_offset(20);
     }];
     
     self.contentView.layer.cornerRadius = 10;
@@ -166,6 +179,35 @@
     return c;
 }
 
+
+- (UIView *)viewSwitchWithImg:(NSString *)imgName title:(NSString *)title action:(SEL)action{
+    UIView *c = [UIView new];
+    
+    UIImageView *imgV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imgName]];
+    [c addSubview:imgV];
+    [imgV mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.equalTo(@10);
+        make.width.height.equalTo(@30);
+        make.bottom.equalTo(@-10);
+    }];
+    UILabel *lbl = [MINUtils createLabelWithText:title size:14 alignment:NSTextAlignmentCenter textColor:UIColor.blackColor];
+    [c addSubview:lbl];
+    [lbl mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(imgV);
+        make.left.equalTo(imgV.mas_right).mas_offset(5);
+    }];
+    
+    UISwitch *s = [UISwitch new];
+    s.on = YES;
+    [c addSubview:s];
+    [s mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(@0);
+        make.right.equalTo(@-10);
+    }];
+    [s addTarget:self action:action forControlEvents:UIControlEventValueChanged];
+    return c;
+}
+
 - (void)pop {
     
     CBCarUserModel *userModel = CBCarUserInstance.shared.userModel;
@@ -196,6 +238,16 @@
         [self removeFromSuperview];
     }];
     
+}
+
+- (void)notifyS:(UISwitch *)sender {
+    NSLog(@"%s", __FUNCTION__);
+    [NSUserDefaults.standardUserDefaults setObject: sender.isOn ? @"on": @"off" forKey:@"_car_notify"];
+}
+
+- (void)soundS:(UISwitch *)sender {
+    NSLog(@"%s", __FUNCTION__);
+    [NSUserDefaults.standardUserDefaults setObject: sender.isOn ? @"on": @"off" forKey:@"_car_notify_sound"];
 }
 
 @end

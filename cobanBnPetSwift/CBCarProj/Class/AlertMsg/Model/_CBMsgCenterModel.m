@@ -12,12 +12,23 @@
 
 + (NSDictionary *)mj_replacedKeyFromPropertyName {
     return @{
-             @"iid":@"id"
-             };
+        @"iid":@"id"
+    };
 }
 
 - (NSString *)descVehicleStatus {
-    
+    NSArray *status = [self.vehicleStatus componentsSeparatedByString:@","];
+    NSMutableArray *descArr = [NSMutableArray new];
+    for (NSString *s in status) {
+        NSString *desc = [self.class type:s];
+        if (!kStringIsEmpty(desc)) {
+            [descArr addObject:desc];
+        }
+    }
+    return [descArr componentsJoinedByString:@","];
+}
+
++ (NSString *)type:(NSString *)type {
     NSDictionary *dic = @{
         @"31": Localized(@"碰撞"),
         @"19": Localized(@"急加速"),
@@ -28,15 +39,7 @@
         @"35": Localized(@"拍照"),
     };
     
-    NSArray *status = [self.vehicleStatus componentsSeparatedByString:@","];
-    NSMutableArray *descArr = [NSMutableArray new];
-    for (NSString *s in status) {
-        NSString *desc = dic[s];
-        if (!kStringIsEmpty(desc)) {
-            [descArr addObject:desc];
-        }
-    }
-    return [descArr componentsJoinedByString:@","];
+    return dic[type] ?: type;
 }
 
 @end

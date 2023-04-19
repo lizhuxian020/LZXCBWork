@@ -32,6 +32,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *image_paths; //通知消息：vehicleStatus:：35的时候  显示图
 
 - (NSString *)descVehicleStatus;
+
++ (NSString *)type:(NSString *)type;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -329,6 +329,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
     }
     ///iOS10以下使用这两个方法接收通知
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        
+        let data = try? JSONSerialization.data(withJSONObject: userInfo)
+        let string = NSString(data: data!, encoding: NSUTF8StringEncoding)
+        CBLog(message: "---------asd------------\(string ?? "")")
 
         UMessage.setAutoAlert(false)
         if #available(iOS 10.0, *) {
@@ -344,6 +348,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         /* 使用了静默推送方式下获取 自定义弹框推送内容 */
         self.createLocalNotification(userInfo: userInfo as NSDictionary)
     }
+    
     ///iOS10新增：处理前台收到通知的代理方法
     @available(iOS 10.0, *)
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
@@ -450,6 +455,8 @@ extension AppDelegate {
 //        let noticeModelObjc = CBPetNoticeModel.deserialize(from: dicc)
         CBLog(message: "推送过来的内容:\(userInfo)")
         CBLog(message: userInfo)
+        
+        var soundEnable:Bool = true
         /* 手表*/
         if noticeModelObjc?.productType == "1" {
             /* 消息列表*/
@@ -467,6 +474,48 @@ extension AppDelegate {
                 alertTitle = "语聊"
                 alertBody = "新语音消息"
                 NotificationCenter.default.post(name: NSNotification.Name.init(KCBWtSingleChatNotification), object: nil)
+            }
+        } else if noticeModelObjc?.productType == "2" {
+            switch noticeModelObjc?.pushType {
+            case "4":
+                /* 报警*/
+                alertTitle = "报警消息".localizedStr
+                if let warms = noticeModelObjc?.warms {
+                    var warmResult = ""
+                    for warmStr in warms.components(separatedBy: ",") {
+                        warmResult = warmResult + (warmResult.count > 0 ? "," : "") + "\(_CBCarAlertMsgCell.type(warmStr))"
+                    }
+                    alertSubTitle = "\("设备触发报警".localizedStr): \(warmResult)"
+                } else {
+                    alertSubTitle = ""
+                }
+                
+                alertBody = ""
+                break
+            case "7":
+                /* 普通通知*/
+                alertTitle = "消息通知".localizedStr//"收到一条语音".localizedStr
+                if let warms = noticeModelObjc?.warms {
+                    var warmResult = ""
+                    for warmStr in warms.components(separatedBy: ",") {
+                        warmResult = warmResult + (warmResult.count > 0 ? "," : "") + "\(_CBMsgCenterModel.type(warmStr))"
+                    }
+                    alertSubTitle = "\("消息通知".localizedStr): \(warmResult)"
+                } else {
+                    alertSubTitle = ""
+                }
+                alertBody = ""
+                break
+            default:
+                break
+            }
+            let _car_notify:String = UserDefaults.standard.object(forKey: "_car_notify") as? String ?? ""
+            if _car_notify == "off" {
+                return
+            }
+            let _car_notify_sound:String = UserDefaults.standard.object(forKey: "_car_notify_sound") as? String ?? ""
+            if _car_notify_sound == "off" {
+                soundEnable = false
             }
         } else {
             switch noticeModelObjc?.pushType {
@@ -507,17 +556,17 @@ extension AppDelegate {
             default:
                 break
             }
-        }
-        NotificationCenter.default.post(name: NSNotification.Name.init(K_CBPetNoticeNotification), object: ["notice":noticeModelObjc])
-        //gu
-        let ss:String = UserDefaults.standard.object(forKey: "appPush") as? String ?? ""
-        if ss == "0" {
-            return
-        }
-        /* 当消息开关关闭的时候，消息通知不弹窗，但推送还是继续*/
-        let userInfoModelObject = CBPetUserInfoModelTool.getUserInfo()
-        if userInfoModelObject.appPush_local == "0" {
-            return
+            NotificationCenter.default.post(name: NSNotification.Name.init(K_CBPetNoticeNotification), object: ["notice":noticeModelObjc])
+            //gu
+            let ss:String = UserDefaults.standard.object(forKey: "appPush") as? String ?? ""
+            if ss == "0" {
+                return
+            }
+            /* 当消息开关关闭的时候，消息通知不弹窗，但推送还是继续*/
+            let userInfoModelObject = CBPetUserInfoModelTool.getUserInfo()
+            if userInfoModelObject.appPush_local == "0" {
+                return
+            }
         }
         
         self.badgeNumber += 1
@@ -527,7 +576,9 @@ extension AppDelegate {
             content.title = alertTitle
             content.subtitle = alertSubTitle
             content.body = alertBody
-            content.sound = .default
+            if soundEnable {
+                content.sound = .default
+            }
             content.userInfo = userInfo as! [AnyHashable : Any]
             content.badge = self.badgeNumber as NSNumber
 

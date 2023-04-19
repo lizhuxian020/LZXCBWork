@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) void (^didClickCheck)(void);
 @property (nonatomic, copy) void (^didClickStop)(void);
 
++ (NSString *)type:(NSString *)type;
+
 @end
 
 NS_ASSUME_NONNULL_END

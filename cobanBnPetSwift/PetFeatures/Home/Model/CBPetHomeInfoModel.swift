@@ -271,6 +271,8 @@ struct CBPetNoticeModel:HandyJSON,Codable {
     var petName:String?
     var petPhoto:String?
     
+    var warms:String?
+    
     /* 听一听消息*/
     //    var petName:String?
     //    var petPhoto:String?
