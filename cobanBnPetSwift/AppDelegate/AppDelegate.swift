@@ -517,6 +517,9 @@ extension AppDelegate {
             if _car_notify_sound == "off" {
                 soundEnable = false
             }
+            if let image_paths = noticeModelObjc?.image_paths {
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "K_CBCarNoticeNotification"), object: nil, userInfo: ["image_paths":image_paths])
+            }
         } else {
             switch noticeModelObjc?.pushType {
             case "1":

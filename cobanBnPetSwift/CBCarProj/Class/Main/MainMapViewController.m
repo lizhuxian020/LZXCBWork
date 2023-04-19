@@ -236,6 +236,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(hidePlayBackView) name: @"kHidePlayBackView" object: nil];
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(didGetSingleLocationNoti:) name: @"SingleLocationNoti" object: nil];
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(reqeustAlertNum) name: @"CBCAR_NOTFICIATION_UPDATE_ALARM_NUM" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(getPushNotifyWithImage:) name: @"K_CBCarNoticeNotification" object: nil];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(taphandle:)];
     [self.view addGestureRecognizer:tap];
@@ -259,6 +260,11 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         [weakself processTrack:deviceDatas];
         [weakself processMapLocation];
     }];
+}
+- (void)getPushNotifyWithImage:(NSNotification *)notify {
+    NSString *image_paths = notify.userInfo[@"image_paths"];
+    NSString *path = [image_paths componentsSeparatedByString:@","].firstObject;
+    [[CBCarAlertView viewWithImageURL:path title:Localized(@"消息通知")] pop];
 }
 - (void)createMQTT {
     CBPetLoginModel *userModel = [CBPetLoginModelTool getUser];
