@@ -139,7 +139,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 @property (nonatomic,strong) CBCarPaopaoView *paopaoView;
 @property (nonatomic,strong) CBNoDataView *noDeviceDataView;
 
-//@property (nonatomic,strong) UIButton *switchMapType;
+@property (nonatomic,strong) UIButton *switchMapType;
 @property (nonatomic, strong) UIButton *deviceListBtn;
 @property (nonatomic, strong) UIButton *qrScanBtn;
 @property (nonatomic, strong) UIButton *alertBtn;
@@ -381,6 +381,17 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         }];
     }
     return _noDeviceDataView;
+}
+- (void)switchMap:(UIButton *)sender {
+    if (_googleMapView.mapType == kGMSTypeHybrid) {
+        [_switchMapType setImage:[UIImage imageNamed:@"weixing"]forState:UIControlStateNormal];
+        _googleMapView.mapType = kGMSTypeNormal;
+        _baiduMapView.mapType = BMKMapTypeStandard;
+    } else {
+        [_switchMapType setImage:[UIImage imageNamed:@"map"]forState:UIControlStateNormal];
+        _googleMapView.mapType = kGMSTypeHybrid;
+        _baiduMapView.mapType = BMKMapTypeSatellite;
+    }
 }
 - (CBBasePopView *)playbackTimeBasePopView {
     if (!_playbackTimeBasePopView) {
@@ -636,7 +647,6 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     
     [self baiduMap];
     [self googleMap];
-//    [self switchMapType];
     [self createBtns];
     [self setupInfoPopView];
 }
@@ -698,6 +708,25 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         make.bottom.equalTo(@(-20));
     }];
     [self.locateBtn addTarget:self action:@selector(didClickLocateBtn) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.switchMapType = [self createBtn:@"weixing"];
+    [self.switchMapType mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.width.height.equalTo(self.locateBtn);
+        make.bottom.equalTo(self.locateBtn.mas_top);
+    }];
+    [_switchMapType addTarget:self action:@selector(switchMap:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIView *_bgView = [UIView new];
+    _bgView.backgroundColor = KWtCellBackColor;
+    [self.view addSubview:_bgView];
+    [_bgView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.equalTo(self.switchMapType);
+        make.bottom.right.equalTo(self.locateBtn);
+    }];
+    _bgView.layer.cornerRadius = 20;
+    [self.view bringSubviewToFront:self.switchMapType];
+    [self.view bringSubviewToFront:self.locateBtn];
+    
 }
 
 - (UIButton *)createBtn:(NSString *)imgName {
