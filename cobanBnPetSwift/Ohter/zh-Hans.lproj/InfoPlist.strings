@@ -8,3 +8,7 @@
 CFBundleDisplayName = "巴诺物联网";
 "NSMicrophoneUsageDescription" = "App需要您的同意,才能访问麦克风录音以发送语音";
 "NSPhotoLibraryUsageDescription" = "App需要您的同意,以便于扫描二维码绑定设备";
+"NSPhotoLibraryAddUsageDescription" = "App需要您的同意,才能访问相册以便于选取照片上传用户头像";
+"NSLocationAlwaysUsageDescription" = "App需要您的同意,才能访问地理位置信息以获取设备的位置信息";
+"NSLocationWhenInUseUsageDescription" = "App需要您的同意,才能访问地理位置信息以获取设备的位置信息";
+"NSCameraUsageDescription"= "App需要您的同意,以便于扫描二维码绑定设备";

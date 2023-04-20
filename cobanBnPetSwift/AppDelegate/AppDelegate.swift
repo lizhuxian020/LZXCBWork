@@ -406,7 +406,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
             ///但是，有大神做过测试，下面这种方式最快
             let device44 = deviceToken.reduce("",{$0 + String(format:"%02x",$1)})
             CBLog(message: "deviceToken44====:\(device44)")
+            deviceId = device44
         }
+        CBDeviceTokenManager.shared().deviceToken = deviceId;
+
         //1.2.7版本开始不需要用户再手动注册devicetoken，SDK会自动注册
         //传入的devicetoken是系统回调didRegisterForRemoteNotificationsWithDeviceToken的入参，切记
         //UMessage.registerDeviceToken(deviceToken)
@@ -476,10 +479,12 @@ extension AppDelegate {
                 NotificationCenter.default.post(name: NSNotification.Name.init(KCBWtSingleChatNotification), object: nil)
             }
         } else if noticeModelObjc?.productType == "2" {
+            var imgAlertTitle = ""
             switch noticeModelObjc?.pushType {
             case "4":
                 /* 报警*/
                 alertTitle = "报警消息".localizedStr
+                imgAlertTitle = "收到报警图片".localizedStr
                 if let warms = noticeModelObjc?.warms {
                     var warmResult = ""
                     for warmStr in warms.components(separatedBy: ",") {
@@ -494,7 +499,8 @@ extension AppDelegate {
                 break
             case "7":
                 /* 普通通知*/
-                alertTitle = "消息通知".localizedStr//"收到一条语音".localizedStr
+                alertTitle = "消息通知".localizedStr
+                imgAlertTitle = "收到图片".localizedStr
                 if let warms = noticeModelObjc?.warms {
                     var warmResult = ""
                     for warmStr in warms.components(separatedBy: ",") {
@@ -518,7 +524,7 @@ extension AppDelegate {
                 soundEnable = false
             }
             if let image_paths = noticeModelObjc?.image_paths {
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "K_CBCarNoticeNotification"), object: nil, userInfo: ["image_paths":image_paths])
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "K_CBCarNoticeNotification"), object: nil, userInfo: ["image_paths":image_paths, "title":imgAlertTitle])
             }
         } else {
             switch noticeModelObjc?.pushType {

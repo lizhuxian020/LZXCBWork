@@ -96,8 +96,8 @@
         make.top.equalTo(aboutV.mas_bottom);
     }];
     
-    UIView *notifyS = [self viewSwitchWithImg:@"修改密码" title:Localized(@"消息通知") action:@selector(notifyS:)];
-    UIView *soundS = [self viewSwitchWithImg:@"修改密码" title:Localized(@"通知声音") action:@selector(soundS:)];
+    UIView *notifyS = [self viewSwitchWithImg:@"消息通知" title:Localized(@"消息通知") action:@selector(notifyS:)];
+    UIView *soundS = [self viewSwitchWithImg:@"通知声音" title:Localized(@"通知声音") action:@selector(soundS:)];
     [self.contentView addSubview:notifyS];
     [self.contentView addSubview:soundS];
     [notifyS mas_makeConstraints:^(MASConstraintMaker *make) {

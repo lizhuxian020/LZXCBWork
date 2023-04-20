@@ -52,6 +52,7 @@
 
 #import "_CBCarAlertMsgCell.h"
 #import "_CBMsgCenterModel.h"
+#import "CBDeviceTokenManager.h"
 
 #endif /* cobanPet_Bridging_Header_h */
 

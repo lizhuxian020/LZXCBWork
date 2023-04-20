@@ -263,8 +263,9 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 }
 - (void)getPushNotifyWithImage:(NSNotification *)notify {
     NSString *image_paths = notify.userInfo[@"image_paths"];
+    NSString *title = notify.userInfo[@"title"];
     NSString *path = [image_paths componentsSeparatedByString:@","].firstObject;
-    [[CBCarAlertView viewWithImageURL:path title:Localized(@"消息通知")] pop];
+    [[CBCarAlertView viewWithImageURL:path title:title?:Localized(@"消息通知")] pop];
 }
 - (void)createMQTT {
     CBPetLoginModel *userModel = [CBPetLoginModelTool getUser];

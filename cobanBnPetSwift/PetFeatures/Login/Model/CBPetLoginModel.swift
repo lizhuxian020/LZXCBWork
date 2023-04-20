@@ -137,6 +137,7 @@ extension CBMappable {
         }
         let isSuccess = NSKeyedArchiver.archiveRootObject(userModel, toFile: Path)
         if isSuccess {
+            NotificationCenter.default .post(name: NSNotification.Name(rawValue: "NOTIFICATION_UPDATE_USER"), object: nil)
             CBLog(message: "用户信息存档成功")
         } else {
             CBLog(message: "用户信息存档失败")
