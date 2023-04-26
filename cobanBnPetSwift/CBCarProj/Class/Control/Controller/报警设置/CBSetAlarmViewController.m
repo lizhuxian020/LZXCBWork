@@ -213,12 +213,12 @@
     } else if ([titleStr isEqualToString:Localized(@"拆除报警")]) {
         [paramters setObject:status forKey:@"warm_cc"];
         [self alarmEditControlSwitchRequest:paramters succcess:^{
-            weakself.controlStatusModel.oilCheckWarn = status.intValue;
+            weakself.controlStatusModel.warmCc = status.intValue;
         }];
     } else if ([titleStr isEqualToString:Localized(@"温度报警")]) {
         [paramters setObject:status forKey:@"warm_wd"];//接口文档小写, 需求文档大写
         [self alarmEditControlSwitchRequest:paramters succcess:^{
-            weakself.controlStatusModel.oilCheckWarn = status.intValue;
+            weakself.controlStatusModel.warmWd = status.intValue;
         }];
     } else if ([titleStr isEqualToString:Localized(@"保养通知")]) {
         [paramters setObject:status forKey:@"serviceFlag"];
@@ -230,14 +230,18 @@
     contentView.backgroundColor = [UIColor whiteColor];
     UISwitch *s = [UISwitch new];
     [contentView addSubview:s];
+    s.on = self.controlStatusModel.warmWd;
+    s.userInteractionEnabled = NO;
     
     UITextField *tfLow = [self wdTF];
     tfLow.text = self.switchModel.wdLowerLimit;
     [contentView addSubview:tfLow];
+    tfLow.placeholder = [Localized(@"下限") stringByAppendingString:@"(℃)"];
     
     UITextField *tfHigh = [self wdTF];
     tfHigh.text = self.switchModel.wdUpperLimit;
     [contentView addSubview:tfHigh];
+    tfHigh.placeholder = [Localized(@"上限") stringByAppendingString:@"(℃)"];
     
     [s mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(@15);
@@ -269,6 +273,12 @@
 //            confirmBlk(@"");
 //        }
         [weakself confirmWDBJ:tfLow.text wdHigh:tfHigh.text];
+//        NSMutableDictionary *paramters = [NSMutableDictionary dictionary];
+//        [paramters setObject:weakself.deviceInfoModelSelect.dno?:@"" forKey:@"dno"];
+//        [paramters setObject:s.isOn?@"1":@"0" forKey:@"warm_wd"];//接口文档小写, 需求文档大写
+//        [weakself alarmEditControlSwitchRequest:paramters succcess:^{
+//            weakself.controlStatusModel.warmWd = s.isOn?1:0;
+//        }];
     }];
     [alertView setDidClickCancel:^{
         [wpopView dismiss];

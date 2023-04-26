@@ -12,7 +12,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface _CBCarAlertMsgCell : UITableViewCell
-
+@property (nonatomic, strong, readonly) UIImageView *imgView;
 @property (nonatomic, strong) _CBCarAlertMsgModel *model;
 
 @property (nonatomic, copy) void (^didClickCheck)(void);

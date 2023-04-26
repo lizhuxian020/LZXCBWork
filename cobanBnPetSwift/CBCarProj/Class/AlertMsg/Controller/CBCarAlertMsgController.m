@@ -12,6 +12,7 @@
 #import "_CBAlertMsgMenuPopView.h"
 #import "CBCarAlertMsgDelegate.h"
 #import "CBCarMsgCenterDelegate.h"
+#import "CBShowImageController.h"
 
 #define __MsgUI_TitleHeight 50
 #define __MsgUI_SelectColor kAppMainColor
@@ -77,6 +78,10 @@
     
     [self.alertMsgDelegate reload];
     [self.msgCenterDelegate reload];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self tabButton:self.buttonsArray[_index]];
+    });
 }
 
 #pragma mark -- 实例化顶部菜单

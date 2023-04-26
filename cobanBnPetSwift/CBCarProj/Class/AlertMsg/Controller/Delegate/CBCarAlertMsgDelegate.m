@@ -7,6 +7,7 @@
 //
 
 #import "CBCarAlertMsgDelegate.h"
+#import "CBShowImageController.h"
 
 @implementation CBCarAlertMsgDelegate
 
@@ -100,6 +101,16 @@
 //        [weakself.navigationController popViewControllerAnimated:YES];
     }];
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    _CBCarAlertMsgCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    if (cell.imgView.hidden || !cell.imgView.image) {
+        return;
+    }
+    CBShowImageController *v = [CBShowImageController new];
+    v.image = cell.imgView.image;
+    [self.navigationController pushViewController:v animated:YES];
 }
 
 - (void)requestToStop:(_CBCarAlertMsgModel *)model {

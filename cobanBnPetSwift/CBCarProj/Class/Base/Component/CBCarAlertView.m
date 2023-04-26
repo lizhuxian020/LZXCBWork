@@ -232,6 +232,40 @@
     return popView;
 }
 
++ (CBBasePopView *)viewWithScrollableChooseData:(NSArray<NSString *> *)dataArr
+                                selectedIndex:(NSInteger)index
+                                        title:(NSString *)title
+                                 didClickData:(void(^)(NSString *contentStr, NSInteger index))didClickData
+                                        confrim:(void(^)(NSString *contentStr, NSInteger index))confirmBlk {
+    CBAlertSelectableView *c = [[CBAlertSelectableView alloc] initWithData:dataArr];
+    UIScrollView *scrollableContent = [UIScrollView new];
+    scrollableContent.backgroundColor = UIColor.whiteColor;
+    [scrollableContent addSubview:c];
+    [c mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(@0);
+        make.width.equalTo(scrollableContent);
+    }];
+    c.currentIndex = index;
+    CBAlertBaseView *alertView = [[CBAlertBaseView alloc] initWithContentView:scrollableContent title:title];
+    [scrollableContent mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.height.equalTo(@200);
+    }];
+    
+    CBBasePopView *popView = [[CBBasePopView alloc] initWithContentView:alertView];
+    __weak CBBasePopView *wpopView = popView;
+    __weak CBAlertSelectableView *wc = c;
+    [alertView setDidClickConfirm:^{
+        if (dataArr.count > 0 && wc.currentIndex < dataArr.count) {
+            confirmBlk(dataArr[wc.currentIndex], wc.currentIndex);
+        }
+        [wpopView dismiss];
+    }];
+    [alertView setDidClickCancel:^{
+        [wpopView dismiss];
+    }];
+    return popView;
+}
+
 + (CBBasePopView *)viewWithCSBJTitle:(NSString *)title
                             initText:(NSString *)text
                                 open:(BOOL)open

@@ -54,6 +54,12 @@ NS_ASSUME_NONNULL_BEGIN
                          didClickData:(void(^)(NSString *contentStr, NSInteger index))didClickData
                               confrim:(void(^)(NSString *contentStr, NSInteger index))confirmBlk;
 
++ (CBBasePopView *)viewWithScrollableChooseData:(NSArray<NSString *> *)dataArr
+                                selectedIndex:(NSInteger)index
+                                        title:(NSString *)title
+                                 didClickData:(void(^)(NSString *contentStr, NSInteger index))didClickData
+                                      confrim:(void(^)(NSString *contentStr, NSInteger index))confirmBlk;
+
 /// 超速报警的设置弹框
 + (CBBasePopView *)viewWithCSBJTitle:(NSString *)title
                             initText:(NSString *)text

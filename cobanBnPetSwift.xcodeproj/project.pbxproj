@@ -684,6 +684,7 @@
 		A2F9C5032926135E00715AF9 /* CBLoginLayoutMarco.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F9C5022926135E00715AF9 /* CBLoginLayoutMarco.swift */; };
 		A2F9C508292B76A700715AF9 /* UIView+BlocksKit.m in Sources */ = {isa = PBXBuildFile; fileRef = A2F9C505292B76A600715AF9 /* UIView+BlocksKit.m */; };
 		A2F9C509292B76A700715AF9 /* UIGestureRecognizer+BlocksKit.m in Sources */ = {isa = PBXBuildFile; fileRef = A2F9C506292B76A600715AF9 /* UIGestureRecognizer+BlocksKit.m */; };
+		A2FC7EAC29F908C3006A326C /* CBShowImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = A2FC7EAB29F908C3006A326C /* CBShowImageController.m */; };
 		B101D4DE2927CF32007EA942 /* UIView+Badge.m in Sources */ = {isa = PBXBuildFile; fileRef = B101D4DD2927CF32007EA942 /* UIView+Badge.m */; };
 		B11EBFDF29294F790000DA24 /* CBCBCarMineHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = B11EBFDE29294F790000DA24 /* CBCBCarMineHeaderView.m */; };
 		B1212C642795CE8B0044E7CC /* CBPetSwitchPetAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1212C632795CE8B0044E7CC /* CBPetSwitchPetAlertView.swift */; };
@@ -1959,6 +1960,8 @@
 		A2F9C505292B76A600715AF9 /* UIView+BlocksKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+BlocksKit.m"; sourceTree = "<group>"; };
 		A2F9C506292B76A600715AF9 /* UIGestureRecognizer+BlocksKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIGestureRecognizer+BlocksKit.m"; sourceTree = "<group>"; };
 		A2F9C507292B76A600715AF9 /* UIView+BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+BlocksKit.h"; sourceTree = "<group>"; };
+		A2FC7EAA29F908C3006A326C /* CBShowImageController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBShowImageController.h; sourceTree = "<group>"; };
+		A2FC7EAB29F908C3006A326C /* CBShowImageController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBShowImageController.m; sourceTree = "<group>"; };
 		B101D4DC2927CF32007EA942 /* UIView+Badge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Badge.h"; sourceTree = "<group>"; };
 		B101D4DD2927CF32007EA942 /* UIView+Badge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Badge.m"; sourceTree = "<group>"; };
 		B11EBFDD29294F790000DA24 /* CBCBCarMineHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBCBCarMineHeaderView.h; sourceTree = "<group>"; };
@@ -4060,6 +4063,7 @@
 		17CDA9DB24CEBE5400BB9F8B /* Class */ = {
 			isa = PBXGroup;
 			children = (
+				A2FC7EA629F90899006A326C /* ShowImageController */,
 				B1A363642950BD7900FF6A63 /* BaseModel */,
 				B1C78282294D932100CD0BB0 /* CarUser */,
 				B13D8BCA2935CA90005F3A61 /* ControlMenu */,
@@ -5676,6 +5680,15 @@
 			path = LoginLayoutMarco;
 			sourceTree = "<group>";
 		};
+		A2FC7EA629F90899006A326C /* ShowImageController */ = {
+			isa = PBXGroup;
+			children = (
+				A2FC7EAA29F908C3006A326C /* CBShowImageController.h */,
+				A2FC7EAB29F908C3006A326C /* CBShowImageController.m */,
+			);
+			path = ShowImageController;
+			sourceTree = "<group>";
+		};
 		B101D4DB2927CABD007EA942 /* Category */ = {
 			isa = PBXGroup;
 			children = (
@@ -6879,6 +6892,7 @@
 				439E90712475A497004ED9AD /* CBPetLoginRegisterMainView.swift in Sources */,
 				A2555D4A29503F00005F5963 /* CBMQTTManager.m in Sources */,
 				172F7BBC24123EC600543DCC /* CBPetUtils.swift in Sources */,
+				A2FC7EAC29F908C3006A326C /* CBShowImageController.m in Sources */,
 				1782BF9024C0427E00544C36 /* SwitchHeaderView.m in Sources */,
 				43CA5C552483AE2000B1F53D /* CBPetFuncChatMoreApplyView.swift in Sources */,
 				17CDAB4F24CEBE5500BB9F8B /* TQLocationConverter.m in Sources */,

@@ -454,12 +454,13 @@
 }
 
 - (void)clickPZ {
-    if (!_wifiModel) {
+    if (!_wifiModel || !_wifiModel.row || _wifiModel.row.count == 0) {
+        [HUD showHUDWithText: Localized(@"还没有绑定wifi摄像头")];
         return;
     }
     NSArray *str = [_wifiModel.row valueForKey:@"channelName"];
     kWeakSelf(self);
-    [[CBCarAlertView viewWithChooseData:str selectedIndex:0 title:Localized(@"摄像机列表") didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
+    [[CBCarAlertView viewWithScrollableChooseData:str selectedIndex:0 title:Localized(@"摄像机列表") didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
         
     } confrim:^(NSString * _Nonnull contentStr, NSInteger index) {
         kStrongSelf(self);
@@ -469,12 +470,13 @@
 }
 
 - (void)clickSSSP {
-    if (!_wifiModel) {
+    if (!_wifiModel || !_wifiModel.row || _wifiModel.row.count == 0) {
+        [HUD showHUDWithText: Localized(@"还没有绑定wifi摄像头")];
         return;
     }
     NSArray *str = [_wifiModel.row valueForKey:@"channelName"];
     kWeakSelf(self);
-    [[CBCarAlertView viewWithChooseData:str selectedIndex:0 title:Localized(@"摄像机列表") didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
+    [[CBCarAlertView viewWithScrollableChooseData:str selectedIndex:0 title:Localized(@"摄像机列表") didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
         
     } confrim:^(NSString * _Nonnull contentStr, NSInteger index) {
         kStrongSelf(self);
@@ -484,23 +486,55 @@
 }
 
 - (void)clickSXJCMM {
-    
-}
-
-- (void)clickSCSXJ {
-    if (!_wifiModel) {
+    if (!_wifiModel || !_wifiModel.row || _wifiModel.row.count == 0) {
+        [HUD showHUDWithText: Localized(@"还没有绑定wifi摄像头")];
         return;
     }
     NSArray *str = [_wifiModel.row valueForKey:@"channelName"];
     kWeakSelf(self);
-    [[CBCarAlertView viewWithChooseData:str selectedIndex:0 title:Localized(@"") didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
+    [[CBCarAlertView viewWithScrollableChooseData:str selectedIndex:0 title:Localized(@"摄像机列表") didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
         
     } confrim:^(NSString * _Nonnull contentStr, NSInteger index) {
         kStrongSelf(self);
         _CBWIFIModel_ROW *rowItem = [self.wifiModel.row objectAtIndex:index];
-        [self doSC:rowItem];
+        [self showCMMInputView:rowItem];
     }] pop];
 }
+
+- (void)showCMMInputView:(_CBWIFIModel_ROW *)rowItem {
+    kWeakSelf(self);
+    [[CBCarAlertView viewWithMultiInput:@[rowItem.channelName] title:_ControlConfigTitle_SXJCMM confirmCanDismiss:^BOOL(NSArray<NSString *> * _Nonnull contentStr) {
+        return !kStringIsEmpty(contentStr.firstObject);
+    } confrim:^(NSArray<NSString *> * _Nonnull contentStr) {
+        kStrongSelf(self);
+        [self doCMM:rowItem channelName:contentStr.firstObject];
+    }] pop];
+}
+
+- (void)clickSCSXJ {
+    if (!_wifiModel || !_wifiModel.row || _wifiModel.row.count == 0) {
+        [HUD showHUDWithText: Localized(@"还没有绑定wifi摄像头")];
+        return;
+    }
+    NSArray *str = [_wifiModel.row valueForKey:@"channelName"];
+    kWeakSelf(self);
+    [[CBCarAlertView viewWithScrollableChooseData:str selectedIndex:0 title:_ControlConfigTitle_SCSXJ didClickData:^(NSString * _Nonnull contentStr, NSInteger index) {
+        
+    } confrim:^(NSString * _Nonnull contentStr, NSInteger index) {
+        kStrongSelf(self);
+        _CBWIFIModel_ROW *rowItem = [self.wifiModel.row objectAtIndex:index];
+        [self confirmSC:rowItem];
+    }] pop];
+}
+
+- (void)confirmSC:(_CBWIFIModel_ROW *)row {
+    kWeakSelf(self);
+    [[CBCarAlertView viewWithAlertTips:Localized(@"确定删除?") title:_ControlConfigTitle_SCSXJ confrim:^(NSString * _Nonnull contentStr) {
+        kStrongSelf(self);
+        [self doSC:row];
+    }] pop];
+}
+
 
 - (void)jumpToVideo:(_CBWIFIModel_ROW *)row {
     CBRealTimeVideoController *vc = CBRealTimeVideoController.new;
@@ -663,6 +697,9 @@
         kStrongSelf(self);
         [self requestWIFIInfo];
         [MBProgressHUD hideHUDForView:self.view animated:YES];
+        if (isSucceed) {
+            [CBTopAlertView alertSuccess:Localized(@"照片正在上传中")];
+        }
     } failed:^(NSError *error) {
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -694,7 +731,7 @@
 - (void)doCMM:(_CBWIFIModel_ROW *)row channelName:(NSString *)name{
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     kWeakSelf(self);
-    [[NetWorkingManager shared] getWithUrl: @"/cameraController/updById"
+    [[NetWorkingManager shared] getWithUrl: @"/cameraChannelController/updById"
                                      params:@{
         @"id": row.channelId ?: @"",
         @"dno": _deviceInfoModelSelect.dno ?: @"",
@@ -703,6 +740,9 @@
         kStrongSelf(self);
         [self requestWIFIInfo];
         [MBProgressHUD hideHUDForView:self.view animated:YES];
+        if (isSucceed) {
+            [CBTopAlertView alertSuccess:Localized(@"操作成功")];
+        }
     } failed:^(NSError *error) {
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -713,7 +753,7 @@
 - (void)doSC:(_CBWIFIModel_ROW *)row {
     [MBProgressHUD showHUDIcon:self.view animated:YES];
     kWeakSelf(self);
-    [[NetWorkingManager shared] getWithUrl: @"/cameraController/delChannelById"
+    [[NetWorkingManager shared] getWithUrl: @"/cameraChannelController/delChannelById"
                                      params:@{
         @"id": row.channelId ?: @"",
         @"dno": _deviceInfoModelSelect.dno ?: @"",
@@ -721,6 +761,9 @@
         kStrongSelf(self);
         [self requestWIFIInfo];
         [MBProgressHUD hideHUDForView:self.view animated:YES];
+        if (isSucceed) {
+            [CBTopAlertView alertSuccess:Localized(@"操作成功")];
+        }
     } failed:^(NSError *error) {
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -761,11 +804,15 @@
                 successBlk();
             }
             [self.tableView reloadData];
+        } else {
+            [self requestListDataWithHud:nil];
+            [self requestWIFIInfo];
         }
     } failed:^(NSError *error) {
         kStrongSelf(self);
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         [self requestListDataWithHud:nil];
+        [self requestWIFIInfo];
     }];
 }
 #pragma mark -- 终端设备参数设置 -- 新增

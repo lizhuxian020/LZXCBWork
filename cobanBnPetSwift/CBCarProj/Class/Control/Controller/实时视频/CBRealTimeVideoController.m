@@ -92,39 +92,53 @@
 }
 
 - (void)doCapture {
-    [MBProgressHUD showHUDIcon:self.view animated:YES];
-    kWeakSelf(self);
-    [[NetWorkingManager shared] postWithUrl: @"/cameraController/photograph" params: @{
-        @"dno": _dno?:@"",
-        @"channel_id": _channelId ?: @"",
-        @"pz_count": @"1", //拍照张数
-        @"resolve": @"0" //分辨率 0：流畅 1：高清 2超清
-    } succeed:^(id response, BOOL isSucceed) {
-        kStrongSelf(self);
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
-    } failed:^(NSError *error) {
-        kStrongSelf(self);
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
-    }];
+//    [MBProgressHUD showHUDIcon:self.view animated:YES];
+//    kWeakSelf(self);
+//    [[NetWorkingManager shared] postWithUrl: @"/cameraController/photograph" params: @{
+//        @"dno": _dno?:@"",
+//        @"channel_id": _channelId ?: @"",
+//        @"pz_count": @"1", //拍照张数
+//        @"resolve": @"0" //分辨率 0：流畅 1：高清 2超清
+//    } succeed:^(id response, BOOL isSucceed) {
+//        kStrongSelf(self);
+//        [MBProgressHUD hideHUDForView:self.view animated:YES];
+//    } failed:^(NSError *error) {
+//        kStrongSelf(self);
+//        [MBProgressHUD hideHUDForView:self.view animated:YES];
+//    }];
+    UIImage *img = [self captureScreenForView:self.videoContainer];
+    UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil);
+    
+}
+
+#pragma mark 获取截屏图片
+- (UIImage *)captureScreenForView:(UIView *)currentView {
+    UIGraphicsBeginImageContextWithOptions(currentView.frame.size, YES, 0.0f);
+    [currentView.layer renderInContext:UIGraphicsGetCurrentContext()];
+
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    return image;
 }
 
 /*
  摄像头角度调整 1：向下；2：向上； 3：向左；4：向右；
  */
 - (void)doControl:(NSString *)angle {
-    [MBProgressHUD showHUDIcon:self.view animated:YES];
-    kWeakSelf(self);
-    [[NetWorkingManager shared] postWithUrl: @"/cameraController/cameraControl" params: @{
-        @"dno": _dno?:@"",
-        @"channel_id": _channelId ?: @"",
-        @"angle": angle ?: @""
-    } succeed:^(id response, BOOL isSucceed) {
-        kStrongSelf(self);
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
-    } failed:^(NSError *error) {
-        kStrongSelf(self);
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
-    }];
+//    [MBProgressHUD showHUDIcon:self.view animated:YES];
+//    kWeakSelf(self);
+//    [[NetWorkingManager shared] postWithUrl: @"/cameraController/cameraControl" params: @{
+//        @"dno": _dno?:@"",
+//        @"channel_id": _channelId ?: @"",
+//        @"angle": angle ?: @""
+//    } succeed:^(id response, BOOL isSucceed) {
+//        kStrongSelf(self);
+//        [MBProgressHUD hideHUDForView:self.view animated:YES];
+//    } failed:^(NSError *error) {
+//        kStrongSelf(self);
+//        [MBProgressHUD hideHUDForView:self.view animated:YES];
+//    }];
 }
 
 

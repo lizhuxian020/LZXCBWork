@@ -268,6 +268,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         self.window?.rootViewController = self.carHomeVC
 //        self.customizedStatusBar?.backgroundColor = UIColor.black
     }
+    @objc func isPetModule() -> Bool {
+        return self.window?.rootViewController == self.petNav;
+    }
+    @objc func isWtModule() -> Bool {
+        return self.window?.rootViewController == self.wtNav;
+    }
+    @objc func isCarModule() -> Bool {
+        return self.window?.rootViewController == self.carHomeVC;
+    }
     // MARK: -- 切换到登录页面
     @objc func switchToLoginView() {
         let loginVC = CBPetLoginViewController.init()
@@ -361,7 +370,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         } else {
             //应用处于前台时的本地推送接受
         }
-        if notification.request.identifier == "CBPetNoticeLocationNotificationID" {
+        if
+            (notification.request.identifier == "CBPetNoticeLocationNotificationID" && !self.isCarModule()) ||
+            (notification.request.identifier == "CBCarNoticeLocationNotificationID" && self.isCarModule())
+        {
             completionHandler(UNNotificationPresentationOptions(rawValue:UNNotificationPresentationOptions.sound.rawValue | UNNotificationPresentationOptions.badge.rawValue | UNNotificationPresentationOptions.alert.rawValue))
         }
     }
@@ -372,7 +384,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         if response.notification.request.trigger is UNPushNotificationTrigger {
             //应用处于后台时的远程推送接受
             //必须加这句代码
-            UMessage.didReceiveRemoteNotification(userInfo)
+//            UMessage.didReceiveRemoteNotification(userInfo)
         } else {
             //应用处于前台时的本地推送接受
         }
@@ -452,6 +464,7 @@ extension AppDelegate {
         var alertTitle = ""
         var alertSubTitle = ""
         var alertBody = ""
+        var requestIdentifier = ""
         let ddJsonBodyInfo = JSON.init(userInfo["body"] as Any)
         let noticeModelObjc = CBPetNoticeModel.deserialize(from: CBPetUtils.getDictionaryFromJSONString(jsonString: ddJsonBodyInfo.stringValue))
 //        let dicc : Dictionary = userInfo["body"] as! Dictionary<String, Any>
@@ -462,6 +475,7 @@ extension AppDelegate {
         var soundEnable:Bool = true
         /* 手表*/
         if noticeModelObjc?.productType == "1" {
+            requestIdentifier = "CBPetNoticeLocationNotificationID";
             /* 消息列表*/
             if noticeModelObjc?.pushType == "0" {
                 alertTitle = self.returnTitle(type: noticeModelObjc?.watchAlarmType ?? "")
@@ -480,6 +494,7 @@ extension AppDelegate {
             }
         } else if noticeModelObjc?.productType == "2" {
             var imgAlertTitle = ""
+            requestIdentifier = "CBCarNoticeLocationNotificationID";
             switch noticeModelObjc?.pushType {
             case "4":
                 /* 报警*/
@@ -527,6 +542,7 @@ extension AppDelegate {
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "K_CBCarNoticeNotification"), object: nil, userInfo: ["image_paths":image_paths, "title":imgAlertTitle])
             }
         } else {
+            requestIdentifier = "CBPetNoticeLocationNotificationID";
             switch noticeModelObjc?.pushType {
             case "1":
                 /* 好友聊天*/
@@ -594,7 +610,7 @@ extension AppDelegate {
             //设置通知触发器
             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.5, repeats: false)
             //设置请求标识符
-            let requestIdentifier = "CBPetNoticeLocationNotificationID"///NSString.init(format: "%lf", NSDate().timeIntervalSince1970)//"com.hangge.testNotification"
+//            let requestIdentifier = "CBPetNoticeLocationNotificationID"///NSString.init(format: "%lf", NSDate().timeIntervalSince1970)//"com.hangge.testNotification"
             //设置一个通知请求
             let request = UNNotificationRequest(identifier: requestIdentifier as String,
                                                 content: content, trigger: trigger)
@@ -632,6 +648,21 @@ extension AppDelegate {
     func clickNotificationAction(userInfo:NSDictionary) {
         let ddJsonBodyInfo = JSON.init(userInfo["body"] as Any)
         let noticeModelObjc = CBPetNoticeModel.deserialize(from: CBPetUtils.getDictionaryFromJSONString(jsonString: ddJsonBodyInfo.stringValue))
+        if noticeModelObjc?.productType == "2" {
+            if self.isCarModule() {
+                switch noticeModelObjc?.pushType {
+                case "4":
+                    NotificationCenter.default.post(name: NSNotification.Name.init("K_CAR_NOTIFICATION_PUSH_MSG_CONTROLLER_0"), object: nil)
+                    break
+                case "7":
+                    NotificationCenter.default.post(name: NSNotification.Name.init("K_CAR_NOTIFICATION_PUSH_MSG_CONTROLLER_1"), object: nil)
+                    break
+                default:
+                    break
+                }
+            }
+            return;
+        }
         switch noticeModelObjc?.pushType {
         case "1":
             if UIViewController.getCurrentVC() is CBPetFuncPetMsgVC {

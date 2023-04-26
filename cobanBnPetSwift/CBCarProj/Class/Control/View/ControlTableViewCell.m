@@ -542,7 +542,10 @@
     NSString *titleStr = self.controlModel.titleStr;
     if (([titleStr isEqualToString:_ControlConfigTitle_WIFIRD])) {
         self.switchView.on = _wifiModel ? [_wifiModel.wifi.wifiSwitch isEqualToString:@"1"] : NO;
-        self.centerLabel.text = self.switchView.isOn ? [NSString stringWithFormat:@"%@,%@", _wifiModel.wifi.wifiName, _wifiModel.wifi.wifiPassword] : @"";
+//        self.centerLabel.text = self.switchView.isOn ? [NSString stringWithFormat:@"%@,%@", _wifiModel.wifi.wifiName, _wifiModel.wifi.wifiPassword] : @"";
+        if (!kStringIsEmpty(_wifiModel.wifi.wifiName) && !kStringIsEmpty(_wifiModel.wifi.wifiPassword)) {        
+            self.centerLabel.text = [NSString stringWithFormat:@"%@,%@", _wifiModel.wifi.wifiName, _wifiModel.wifi.wifiPassword];
+        }
     }
 }
 @end

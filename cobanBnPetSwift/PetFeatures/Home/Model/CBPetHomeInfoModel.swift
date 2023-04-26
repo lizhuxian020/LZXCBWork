@@ -244,7 +244,7 @@ struct CBPetNoticeModel:HandyJSON,Codable {
     var body:String? 
     
     var watchAlarmType:String? /* 手表报警类型*/
-    var productType:String? /* 1:为手表推送 其他为宠物推送*/
+    var productType:String? /* 1:为手表推送 其他为宠物推送, 0: 宠物 ;1:手表 ;2: 车联网*/
     var phone:String?
     /* 1、好友聊天，2、绑定申请，3、宠友添加申请，4、设备报警，5、听一听消息*/
     var pushType:String?

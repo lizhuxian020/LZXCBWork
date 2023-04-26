@@ -585,7 +585,7 @@
     [img drawInRect:CGRectMake(0, 0, imgW, imgH)];
     //7.3在中心划入其他图片
     
-    UIImage *centerImg=[UIImage imageNamed:@"icon-60"];
+    UIImage *centerImg=[UIImage imageNamed:@"icon--60"];
     if (centerImg){
         CGFloat centerW = centerImg.size.width * 0.6;//1.5;//3;
         CGFloat centerH = centerImg.size.height * 0.6;//1.5;//3;

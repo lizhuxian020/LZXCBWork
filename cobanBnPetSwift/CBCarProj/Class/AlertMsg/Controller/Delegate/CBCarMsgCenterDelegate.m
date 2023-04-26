@@ -7,6 +7,7 @@
 //
 
 #import "CBCarMsgCenterDelegate.h"
+#import "CBShowImageController.h"
 
 @implementation CBCarMsgCenterDelegate
 
@@ -97,6 +98,17 @@
     }];
     return cell;
 }
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    _CBMsgCenterCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    if (cell.imgView.hidden || !cell.imgView.image) {
+        return;
+    }
+    CBShowImageController *v = [CBShowImageController new];
+    v.image = cell.imgView.image;
+    [self.navigationController pushViewController:v animated:YES];
+}
+
 
 - (void)requestToStop:(_CBMsgCenterModel *)model {
     kWeakSelf(self);

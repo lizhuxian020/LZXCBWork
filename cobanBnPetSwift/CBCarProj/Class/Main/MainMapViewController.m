@@ -237,6 +237,8 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(didGetSingleLocationNoti:) name: @"SingleLocationNoti" object: nil];
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(reqeustAlertNum) name: @"CBCAR_NOTFICIATION_UPDATE_ALARM_NUM" object: nil];
     [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(getPushNotifyWithImage:) name: @"K_CBCarNoticeNotification" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(pushMsgController0) name: @"K_CAR_NOTIFICATION_PUSH_MSG_CONTROLLER_0" object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(pushMsgController1) name: @"K_CAR_NOTIFICATION_PUSH_MSG_CONTROLLER_1" object: nil];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(taphandle:)];
     [self.view addGestureRecognizer:tap];
@@ -798,6 +800,16 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
+- (void)pushMsgController0 {
+    CBCarAlertMsgController *vc = [CBCarAlertMsgController new];
+    vc.index = 0;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+- (void)pushMsgController1 {
+    CBCarAlertMsgController *vc = [CBCarAlertMsgController new];
+    vc.index = 1;
+    [self.navigationController pushViewController:vc animated:YES];
+}
 #pragma mark - 按钮点击事件
 - (void)didClickDeviceListBtn {
     [self leftBtnClick];

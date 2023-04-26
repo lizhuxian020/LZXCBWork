@@ -12,7 +12,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface _CBMsgCenterCell : UITableViewCell
-
+@property (nonatomic, strong, readonly) UIImageView *imgView;
 @property (nonatomic, strong) _CBMsgCenterModel *model;
 
 @property (nonatomic, copy) void (^didClickCheck)(void);

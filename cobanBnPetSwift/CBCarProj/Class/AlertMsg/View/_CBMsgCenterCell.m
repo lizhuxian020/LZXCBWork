@@ -37,6 +37,7 @@
 }
 
 - (void)createUI {
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
     self.contentView.backgroundColor = kGreyColor;
     self.myContentView = [UIView new];
     self.myContentView.backgroundColor = UIColor.whiteColor;

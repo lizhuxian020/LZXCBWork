@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CBCarAlertMsgController : MINBaseViewController
 
+@property (nonatomic, assign) int index;
+
 @end
 
 NS_ASSUME_NONNULL_END
