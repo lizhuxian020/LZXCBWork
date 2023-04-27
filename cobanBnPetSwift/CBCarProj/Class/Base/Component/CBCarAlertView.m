@@ -426,7 +426,7 @@
     return popView;
 }
 
-+ (CBBasePopView *)viewWithImageURL:(NSString *)img title:(NSString *)title{
++ (CBBasePopView *)viewWithImageURL:(NSString *)img title:(NSString *)title confrim:(void(^)(void))confirmBlk {
     
     UIView *contentView = [UIView new];
     contentView.backgroundColor = [UIColor whiteColor];
@@ -440,12 +440,15 @@
     }];
     
     CBAlertBaseView *alertView = [[CBAlertBaseView alloc] initWithContentView:contentView title:title];
-    alertView.confirmText = Localized(@"保存");
+    alertView.confirmText = Localized(@"查看");
     CBBasePopView *popView = [[CBBasePopView alloc] initWithContentView:alertView];
     __weak CBBasePopView *wpopView = popView;
     __weak UIImageView *wimgV = imgV;
     [alertView setDidClickConfirm:^{
-        UIImageWriteToSavedPhotosAlbum(wimgV.image, nil, nil, nil);
+//        UIImageWriteToSavedPhotosAlbum(wimgV.image, nil, nil, nil);
+        if (confirmBlk) {
+            confirmBlk();
+        }
         [wpopView dismiss];
     }];
     [alertView setDidClickCancel:^{

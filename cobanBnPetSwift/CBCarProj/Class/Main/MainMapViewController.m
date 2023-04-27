@@ -266,8 +266,16 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 - (void)getPushNotifyWithImage:(NSNotification *)notify {
     NSString *image_paths = notify.userInfo[@"image_paths"];
     NSString *title = notify.userInfo[@"title"];
+    BOOL isAlarm = [notify.userInfo[@"isAlarm"] boolValue];
     NSString *path = [image_paths componentsSeparatedByString:@","].firstObject;
-    [[CBCarAlertView viewWithImageURL:path title:title?:Localized(@"消息通知")] pop];
+    kWeakSelf(self)
+    [[CBCarAlertView viewWithImageURL:path title:title?:Localized(@"消息通知") confrim:^{
+        if (isAlarm) {
+            [weakself pushMsgController0];
+        } else {
+            [weakself pushMsgController1];
+        }
+    }] pop];
 }
 - (void)createMQTT {
     CBPetLoginModel *userModel = [CBPetLoginModelTool getUser];

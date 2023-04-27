@@ -615,7 +615,7 @@
         _electriLb.attributedText = [self getAttStr:Localized(@"电量:") content:_deviceInfoModel.battery  ? [_deviceInfoModel.battery stringByAppendingString:@"%"] : @"0%"];
         _oilLb.attributedText = [self getAttStr:Localized(@"油量:") content:[NSString stringWithFormat:@"%@L %@%@",_deviceInfoModel.oil,_deviceInfoModel.oil_prop,@"%"]];
         _tempLb.attributedText = [self getAttStr:Localized(@"温度:") content:[NSString stringWithFormat:@"%@℃",_deviceInfoModel.temp?:@"-"]];
-        _humidityLb.attributedText = [self getAttStr:Localized(@"油量:") content:[NSString stringWithFormat:@"%@%@",_deviceInfoModel.humidity?:@"-",@"%"]];
+        _humidityLb.attributedText = [self getAttStr:Localized(@"湿度:") content:[NSString stringWithFormat:@"%@%@",_deviceInfoModel.humidity?:@"-",@"%"]];
 
         _sleepModelLb.attributedText = [self getAttStr:Localized(@"休眠模式:") content:[self returnSleepModel:_deviceInfoModel.restMod]];
         _gsmNumberLb.attributedText = [self getAttStr:@"GSM:" content:deviceInfoModel.gsm.intValue >= 15 ? Localized(@"强") : Localized(@"弱")];

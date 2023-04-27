@@ -188,6 +188,25 @@
             @"wifi_password": model.wifi_password ?: @"",
         }];
         return;
+    } else if (model.code == 80) {
+        /*
+         "code": 80 二维码配对结果通知
+         {
+             "code": 80,
+             "data": {
+                 "pairing_channel_id": 1,//配对通道ID
+                 "pairing_results": 0//0：失败 1：成功
+             },
+             "answerResult": 0,
+             "dno": "863584040008426"
+         }
+         */
+        if (!kStringIsEmpty(model.pairing_results) && [model.pairing_results isEqualToString:@"1"]) {
+            [NSNotificationCenter.defaultCenter postNotificationName:@"CBCAR_NOTFICIATION_PAIR_RESULT" object:nil userInfo:@{
+            }];
+            [HUD showHUDWithText:Localized(@"绑定成功")];
+        }
+        return;
     } else if (model.code == 64) {
         /*
          "code": 64 设备主动上报报警图片/用户下发拍照指令上报

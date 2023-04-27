@@ -77,6 +77,7 @@
 //    self.restArr = @[@[Localized(@"长在线"), Localized(@"时间休眠"), Localized(@"振动休眠"), Localized(@"深度振动休眠"), Localized(@"定时报告"), Localized(@"定时报告+深度振动休眠")]];
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(requestListDataWithHud:) name:@"CBCAR_NOTFICIATION_GETMQTT_CODE2" object:nil];
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(didGetMQTTWIFIInfo:) name:@"CBCAR_NOTFICIATION_GET_WIFI_INFO" object:nil];
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(requestWIFIInfo) name:@"CBCAR_NOTFICIATION_PAIR_RESULT" object:nil];
 }
 - (NSMutableArray *)arrayData {
     if (!_arrayData) {

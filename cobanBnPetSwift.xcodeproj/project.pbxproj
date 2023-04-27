@@ -685,6 +685,7 @@
 		A2F9C508292B76A700715AF9 /* UIView+BlocksKit.m in Sources */ = {isa = PBXBuildFile; fileRef = A2F9C505292B76A600715AF9 /* UIView+BlocksKit.m */; };
 		A2F9C509292B76A700715AF9 /* UIGestureRecognizer+BlocksKit.m in Sources */ = {isa = PBXBuildFile; fileRef = A2F9C506292B76A600715AF9 /* UIGestureRecognizer+BlocksKit.m */; };
 		A2FC7EAC29F908C3006A326C /* CBShowImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = A2FC7EAB29F908C3006A326C /* CBShowImageController.m */; };
+		A2FC7EB029FA6570006A326C /* CBBasePopManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A2FC7EAF29FA6570006A326C /* CBBasePopManager.m */; };
 		B101D4DE2927CF32007EA942 /* UIView+Badge.m in Sources */ = {isa = PBXBuildFile; fileRef = B101D4DD2927CF32007EA942 /* UIView+Badge.m */; };
 		B11EBFDF29294F790000DA24 /* CBCBCarMineHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = B11EBFDE29294F790000DA24 /* CBCBCarMineHeaderView.m */; };
 		B1212C642795CE8B0044E7CC /* CBPetSwitchPetAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1212C632795CE8B0044E7CC /* CBPetSwitchPetAlertView.swift */; };
@@ -1962,6 +1963,8 @@
 		A2F9C507292B76A600715AF9 /* UIView+BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+BlocksKit.h"; sourceTree = "<group>"; };
 		A2FC7EAA29F908C3006A326C /* CBShowImageController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBShowImageController.h; sourceTree = "<group>"; };
 		A2FC7EAB29F908C3006A326C /* CBShowImageController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBShowImageController.m; sourceTree = "<group>"; };
+		A2FC7EAE29FA6570006A326C /* CBBasePopManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBBasePopManager.h; sourceTree = "<group>"; };
+		A2FC7EAF29FA6570006A326C /* CBBasePopManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CBBasePopManager.m; sourceTree = "<group>"; };
 		B101D4DC2927CF32007EA942 /* UIView+Badge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Badge.h"; sourceTree = "<group>"; };
 		B101D4DD2927CF32007EA942 /* UIView+Badge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Badge.m"; sourceTree = "<group>"; };
 		B11EBFDD29294F790000DA24 /* CBCBCarMineHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CBCBCarMineHeaderView.h; sourceTree = "<group>"; };
@@ -6005,6 +6008,8 @@
 				B1D3565E292E5EF400E677F7 /* CBBasePopView.m */,
 				B1D35660292E65FD00E677F7 /* CBAlertBaseView.h */,
 				B1D35661292E65FD00E677F7 /* CBAlertBaseView.m */,
+				A2FC7EAE29FA6570006A326C /* CBBasePopManager.h */,
+				A2FC7EAF29FA6570006A326C /* CBBasePopManager.m */,
 			);
 			path = PopView;
 			sourceTree = "<group>";
@@ -6963,6 +6968,7 @@
 				17CDAC1224CEBE5600BB9F8B /* MINLabel.m in Sources */,
 				A2F9C5002925D1C400715AF9 /* CBPetLoginInputView.swift in Sources */,
 				1782BFA524C0427E00544C36 /* CBWtBaseNetworkModel.m in Sources */,
+				A2FC7EB029FA6570006A326C /* CBBasePopManager.m in Sources */,
 				17CDAC0B24CEBE5600BB9F8B /* AboutUsViewController.m in Sources */,
 				437B3E77247F5C67005365D9 /* CBPetNoRecordingView.swift in Sources */,
 				437E164A248C03B60086DBB4 /* CBPetFenceAlarmViewController.swift in Sources */,

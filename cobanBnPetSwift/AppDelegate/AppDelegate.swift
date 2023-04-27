@@ -495,6 +495,7 @@ extension AppDelegate {
         } else if noticeModelObjc?.productType == "2" {
             var imgAlertTitle = ""
             requestIdentifier = "CBCarNoticeLocationNotificationID";
+            var isAlarm = true
             switch noticeModelObjc?.pushType {
             case "4":
                 /* 报警*/
@@ -514,6 +515,7 @@ extension AppDelegate {
                 break
             case "7":
                 /* 普通通知*/
+                isAlarm = false
                 alertTitle = "消息通知".localizedStr
                 imgAlertTitle = "收到图片".localizedStr
                 if let warms = noticeModelObjc?.warms {
@@ -539,7 +541,7 @@ extension AppDelegate {
                 soundEnable = false
             }
             if let image_paths = noticeModelObjc?.image_paths {
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "K_CBCarNoticeNotification"), object: nil, userInfo: ["image_paths":image_paths, "title":imgAlertTitle])
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "K_CBCarNoticeNotification"), object: nil, userInfo: ["image_paths":image_paths, "title":imgAlertTitle, "isAlarm": isAlarm])
             }
         } else {
             requestIdentifier = "CBPetNoticeLocationNotificationID";

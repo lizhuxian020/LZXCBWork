@@ -56,6 +56,11 @@
         @"AUTH_PHONE":Localized(@"授权号码"),
         @"DELETE_AUTH_PHONE":Localized(@"删除授权号码"),
         @"DELETE_FENCE":Localized(@"删除电子围栏"),
+        @"REALTIME_VIDEO":Localized(@"实时视频"),
+        @"PHOTOGRAPH":Localized(@"拍照"),
+        @"WIF_HOTSPOT":Localized(@"wifi热点"),
+        @"WARN_CC":Localized(@"拆除报警开关"),
+        @"WARN_WD":Localized(@"温度报警开关"),
     };
 }
 

@@ -7,6 +7,7 @@
 //
 
 #import "CBBasePopView.h"
+#import "CBBasePopManager.h"
 
 @interface CBBasePopView ()
 
@@ -70,6 +71,10 @@
 }
 
 - (void)pop {
+    if (CBBasePopManager.share.currentPopView) {
+        [CBBasePopManager.share.currentPopView dismiss];
+    }
+    CBBasePopManager.share.currentPopView = self;
     [[UIApplication sharedApplication].keyWindow addSubview:self];
     [self.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(@0);

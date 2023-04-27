@@ -80,7 +80,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 一张图片, 带保存按钮和忽略按钮
 /// - Parameter img: img description
-+ (CBBasePopView *)viewWithImageURL:(NSString *)img title:(NSString *)title;
++ (CBBasePopView *)viewWithImageURL:(NSString *)img title:(NSString *)title confrim:(void(^)(void))confirmBlk;
 
 @end
 

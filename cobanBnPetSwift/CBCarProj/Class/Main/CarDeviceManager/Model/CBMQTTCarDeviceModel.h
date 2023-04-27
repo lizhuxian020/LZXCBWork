@@ -56,6 +56,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) CBMQTTCarDeviceStateModel *state;
 @property (nonatomic, copy) NSString *wifi_name;
 @property (nonatomic, copy) NSString *wifi_password;
+@property (nonatomic, copy) NSString *pairing_channel_id;
+@property (nonatomic, copy) NSString *pairing_results;
 //{
 //    answerResult = 0;
 //    code = 21;
