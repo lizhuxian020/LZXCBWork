@@ -59,8 +59,9 @@
         @"REALTIME_VIDEO":Localized(@"实时视频"),
         @"PHOTOGRAPH":Localized(@"拍照"),
         @"WIF_HOTSPOT":Localized(@"wifi热点"),
-        @"WARN_CC":Localized(@"拆除报警开关"),
-        @"WARN_WD":Localized(@"温度报警开关"),
+        @"WARM_CC":Localized(@"拆除报警开关"),
+        @"WARM_WD":Localized(@"温度报警开关"),
+        @"HORN_SWITCH ":Localized(@"喇叭开关"),
     };
 }
 

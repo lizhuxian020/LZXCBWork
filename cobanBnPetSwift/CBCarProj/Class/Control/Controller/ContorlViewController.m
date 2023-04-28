@@ -734,7 +734,7 @@
     kWeakSelf(self);
     [[NetWorkingManager shared] getWithUrl: @"/cameraChannelController/updById"
                                      params:@{
-        @"id": row.channelId ?: @"",
+        @"id": row.idd ?: @"",
         @"dno": _deviceInfoModelSelect.dno ?: @"",
         @"channelName": name ?: @""
     } succeed:^(id response, BOOL isSucceed) {
@@ -756,7 +756,7 @@
     kWeakSelf(self);
     [[NetWorkingManager shared] getWithUrl: @"/cameraChannelController/delChannelById"
                                      params:@{
-        @"id": row.channelId ?: @"",
+        @"id": row.idd ?: @"",
         @"dno": _deviceInfoModelSelect.dno ?: @"",
     } succeed:^(id response, BOOL isSucceed) {
         kStrongSelf(self);
