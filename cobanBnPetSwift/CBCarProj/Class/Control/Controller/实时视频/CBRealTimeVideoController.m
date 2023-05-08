@@ -28,6 +28,37 @@
     
     _urlStr = [NSString stringWithFormat:@"rtmp://mqtt.baanool.com:1935/%@/%@", _dno, _channelId];
     [self createUI];
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(moviePlayBackDidFinish:) name:IJKMPMoviePlayerPlaybackDidFinishNotification object:nil];
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(isFinishPreparedToPlay:) name:IJKMPMediaPlaybackIsPreparedToPlayDidChangeNotification object:nil];
+    
+}
+
+- (void)isFinishPreparedToPlay:(NSNotification *)notification {
+    NSLog(@"--lzx%s", __FUNCTION__);
+}
+
+- (void)moviePlayBackDidFinish:(NSNotification *)notification {
+    int reason = [[notification.userInfo valueForKey:IJKMPMoviePlayerPlaybackDidFinishReasonUserInfoKey] intValue];
+    switch (reason) {
+        case IJKMPMovieFinishReasonPlaybackEnded:
+            NSLog(@"--lzx: ijk: 正常结束");
+            break;
+        case IJKMPMovieFinishReasonUserExited:
+            NSLog(@"--lzx: ijk: 用户结束");
+            break;
+        case IJKMPMovieFinishReasonPlaybackError: {
+            NSLog(@"--lzx: ijk: 错误结束");
+            //重新播放时无推流, 或者播放时, 断推流
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self removePlay];
+                [self addPlay];
+            });
+            break;
+        }
+            
+        default:
+            break;
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -120,6 +151,21 @@
     UIGraphicsEndImageContext();
 
     return image;
+}
+
+- (void)removePlay {
+    [self.player shutdown];
+    [self.player.view removeFromSuperview];
+    self.player = nil;
+}
+
+- (void)addPlay {
+    self.player = [[IJKFFMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:_urlStr] withOptions:[IJKFFOptions optionsByDefault]];
+    [self.videoContainer addSubview:self.player.view];
+    [self.player.view mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(@0);
+    }];
+    [self.player prepareToPlay];
 }
 
 /*
