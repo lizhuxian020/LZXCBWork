@@ -20,6 +20,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSNumber *)getTimeQS;
 - (NSString *)getTimeRestUnit;
 - (NSNumber *)getTimeRest;
+
+- (BOOL)isALess5Min;
+- (BOOL)isBLess5Min;
 @end
 
 NS_ASSUME_NONNULL_END

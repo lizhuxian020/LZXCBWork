@@ -107,9 +107,13 @@
         make.height.equalTo(@1);
         make.left.right.equalTo(lastView);
     }];
-    
 }
 
-
+- (BOOL)isChooseAlwaysOnline {
+    return _currentIndex == 0;
+}
+- (BOOL)isChooseShakeOnline {
+    return _currentIndex == 1;
+}
 
 @end

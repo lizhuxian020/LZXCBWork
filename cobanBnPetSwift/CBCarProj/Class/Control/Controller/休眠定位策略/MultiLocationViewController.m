@@ -69,6 +69,33 @@
 #pragma mark - Action
 - (void)rightBtnClick
 {
+    /*
+     判断策略是否选对没
+     
+     再判断静止时间是否大于5min
+     */
+    if (self.locationModeView.getReportWay.intValue == 2) {
+        if (!self.xmChooseView.isChooseShakeOnline && !self.xmChooseView.isChooseAlwaysOnline) {
+            //策略选择错误
+            [HUD showHUDWithText:Localized(@"当前休眠模式不支持限距定时汇报")];
+            return;
+        }
+    }
+    if (self.locationModeView.getReportWay.intValue == 0) {
+        if (!self.xmChooseView.isChooseAlwaysOnline && self.locationModeView.isALess5Min) {
+            //需要大于5min
+            [HUD showHUDWithText:Localized(@"当前休眠模式静止时的时间间距需要大于5分钟")];
+            return;
+        }
+    }
+    if (self.locationModeView.getReportWay.intValue == 2) {
+        if (!self.xmChooseView.isChooseAlwaysOnline && self.locationModeView.isBLess5Min) {
+            //需要大于5min
+            [HUD showHUDWithText:Localized(@"当前休眠模式静止时的时间间距需要大于5分钟")];
+            return;
+        }
+    }
+    return;
     //MBProgressHUD *hud = [MINUtils hudToView: self.view withText: Localized(@"加载中...")];
     //[hud hideAnimated: YES];
     [MBProgressHUD showHUDIcon:self.view animated:YES];

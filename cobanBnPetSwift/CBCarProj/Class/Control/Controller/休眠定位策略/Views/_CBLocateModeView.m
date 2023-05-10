@@ -544,4 +544,11 @@
     self.BALbl.text = [NSString stringWithFormat:@"%d%@", num, self.unitData[uniIndex]];
     self.numberBA = [self getTime:num :uniIndex].integerValue;
 }
+
+- (BOOL)isALess5Min {
+    return _numberAA < 5 * 60;
+}
+- (BOOL)isBLess5Min {
+    return _numberBA < 5 * 60;
+}
 @end
