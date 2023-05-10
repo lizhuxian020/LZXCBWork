@@ -95,7 +95,6 @@
             return;
         }
     }
-    return;
     //MBProgressHUD *hud = [MINUtils hudToView: self.view withText: Localized(@"加载中...")];
     //[hud hideAnimated: YES];
     [MBProgressHUD showHUDIcon:self.view animated:YES];
