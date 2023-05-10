@@ -1,4 +1,4 @@
-/* 
+/*
   Localizable.strings
   cobanBnPetSwift
 
@@ -110,7 +110,7 @@
 "用户" = "User";
 "已同意" = "Approved";
 "点击查看" = "Click to view";
-"位置在" = "'s location in'"; 
+"位置在" = "'s location in'";
 "的声音" = "'s sound";
 "是否听听" = "Are you listening";
 "的位置未知" = "'s location is unkonwn";
@@ -1503,3 +1503,20 @@
 "输入手机号码(必填)" = "Enter  phone number (required)";
 "任何一项不能为空" = "None of the items can be empty";
 "设置转弯补报角度最低不能小于5度" = "Set the minimum angle of turn reporting to be no less than 5 degrees";
+
+"收到报警图片" = "Alarm picture received";
+"设备触发报警" = "Device triggers alarm";
+"收到图片" = "Received picture";
+"通知声音" = "Notification sound";
+"还没有绑定wifi摄像头" = "Haven't bound wifi camera yet";
+"照片正在上传中" = "Photos are uploading";
+"下限" = "Lower limit";
+"上限" = "Upper limit";
+"实时视频" = "Real Time Video";
+"拍照" = "Photograph";
+"wifi热点" = "Wifi Hotspot";
+"拆除报警开关" = "Demolition alarm";
+"温度报警开关" = "Temperature alarm";
+"查看" = "Check";
+"绑定成功" = "Bind successfully";
+"喇叭开关" = "Horn switch";

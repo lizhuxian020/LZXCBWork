@@ -19,6 +19,8 @@
 @property (nonatomic, strong) UITextView *textView;
 
 @property (nonatomic, assign) int lastDays;
+
+@property (nonatomic, strong) NSDate *currentSelectedDate;
 @end
 
 @implementation _CBTSTChooseTimeView
@@ -85,12 +87,14 @@
 
 - (void)dateChange:(UIDatePicker *)sender {
     NSDateFormatter* formatter = [[NSDateFormatter alloc]init];
-    NSTimeZone *timeZone = [NSTimeZone timeZoneForSecondsFromGMT:8*3600];
+//    NSTimeZone *timeZone = [NSTimeZone timeZoneForSecondsFromGMT:8*3600];
+    NSTimeZone *timeZone = [NSTimeZone systemTimeZone];
     [formatter setTimeZone:timeZone];
     formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
     
     
     NSString *str = [formatter stringFromDate: sender.date];
+    self.currentSelectedDate = sender.date;
     self.contentLbl.text = str;
 }
 
@@ -105,7 +109,13 @@
 }
 
 - (NSString *)timeStr {
-    return self.contentLbl.text;
+    NSDateFormatter* formatter = [[NSDateFormatter alloc]init];
+    NSTimeZone *timeZone = [NSTimeZone timeZoneForSecondsFromGMT:8*3600];
+    [formatter setTimeZone:timeZone];
+    formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+    
+    NSString *str = [formatter stringFromDate: _currentSelectedDate];
+    return str;
 }
 /*
 // Only override drawRect: if you perform custom drawing.

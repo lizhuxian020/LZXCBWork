@@ -87,6 +87,7 @@
 }
 
 -(void)dismiss {
+    CBBasePopManager.share.currentPopView = nil;
     [self.contentView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(@-200);
     }];
