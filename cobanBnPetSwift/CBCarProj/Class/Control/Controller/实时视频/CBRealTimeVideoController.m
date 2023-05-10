@@ -18,6 +18,8 @@
 @property(atomic, retain) id<IJKMediaPlayback> player;
 
 @property (nonatomic, copy) NSString *urlStr;
+
+@property (nonatomic, strong) NSTimer *heartbeatTimer;
 @end
 
 @implementation CBRealTimeVideoController
@@ -35,10 +37,26 @@
 
 - (void)isFinishPreparedToPlay:(NSNotification *)notification {
     NSLog(@"--lzx%s", __FUNCTION__);
+    [self startHeartBeat];
+}
+
+- (void)startHeartBeat {
+    [self endHeartBeat];
+    
+    _heartbeatTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(heartbeat) userInfo:nil repeats:YES];
+    
+}
+
+- (void)endHeartBeat {
+    if (_heartbeatTimer) {
+        [_heartbeatTimer invalidate];
+        _heartbeatTimer = nil;
+    }
 }
 
 - (void)moviePlayBackDidFinish:(NSNotification *)notification {
     int reason = [[notification.userInfo valueForKey:IJKMPMoviePlayerPlaybackDidFinishReasonUserInfoKey] intValue];
+    [self endHeartBeat];
     switch (reason) {
         case IJKMPMovieFinishReasonPlaybackEnded:
             NSLog(@"--lzx: ijk: 正常结束");
@@ -73,6 +91,7 @@
     [super viewDidDisappear:animated];
     
     [self.player shutdown];
+    [self endHeartBeat];
 //    [self removeMovieNotificationObservers];
 }
 
@@ -187,7 +206,16 @@
 //    }];
 }
 
-
+- (void)heartbeat {
+    NSLog(@"--lzx%s", __FUNCTION__);
+    [[NetWorkingManager shared] getWithUrl:@"userController/liveVideoHeartbeat" params:@{
+        @"dno": _dno ?: @""
+    } succeed:^(id response, BOOL isSucceed) {
+        
+    } failed:^(NSError *error) {
+        
+    }];
+}
 /*
 #pragma mark - Navigation
 
