@@ -207,6 +207,22 @@
             [HUD showHUDWithText:Localized(@"绑定成功")];
         }
         return;
+    } else if (model.code == 81) {
+        /*
+         {
+             "code": 81,
+             "data": {
+                 "pairing_channel_id": 1, //配对通道ID
+                 "pairing_results": 0 //0：失败 1：成功
+             },
+             "answerResult": 0,
+             "dno": "863584040008426"
+         }
+         收到81页面上不提示“摄像头配对成功”，只重新调用获取通道列表的接口
+         */
+        [NSNotificationCenter.defaultCenter postNotificationName:@"CBCAR_NOTFICIATION_PAIR_RESULT" object:nil userInfo:@{
+        }];
+        return;
     } else if (model.code == 64) {
         /*
          "code": 64 设备主动上报报警图片/用户下发拍照指令上报
