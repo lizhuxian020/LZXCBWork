@@ -62,6 +62,7 @@
         @"WARM_CC":Localized(@"拆除报警开关"),
         @"WARM_WD":Localized(@"温度报警开关"),
         @"HORN_SWITCH ":Localized(@"喇叭开关"),
+        @"WY_FENCE":Localized(@"移位取消"),
     };
 }
 

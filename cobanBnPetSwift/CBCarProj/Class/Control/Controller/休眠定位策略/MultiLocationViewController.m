@@ -84,14 +84,14 @@
     if (self.locationModeView.getReportWay.intValue == 0) {
         if (!self.xmChooseView.isChooseAlwaysOnline && self.locationModeView.isALess5Min) {
             //需要大于5min
-            [HUD showHUDWithText:Localized(@"当前休眠模式静止时的时间间距需要大于5分钟")];
+            [HUD showHUDWithText:Localized(@"当前休眠模式静止时的时间间距需要大于10分钟")];
             return;
         }
     }
     if (self.locationModeView.getReportWay.intValue == 2) {
         if (!self.xmChooseView.isChooseAlwaysOnline && self.locationModeView.isBLess5Min) {
             //需要大于5min
-            [HUD showHUDWithText:Localized(@"当前休眠模式静止时的时间间距需要大于5分钟")];
+            [HUD showHUDWithText:Localized(@"当前休眠模式静止时的时间间距需要大于10分钟")];
             return;
         }
     }

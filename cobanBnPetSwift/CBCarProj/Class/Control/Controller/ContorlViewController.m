@@ -721,6 +721,10 @@
         kStrongSelf(self);
         [self requestWIFIInfo];
         [MBProgressHUD hideHUDForView:self.view animated:YES];
+        //设备不不在线, 则不跳
+        if ([response[@"status"]integerValue] == 602) {
+            return;
+        }
         [self jumpToVideo:row];
     } failed:^(NSError *error) {
         kStrongSelf(self);

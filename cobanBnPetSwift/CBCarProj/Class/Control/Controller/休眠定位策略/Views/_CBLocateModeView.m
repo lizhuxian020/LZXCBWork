@@ -546,9 +546,11 @@
 }
 
 - (BOOL)isALess5Min {
-    return _numberAA < 5 * 60;
+    //5 又改成10
+    return _numberAA < 10 * 60;
 }
 - (BOOL)isBLess5Min {
-    return _numberBA < 5 * 60;
+    //5 又改成10
+    return _numberBA < 10 * 60;
 }
 @end
