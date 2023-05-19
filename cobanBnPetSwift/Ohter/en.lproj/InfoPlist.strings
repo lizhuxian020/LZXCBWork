@@ -1,4 +1,4 @@
-/* 
+/*
   InfoPlist.strings
   cobanBnPetSwift
 
@@ -6,9 +6,9 @@
   Copyright © 2020 coban. All rights reserved.
 */
 CFBundleDisplayName = "BAANOOL IOT";
-"NSMicrophoneUsageDescription" = "App needs your consent to access the microphone recording to send voice";
-"NSPhotoLibraryUsageDescription" = "App requires your consent in order to scan the QR code to bind the device";
-"NSPhotoLibraryAddUsageDescription" = "App requires your consent in order to scan the QR code to bind the device";
-"NSLocationAlwaysUsageDescription" = "App needs your consent to access the geographic location information to obtain the location information of the device";
-"NSLocationWhenInUseUsageDescription" = "App needs your consent to access the geographic location information to obtain the location information of the device";
-"NSCameraUsageDescription"= "The app needs your consent to scan the QR code and bind the device";
+"NSMicrophoneUsageDescription" = "App needs consent to access microphone recordings to send voice";
+"NSPhotoLibraryUsageDescription" = "App needs your consent to scan the QR code to bind the device";
+"NSPhotoLibraryAddUsageDescription" = "The app needs your consent to access the photo album in order to select photos and upload user avatars";
+"NSLocationAlwaysUsageDescription" = "The app needs your consent to access the geographic location information to obtain the location information of the device";
+"NSLocationWhenInUseUsageDescription" = "The app needs your consent to access the geographic location information to obtain the location information of the device";
+"NSCameraUsageDescription"= "The app needs your consent to scan the QR code to bind the device";

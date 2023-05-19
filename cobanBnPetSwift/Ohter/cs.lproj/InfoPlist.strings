@@ -1,0 +1,14 @@
+/*
+  InfoPlist.strings
+  cobanBnPetSwift
+
+  Created by coban on 2020/3/10.
+  Copyright © 2020 coban. All rights reserved.
+*/
+CFBundleDisplayName = "BAANOOL IOT";
+"NSMicrophoneUsageDescription" = "Aplikace potřebuje souhlas s přístupem k nahrávkám z mikrofonu, aby mohla odesílat hlas";
+"NSPhotoLibraryUsageDescription" = "Aplikace potřebuje váš souhlas k naskenování QR kódu, aby se zařízení spojilo";
+"NSPhotoLibraryAddUsageDescription" = "Aplikacja potrzebuje Twojej zgody, aby uzyskać dostęp do albumu zdjęć w celu wybrania zdjęć i przesłania awatarów użytkowników";
+"NSLocationAlwaysUsageDescription" = "Aplikacja potrzebuje Twojej zgody na dostęp do informacji o lokalizacji geograficznej w celu uzyskania informacji o lokalizacji urządzenia";
+"NSLocationWhenInUseUsageDescription" = "Aplikacja potrzebuje Twojej zgody na dostęp do informacji o lokalizacji geograficznej w celu uzyskania informacji o lokalizacji urządzenia";
+"NSCameraUsageDescription"= "Aplikacja potrzebuje Twojej zgody na zeskanowanie kodu QR w celu powiązania urządzenia";

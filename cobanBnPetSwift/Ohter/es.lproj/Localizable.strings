@@ -391,7 +391,7 @@
 "输入电话号码" = "Introduzca el número de teléfono";
 "报警设置" = "Ajustes de alarma";
 "终端设置" = "Configuración de terminales";
-"断油断电模式设置" = "Configuración del modo de corte de aceite";
+"断油断电模式设置" = "Configuración del de corte de aceite";
 "布防/撤防" = "Armar/Desarmar";
 "布防" = "Armar";
 "撤防" = "Desarmar";
@@ -1521,3 +1521,13 @@
 "查看" = "Controlar";
 "绑定成功" = "Enlazar con éxito";
 "喇叭开关" = "Trompeta";
+
+"当前休眠模式不支持限距定时汇报" ="No admite informes de tiempo limitado";
+"当前休眠模式静止时的时间间距需要大于10分钟" ="El intervalo de tiempo cuando está parado debe ser mayor a 10 minutos";
+
+"湿度" = "Humedad";
+"摄像机重命名" = "Renombrar cámara";
+"删除摄像机" = "Eliminar cámara";
+"摄像机列表" = "Lista de cámaras";
+"温度报警" = "Alarma de temperatura";
+"确定删除?" = "¿Confirmar eliminación?";
