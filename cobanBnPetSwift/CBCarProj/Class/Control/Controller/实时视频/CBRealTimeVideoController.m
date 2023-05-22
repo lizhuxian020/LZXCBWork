@@ -156,8 +156,12 @@
 //        kStrongSelf(self);
 //        [MBProgressHUD hideHUDForView:self.view animated:YES];
 //    }];
-    UIImage *img = [self captureScreenForView:self.videoContainer];
-    UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil);
+    if ([self.player.view conformsToProtocol:@protocol(IJKSDLGLViewProtocol)]) {
+        id<IJKSDLGLViewProtocol> p = self.player.view;
+        UIImage *img = [p snapshot];
+        UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil);
+        [HUD showHUDWithText:Localized(@"截图成功") withDelay:2.0];
+    }
     
 }
 

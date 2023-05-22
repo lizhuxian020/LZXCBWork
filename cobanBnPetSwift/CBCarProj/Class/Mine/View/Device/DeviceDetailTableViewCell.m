@@ -55,6 +55,7 @@
         tf.placeholder = @"请输入";
         self.textField = tf;
         [_nameLabel setContentHuggingPriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
+        [_nameLabel setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
 
         _selectLabel = [MINUtils createLabelWithText: @"选择车辆颜色" size: 12 * KFitHeightRate alignment: NSTextAlignmentCenter textColor: kRGB(137, 137, 137)];
         _selectLabel.layer.borderWidth = 0.5;
