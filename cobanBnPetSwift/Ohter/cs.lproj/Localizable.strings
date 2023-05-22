@@ -1526,7 +1526,7 @@
 "当前休眠模式不支持限距定时汇报" ="Tento režim spánku nepodporuje časově omezené hlášení";
 "当前休眠模式静止时的时间间距需要大于10分钟" ="Časový interval, kdy je v klidu, je delší než 10 minut";
 
-"湿度" = "Vlhkost";
+"湿度:" = "Vlhkost:";
 "摄像机重命名" = "Přejmenování fotoaparátu";
 "删除摄像机" = "Smazat kameru";
 "摄像机列表" = "Camera list";

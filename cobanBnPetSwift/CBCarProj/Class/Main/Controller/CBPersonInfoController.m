@@ -28,7 +28,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initBarWithTitle:Localized(@"个人信息") isBack:YES];
-    [self initBarRighBtnTitle:@"保存" target:self action:@selector(save)];
+    [self initBarRighBtnTitle:Localized(@"保存") target:self action:@selector(save)];
     
     CBCarUserModel *userModel = [CBCarUserInstance.shared userModel];
     

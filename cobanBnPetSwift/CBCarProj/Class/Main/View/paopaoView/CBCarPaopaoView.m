@@ -432,7 +432,7 @@
     
     //同一行的放里面(不换行）
     NSArray *sameLineLb = @[
-        _accLb,_doorLb,_oilLb,_humidityLb,_gpsNumberLb
+        _accLb,_oilLb,_humidityLb,_gpsNumberLb
     ];
 
     [self.bgmView layoutIfNeeded];
@@ -635,7 +635,7 @@
         
         NSString *createTimeStr = [Utils convertTimeWithTimeIntervalString:deviceInfoModel.createTime?:@"" timeZone:deviceInfoModel.timeZone?:@""];
         _timeLb.attributedText = [self getAttStr:Localized(@"上报时间:") content:createTimeStr];
-        _addressLabel.attributedText = [self getAttStr:Localized(@"地址:") content:deviceInfoModel.address?:@"未知"];
+        _addressLabel.attributedText = [self getAttStr:Localized(@"地址:") content:deviceInfoModel.address?:Localized(@"未知")];
     }
 }
 

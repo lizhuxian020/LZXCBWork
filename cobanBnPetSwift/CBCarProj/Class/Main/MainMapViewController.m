@@ -1645,6 +1645,10 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
                 return ;
             }
         } completion:^(BOOL finished) {
+            //更新地图中心
+            BMKSportNode *node = [sportNodes objectAtIndex:currentIndex];
+            [self updateMapCenterWithSportNode:node];
+            
             lastIndex = currentIndex;
             if (isAnimate) {
                 [self running_track];
@@ -1811,6 +1815,12 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 }
 - (void)processMapLocation {
     
+    if ([AppDelegate shareInstance].isShowPlayBackView == YES) {
+        // 回放轨迹的时候 不刷新设备位置
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        return;
+    }
+    
     if (self.paopaoView.isAlertPaopaoView == YES) {
         // 打开设备详情窗口时候，不移动地图, 但要画围栏
         [self updateMapLocationWhenPaoView];
@@ -1821,6 +1831,12 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     if (!targetModel) {
         targetModel = CarDeviceManager.deviceDatas.firstObject;
     }
+    [self updateMapCenter:targetModel];
+}
+- (void)updateMapCenterWithSportNode:(BMKSportNode *)node {
+    CBHomeLeftMenuDeviceInfoModel *targetModel = [CBHomeLeftMenuDeviceInfoModel new];
+    targetModel.lat = @(node.coordinate.latitude).description;
+    targetModel.lng = @(node.coordinate.longitude).description;
     [self updateMapCenter:targetModel];
 }
 - (void)updateMapLocationWhenPaoView {

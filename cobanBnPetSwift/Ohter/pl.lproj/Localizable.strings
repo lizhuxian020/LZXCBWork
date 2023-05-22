@@ -1526,7 +1526,7 @@
 "当前休眠模式不支持限距定时汇报" ="Ten tryb uśpienia nie obsługuje raportowania ograniczonego czasowo";
 "当前休眠模式静止时的时间间距需要大于10分钟" ="Przedział czasu, w którym stoi nieruchomo, musi być większy niż 10 minut";
 
-"湿度" = "wilgotność";
+"湿度:" = "wilgotność:";
 "摄像机重命名" = "Zmiana nazwy aparatu";
 "删除摄像机" = "Usuń kamerę";
 "摄像机列表" = "Lista kamer";

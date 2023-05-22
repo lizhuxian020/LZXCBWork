@@ -1524,7 +1524,7 @@
 "当前休眠模式不支持限距定时汇报" ="This sleep mode does not support time-limited reporting";
 "当前休眠模式静止时的时间间距需要大于10分钟" ="The time interval when stationary is greater than 10 minutes";
 
-"湿度" = "Humidity";
+"湿度:" = "Humidity:";
 "摄像机重命名" = "Camera rename";
 "删除摄像机" = "Delete camera";
 "摄像机列表" = "Camera list";

@@ -1525,7 +1525,7 @@
 "当前休眠模式不支持限距定时汇报" ="Não suporta relatórios com tempo limitado";
 "当前休眠模式静止时的时间间距需要大于10分钟" ="O intervalo de tempo estático precisa ser maior que 10 minutos";
 
-"湿度" = "Umidade";
+"湿度:" = "Umidade:";
 "摄像机重命名" = "Câmera renomear";
 "删除摄像机" = "Excluir câmera";
 "摄像机列表" = "Lista de câmeras";
