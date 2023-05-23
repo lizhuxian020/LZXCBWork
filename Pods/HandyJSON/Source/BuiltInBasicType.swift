@@ -136,7 +136,8 @@ extension String: _BuiltInBasicType {
                     return "false"
                 }
             }
-            return formatter.string(from: num)
+//            return formatter.string(from: num) 解决小数点位逗号的情况
+            return "\(object)"
         case _ as NSNull:
             return nil
         default:
