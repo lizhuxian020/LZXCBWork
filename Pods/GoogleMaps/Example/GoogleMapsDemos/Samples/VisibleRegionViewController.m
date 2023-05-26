@@ -1,12 +1,23 @@
-#if !defined(__has_feature) || !__has_feature(objc_arc)
-#error "This file requires ARC support."
-#endif
+/*
+ * Copyright 2016 Google LLC. All rights reserved.
+ *
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
 
 #import "GoogleMapsDemos/Samples/VisibleRegionViewController.h"
 
 #import <GoogleMaps/GoogleMaps.h>
 
-static CGFloat kOverlayHeight = 140.0f;
+static const CGFloat kOverlayHeight = 140.0f;
 
 @implementation VisibleRegionViewController {
   GMSMapView *_mapView;
@@ -48,11 +59,12 @@ static CGFloat kOverlayHeight = 140.0f;
   [UIView animateWithDuration:2.0 animations:^{
     CGSize size = self.view.bounds.size;
     if (padding.bottom == 0.0f) {
-      _overlay.frame = CGRectMake(0, size.height - kOverlayHeight, size.width, kOverlayHeight);
-      _mapView.padding = UIEdgeInsetsMake(0, 0, kOverlayHeight, 0);
+      self->_overlay.frame =
+          CGRectMake(0, size.height - kOverlayHeight, size.width, kOverlayHeight);
+      self->_mapView.padding = UIEdgeInsetsMake(0, 0, kOverlayHeight, 0);
     } else {
-      _overlay.frame = CGRectMake(0, _mapView.bounds.size.height, size.width, 0);
-      _mapView.padding = UIEdgeInsetsZero;
+      self->_overlay.frame = CGRectMake(0, self->_mapView.bounds.size.height, size.width, 0);
+      self->_mapView.padding = UIEdgeInsetsZero;
     }
   }];
 }

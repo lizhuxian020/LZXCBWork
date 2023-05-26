@@ -150,8 +150,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
             CBLog(message: "百度地图引擎启动成功")
         }
         /* google*/ ///AIzaSyCD__IsJ98qr7XHUnAuxUhGH5sh4jwIF3s
-        GMSServices.provideAPIKey("AIzaSyCSKYnvdJJIW8DJTuvQUKtY7Ov9P5hHw3A")
-//        GMSServices.provideAPIKey("AIzaSyALcmyCW-vlGaDo9RUG45A0Z7apiJWcYNQ")
+//        GMSServices.provideAPIKey("AIzaSyCSKYnvdJJIW8DJTuvQUKtY7Ov9P5hHw3A")
+        GMSServices.provideAPIKey("AIzaSyALcmyCW-vlGaDo9RUG45A0Z7apiJWcYNQ")
         
         /* 友盟推送*/
 //        AppKey

@@ -1,50 +1,54 @@
-#if !defined(__has_feature) || !__has_feature(objc_arc)
-#error "This file requires ARC support."
-#endif
+/*
+ * Copyright 2016 Google LLC. All rights reserved.
+ *
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
 
 #import "GoogleMapsDemos/Samples/Samples.h"
 
-// Map Demos
-#import "GoogleMapsDemos/Samples/BasicMapViewController.h"
-#import "GoogleMapsDemos/Samples/CustomIndoorViewController.h"
-#import "GoogleMapsDemos/Samples/DoubleMapViewController.h"
-#import "GoogleMapsDemos/Samples/FrameRateViewController.h"
-#import "GoogleMapsDemos/Samples/GestureControlViewController.h"
-#import "GoogleMapsDemos/Samples/IndoorMuseumNavigationViewController.h"
-#import "GoogleMapsDemos/Samples/IndoorViewController.h"
-#import "GoogleMapsDemos/Samples/MapTypesViewController.h"
-#import "GoogleMapsDemos/Samples/MapZoomViewController.h"
-#import "GoogleMapsDemos/Samples/MyLocationViewController.h"
-#import "GoogleMapsDemos/Samples/SnapshotReadyViewController.h"
-#import "GoogleMapsDemos/Samples/TrafficMapViewController.h"
-#import "GoogleMapsDemos/Samples/VisibleRegionViewController.h"
-
-// Panorama Demos
-#import "GoogleMapsDemos/Samples/FixedPanoramaViewController.h"
-#import "GoogleMapsDemos/Samples/PanoramaViewController.h"
-
-// Overlay Demos
 #import "GoogleMapsDemos/Samples/AnimatedCurrentLocationViewController.h"
 #import "GoogleMapsDemos/Samples/AnimatedUIViewMarkerViewController.h"
+#import "GoogleMapsDemos/Samples/BasicMapViewController.h"
+#import "GoogleMapsDemos/Samples/CameraViewController.h"
+#import "GoogleMapsDemos/Samples/CustomIndoorViewController.h"
 #import "GoogleMapsDemos/Samples/CustomMarkersViewController.h"
+#import "GoogleMapsDemos/Samples/DoubleMapViewController.h"
+#import "GoogleMapsDemos/Samples/FitBoundsViewController.h"
+#import "GoogleMapsDemos/Samples/FixedPanoramaViewController.h"
+#import "GoogleMapsDemos/Samples/FrameRateViewController.h"
+#import "GoogleMapsDemos/Samples/GeocoderViewController.h"
+#import "GoogleMapsDemos/Samples/GestureControlViewController.h"
 #import "GoogleMapsDemos/Samples/GradientPolylinesViewController.h"
 #import "GoogleMapsDemos/Samples/GroundOverlayViewController.h"
+#import "GoogleMapsDemos/Samples/IndoorMuseumNavigationViewController.h"
+#import "GoogleMapsDemos/Samples/IndoorViewController.h"
+#import "GoogleMapsDemos/Samples/MapLayerViewController.h"
+#import "GoogleMapsDemos/Samples/MapTypesViewController.h"
+#import "GoogleMapsDemos/Samples/MapZoomViewController.h"
 #import "GoogleMapsDemos/Samples/MarkerEventsViewController.h"
 #import "GoogleMapsDemos/Samples/MarkerInfoWindowViewController.h"
 #import "GoogleMapsDemos/Samples/MarkerLayerViewController.h"
 #import "GoogleMapsDemos/Samples/MarkersViewController.h"
+#import "GoogleMapsDemos/Samples/MyLocationViewController.h"
+#import "GoogleMapsDemos/Samples/PaddingBehaviorViewController.h"
+#import "GoogleMapsDemos/Samples/PanoramaViewController.h"
 #import "GoogleMapsDemos/Samples/PolygonsViewController.h"
 #import "GoogleMapsDemos/Samples/PolylinesViewController.h"
-#import "GoogleMapsDemos/Samples/TileLayerViewController.h"
-
-// Camera Demos
-#import "GoogleMapsDemos/Samples/CameraViewController.h"
-#import "GoogleMapsDemos/Samples/FitBoundsViewController.h"
-#import "GoogleMapsDemos/Samples/MapLayerViewController.h"
-
-// Services
-#import "GoogleMapsDemos/Samples/GeocoderViewController.h"
+#import "GoogleMapsDemos/Samples/SnapshotReadyViewController.h"
 #import "GoogleMapsDemos/Samples/StructuredGeocoderViewController.h"
+#import "GoogleMapsDemos/Samples/StyledMapViewController.h"
+#import "GoogleMapsDemos/Samples/TileLayerViewController.h"
+#import "GoogleMapsDemos/Samples/TrafficMapViewController.h"
+#import "GoogleMapsDemos/Samples/VisibleRegionViewController.h"
 
 @implementation Samples
 
@@ -59,6 +63,9 @@
    andDescription:nil],
     [self newDemo:[MapTypesViewController class]
         withTitle:@"Map Types"
+   andDescription:nil],
+    [self newDemo:[StyledMapViewController class]
+        withTitle:@"Styled Map"
    andDescription:nil],
     [self newDemo:[TrafficMapViewController class]
         withTitle:@"Traffic Layer"
@@ -92,6 +99,9 @@
    andDescription:nil],
     [self newDemo:[FrameRateViewController class]
         withTitle:@"Frame Rate"
+   andDescription:nil],
+    [self newDemo:[PaddingBehaviorViewController class]
+        withTitle:@"Padding Behavior"
    andDescription:nil],
   ];
 

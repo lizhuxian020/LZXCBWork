@@ -14,16 +14,11 @@ PODS:
   - FMDB/standard (2.7.5)
   - FreeStreamer (3.8.3):
     - Reachability (~> 3.0)
-  - GoogleMaps (2.0.1):
-    - GoogleMaps/Maps (= 2.0.1)
-  - GoogleMaps/Base (2.0.1)
-  - GoogleMaps/Maps (2.0.1):
-    - GoogleMaps/Base (= 2.0.1)
-  - GooglePlacePicker (2.0.1):
-    - GoogleMaps (= 2.0.1)
-    - GooglePlaces (= 2.0.1)
-  - GooglePlaces (2.0.1):
-    - GoogleMaps/Base (= 2.0.1)
+  - GoogleMaps (3.9.0):
+    - GoogleMaps/Maps (= 3.9.0)
+  - GoogleMaps/Base (3.9.0)
+  - GoogleMaps/Maps (3.9.0):
+    - GoogleMaps/Base
   - HandyJSON (5.0.0)
   - IQKeyboardManager (3.2.4)
   - Masonry (1.1.0)
@@ -63,9 +58,7 @@ DEPENDENCIES:
   - BMKLocationKit
   - FMDB
   - FreeStreamer (~> 3.8.2)
-  - GoogleMaps (~> 2.0.0)
-  - GooglePlacePicker
-  - GooglePlaces
+  - GoogleMaps (~> 3.9.0)
   - HandyJSON
   - IQKeyboardManager (~> 3.2.2)
   - Masonry
@@ -91,9 +84,6 @@ SPEC REPOS:
     - BMKLocationKit
     - FMDB
     - FreeStreamer
-    - GoogleMaps
-    - GooglePlacePicker
-    - GooglePlaces
     - HandyJSON
     - IQKeyboardManager
     - Masonry
@@ -108,6 +98,7 @@ SPEC REPOS:
     - SwiftyJSON
   trunk:
     - AFNetworking
+    - GoogleMaps
     - MQTTClient
     - QFDatePicker
     - UMCommon
@@ -121,9 +112,7 @@ SPEC CHECKSUMS:
   BMKLocationKit: 29f9f04827bfe2f2ca2c1c87b11161f05d4189a5
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   FreeStreamer: b205b0bf6a2e7855f935369145498f930eb27cac
-  GoogleMaps: f09da64fc987c1aa29394567c3cab5a3df83c402
-  GooglePlacePicker: dfa24ab4b81e23cb844db544a5caf27fe152c04f
-  GooglePlaces: 72fab1d1651c6df0322f2aad245ffb15b80d3c56
+  GoogleMaps: 4b5346bddfe6911bb89155d43c903020170523ac
   HandyJSON: 992f2d661716d6a91de82d0056927bc7813b5770
   IQKeyboardManager: 555b1231fefafb21b19278d7cca72986a27b748b
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
@@ -142,6 +131,6 @@ SPEC CHECKSUMS:
   UMDevice: 053478c4b4d7292f31f0a275c227d3c4007a5571
   UMPush: c420e1cf2d1c96f1257f390bc626314fb7e6d9e6
 
-PODFILE CHECKSUM: 3f88392864917b1a68c40ebaaa329e6377103ecc
+PODFILE CHECKSUM: b246a81ad8ff3b375c57fc326fffbe76207b9634
 
 COCOAPODS: 1.11.3
