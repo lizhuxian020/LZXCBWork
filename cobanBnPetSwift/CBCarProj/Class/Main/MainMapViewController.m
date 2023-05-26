@@ -1647,7 +1647,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         } completion:^(BOOL finished) {
             //更新地图中心
             BMKSportNode *node = [sportNodes objectAtIndex:currentIndex];
-            [self updateMapCenterWithSportNode:node];
+            [self updateMapCenterWithCoordinate:node.coordinate];
             
             lastIndex = currentIndex;
             if (isAnimate) {
@@ -1659,6 +1659,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 - (void)animateToNextCoord:(GMSMarker *)marker {
     CoordsList *coords = marker.userData;
     CLLocationCoordinate2D coord = [coords next];
+    [self updateMapCenterWithCoordinate:coord];
     CLLocationCoordinate2D previous = marker.position;
     if (coord.latitude != -1 && coord.longitude != -1) {
         if (lastIndex != currentIndex) {
@@ -1833,10 +1834,10 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     }
     [self updateMapCenter:targetModel];
 }
-- (void)updateMapCenterWithSportNode:(BMKSportNode *)node {
+- (void)updateMapCenterWithCoordinate:(CLLocationCoordinate2D)coordinate {
     CBHomeLeftMenuDeviceInfoModel *targetModel = [CBHomeLeftMenuDeviceInfoModel new];
-    targetModel.lat = @(node.coordinate.latitude).description;
-    targetModel.lng = @(node.coordinate.longitude).description;
+    targetModel.lat = @(coordinate.latitude).description;
+    targetModel.lng = @(coordinate.longitude).description;
     [self updateMapCenter:targetModel];
 }
 - (void)updateMapLocationWhenPaoView {
