@@ -20,8 +20,8 @@
 #import <BaiduMapAPI_Map/BMKMapView.h>           //只引入所需的单个头文件
 
 #import <GoogleMaps/GoogleMaps.h>
-#import <GooglePlaces/GooglePlaces.h>
-#import <GooglePlacePicker/GooglePlacePicker.h>
+//#import <GooglePlaces/GooglePlaces.h>
+//#import <GooglePlacePicker/GooglePlacePicker.h>
 
 /* wav格式转amr*/
 #import "AudioConverter.h"

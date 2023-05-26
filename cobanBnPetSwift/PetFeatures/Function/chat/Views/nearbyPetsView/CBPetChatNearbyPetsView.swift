@@ -232,7 +232,7 @@ extension CBPetChatNearbyPetsView {
         
         marker.iconView = markView
         marker.userData = model
-        marker.appearAnimation = kGMSMarkerAnimationPop
+        marker.appearAnimation = .pop
         marker.groundAnchor = CGPoint.init(x: 0.5, y: 0.5)
         marker.snippet = "Sub title"
         marker.map = self.googleMapView

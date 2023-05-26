@@ -6,9 +6,10 @@ pod 'Masonry'
 # 提示和转圈
 pod 'MBProgressHUD'
 pod 'MJRefresh','~> 3.1.12'
-pod 'GoogleMaps','~> 2.0.0'      #google地图SDK
-pod 'GooglePlaces'    #实现搜索功能，官方文档叫做地点自动完成；
-pod 'GooglePlacePicker'  #是实现获取某个POI的的详细信息，比如名字、详细地址、路线等
+pod 'GoogleMaps','~> 3.9.0'      #google地图SDK
+#pod 'GooglePlaces'    #实现搜索功能，官方文档叫做地点自动完成；
+#pod 'GooglePlacePicker'  #是实现获取某个POI的的详细信息，比如名字、详细地址、路线等
+#pod 'GoogleMaps', '7.4.0'
 #GoogleMaps：显示基本的定位功能；
 #GooglePlaces：实现搜索功能，官方文档叫做地点自动完成；
 #GooglePlacePicker：是实现获取某个POI的的详细信息，比如名字、详细地址、路线等

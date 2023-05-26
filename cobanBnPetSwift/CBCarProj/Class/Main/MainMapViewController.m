@@ -19,8 +19,8 @@
 #import <CoreLocation/CoreLocation.h>
 
 #import <GoogleMaps/GoogleMaps.h>
-#import <GooglePlaces/GooglePlaces.h>
-#import <GooglePlacePicker/GooglePlacePicker.h>
+//#import <GooglePlaces/GooglePlaces.h>
+//#import <GooglePlacePicker/GooglePlacePicker.h>
 
 //#import "JSONKit.h"
 #import "ZCChinaLocation.h"
@@ -98,7 +98,7 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 @property (nonatomic, strong) UIView *googleView;
 @property (nonatomic, strong) GMSPolyline *polyline;
 @property (nonatomic, strong) GMSMutablePath *linePath;
-@property (nonatomic, strong) GMSPlacesClient *placesClient; // 可以获取某个地方的信息
+//@property (nonatomic, strong) GMSPlacesClient *placesClient; // 可以获取某个地方的信息
 
 // 20s刷新一次的 轨迹和线
 @property (nonatomic, strong) GMSPolyline *polyline_realTime;
