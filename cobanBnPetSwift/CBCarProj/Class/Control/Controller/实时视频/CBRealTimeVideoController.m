@@ -99,7 +99,42 @@
     [self initBarWithTitle:Localized(@"实时视频") isBack: YES];
     self.view.backgroundColor = UIColor.darkGrayColor;
     
-    self.player = [[IJKFFMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:_urlStr] withOptions:[IJKFFOptions optionsByDefault]];
+    IJKFFOptions *options = [IJKFFOptions optionsByDefault];
+    
+//    [options setFormatOptionValue:@"prefer_top" forKey:@"ptsp_flags"];
+//    [options setFormatOptionValue:@"video" forKey:@"allowed_media_types"];
+//    [options setFormatOptionIntValue:20000 forKey:@"timeout"];
+//    [options setFormatOptionIntValue:1316 forKey:@"buffer_size"];
+//    [options setFormatOptionIntValue:1 forKey:@"infbuf"];
+//    [options setFormatOptionIntValue:1 forKey:@"analyzeduration"];
+//    [options setFormatOptionIntValue:100 forKey:@"analyzemaxduration"];
+//    [options setFormatOptionIntValue:102400 forKey:@"formatprobesize"];
+//    [options setFormatOptionIntValue:102400 forKey:@"probesize"];
+    
+    [options setPlayerOptionIntValue:1 forKey:@"loop"];
+    [options setPlayerOptionIntValue:0 forKey:@"packet-buffering"];
+    [options setPlayerOptionIntValue:1 forKey:@"framedrop"];
+    
+//    [options setFormatOptionValue:@"tcp" forKey:@"rtsp_transport"];
+//    [options setFormatOptionValue:@"prefer_tcp" forKey:@"rtsp_flags"];
+//    [options setFormatOptionValue:@"video" forKey:@"allowed_media_types"];
+//    [options setFormatOptionIntValue:0 forKey:@"http-detect-range-support"];
+//    [options setFormatOptionIntValue:1316 forKey:@"buffer_size"];
+//    [options setFormatOptionIntValue:1 forKey:@"infbuf"];
+//    [options setFormatOptionIntValue:1 forKey:@"analyzeduration"];
+//    [options setFormatOptionIntValue:100 forKey:@"analyzemaxduration"];
+//    [options setFormatOptionIntValue:10240 forKey:@"probesize"];
+//    [options setFormatOptionIntValue:1 forKey:@"flush_packets"];
+//
+    
+//    [options setPlayerOptionIntValue:1 forKey:@"an"];
+//    [options setPlayerOptionIntValue:0 forKey:@"start-on-prepared"];
+//
+//
+//    [options setCodecOptionIntValue:48 forKey:@"skip_loop_filter"];
+//    [options setCodecOptionIntValue:8 forKey:@"skip_frame"];
+    
+    self.player = [[IJKFFMoviePlayerController alloc] initWithContentURL:[NSURL URLWithString:_urlStr] withOptions:options];
     
     self.videoContainer = [UIView new];
     [self.view addSubview:self.videoContainer];
