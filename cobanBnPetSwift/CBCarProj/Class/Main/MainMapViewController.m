@@ -824,6 +824,12 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
 }
 
 - (void)didClickScanBtn {
+    CBPetLoginModel *userLogin = [CBPetLoginModelTool getUser];
+    // 0为查看权限
+    if ([userLogin.auth isEqualToString:@"0"]) {
+        [HUD showHUDWithText:Localized(@"无权限访问") withDelay:2.0];
+        return;
+    }
     AddDeviceViewController *bindVC = [[AddDeviceViewController alloc]init];
     bindVC.isBind = YES;
     [self.navigationController pushViewController:bindVC animated:YES];
@@ -2301,7 +2307,6 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
     }
     // 未选中设备时，控制模块和报表模块不能点击
     if ([viewController.tabBarItem.title isEqualToString:Localized(@"电子围栏")]
-        || [viewController.tabBarItem.title isEqualToString:Localized(@"报表")]
         || [viewController.tabBarItem.title isEqualToString:Localized(@"设备")]
         ) {
         CBPetLoginModel *userLogin = [CBPetLoginModelTool getUser];

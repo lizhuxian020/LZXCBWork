@@ -137,8 +137,9 @@
             {
                 NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
                 [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"shanghai"]];
                 NSInteger startTimeInterval = [CBCommonTools timeStrConvertTimeInteral:formModel.startTime formatter:formatter].integerValue;
-                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:[NSString stringWithFormat:@"%@",@(startTimeInterval*1000)] timeZone:@""];
+                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:[NSString stringWithFormat:@"%@",@(startTimeInterval*1000)] timeZoneObj:NSTimeZone.localTimeZone];
                 self.middleLabel.text = startTimeStr?:@"";
                 if (formModel.status == 0) {
                     self.rightLabel.text = Localized(@"关");
@@ -150,7 +151,7 @@
             case FormTypePourOil:
                 //加油报表
             {
-                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZone:@""];
+                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZoneObj:NSTimeZone.localTimeZone];
                 self.middleLabel.text = startTimeStr;
                 self.rightLabel.text = [NSString stringWithFormat:@"%@",formModel.oilCount];
             }
@@ -158,7 +159,7 @@
             case FormTypeOilLeak:
                 //漏油报表
             {
-                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZone:@""];
+                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZoneObj:NSTimeZone.localTimeZone];
                 self.middleLabel.text = startTimeStr;
                 self.rightLabel.text = [NSString stringWithFormat:@"%@",formModel.oilCount];
             }
@@ -166,7 +167,7 @@
             case FormTypeAllAlarm:
                 //所有报警
                 {
-                    NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZone:@""];
+                    NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZoneObj:NSTimeZone.localTimeZone];
                     self.middleLabel.text = startTimeStr?:@"";
                     NSArray *arrayType = [formModel.type componentsSeparatedByString:@","];
                     NSMutableArray *arrayTypeStr = [NSMutableArray array];
@@ -181,7 +182,7 @@
             case FormTypeSOSAlarm:
                 //SOS报警
             {
-                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZone:@""];
+                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZoneObj:NSTimeZone.localTimeZone];
                 self.middleLabel.text = startTimeStr;
                 self.rightLabel.text = [NSString stringWithFormat:@"SOS"];
             }
@@ -189,7 +190,7 @@
             case FormTypeOverspeedAlarm:
                 //超速报警
             {
-                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZone:@""];
+                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZoneObj:NSTimeZone.localTimeZone];
                 self.middleLabel.text = startTimeStr;
                 self.rightLabel.text = [NSString stringWithFormat:@"%@", formModel.speed];
             }
@@ -197,7 +198,7 @@
             case FormTypeTiredAlarm:
                 //疲劳驾驶统计
             {
-                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZone:@""];
+                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZoneObj:NSTimeZone.localTimeZone];
                 self.middleLabel.text = startTimeStr;
                 self.rightLabel.text = [NSString stringWithFormat:@"%@", formModel.speed];
             }
@@ -205,7 +206,7 @@
             case FormTypeUnderpackingAlarm:
                 //欠压统计
             {
-                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZone:@""];
+                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZoneObj:NSTimeZone.localTimeZone];
                 self.middleLabel.text = startTimeStr;
                 self.rightLabel.text = [NSString stringWithFormat:@"%@%@",formModel.battery,@"%"];
             }
@@ -213,7 +214,7 @@
             case FormTypePowerDownAlarm:
                 //掉电报警统计报表
             {
-                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZone:@""];
+                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZoneObj:NSTimeZone.localTimeZone];
                 self.middleLabel.text = startTimeStr;
                 self.rightLabel.text = [NSString stringWithFormat:@"%@",Localized(@"掉电")];
             }
@@ -221,7 +222,7 @@
             case FormTypeShakeAlarm:
                 //振动报警统计报表
             {
-                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZone:@""];
+                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZoneObj:NSTimeZone.localTimeZone];
                 self.middleLabel.text = startTimeStr;
                 self.rightLabel.text = [NSString stringWithFormat:@"%@",Localized(@"振动")];
             }
@@ -231,8 +232,10 @@
             {
                 NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
                 [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"shanghai"]];
                 NSInteger startTimeInterval = [CBCommonTools timeStrConvertTimeInteral:formModel.startTime formatter:formatter].integerValue;
-                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:[NSString stringWithFormat:@"%@",@(startTimeInterval*1000)] timeZone:@""];
+                
+                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:[NSString stringWithFormat:@"%@",@(startTimeInterval*1000)] timeZoneObj:NSTimeZone.localTimeZone];
                 self.middleLabel.text = startTimeStr?:@"";
                 if (formModel.status == 0) {
                     self.rightLabel.text = Localized(@"开门");
@@ -244,7 +247,7 @@
             case FormTypeFireAlarm:
                 //点火报警统计报表
             {
-                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZone:@""];
+                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZoneObj:NSTimeZone.localTimeZone];
                 self.middleLabel.text = startTimeStr;
                 self.rightLabel.text = [NSString stringWithFormat:@"%@",Localized(@"点火")];
             }
@@ -252,7 +255,7 @@
             case FormTypeMoveAlarm:
                 //位移报警统计报表
             {
-                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZone:@""];
+                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZoneObj:NSTimeZone.localTimeZone];
                 self.middleLabel.text = startTimeStr;
                 self.rightLabel.text = [NSString stringWithFormat:@"%@",Localized(@"位移")];
             }
@@ -260,7 +263,7 @@
             case FormTypeGasolineTheftAlarm:
                 //偷油漏油报警统计报表
             {
-                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZone:@""];
+                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZoneObj:NSTimeZone.localTimeZone];
                 self.middleLabel.text = startTimeStr;
                 self.rightLabel.text = [NSString stringWithFormat: @"%@",formModel.oil];
             }
@@ -268,7 +271,7 @@
             case FormTypeCollisionAlarm:
                 //碰撞报警报表
             {
-                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZone:@""];
+                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZoneObj:NSTimeZone.localTimeZone];
                 self.middleLabel.text = startTimeStr;
                 self.rightLabel.text = [NSString stringWithFormat:@"%@", formModel.speed];
             }
@@ -276,7 +279,7 @@
             case FormTypeOBD:
                 //OBD报表
             {
-                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZone:@""];
+                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZoneObj:NSTimeZone.localTimeZone];
                 self.middleLabel.text = startTimeStr;
                 self.rightLabel.text = [NSString stringWithFormat: @"%@",formModel.errCode];
             }
@@ -284,7 +287,7 @@
             case FormTypeInFencing:
                 //入围栏报警报表
             {
-                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZone:@""];
+                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZoneObj:NSTimeZone.localTimeZone];
                 self.middleLabel.text = startTimeStr;
                 self.rightLabel.text = [NSString stringWithFormat: @"%@",formModel.fName?:@""];
             }
@@ -292,7 +295,7 @@
             case FormTypeOutFencing:
                 //出围栏报警报表
             {
-                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZone:@""];
+                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZoneObj:NSTimeZone.localTimeZone];
                 self.middleLabel.text = startTimeStr;
                 self.rightLabel.text = [NSString stringWithFormat: @"%@",formModel.fName?:@""];
             }
@@ -300,7 +303,7 @@
             case FormTypeInOutFencing:
                 //出入围栏报警报表
             {
-                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZone:@""];
+                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:formModel.createTime?:@"0" timeZoneObj:NSTimeZone.localTimeZone];
                 self.middleLabel.text = startTimeStr;
                 self.rightLabel.text = [NSString stringWithFormat: @"%@",formModel.fName?:@""];
             }
