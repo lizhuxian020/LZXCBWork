@@ -1531,5 +1531,7 @@
 "温度报警" = "Temperature alarm";
 "确定删除?" = "Confirm delete?";
 
-"移位取消" = "移位取消";
-"截图成功" = "截图成功";
+"移位取消" = "Move Cancel";
+"截图成功" = "Successful screenshot";
+"此摄像头未连接" = "This camera is not connected";
+"请按一下wifi摄像机的reset按键，等待大约35秒后将摄像头对准二维码，摄像机将自动绑定" ="Please press the reset button of the wifi camera, wait about 35 seconds and point the camera at the QR code, and the camera will be automatically bound";

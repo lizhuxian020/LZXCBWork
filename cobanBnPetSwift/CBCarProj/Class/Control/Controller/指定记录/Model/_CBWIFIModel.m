@@ -20,6 +20,10 @@
              };
 }
 
+- (BOOL)connected {
+    return [_isConnect isEqualToString:@"1"];
+}
+
 @end
 
 @implementation _CBWIFIModel

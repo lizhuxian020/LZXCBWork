@@ -265,6 +265,25 @@ static CGFloat yyj_font17 = 0;
     NSString* dateString = [formatter stringFromDate:date];
     return dateString;
 }
+
++ (NSString *)convertTimeWithTimeIntervalString:(NSString *)timeString timeZoneObj:(NSTimeZone *)timeZone {
+    if (!timeZone) {
+        timeZone = [NSTimeZone localTimeZone];
+    }
+    
+    //毫秒值转化为秒
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:[timeString doubleValue]/ 1000.0];
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setTimeZone:timeZone];
+    [formatter setDateStyle:NSDateFormatterMediumStyle];
+    [formatter setTimeStyle:NSDateFormatterShortStyle];
+    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    
+    NSString *DateTime = [formatter stringFromDate:date];
+    return DateTime;
+}
+
 //时间戳转时间 指定时区
 + (NSString *)convertTimeWithTimeIntervalString:(NSString *)timeString timeZone:(NSString *)timeZoneStr {
     if (kStringIsEmpty(timeZoneStr)) {

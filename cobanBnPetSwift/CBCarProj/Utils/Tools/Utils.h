@@ -50,6 +50,8 @@
 + (NSString *)timeWithTimeIntervalString:(NSString *)timeString;
 //时间戳转时间 指定时区
 + (NSString *)convertTimeWithTimeIntervalString:(NSString *)timeString timeZone:(NSString *)timeZone;
+//时间戳转时间 指定时区
++ (NSString *)convertTimeWithTimeIntervalString:(NSString *)timeString timeZoneObj:(NSTimeZone *)timeZone;
 
 + (NSString *)caculateTimeSub:(NSString *)time;
 

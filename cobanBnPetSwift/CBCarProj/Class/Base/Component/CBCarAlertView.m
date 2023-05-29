@@ -413,15 +413,36 @@
 }
 
 + (CBBasePopView *)viewWithImage:(UIImage *)img {
+    return [self viewWithImage:img desc:nil];
+}
+
++ (CBBasePopView *)viewWithImage:(UIImage *)img desc:(NSString *)desc {
     UIView *contentView = [UIView new];
     contentView.backgroundColor = [UIColor whiteColor];
     UIImageView *imgV = [[UIImageView alloc] initWithImage:img];
     [contentView addSubview:imgV];
     [imgV mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.equalTo(@10);
-        make.right.bottom.equalTo(@-10);
+        make.right.equalTo(@-10);
         make.width.equalTo(imgV.mas_height);
     }];
+    if (kStringIsEmpty(desc)) {
+        [imgV mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.bottom.equalTo(@-10);
+        }];
+    } else {
+        UILabel *lbl = [UILabel new];
+        lbl.text = desc;
+        lbl.textColor = kCellTextColor;
+        lbl.font = [UIFont systemFontOfSize:15 * KFitWidthRate];
+        lbl.numberOfLines = 0;
+        [contentView addSubview:lbl];
+        [lbl mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.equalTo(imgV);
+            make.top.equalTo(imgV.mas_bottom).offset(10);
+            make.bottom.equalTo(@-10);
+        }];
+    }
     CBBasePopView *popView = [[CBBasePopView alloc] initWithContentView:contentView];
     return popView;
 }

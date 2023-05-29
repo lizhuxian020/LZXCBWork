@@ -275,6 +275,7 @@
         return @"";
     }
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.timeZone = [NSTimeZone timeZoneWithName:@"shanghai"];
     [formatter setDateFormat: formatterString];
 //    NSString * language = [[NSUserDefaults standardUserDefaults]objectForKey:@"appLanguage"];
 //    NSLocale * locale = [[NSLocale alloc] initWithLocaleIdentifier: language];

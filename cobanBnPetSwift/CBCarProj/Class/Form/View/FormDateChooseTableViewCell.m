@@ -123,8 +123,10 @@
             {
                 NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
                 [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"shanghai"]];
                 NSInteger startTimeInterval = [CBCommonTools timeStrConvertTimeInteral:formModel.startTime formatter:formatter].integerValue;
-                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:[NSString stringWithFormat:@"%@",@(startTimeInterval*1000)] timeZone:@""];
+                
+                NSString *startTimeStr = [Utils convertTimeWithTimeIntervalString:[NSString stringWithFormat:@"%@",@(startTimeInterval*1000)] timeZoneObj:NSTimeZone.localTimeZone];
                 self.middleLabel.text = startTimeStr?:@"";
                 
                 self.rightLabel.text = [self getTimeStr:formModel.time];

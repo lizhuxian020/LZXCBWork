@@ -7,6 +7,7 @@
 //
 
 #import "CBCarPaopaoView.h"
+#import "cobanBnPetSwift-Swift.h"
 
 #define __CarPaoTitle_Title @"标题"
 #define __CarPaoTitle_Track Localized(@"跟踪")
@@ -479,8 +480,14 @@
 }
 #pragma mark -- button点击事件
 - (void)didClickBtn:(NSString *)title {
+    CBPetLoginModel *userLogin = [CBPetLoginModelTool getUser];
+    // 0为查看权限
     NSLog(@"%@", title);
     if ([title isEqualToString:__CarPaoTitle_Title]) {
+        if ([userLogin.auth isEqualToString:@"0"]) {
+            [HUD showHUDWithText:Localized(@"无权限访问") withDelay:2.0];
+            return;
+        }
         if (self.clickBlock) {
             self.clickBlock(CBCarPaopaoViewClickTypeTitle, self.deviceInfoModel);
         }
@@ -496,6 +503,10 @@
         }
     }
     if ([title isEqualToString:__CarPaoTitle_Move]) {
+        if ([userLogin.auth isEqualToString:@"0"]) {
+            [HUD showHUDWithText:Localized(@"无权限访问") withDelay:2.0];
+            return;
+        }
         if (self.movePopView.alpha == 0) {
             [self showMovePopView];
         }

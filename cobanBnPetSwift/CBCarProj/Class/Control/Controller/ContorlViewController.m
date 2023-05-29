@@ -451,7 +451,7 @@
         return;
     }
     UIImage *img = [CBWtCommonTools createQRCodeByStringLogo:[NSString stringWithFormat:@"%@,%@", _wifiModel.wifi.wifiName, _wifiModel.wifi.wifiPassword]];
-    [[CBCarAlertView viewWithImage:img] pop];
+    [[CBCarAlertView viewWithImage:img desc:Localized(@"请按一下wifi摄像机的reset按键，等待大约35秒后将摄像头对准二维码，摄像机将自动绑定")] pop];
 }
 
 - (void)clickPZ {
@@ -482,7 +482,11 @@
     } confrim:^(NSString * _Nonnull contentStr, NSInteger index) {
         kStrongSelf(self);
         _CBWIFIModel_ROW *rowItem = [self.wifiModel.row objectAtIndex:index];
-        [self doSSSP:rowItem];
+        if (rowItem.connected) {
+            [self doSSSP:rowItem];
+        } else {
+            [HUD showHUDWithText:Localized(@"此摄像头未连接")];
+        }
     }] pop];
 }
 

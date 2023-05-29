@@ -1531,3 +1531,8 @@
 "摄像机列表" = "Lista de câmeras";
 "温度报警" = "Alarme de temperatura";
 "确定删除?" = "Confirmar exclusão?";
+
+"移位取消" = "Mover Cancelar";
+"截图成功" = "Captura de tela bem-sucedida";
+"请按一下wifi摄像机的reset按键，等待大约35秒后将摄像头对准二维码，摄像机将自动绑定" ="Pressione o botão de reset da câmera wi-fi, aguarde cerca de 35 segundos e aponte a câmera para o código QR, a câmera será automaticamente ligada";
+"此摄像头未连接" = "Esta câmera não está conectada";

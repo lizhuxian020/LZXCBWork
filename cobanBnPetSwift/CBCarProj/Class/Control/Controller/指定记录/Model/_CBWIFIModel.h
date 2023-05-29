@@ -25,6 +25,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *createTime ; /** <##><##> **/
 @property (nonatomic, copy) NSString *dno ; /** <##> **/
 @property (nonatomic, copy) NSString *idd ; /** <##> **/
+@property (nonatomic, copy) NSString *isConnect ; /** <##> **/
+
+- (BOOL)connected;
 
 @end
 
@@ -45,23 +48,50 @@ NS_ASSUME_NONNULL_BEGIN
              "wifiPassword": "a123456"
          },
          "row": [{
-             "channelId": 3,
-             "channelName": "客厅摄像2",
-             "createTime": null,
-             "dno": "863584040008426",
-             "id": 3
-         }, {
              "channelId": 4,
-             "channelName": "客厅1",
-             "createTime": null,
+             "channelName": "通道4",
+             "channelUid": "",
+             "createTime": 1684810411000,
              "dno": "863584040008426",
-             "id": 5
+             "id": 5,
+             "isConnect": 1,
+             "isTCard": 0
          }, {
              "channelId": 5,
-             "channelName": "客厅2",
-             "createTime": null,
+             "channelName": "通道5",
+             "channelUid": "",
+             "createTime": 1684810411000,
              "dno": "863584040008426",
-             "id": 6
+             "id": 6,
+             "isConnect": 1,
+             "isTCard": 0
+         }, {
+             "channelId": 3,
+             "channelName": "通道3",
+             "channelUid": "",
+             "createTime": 1684810411000,
+             "dno": "863584040008426",
+             "id": 8,
+             "isConnect": 1,
+             "isTCard": 0
+         }, {
+             "channelId": 2,
+             "channelName": "通道2",
+             "channelUid": "",
+             "createTime": 1684810412000,
+             "dno": "863584040008426",
+             "id": 9,
+             "isConnect": 1,
+             "isTCard": 0
+         }, {
+             "channelId": 6,
+             "channelName": "通道6",
+             "channelUid": "",
+             "createTime": 1684810412000,
+             "dno": "863584040008426",
+             "id": 10,
+             "isConnect": 1,
+             "isTCard": 0
          }]
      },
      "length": null,

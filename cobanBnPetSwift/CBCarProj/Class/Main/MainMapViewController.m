@@ -2300,7 +2300,10 @@ MINPickerViewDelegate, BMKLocationManagerDelegate, BMKGeoCodeSearchDelegate,UIGe
         return NO;
     }
     // 未选中设备时，控制模块和报表模块不能点击
-    if ([viewController.tabBarItem.title isEqualToString:Localized(@"电子围栏")] || [viewController.tabBarItem.title isEqualToString:Localized(@"报表")]) {
+    if ([viewController.tabBarItem.title isEqualToString:Localized(@"电子围栏")]
+        || [viewController.tabBarItem.title isEqualToString:Localized(@"报表")]
+        || [viewController.tabBarItem.title isEqualToString:Localized(@"设备")]
+        ) {
         CBPetLoginModel *userLogin = [CBPetLoginModelTool getUser];
         CBHomeLeftMenuDeviceInfoModel *deviceModelInfo = CarDeviceManager.deviceInfoModelSelect;
         // 没有选中

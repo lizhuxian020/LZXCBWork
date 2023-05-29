@@ -77,6 +77,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// 只有图片没有按钮
 /// - Parameter img: img description
 + (CBBasePopView *)viewWithImage:(UIImage *)img;
++ (CBBasePopView *)viewWithImage:(UIImage *)img desc:(NSString *)desc;
 
 /// 一张图片, 带保存按钮和忽略按钮
 /// - Parameter img: img description

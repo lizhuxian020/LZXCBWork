@@ -1532,3 +1532,8 @@
 "摄像机列表" = "Camera list";
 "温度报警" = "Seznam kamer";
 "确定删除?" = "Potvrďte smazání?";
+
+"移位取消" = "Zrušení pohybu";
+"截图成功" = "Úspěšný snímek obrazovky";
+"请按一下wifi摄像机的reset按键，等待大约35秒后将摄像头对准二维码，摄像机将自动绑定" ="Stiskněte prosím resetovací tlačítko wifi kamery, počkejte asi 35 sekund a namiřte kameru na QR kód, kamera se automaticky sváže";
+"此摄像头未连接" = "Tato kamera není připojena";
